@@ -1,0 +1,31 @@
+{
+    "name": "join-project",
+    "version": "0.3.0",
+    "description": "Kanban Project Management Tool - Vanilla JS + Firebase",
+    "main": "index.html",
+    "type": "module",
+    "scripts": {
+        "docs": "jsdoc -c jsdoc.json README.md",
+        "serve": "npx serve .",
+        "dev": "npx serve . -p 3000",
+        "docs-serve": "npm run docs && npx serve documentation",
+        "clean-docs": "powershell -NoLogo -NoProfile -Command \"Remove-Item -Recurse -Force ./docs,./docs_temp -ErrorAction SilentlyContinue\"",
+        "migrate:users": "node ./migration/migrateUsers.mjs"
+    },
+    "dependencies": {
+        "firebase": "^10.7.1",
+        "firebase-admin": "^12.5.0"
+    },
+    "devDependencies": {
+        "jsdoc": "^4.0.2",
+        "serve": "^14.2.1"
+    },
+    "keywords": [
+        "kanban",
+        "project-management",
+        "vanilla-js",
+        "firebase"
+    ],
+    "author": "",
+    "license": "MIT"
+}

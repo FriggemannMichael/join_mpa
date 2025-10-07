@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join App – Add Task</title>
+    <link rel="stylesheet" href="./css/root.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/board.css" />
+    <link rel="stylesheet" href="./css/contact.css" />
+    <link rel="stylesheet" href="./css/add_task.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <div id="layout-header" data-template="header"></div>
+      <aside id="layout-sidebar" data-template="sidebar"></aside>
+      <main
+        id="pageContent"
+        class="main__container add-task-main"
+        tabindex="-1"
+      >
+        <section class="container" aria-labelledby="addTaskTitle">
+          <h1 class="page-title" id="addTaskTitle">Add Task</h1>
+          <div class="form-wrapper">
+            <div class="left-section">
+              <div class="form-group">
+                <label for="taskTitle"
+                  >Title<sup class="required" aria-hidden="true">*</sup></label
+                >
+                <input type="text" id="taskTitle" placeholder="Enter a title" />
+              </div>
+              <div class="form-group">
+                <label for="taskDescription">Description</label>
+                <textarea
+                  id="taskDescription"
+                  placeholder="Enter a Description"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="taskDueDate"
+                  >Due date<sup class="required" aria-hidden="true"
+                    >*</sup
+                  ></label
+                >
+                <input type="date" id="taskDueDate" placeholder="dd/mm/yyyy" />
+              </div>
+            </div>
+            <div class="divider" aria-hidden="true"></div>
+            <div class="right-section">
+              <div class="form-group">
+                <label>Priority</label>
+                <div
+                  class="priority-buttons"
+                  role="group"
+                  aria-label="Priority selection"
+                >
+                  <button
+                    class="priority-btn"
+                    data-priority="urgent"
+                    type="button"
+                  >
+                    Urgent
+                    <img
+                      class="prio-icon"
+                      src="./img/icon/prio-urgent.svg"
+                      alt="Urgent priority"
+                    />
+                  </button>
+                  <button
+                    class="priority-btn active"
+                    data-priority="medium"
+                    type="button"
+                  >
+                    Medium
+                    <img
+                      class="prio-icon"
+                      src="./img/icon/prio-medium.svg"
+                      alt="Medium priority"
+                    />
+                  </button>
+                  <button
+                    class="priority-btn"
+                    data-priority="low"
+                    type="button"
+                  >
+                    Low
+                    <img
+                      class="prio-icon"
+                      src="./img/icon/prio-low.svg"
+                      alt="Low priority"
+                    />
+                  </button>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="taskAssignees">Assigned to</label>
+                <select id="taskAssignees">
+                  <option value="">Kontakt für Zuweisung auswählen</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="taskCategory"
+                  >Category<sup class="required" aria-hidden="true"
+                    >*</sup
+                  ></label
+                >
+                <select id="taskCategory">
+                  <option value="">Select task category</option>
+                  <option value="user-task">User Task</option>
+                  <option value="technical-task">Technical Task</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="taskSubtasks">Subtasks</label>
+                <input
+                  type="text"
+                  id="taskSubtasks"
+                  placeholder="Add new subtask"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="button-group">
+            <p class="required-text">
+              <sup class="required" aria-hidden="true">*</sup> This field is
+              required
+            </p>
+            <div class="buttons">
+              <button class="btn-clear" type="button" id="taskClearBtn">
+                Clear ✕
+              </button>
+              <button class="btn-create" type="button" id="taskCreateBtn">
+                Create Task ✓
+              </button>
+            </div>
+          </div>
+          <p class="login-status" id="taskStatus" aria-live="polite"></p>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="./js/pages/add-task.js"></script>
+  </body>
+</html>

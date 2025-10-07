@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><p># Join - Kanban Project Management Tool</p>
+<p>Ein leichtgewichtiges Kanban- / Task- und Kontakt-Management Tool mit Vanilla JavaScript (ES Modules) und Firebase Authentication.</p>
+<h2>🎯 Projektübersicht</h2>
+<p>Aktueller Stand: <strong>Multi Page Application (MPA)</strong> mit dedizierten HTML-Dokumenten pro Bereich. Öffentliche Seiten (<code>index.html</code>, <code>signup.html</code>, <code>privacy.html</code>, <code>legal.html</code>) stehen ohne Auth zur Verfügung. Authentifizierte Seiten (<code>summary.html</code>, <code>board.html</code>, <code>add-task.html</code>, <code>contacts.html</code>, <code>profile.html</code>, <code>settings.html</code>) schützen sich beim Laden über einen gemeinsamen Auth-Guard. Header und Sidebar werden als Templates ausgeliefert und pro Seite dynamisch eingebunden.</p>
+<h2>📁 Projektstruktur (Ist-Zustand)</h2>
+<pre class="prettyprint source"><code>join/
+├── index.html                 # Login / Landing (öffentlich)
+├── signup.html                # Registrierung (öffentlich)
+├── summary.html               # Dashboard (authentifiziert)
+├── board.html                 # Kanban Board (authentifiziert)
+├── add-task.html              # Task-Formular (authentifiziert)
+├── contacts.html              # Kontakte (authentifiziert)
+├── profile.html               # Profil (authentifiziert)
+├── settings.html              # Einstellungen (authentifiziert)
+├── privacy.html               # Datenschutzerklärung (öffentlich)
+├── legal.html                 # Impressum (öffentlich)
+├── css/
+│   ├── root.css               # Design Tokens / Reset
+│   ├── main.css               # Layout / Navigation / Standalone Pages
+│   └── *.css                  # Feature-spezifische Styles (Contacts, Board, …)
+├── img/
+│   ├── icon/                  # SVGs & PNGs
+│   └── fonts/                 # Schriftdateien (Inter)
+├── js/
+│   ├── common/                # Shared Utilities & Services (Firebase, Auth, Layout)
+│   └── pages/                 # Seiten-spezifische Controller (login, summary, …)
+├── templates/
+│   ├── header.html            # Partials für Layout-Shell
+│   └── sidebar.html
+├── documentation/             # Generierte JSDoc Dateien (Output)
+├── migration/                 # Migrationsskripte / Datenübernahmen
+├── olddata/                   # Altbestand (statisch / vor Refactor)
+├── package.json
+├── STRUCTURE.md
+└── README.md
+</code></pre>
+<blockquote>
+<p>Geplante zusätzliche Persistenz (Tasks, mehrere Kontakte) folgt nach Stabilisierung des Auth / Provisioning Flows.</p>
+</blockquote>
+<h2>🧾 JSDoc Konventionen</h2>
+<ul>
+<li><code>@module</code> pro zentraler Datei (main, auth, firebase, header, sidebar, summary)</li>
+<li><code>@function</code>, <code>@param</code>, <code>@returns</code> für exportierte Funktionen</li>
+<li><code>@private</code> für interne Helfer</li>
+<li>Kurze prägnante Erstbeschreibung (kein doppelter Funktionsname)</li>
+<li>Globale Inline-Handler nur falls zwingend nötig</li>
+</ul>
+<h2>🗄️ Realtime Database Provisioning (bereits aktiv)</h2>
+<p>Beim ersten erfolgreichen Login eines echten Firebase-Nutzers (kein Gast) legt <code>userProvisioning.js</code> automatisch zwei Knoten in der Realtime Database an:</p>
+<pre class="prettyprint source"><code>users/&lt;uid>     # Stammdaten (email, displayName, provider, status, timestamps)
+contacts/&lt;uid>  # Eigene Kontakt-Basis (initials, Farbe, name)
+</code></pre>
+<p>Derzeit gibt es noch KEIN volles CRUD für mehrere Kontakte – diese Struktur ist die Grundlage für spätere Erweiterungen.</p>
+<h2>📜 Skripte</h2>
+<pre class="prettyprint source lang-bash"><code>npm run docs        # Generiert HTML nach ./documentation
+npm run docs-serve  # Generiert & startet lokalen Server (Port siehe Ausgabe)
+</code></pre>
+<h2>🔁 Empfohlener Workflow</h2>
+<ol>
+<li>Feature umsetzen</li>
+<li>Öffentliche API kommentieren (JSDoc)</li>
+<li><code>npm run docs</code> ausführen &amp; prüfen</li>
+<li>Commit &amp; Push</li>
+</ol>
+<h2>⚙️ Automatisierung (optional)</h2>
+<p>Pre-Commit Hook (derzeit nicht aktiv):</p>
+<pre class="prettyprint source lang-bash"><code>npm i -D husky
+npx husky install
+echo &quot;npm run docs&quot; > .husky/pre-commit
+chmod +x .husky/pre-commit
+</code></pre>
+<blockquote>
+<p>Nicht aktiviert, um schnelle Commits während aktiver Implementierung zu ermöglichen.</p>
+</blockquote>
+<h2>🧩 Technische Eckpunkte</h2>
+<table>
+<thead>
+<tr>
+<th>Bereich</th>
+<th>Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Architektur</td>
+<td>Multi Page Application + modulare ES Modules</td>
+</tr>
+<tr>
+<td>Layout</td>
+<td>Header &amp; Sidebar als HTML-Templates (Lazy Loading)</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td>Firebase Authentication (E-Mail/Passwort + Gast Session)</td>
+</tr>
+<tr>
+<td>Provisioning</td>
+<td>Realtime DB: users/<uid>, contacts/<uid> (Basis)</td>
+</tr>
+<tr>
+<td>Guarding</td>
+<td><code>pageGuard.ensureAuthenticated()</code> auf geschützten Seiten</td>
+</tr>
+<tr>
+<td>UI Komponenten</td>
+<td>Summary, Board, Add Task, Contacts, Profile, Settings</td>
+</tr>
+<tr>
+<td>Erweiterbar</td>
+<td>Persistente Tasks &amp; Kontakt-CRUD, Firestore optional</td>
+</tr>
+</tbody>
+</table>
+<h2>🖥️ Browser-Unterstützung</h2>
+<p>Getestet / Zielumgebung:</p>
+<ul>
+<li>Chrome / Edge 90+</li>
+<li>Firefox 88+</li>
+<li>Safari 14+</li>
+<li>Mobile (iOS Safari, Chrome Mobile)</li>
+</ul>
+<h2>✅ Code- &amp; Stil-Richtlinien</h2>
+<ul>
+<li>Funktionen möglichst &lt; ~14 Zeilen (Single Responsibility)</li>
+<li>Dateien überschaubar (&lt; ~400 Zeilen)</li>
+<li>Benennung: <code>camelCase</code></li>
+<li>Keine ungefangenen Errors in der Konsole</li>
+<li>XSS-Vermeidung bei dynamischer Ausgabe (z.B. <code>escapeHtml</code> im Header)</li>
+</ul>
+<h2>📱 Responsives Verhalten</h2>
+<ul>
+<li>Läuft ab 320px Breite ohne horizontales Scrollen</li>
+<li>Max-Width Begrenzung für große Screens</li>
+<li>Touch-taugliche Interaktionen vorgesehen</li>
+</ul>
+<h2>🔑 Firebase Setup (Auth + Realtime Database Basis)</h2>
+<ol>
+<li>Projekt in der Firebase Console anlegen</li>
+<li>Authentication aktivieren (E-Mail/Passwort)</li>
+<li>Config in <code>js/common/firebase.js</code> eintragen</li>
+</ol>
+<pre class="prettyprint source lang-javascript"><code>const firebaseConfig = {
+  apiKey: &quot;&lt;KEY>&quot;,
+  authDomain: &quot;&lt;PROJECT>.firebaseapp.com&quot;,
+  projectId: &quot;&lt;PROJECT-ID>&quot;,
+  // ... weitere Werte
+};
+</code></pre>
+<h2>🚀 Deployment (statisch möglich)</h2>
+<ul>
+<li>Netlify (Drag &amp; Drop oder Git)</li>
+<li>Vercel (Git Push Deploy)</li>
+<li>GitHub Pages</li>
+<li>Firebase Hosting (<code>firebase deploy</code>)</li>
+</ul>
+<p>MPA → Kein spezielles SPA Rewriting nötig.</p>
+<h2>🧪 Manuelle Tests (aktuelle Basis-Checkliste)</h2>
+<ul>
+<li>[ ] Login + Logout + Gastmodus (index.html ↔ summary.html)</li>
+<li>[ ] Fehlerbehandlung bei falschen Credentials</li>
+<li>[ ] Auth-Guard leitet ungeloggte Nutzer von internen Seiten zurück zur Startseite</li>
+<li>[ ] Template-Loader injiziert Header &amp; Sidebar ohne Race Conditions</li>
+<li>[ ] Responsive Layout &lt; 400px &amp; &gt; 1200px auf allen Seiten</li>
+<li>[ ] Tastaturbedienung Profilmenü</li>
+<li>[ ] Provisioning legt users/<uid> &amp; contacts/<uid> an</li>
+<li>[ ] Dokumentation baut ohne Warnungen</li>
+</ul>
+<h2>⚖️ Rechtliches</h2>
+<ul>
+<li>Datenschutzerklärung (Privacy Policy) Seite (geplant / falls erforderlich)</li>
+<li>Impressum (Legal Notice) Seite (geplant / falls erforderlich)</li>
+</ul>
+<h2>👥 Zusammenarbeit</h2>
+<ul>
+<li>Sinnvolle Commit Messages</li>
+<li>Kleine, klar abgegrenzte Changes</li>
+<li>Optional: Branch pro Feature (später CI Hook denkbar)</li>
+</ul>
+<hr>
+<h2>📌 Roadmap (Kurz)</h2>
+<ul>
+<li>Kontakt-CRUD (mehrere Einträge pro User)</li>
+<li>Task-Persistenz (DB statt nur lokal / Platzhalter)</li>
+<li>Zugriffsregeln (Security Rules Harden)</li>
+<li>Board Drag &amp; Drop Persistenz</li>
+<li>Optional: Firestore / Offline / PWA</li>
+</ul>
+<hr>
+<p><strong>Built with ❤️ using Vanilla JavaScript &amp; Firebase</strong></p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#createTask">createTask</a></li><li><a href="global.html#loadFirebaseDatabase">loadFirebaseDatabase</a></li><li><a href="global.html#subscribeToTasks">subscribeToTasks</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Mon Oct 06 2025 15:29:16 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

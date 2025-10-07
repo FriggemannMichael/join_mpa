@@ -1,0 +1,692 @@
+/* ===============================
+   Design Tokens (:root)
+================================*/
+:root {
+    /* Colors */
+    --color-text-strong: #42526E;
+    --color-text: #333333;
+    --color-bg-board: #F6F7F8;
+    --color-border: #A8A8A8;
+    --color-separator: #D1D1D1;
+    --color-danger: #E53935;
+    --color-white: #ffffff;
+    --color-btn: #2A3647;
+    --color-btn-hover: #29ABE2;
+    --color-btn-active: #091930;
+    --color-task-user-story: #0038FF;
+    --color-technical-task: #1FD7C1;
+    --bg-no-task: #E7E7E7;
+    --color-no-task: #A8A8A8;
+
+    /* Typography */
+    --fs-h2: 4rem;
+    /* 64px */
+    --fs-h3: 1.25rem;
+    /* 20px */
+    --fs-body: 1rem;
+    /* 16px */
+    --fs-input: 1.25rem;
+    /* 20px */
+    --fs-small: 0.875rem;
+    /* 14px */
+    --fs-h2-resp: 2.9375rem;
+    /* 47px */
+    --fs-h3-resp: 1.6875rem;
+    /* 27px */
+
+    /* Spacing scale */
+    --space-0: 0;
+    --space-xxs: 0.25rem;
+    /* 4px */
+    --space-xs: 0.5rem;
+    /* 8px */
+    --space-sm: 0.75rem;
+    /* 12px */
+    --space-md: 1rem;
+    /* 16px */
+    --space-lg: 1.5rem;
+    /* 24px */
+    --space-xl: 2rem;
+    /* 32px */
+    --space-2xl: 3rem;
+    /* 48px */
+    --space-3xl: 3.5rem;
+    /* 56px */
+    --space-4xl: 4rem;
+    /* 64px */
+    --space-5xl: 5rem;
+    /* 80px */
+
+    /* Component paddings */
+    --pad-header-top-desktop: 5rem;
+    /* ~80px, vorher 79.5px */
+    --pad-page-x: var(--space-4xl);
+    /* 64px */
+    --pad-page-x-mobile: var(--space-md);
+    /* 16px */
+
+    /* Radius & Shadow */
+    --radius-sm: 0.5rem;
+    /* 8px */
+    --radius-md: 0.625rem;
+    /* 10px */
+    --radius-lg: 1.5rem;
+    /* 24px */
+    --radius-xl: 1.875rem;
+
+    --shadow-thin: 0 0 0.25rem 0 rgba(0, 0, 0, 0.16);
+    --shadow-card: 0 0 0.625rem 0.1875rem rgba(0, 0, 0, 0.08);
+
+    /* Inputs / Controls */
+    --input-h: 3rem;
+    /* 48px */
+    --search-w: 19.5rem;
+    /* 312px */
+    --affix-gap: 1rem;
+    /* 16px */
+    --affix-right: 1rem;
+    /* 16px */
+    --separator-h: 2rem;
+    /* 32px */
+    --search-btn-w: 2rem;
+    /* 32px */
+    --add-task-button-width: 10rem;
+    /* 160px */
+    --task-width: 15.375rem;
+    /* 246px */
+    --add-task-button-kanban: 1.5rem;
+    /* 24px */
+
+    --height-no-task: 3rem;
+    /* 48px */
+    --height-footer-task-card: 2rem;
+    /* 32px */
+
+    /* Responsive sizes */
+    --add-task-btn-kanban-resp: 1.875rem;
+    /* 30px */
+
+    /* Progress bar */
+    --progress-width: 8rem;
+    /* 128px */
+    --progress-height: 0.5rem;
+    /* 8px */
+    --progress-radius: 0.5rem;
+    /* 8px */
+    --progress-gap: 0.625rem;
+    /* 10px */
+    --progress-top: 0.25rem;
+    /* 4px */
+    --progress-track: #F4F4F4;
+    --progress-fill: #4589FF;
+
+    /* Board */
+    --bg-board: var(--color-bg-board);
+    --kanban-padding: 5rem;
+
+    /* Gaps */
+    --gap-md: 0.625rem;
+    /* 10px */
+}
+
+
+/* ===============================
+   Headings
+================================*/
+
+h2 {
+    font-size: var(--fs-h2);
+    font-weight: 700;
+    font-style: bold;
+}
+
+/* ===============================
+   Kanban-Header
+================================*/
+
+.kanban_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: var(--pad-header-top-desktop);
+    padding-left: var(--pad-page-x);
+    padding-right: var(--pad-page-x);
+    background-color: var(--bg-board);
+    text-decoration: none;
+    cursor: default;
+}
+
+/* ===============================
+   Search
+================================*/
+
+.search_input_field {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    margin-left: auto;
+}
+
+.search_field {
+    position: relative;
+    display: block;
+    height: var(--input-h);
+}
+
+.search_input {
+    height: var(--input-h);
+    width: var(--search-w);
+    font-size: var(--fs-input);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    padding-top: var(--space-xs);
+    padding-bottom: var(--space-xs);
+    padding-left: var(--space-md);
+    padding-right: var(--space-3xl);
+    cursor: auto;
+    outline: none;
+}
+
+.search_input:focus {
+    border-color: var(--color-btn-hover);
+}
+
+.search_affix {
+    position: absolute;
+    top: 50%;
+    right: var(--affix-right);
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: var(--affix-gap);
+    pointer-events: auto;
+}
+
+.separator_input_field {
+    height: var(--separator-h);
+    width: 1px;
+    background-color: var(--color-separator);
+    pointer-events: none;
+    cursor: pointer;
+}
+
+.search_button {
+    all: unset;
+    cursor: pointer;
+    width: var(--search-btn-w);
+    height: var(--search-btn-w);
+    background-position: center;
+    background-size: contain;
+    background-image: url(../img/icon/search-default.svg);
+}
+
+.search_button:hover {
+    background-image: url(../img/icon/search-hover.svg);
+}
+
+.search_button:active {
+    background-image: url(../img/icon/search-click.svg);
+}
+
+.search_error {
+    position: absolute;
+    left: 0;
+    top: calc(100% + var(--space-xs));
+    font-size: var(--fs-small);
+    color: var(--color-danger);
+    line-height: 1.2;
+    white-space: nowrap;
+    display: none;
+    z-index: 2;
+}
+
+.add_task_button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: var(--space-xs);
+    padding-bottom: var(--space-xs);
+    padding-left: var(--space-md);
+    padding-right: var(--space-md);
+    margin-left: var(--space-xl);
+    width: var(--add-task-button-width);
+    height: var(--input-h);
+    font-size: var(--fs-input);
+    font-weight: 700;
+    color: var(--color-white);
+    background-color: var(--color-btn);
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+}
+
+.add_task_button:hover {
+    background-color: var(--color-btn-hover);
+}
+
+.add_task_button:active {
+    background-color: var(--color-btn-active);
+}
+
+
+
+
+/* ===============================
+   Board
+================================*/
+
+.kanban-board {
+    padding-top: var(--space-4xl);
+    padding-left: var(--pad-page-x);
+    padding-right: var(--pad-page-x);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: var(--bg-board);
+    gap: var(--space-lg);
+    text-decoration: none;
+    cursor: default;
+}
+
+.task_column {
+    width: var(--task-width);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.task_column_header {
+    display: flex;
+    justify-content: space-between;
+    width: var(--task-width);
+}
+
+.task_column_header h3 {
+    font-size: var(--fs-h3);
+    font-weight: 700;
+    color: var(--color-text-strong);
+}
+
+.add_task_button_kanban {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    width: var(--add-task-button-kanban);
+    height: var(--add-task-button-kanban);
+    background-image: url(../img/icon/add-task-Default.svg);
+    background-repeat: contain;
+    background-position: center;
+}
+
+.add_task_button_kanban:hover {
+    cursor: pointer;
+    background-image: url(../img/icon/add-task-Hover.svg);
+}
+
+.add_task_button_kanban:active {
+    cursor: pointer;
+    background-image: url(../img/icon/add-task-click.svg);
+}
+
+.task_space {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+}
+
+.no_task_to_do {
+    border: 1px dashed var(--color-border);
+    background-color: var(--bg-no-task);
+    border-radius: var(--radius-md);
+    font-size: var(--fs-body);
+    color: var(--color-no-task);
+    height: var(--height-no-task);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-thin);
+}
+
+
+
+/* ===============================
+   Task Card
+================================*/
+
+.task_card {
+    display: flex;
+    flex-direction: column;
+    width: var(--task-width);
+    padding: var(--space-md);
+    box-shadow: var(--shadow-card);
+    border-radius: var(--radius-lg);
+    gap: var(--gap-md);
+    background-color: var(--color-white);
+}
+
+.task_card:hover {
+    cursor: pointer;
+}
+
+.task_card:active {
+    transform: rotate(5deg);
+}
+
+.task_category {
+    font-size: var(--fs-body);
+    color: var(--color-white);
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-sm);
+    gap: var(--gap-md);
+    background-color: var(--color-task-user-story);
+}
+
+.task_card_description {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xs);
+}
+
+h5 {
+    font-size: var(--fs-body);
+}
+
+.task_header {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+.task_description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #A8A8A8;
+}
+
+
+.subtasks {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--progress-gap);
+    margin-top: var(--progress-top);
+}
+
+.subtasks_bar {
+    width: var(--progress-width);
+    height: var(--progress-height);
+    background: var(--progress-track);
+    border-radius: var(--progress-radius);
+    overflow: hidden;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    position: relative;
+}
+
+.subtasks_bar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform-origin: left;
+    transform: scaleX(calc(var(--done) / var(--total)));
+    background: var(--progress-fill);
+    border-radius: inherit;
+}
+
+.subtasks_label {
+    font-size: var(--fs-small);
+    white-space: nowrap;
+}
+
+.prio {
+    display: flex;
+    align-items: center;
+}
+
+.footer_task_card {
+    height: var(--height-footer-task-card);
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.drop_placeholder {
+    box-sizing: border-box;
+    width: var(--task-width);
+    height: var(--h, var(--height-no-task));
+    box-shadow: var(--shadow-thin);
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-xl);
+}
+
+
+/* ===============================
+   Alerts
+================================*/
+
+.task-added {
+    position: fixed;
+    width: 20.375rem;
+    height: 4.625rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    background-color: #2A3647;
+    border-radius: 20px;
+    z-index: 2000;
+    box-shadow: 0 0 4px 0 #0000001A;
+    color: white;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===============================
+   Overlays
+================================*/
+
+.overlay {
+    position: fixed;
+    display: none;
+    z-index: 50;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.overlay.active {
+    display: flex;
+}
+
+.backdrop_overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(3px);
+    z-index: 0;
+    transition: opacity 0.3s ease;
+}
+
+
+.add_task_overlay {
+    z-index: 1;
+    width: fit-content;
+    height: fit-content;
+    background-color: var(--color-white);
+    /* border: var(); */
+    border-radius: 30px;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.16);
+
+}
+
+.container-add-task-test {
+    padding: 6rem;
+}
+
+.task-overlay {
+    /* position: fixed; */
+    width: 525px;
+    height: fit-content;
+    padding: 48px 40px;
+    gap: 24px;
+    background-color: var(--color-white);
+    border-radius: 30px;
+    z-index: 1;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.16);
+    display: grid;
+}
+
+.header-task-overlay {
+    display: flex;
+    justify-content: space-between;
+}
+
+.task_description_overlay {
+    font-size: var(--fs-input);
+}
+
+.due_date_task_overlay {
+    font-size: var(--fs-input);
+}
+
+.priority {
+    font-size: var(--fs-input);
+}
+
+.assigned_to_task_overlay {
+    font-size: var(--fs-input);
+    gap: var(--space-xs);
+}
+
+.assignees_task_overlay {
+    font-size: var(--fs-input);
+    padding: 7px 16px;
+}
+
+.subtask_task_overlay {
+    font-size: var(--fs-input);
+    gap: var(--space-xs);
+}
+
+.subtask_header_task_overlay {
+    font-size: var(--fs-input);
+}
+
+.subtask_task_overlay-2 {
+    font-size: var(--fs-input);
+    gap: 4px;
+    padding: 6px 16px;
+}
+
+.cloase-button-test {
+    width: 30px;
+    height: 30px;
+    background-color: #E53935;
+}
+
+/* ===============================
+   Utilities
+================================*/
+
+.display_flex {
+    display: flex;
+}
+
+@media (max-width: 64rem) {
+
+    .kanban_header {
+        flex-wrap: wrap;
+        /* gap: 48px; */
+        padding-top: var(--space-2xl);
+        padding-left: var(--pad-page-x-mobile);
+        padding-right: var(--pad-page-x-mobile);
+    }
+
+    h2 {
+        font-size: var(--fs-h2-resp);
+    }
+
+    .search_input_field {
+        order: 1;
+        width: 100%;
+        padding-top: var(--space-2xl);
+    }
+
+    .add_task_button {
+        margin-left: 0;
+    }
+
+    .kanban-board {
+        padding-top: var(--space-lg);
+        padding-left: var(--pad-page-x-mobile);
+        padding-right: var(--pad-page-x-mobile);
+        padding-bottom: var(--pad-page-x-mobile);
+        flex-direction: column;
+    }
+
+    .task_space {
+        flex-direction: row;
+        overflow-x: auto;
+        padding: var(--space-sm);
+    }
+
+    .task_column {
+        width: 100%;
+    }
+
+    .task_column_header {
+        width: 100%;
+    }
+
+    h3 {
+        font-size: var(--fs-h3-resp);
+    }
+
+    .add_task_button {
+        width: var(--add-task-btn-kanban-resp);
+        height: var(--add-task-btn-kanban-resp);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    .add_task_lable {
+        display: none;
+    }
+}
+
+@media (max-width: 500px),
+(hover: none) {
+
+    .add_task_button_kanban:hover {
+        background-image: url(../img/icon/add-task-Default.svg);
+    }
+
+    .add_task_button_kanban:active {
+        background-image: url(../img/icon/add-task-Hover.svg);
+        animation: toDark 0.01s forwards;
+        /* 10 ms */
+    }
+}
+
+@keyframes toDark {
+    to {
+        background-image: url(../img/icon/add-task-click.svg);
+    }
+}

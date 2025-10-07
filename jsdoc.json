@@ -1,0 +1,13 @@
+{
+    "source": {
+        "include": [
+            "js"
+        ],
+        "includePattern": ".js$",
+        "excludePattern": "(node_modules|docs|documentation)"
+    },
+    "opts": {
+        "destination": "documentation",
+        "recurse": true
+    }
+}

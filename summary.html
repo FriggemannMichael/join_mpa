@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join App – Summary</title>
+    <link rel="stylesheet" href="./css/root.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/board.css" />
+    <link rel="stylesheet" href="./css/contact.css" />
+    <link rel="stylesheet" href="./css/add_task.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <div id="layout-header" data-template="header"></div>
+      <aside id="layout-sidebar" data-template="sidebar"></aside>
+      <main id="pageContent" class="main__container" tabindex="-1">
+        <section class="summary-layout-wrapper">
+          <div class="summary-layout-left">
+            <div class="summary__container">
+              <div class="summary__header">
+                <h2 class="summary__title">Join 360</h2>
+                <img
+                  class="seperator"
+                  src="./img/icon/seperator_blue.png"
+                  alt=""
+                  aria-hidden="true"
+                />
+                <p class="summary__header-text">Key Metrics at a Glance</p>
+              </div>
+              <div class="seperator__horizental" aria-hidden="true"></div>
+            </div>
+            <div class="main_content">
+              <section id="overview" class="overview gap_18">
+                <div class="df_row gap_18">
+                  <article class="summary_card" data-summary-block="todo">
+                    <div class="round_icon" aria-hidden="true">
+                      <img src="./img/icon/edit_dark.png" alt="To-do Icon" />
+                    </div>
+                    <div class="text_box">
+                      <span id="amount_toDo" data-summary="todo" class="amount"
+                        >1</span
+                      >
+                      <span class="text">To-do</span>
+                    </div>
+                  </article>
+                  <article class="summary_card" data-summary-block="done">
+                    <div class="round_icon" aria-hidden="true">
+                      <img src="./img/icon/done_dark.png" alt="Done Icon" />
+                    </div>
+                    <div class="text_box">
+                      <span id="amount_done" data-summary="done" class="amount"
+                        >1</span
+                      >
+                      <span class="text">Done</span>
+                    </div>
+                  </article>
+                </div>
+                <article
+                  class="summary_card"
+                  data-summary-block="urgent-deadline"
+                >
+                  <div class="middle_box box_left">
+                    <div class="round_priority_icon" aria-hidden="true">
+                      <img
+                        src="./img/icon/urgent.png"
+                        alt="Urgent Priority Icon"
+                      />
+                    </div>
+                    <div class="text_box">
+                      <span
+                        id="amount_urgent"
+                        data-summary="urgent"
+                        class="amount"
+                        >1</span
+                      >
+                      <span class="text">Urgent</span>
+                    </div>
+                  </div>
+                  <div
+                    class="separator"
+                    role="separator"
+                    aria-hidden="true"
+                  ></div>
+                  <div class="middle_box box_right">
+                    <p>
+                      <span
+                        id="amount_deadline"
+                        data-summary="deadline-date"
+                        class="deadline_date"
+                        >October 16, 2022</span
+                      >
+                      <span class="text">Upcoming Deadline</span>
+                    </p>
+                  </div>
+                </article>
+                <div class="df_row gap_18">
+                  <article
+                    class="summary_card"
+                    data-summary-block="tasks-total"
+                  >
+                    <div class="text_box">
+                      <span
+                        id="amount_tasks"
+                        data-summary="tasks-total"
+                        class="amount"
+                        >5</span
+                      >
+                      <span class="text">Tasks in<br />Board</span>
+                    </div>
+                  </article>
+                  <article
+                    class="summary_card"
+                    data-summary-block="in-progress"
+                  >
+                    <div class="text_box">
+                      <span
+                        id="amount_inProgress"
+                        data-summary="in-progress"
+                        class="amount"
+                        >2</span
+                      >
+                      <span class="text">Tasks in<br />Progress</span>
+                    </div>
+                  </article>
+                  <article
+                    class="summary_card"
+                    data-summary-block="awaiting-feedback"
+                  >
+                    <div class="text_box">
+                      <span
+                        id="amount_awaitingFeedback"
+                        data-summary="awaiting-feedback"
+                        class="amount"
+                        >2</span
+                      >
+                      <span class="text">Awaiting<br />Feedback</span>
+                    </div>
+                  </article>
+                </div>
+              </section>
+            </div>
+          </div>
+          <aside class="summary__greeting__container" id="summaryGreeting">
+            <p id="greeting__text" class="summary__greeting__formula">
+              Good morning,
+            </p>
+            <p id="greeting__name" class="summary__greeting__name">Guest</p>
+          </aside>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="./js/pages/summary.js"></script>
+  </body>
+</html>

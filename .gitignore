@@ -1,0 +1,34 @@
+# Node modules
+node_modules/
+
+# Legacy removed documentation folders
+docs/
+docs_temp/
+
+# Environment variables
+.env
+.env.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Migration sensitive files
+migration/serviceAccountKey.json
+migration/passwords_created.json
+
+# Build outputs
+dist/
+build/
+
+# Firebase-Konfiguration

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: components/summary.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: components/summary.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>// summary.js – Baut die Übersicht mit den Kacheln.
+// Zahlen sind aktuell statisch; später austauschbar über Daten-Update.
+/**
+ * @module summary
+ */
+/**
+ * Rendert die Summary-Kachelübersicht mit Begrüßung.
+ * Wenn kein container übergeben wird, wird #layout-main genutzt.
+ * @function renderSummaryView
+ * @param {HTMLElement|string} [container] Optional DOM-Element oder CSS-Selector.
+ * @returns {void}
+ */
+import { getActiveUser } from "../auth.js";
+
+export function renderSummaryView(container) {
+  let mount;
+  if (container instanceof HTMLElement) {
+    mount = container;
+  } else if (typeof container === "string") {
+    mount = document.querySelector(container);
+  } else {
+    mount = document.getElementById("layout-main");
+  }
+  if (!mount) return;
+
+  // Dynamische Begrüßung + Nutzername
+  let userName = "Guest";
+  try {
+    const user = getActiveUser &amp;&amp; getActiveUser();
+    if (user) {
+      if (user.displayName &amp;&amp; user.displayName.trim())
+        userName = user.displayName.trim();
+      else if (user.email) userName = user.email.split("@")[0];
+    }
+  } catch {}
+  const hour = new Date().getHours();
+  const greeting =
+    hour &lt; 12
+      ? "Good morning,"
+      : hour &lt; 18
+      ? "Good afternoon,"
+      : "Good evening,";
+
+  mount.innerHTML = `
+    &lt;div class="summary-layout-wrapper">
+      &lt;div class="summary-layout-left">
+        &lt;div class="summary__container">
+          &lt;div class="summary__header">
+            &lt;h2 class="summary__title">Join 360&lt;/h2>
+            &lt;img class="seperator" src="./img/icon/seperator_blue.png" alt="" aria-hidden="true" />
+            &lt;div class="summary__header-text">Key Metrics at a Glance&lt;/div>
+          &lt;/div>
+          &lt;div class="seperator__horizental" aria-hidden="true">&lt;/div>
+        &lt;/div>
+        &lt;div class="main_content">
+        &lt;section id="overview" class="overview gap_18">
+        &lt;!-- first row -->
+        &lt;div class="df_row gap_18">
+          &lt;div class="summary_card" data-summary-block="todo">
+            &lt;div class="round_icon" aria-hidden="true">
+              &lt;svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="To-do Icon">
+                &lt;path d="M3.0612 22.1418H4.92787L16.4279 10.6418L14.5612 8.7751L3.0612 20.2751V22.1418ZM22.1279 8.70843L16.4612 3.10843L18.3279 1.24176C18.839 0.730653 19.4668 0.475098 20.2112 0.475098C20.9556 0.475098 21.5834 0.730653 22.0945 1.24176L23.9612 3.10843C24.4723 3.61954 24.739 4.23621 24.7612 4.95843C24.7834 5.68065 24.539 6.29732 24.0279 6.80843L22.1279 8.70843ZM20.1945 10.6751L6.0612 24.8084H0.394531V19.1418L14.5279 5.00843L20.1945 10.6751Z" fill="currentColor"/>
+              &lt;/svg>
+            &lt;/div>
+            &lt;div class="text_box">
+              &lt;span id="amount_toDo" data-summary="todo" class="amount">1&lt;/span>
+              &lt;span class="text">To-do&lt;/span>
+            &lt;/div>
+          &lt;/div>
+          &lt;div class="summary_card" data-summary-block="done">
+            &lt;div class="round_icon" aria-hidden="true">
+              &lt;svg width="38" height="30" viewBox="0 0 38 30" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Done Icon">
+                &lt;path d="M3.92285 14.8085L15.1516 25.8745L33.8662 3.74243" stroke="currentColor" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+              &lt;/svg>
+            &lt;/div>
+            &lt;div class="text_box">
+              &lt;span id="amount_done" data-summary="done" class="amount">1&lt;/span>
+              &lt;span class="text">Done&lt;/span>
+            &lt;/div>
+          &lt;/div>
+        &lt;/div>
+
+        &lt;!-- second row -->
+        &lt;div>
+          &lt;div class="summary_card" data-summary-block="urgent-deadline">
+            &lt;!-- left side -->
+            &lt;div class="middle_box box_left">
+              &lt;div class="round_priority_icon" aria-hidden="true">
+                &lt;img src="./img/icon/urgent.png" alt="Urgent Priority Icon" />
+              &lt;/div>
+              &lt;div class="text_box">
+                &lt;span id="amount_urgent" data-summary="urgent" class="amount">1&lt;/span>
+                &lt;span class="text">Urgent&lt;/span>
+              &lt;/div>
+            &lt;/div>
+            &lt;div class="separator" role="separator" aria-hidden="true">&lt;/div>
+            &lt;!-- right side -->
+            &lt;div class="middle_box box_right">
+              &lt;p>
+                &lt;span id="amount_deadline" data-summary="deadline-date" class="deadline_date">October 16, 2022&lt;/span>
+                &lt;span class="text">Upcoming Deadline&lt;/span>
+              &lt;/p>
+            &lt;/div>
+          &lt;/div>
+        &lt;/div>
+
+        &lt;!-- third row -->
+        &lt;div class="df_row gap_18">
+          &lt;div class="summary_card" data-summary-block="tasks-total">
+            &lt;div class="text_box">
+              &lt;span id="amount_tasks" data-summary="tasks-total" class="amount">5&lt;/span>
+              &lt;span class="text">Tasks in&lt;br>Board&lt;/span>
+            &lt;/div>
+          &lt;/div>
+          &lt;div class="summary_card" data-summary-block="in-progress">
+            &lt;div class="text_box">
+              &lt;span id="amount_inProgress" data-summary="in-progress" class="amount">2&lt;/span>
+              &lt;span class="text">Tasks in&lt;br>Progress&lt;/span>
+            &lt;/div>
+          &lt;/div>
+            &lt;div class="summary_card" data-summary-block="awaiting-feedback">
+              &lt;div class="text_box">
+                &lt;span id="amount_awaitingFeedback" data-summary="awaiting-feedback" class="amount">2&lt;/span>
+                &lt;span class="text">Awaiting&lt;br>Feedback&lt;/span>
+              &lt;/div>
+            &lt;/div>
+        &lt;/div>
+        &lt;/section>
+        &lt;/div>
+      &lt;/div>
+      &lt;div class="summary__greeting__container" id="summaryGreeting">
+        &lt;div id="greeting__text" class="summary__greeting__formula">${greeting}&lt;/div>
+        &lt;div id="greeting__name" class="summary__greeting__name">${userName}&lt;/div>
+      &lt;/div>
+    &lt;/div>`;
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-auth.html">auth</a></li><li><a href="module-firebase.html">firebase</a></li><li><a href="module-header.html">header</a></li><li><a href="module-main.html">main</a></li><li><a href="module-sidebar.html">sidebar</a></li><li><a href="module-summary.html">summary</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkBoxClicked">checkBoxClicked</a></li><li><a href="global.html#deleteMessageThatPasswordsDontMatch">deleteMessageThatPasswordsDontMatch</a></li><li><a href="global.html#disableSignupButtonIfFormIsEmpty">disableSignupButtonIfFormIsEmpty</a></li><li><a href="global.html#showPassword">showPassword</a></li><li><a href="global.html#signUpSubmit">signUpSubmit</a></li><li><a href="global.html#validateEmail">validateEmail</a></li><li><a href="global.html#validatePassword">validatePassword</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Fri Sep 26 2025 15:06:17 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

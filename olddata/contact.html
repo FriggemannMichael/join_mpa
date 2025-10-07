@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join App</title>
+    <link rel="stylesheet" href="css/root.css" />
+    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/contact.css" />
+    <script src="./script/contact.js"></script>
+  </head>
+
+  <body>
+    <div id="layout-header">
+      <header>
+        <h2 class="header-slogan">Kanban Project Management Tool</h2>
+        <img
+          class="header-logo"
+          src="./img/header_logo.svg"
+          alt="Join Logo"
+        />
+        <div class="header-icons">
+          <div class="help-icon">
+            <a href="#help" aria-label="Hilfe öffnen">
+              <img src="./img/help_icon.svg" alt="Help" />
+            </a>
+          </div>
+          <div
+            class="profile-icon"
+            id="profileIcon"
+            aria-haspopup="true"
+            aria-expanded="false"
+            tabindex="0"
+          >
+            <div class="profile-name guest-font-size" id="profileInitials">
+              GU
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="sub-menu-bg d-none" id="profileMenuBackdrop"></div>
+      <div class="sub-menu sub-menu-close" id="profileMenu" aria-hidden="true">
+        <a href="#profile">
+          <div>Profil</div>
+        </a>
+        <a href="#settings">
+          <div>Einstellungen</div>
+        </a>
+        <a href="#logout" id="logoutLink">
+          <div>Logout</div>
+        </a>
+      </div>
+    </div>
+    <aside id="layout-sidebar">
+      <nav aria-label="Primäre Navigation" class="app-sidebar">
+        <img class="nav-logo" src="./img/icon/logo.svg" alt="Join Logo" />
+        <div class="nav-menu" role="list">
+          <a href="#summary" class="nav-link link-1 link-active" data-nav="">
+            <div class="link-icon">
+              <img src="./img/icon/summary_icon.svg" alt="Summary Icon" />
+            </div>
+            <div class="link-name">
+              <p>Summary</p>
+            </div>
+          </a>
+
+          <a href="#board" class="nav-link link-2" data-nav="">
+            <div class="link-icon">
+              <img src="./img/icon/board_icon.svg" alt="Board Icon" />
+            </div>
+            <div class="link-name">
+              <p>Board</p>
+            </div>
+          </a>
+
+          <a href="#add-task" class="nav-link link-3" data-nav="">
+            <div class="link-icon">
+              <img src="./img/icon/add_task_icon.svg" alt="Add Task Icon" />
+            </div>
+            <div class="link-name">
+              <p>Add Task</p>
+            </div>
+          </a>
+
+          <a href="#contacts" class="nav-link link-4" data-nav="">
+            <div class="link-icon">
+              <img src="./img/icon/contacts_icon.svg" alt="Contacts Icon" />
+            </div>
+            <div class="link-name">
+              <p>Contacts</p>
+            </div>
+          </a>
+        </div>
+        <div class="privacy-and-legal">
+          <a href="#privacy">
+            <p>Privacy Policy</p>
+          </a>
+          <a href="#legal">
+            <p>Legal Notice</p>
+          </a>
+        </div>
+      </nav>
+    </aside>
+    <main id="layout-main" class="main__container contact-page" tabindex="-1">
+      <div id="contact-list" class="contact_list">
+        <button class="contact-btn">
+          Add new Contact
+          <img src="./img/icon/person_add.png" alt="add Person" />
+        </button>
+
+        <p class="beginning-letter">A</p>
+        <div class="contact-seperator"></div>
+        <div class="contact-person">
+          <div class="initals">AM</div>
+          <div class="small-info">
+            <h3>Anton Mayer</h3>
+            <a href="mailto:antonm@gmail.com">antonm@gmail.com</a>
+          </div>
+        </div>
+        <div class="contact-person">
+          <div class="initals">AM</div>
+          <div class="small-info">
+            <h3>Anton Mayer</h3>
+            <a href="mailto:antonm@gmail.com">antonm@gmail.com</a>
+          </div>
+        </div>
+        <div class="contact-person">
+          <div class="initals">AM</div>
+          <div class="small-info">
+            <h3>Anton Mayer</h3>
+            <a href="mailto:antonm@gmail.com">antonm@gmail.com</a>
+          </div>
+        </div>
+        <div class="contact-person">
+          <div class="initals">AM</div>
+          <div class="small-info">
+            <h3>Anton Mayer</h3>
+            <a href="mailto:antonm@gmail.com">antonm@gmail.com</a>
+          </div>
+        </div>
+        <p class="beginning-letter">B</p>
+        <div class="contact-seperator"></div>
+        <div class="contact-person">
+          <div class="initals">BM</div>
+          <div class="small-info">
+            <h3>Bernd Mayer</h3>
+            <a href="mailto:antonm@gmail.com">antonm@gmail.com</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="contact-info">
+        <div class="contact-headline">
+          <h3>Contacts</h3>
+          <div class="headline-seperator"></div>
+          <span>Better with a team</span>
+        </div>
+        <div class="contact-big">
+          <div class="initals-big">BM</div>
+          <div class="name-big">
+            <span>Bernd Mayer</span>
+            <div class="changebtns">
+              <button><img src="./img/icon/edit.svg" alt="" />Edit</button>
+              <button>
+                <img src="./img/icon/delete.svg" alt="" />Delete
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="contact-big-information">
+          <span>Contact Information</span>
+          <div class="contact-deep-info">
+            <div class="contact-mail">
+              <span>E-Mail</span>
+              <a href="mailto:antonm@gmail.com">antonm@gmail.com</a>
+            </div>
+            <div class="contact-phone">
+              <span>Phone</span>
+              <a href="tel:+491111111111">+49 111 111 1111</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

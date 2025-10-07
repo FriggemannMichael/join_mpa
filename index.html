@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join App</title>
+    <link rel="stylesheet" href="./css/root.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/board.css" />
+    <link rel="stylesheet" href="./css/contact.css" />
+    <link rel="stylesheet" href="./css/add_task.css" />
+  </head>
+  <body>
+    <div class="brand-splash" id="brandSplash">
+      <img src="./img/header_logo.svg" alt="Join Logo" />
+    </div>
+    <div class="login-header-signup">
+      <div class="signup-text">Not a Join user?</div>
+      <button class="btn btn-signup" type="button" id="signupBtn">
+        Sign up
+      </button>
+    </div>
+    <div class="login-view-wrapper">
+      <div
+        class="login-card login-card-hidden"
+        role="main"
+        aria-labelledby="loginTitle"
+      >
+        <div class="login-logo-fixed">
+          <img src="./img/icon/logo.svg" alt="Join Logo" />
+        </div>
+        <div class="login-header"><h1 id="loginTitle">Login</h1></div>
+        <div>
+          <div class="signUp__separator_login" aria-hidden="true"></div>
+        </div>
+        <form class="login-form" id="loginForm" novalidate>
+          <div class="inputField__container inputField__container-margin24">
+            <input
+              id="email"
+              type="email"
+              name="email"
+              placeholder="E-Mail"
+              autocomplete="email"
+              required
+            />
+            <img
+              class="inputField__username__icon"
+              src="./img/icon/mail.svg"
+              alt="Email"
+            />
+          </div>
+          <div class="inputField__container inputField__container-margin24">
+            <input
+              id="password"
+              type="password"
+              name="password"
+              placeholder="Passwort"
+              autocomplete="current-password"
+              required
+            />
+            <img
+              class="inputField__password__icon"
+              src="./img/icon/lock.svg"
+              alt="Passwort"
+            />
+          </div>
+          <div class="login-status" id="loginStatus" aria-live="polite"></div>
+          <div class="login-actions">
+            <button type="submit" class="btn btn-primary" id="loginBtn">
+              Login
+            </button>
+            <button type="button" class="btn btn-outline" id="guestBtn">
+              Gastzugang
+            </button>
+          </div>
+        </form>
+      </div>
+      <footer class="login-footer" role="contentinfo">
+        <a href="./privacy.html" class="login-footer__link" rel="nofollow"
+          >Privacy Policy</a
+        >
+        <a href="./legal.html" class="login-footer__link" rel="nofollow"
+          >Legal Notice</a
+        >
+      </footer>
+    </div>
+    <script type="module" src="./js/pages/login.js"></script>
+  </body>
+</html>

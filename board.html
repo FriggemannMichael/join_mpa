@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Join App – Board</title>
+    <link rel="stylesheet" href="./css/root.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/board.css" />
+    <link rel="stylesheet" href="./css/contact.css" />
+    <link rel="stylesheet" href="./css/add_task.css" />
+  </head>
+  <body>
+    <div class="layout">
+      <div id="layout-header" data-template="header"></div>
+      <aside id="layout-sidebar" data-template="sidebar"></aside>
+      <main id="pageContent" class="main__container" tabindex="-1">
+        <div class="kanban_header">
+          <h2>Board</h2>
+          <div id="SearchInputField" class="search_input_field">
+            <div class="search_field">
+              <input
+                id="searchInput"
+                class="search_input"
+                type="text"
+                placeholder="Find task"
+              />
+              <div class="search_affix">
+                <div class="separator_input_field"></div>
+                <button
+                  type="button"
+                  class="search_button"
+                  aria-label="Search"
+                ></button>
+              </div>
+            </div>
+            <div id="search_error" class="search_error">
+              Results not found. Adjust your search.
+            </div>
+          </div>
+          <a class="add_task_button" href="./add-task.html">
+            <span class="add_task_lable">Add task</span>
+            <img class="" src="./img/icon/add.svg" alt="Plus Sign" />
+          </a>
+        </div>
+
+        <section class="kanban-board">
+          <div class="task_column">
+            <div class="task_column_header">
+              <h3>To Do</h3>
+              <div
+                class="add_task_button_kanban"
+                role="button"
+                tabindex="0"
+              ></div>
+            </div>
+
+            <div id="toDo" class="task_space">
+              <div class="no_task_to_do">No task To do</div>
+
+              <div class="drop_placeholder"></div>
+            </div>
+          </div>
+
+          <div class="task_column">
+            <div class="task_column_header">
+              <h3>In progress</h3>
+              <div
+                class="add_task_button_kanban"
+                role="button"
+                tabindex="0"
+              ></div>
+            </div>
+
+            <div id="inProgress" class="task_space">
+              <div class="no_task_to_do">No task in progress</div>
+
+              <article class="task_card">
+                <div id="taskType" class="task_category">Type</div>
+
+                <section class="task_card_description">
+                  <h5 id="taskHeader" class="task_header">
+                    Kochwelt Page &amp; Recipe Recommender
+                  </h5>
+
+                  <span id="taskDescription" class="task_description"
+                    >Build start page with recipe recommendation.
+                  </span>
+                </section>
+
+                <div class="subtasks" style="--done: 1; --total: 2">
+                  <div
+                    class="subtasks_bar"
+                    aria-label="Subtasks progress"
+                    role="progressbar"
+                    aria-valuenow="1"
+                    aria-valuemin="0"
+                    aria-valuemax="2"
+                  ></div>
+                  <span class="subtasks_label">1/2 Subtasks</span>
+                </div>
+
+                <div class="footer_task_card">
+                  <div class="assignees" aria-label="assignees">
+                    <ul class="avatar-group" id="assignees" role="list"></ul>
+                  </div>
+
+                  <div class="prio">
+                    <img src="./img/icon/prio-medium.svg" alt="Prio Medium" />
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+
+          <div class="task_column">
+            <div class="task_column_header">
+              <h3>Await Feedback</h3>
+              <div
+                class="add_task_button_kanban"
+                role="button"
+                tabindex="0"
+              ></div>
+            </div>
+
+            <div id="awaitFeedback" class="task_space">
+              <div class="no_task_to_do">No task await Feetback</div>
+            </div>
+          </div>
+
+          <div class="task_column">
+            <div class="task_column_header">
+              <h3>Done</h3>
+            </div>
+
+            <div id="done" class="task_space">
+              <div class="no_task_to_do">No task Done</div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script type="module" src="./js/pages/board.js"></script>
+  </body>
+</html>
