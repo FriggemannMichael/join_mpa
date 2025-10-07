@@ -32,3 +32,6 @@ dist/
 build/
 
 # Firebase-Konfiguration
+
+# Copilot instructions
+.copilot-instructions
