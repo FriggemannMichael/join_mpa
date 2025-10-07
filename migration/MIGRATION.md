@@ -1,50 +1,102 @@
-# User Migration (Legacy JSON -> Firebase Authentication + Realtime DB)
+# 🚀 JOIN MPA - User Migration Guide
 
-Dieses Dokument beschreibt, wie du die alten User aus `usersdatabase.json` nach Firebase überführst.
+**Team Guide für die Migration von Legacy-Usern zu Firebase**
 
-## Ausgangslage
-- Legacy-Datei: `usersdatabase.json` mit Struktur `{"users": {<legacyKey>: { name, email, password, phone, color, initials, id }}}`
-- Aktuelle App nutzt Firebase Authentication (E-Mail + Passwort) und optional Realtime Database für Kontakte.
-- Passwörter liegen im Klartext vor (unsicher) und sollen bei Migration sicher neu gesetzt oder übernommen werden.
+Hey Team! 👋  
+Hier ist eine schnelle Anleitung, wie wir unsere alten User aus der JSON-Datei zu Firebase migrieren können.
 
-## Ziel
-1. Für jeden Legacy-User einen Firebase Auth User anlegen (oder vorhandenen erkennen).
-2. Ein Kontaktprofil in der Realtime Database unter `contacts/<uid>` speichern.
-3. Klartext-Passwörter werden NICHT im Klartext übernommen – Option:
-   - a) Temporär identisches Passwort setzen (nur in Dev) und Benutzer später zum Reset zwingen.
-   - b) Generiertes Random-Passwort setzen und Passwort-Reset E-Mail versenden.
+## 📋 Was wir vorhaben
 
-## Vorbereitung
-1. Service Account JSON aus Firebase Console generieren:
-   - Firebase Console → Projekteinstellungen → Service Accounts → "Neuen privaten Schlüssel generieren".
-   - Datei speichern als: `./migration/serviceAccountKey.json` (NICHT committen!).
-2. In der Realtime Database sicherstellen, dass Schreibrechte für Admin vorhanden sind (Admin SDK umgeht Security Rules).
-3. Node.js Umgebung: `npm install` (fügt `firebase-admin` hinzu).
+Wir haben noch alte User-Daten in `usersdatabase.json` liegen, die wir jetzt ordentlich zu Firebase Authentication überführen wollen. Gleichzeitig erstellen wir Kontaktprofile in der Realtime Database.
 
-## Skript ausführen
+### Aktuelle Situation:
+
+- **Legacy-File:** `usersdatabase.json` mit User-Objekten
+- **Neue App:** Firebase Authentication + Realtime Database
+- **Problem:** Passwörter liegen im Klartext vor (nicht sicher!)
+
+## 🎯 Das Ziel
+
+1. ✅ Firebase Auth User für jeden Legacy-User erstellen
+2. ✅ Kontaktprofil in Realtime DB speichern (`contacts/<uid>`)
+3. ✅ Sichere Passwort-Behandlung (kein Klartext!)
+
+## 🛠 Setup (einmalig)
+
+### Firebase Service Account Key generieren:
+
+1. Firebase Console öffnen → Projekteinstellungen → Service Accounts
+2. "Neuen privaten Schlüssel generieren" klicken
+3. JSON-Datei speichern als: `./migration/serviceAccountKey.json`
+4. **WICHTIG:** Diese Datei NIEMALS committen! (steht schon in .gitignore)
+
+### Database Permissions:
+
+- Admin SDK umgeht die Security Rules automatisch
+- Realtime Database sollte bereit sein
+
+### Dependencies:
+
+```bash
+npm install
+```
+
+(Das `firebase-admin` Package ist schon in der package.json)
+
+## 🚀 Migration starten
+
+Einfach diesen Befehl ausführen:
+
 ```bash
 npm run migrate:users
 ```
 
-Optional mit Optionen (siehe Kopf des Skripts).
+Das Skript ist **idempotent** - ihr könnt es mehrfach laufen lassen ohne Probleme!
 
-## Nach der Migration
-- Prüfe in Firebase Authentication: Alle neuen Benutzer sichtbar?
-- Prüfe Realtime Database: `contacts/<uid>` Einträge vorhanden?
-- Falls Random-Passwörter gesetzt wurden: Passwort-Reset E-Mails senden oder manuell veranlassen.
-- Entferne alte Klartext-Passwörter aus Repo / Git-Historie falls sensibel.
+## ✅ Nach der Migration prüfen
 
-## Sicherheit
-- `serviceAccountKey.json` in `.gitignore` aufnehmen.
-- Keine Klartext-Passwörter dauerhaft behalten.
+### Firebase Authentication:
 
-## Rollback
-- Migration ist idempotent (Skript prüft vorhandene E-Mails) – kannst es mehrfach laufen lassen.
-- Zum Entfernen: Manuell Benutzer in Auth löschen + Kontakteinträge entfernen.
+- Console öffnen → Authentication → Users
+- Alle neuen User sollten dort sichtbar sein
 
-## Erweiterungen (später)
-- Logging in Datei.
-- Dry-Run Modus.
-- Mapping-Datei generieren (legacyKey -> newUid).
+### Realtime Database:
 
-Viel Erfolg! Siehe `migrateUsers.mjs` für Details.
+- Console öffnen → Realtime Database
+- Unter `contacts/<uid>` sollten die Profile stehen
+
+### Passwörter:
+
+- Falls Random-Passwörter generiert wurden → Password-Reset E-Mails versenden
+- User informieren, dass sie sich neu anmelden müssen
+
+## 🔒 Sicherheits-Checklist
+
+- [ ] `serviceAccountKey.json` ist in .gitignore
+- [ ] Keine Klartext-Passwörter in Code/Commits
+- [ ] Legacy JSON-Datei nach Migration sicher löschen/archivieren
+
+## 🔄 Rollback (falls nötig)
+
+Das Skript prüft bereits vorhandene E-Mail-Adressen, daher:
+
+- **Safe:** Migration mehrfach ausführbar
+- **Manual Cleanup:** User in Firebase Auth löschen + DB-Einträge entfernen
+
+## 📝 TODOs für später
+
+- [ ] Logging in separate Datei
+- [ ] Dry-Run Modus implementieren
+- [ ] Mapping-Datei erstellen (legacyKey → newUid)
+
+## 💡 Tipps
+
+- Testet zuerst mit einem kleineren Datensatz
+- Macht ein Backup der Firebase Auth Users vor größeren Migrationen
+- Bei Problemen: Schaut in `migrateUsers.mjs` für Details
+
+**Happy Migrating! 🎉**
+
+---
+
+_Bei Fragen: Slack me oder Issue im Repo erstellen_

@@ -1,3 +1,8 @@
+/**
+ * Add-Task-Seite für das Erstellen neuer Tasks
+ * @module add-task
+ */
+
 import { bootLayout } from "../common/layout.js";
 import { guardPage } from "../common/pageGuard.js";
 import { auth } from "../common/firebase.js";
@@ -6,6 +11,9 @@ import { createTask } from "../common/tasks.js";
 
 initAddTaskPage();
 
+/**
+ * Initialisiert die Add-Task-Seite mit Authentication-Check und UI-Setup
+ */
 async function initAddTaskPage() {
   const allowed = await guardPage("./index.html");
   if (!allowed) return;
@@ -15,18 +23,28 @@ async function initAddTaskPage() {
   bindActionButtons();
 }
 
+/**
+ * Bindet Event-Listener für Prioritäts-Buttons
+ */
 function bindPriorityButtons() {
   document.querySelectorAll(".priority-btn").forEach((button) => {
     button.addEventListener("click", () => setActivePriority(button));
   });
 }
 
+/**
+ * Setzt einen Prioritäts-Button als aktiv und deaktiviert andere
+ * @param {HTMLElement} activeButton Der zu aktivierende Button
+ */
 function setActivePriority(activeButton) {
   document.querySelectorAll(".priority-btn").forEach((button) => {
     button.classList.toggle("active", button === activeButton);
   });
 }
 
+/**
+ * Bindet Event-Listener für Aktions-Buttons (Clear, Create)
+ */
 function bindActionButtons() {
   const clearBtn = document.getElementById("taskClearBtn");
   const createBtn = document.getElementById("taskCreateBtn");
@@ -34,6 +52,9 @@ function bindActionButtons() {
   if (createBtn) createBtn.addEventListener("click", handleTaskCreate);
 }
 
+/**
+ * Lädt und füllt die Assignee-Auswahlliste mit Kontakten
+ */
 async function populateAssignees() {
   const select = document.getElementById("taskAssignees");
   if (!select) return;

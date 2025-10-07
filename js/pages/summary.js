@@ -1,3 +1,8 @@
+/**
+ * Summary-Seite für Dashboard und Task-Übersicht
+ * @module summary
+ */
+
 import { bootLayout } from "../common/layout.js";
 import { guardPage } from "../common/pageGuard.js";
 import { getActiveUser } from "../common/authService.js";

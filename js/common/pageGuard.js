@@ -1,5 +1,15 @@
+/**
+ * Page Guard Service für Authentication-basierte Zugriffskontrolle
+ * @module pageGuard
+ */
+
 import { authReady, getActiveUser } from "./authService.js";
 
+/**
+ * Schützt eine Seite vor unauthentifizierten Zugriffen
+ * @param {string} redirect URL für Weiterleitung bei fehlender Auth
+ * @returns {Promise<boolean>} True wenn User authentifiziert ist
+ */
 export async function guardPage(redirect) {
   await authReady;
   const user = getActiveUser();
@@ -8,6 +18,10 @@ export async function guardPage(redirect) {
   return false;
 }
 
+/**
+ * Leitet authentifizierte User zu einer Zielseite weiter
+ * @param {string} target Ziel-URL für Weiterleitung
+ */
 export async function redirectIfAuthenticated(target) {
   await authReady;
   if (getActiveUser()) window.location.href = target;
