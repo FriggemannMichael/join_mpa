@@ -5,8 +5,28 @@ import { subscribeToTasks } from "../common/tasks.js";
 
 let unsubscribeFromTasks = null;
 
+// DOM ready event listener für sofortige Guest-Behandlung
+document.addEventListener("DOMContentLoaded", () => {
+  handleGuestDisplay();
+});
+
 initSummaryPage();
 
+/**
+ * Behandelt die Anzeige für Guest-User sofort beim DOM-Load
+ */
+function handleGuestDisplay() {
+  const user = getActiveUser();
+  const nameField = document.getElementById("greeting__name");
+
+  if (
+    nameField &&
+    user &&
+    (user.uid === "guest-user" || user.displayName === "Guest User")
+  ) {
+    nameField.style.display = "none";
+  }
+}
 
 /**
  * Initialisiert die Summary-Seite mit Authentication-Check und Layout-Loading
@@ -18,7 +38,6 @@ async function initSummaryPage() {
   renderGreeting();
   await loadSummaryData();
 }
-
 
 /**
  * Lädt und abonniert die Task-Daten für Summary-Anzeige
@@ -39,10 +58,34 @@ function renderGreeting() {
   const nameField = document.getElementById("greeting__name");
   const textField = document.getElementById("greeting__text");
   if (!nameField || !textField) return;
-  nameField.textContent = resolveUserName();
-  textField.textContent = buildGreetingPrefix();
+
+  const user = getActiveUser();
+  const isGuest = isGuestUser(user);
+
+  if (isGuest) {
+    // Bei Guest-User: Name-Element komplett ausblenden
+    nameField.style.display = "none";
+    textField.textContent = buildGreetingPrefixForGuest();
+  } else {
+    // Bei echtem User: Name-Element anzeigen
+    nameField.style.display = "block";
+    nameField.textContent = resolveUserName();
+    textField.textContent = buildGreetingPrefix();
+  }
 }
 
+/**
+ * Prüft ob der aktuelle User ein Guest ist
+ * @param {Object|null} user User-Objekt
+ * @returns {boolean} True wenn Guest-User
+ */
+function isGuestUser(user) {
+  if (!user) return true;
+  if (user.uid === "guest-user") return true;
+  if (user.displayName === "Guest User") return true;
+  if (user.displayName === "Guest") return true;
+  return false;
+}
 
 /**
  * Aktualisiert alle Summary-Metriken basierend auf Task-Daten
@@ -57,7 +100,6 @@ function updateSummaryMetrics(tasks) {
   const metrics = calculateTaskMetrics(tasks);
   updateSummaryDisplay(metrics);
 }
-
 
 /**
  * Berechnet alle notwendigen Task-Metriken für die Summary-Anzeige
@@ -84,7 +126,6 @@ function calculateTaskMetrics(tasks) {
   };
 }
 
-
 /**
  * Findet die nächstliegende Deadline aus allen Tasks
  * @param {Array} tasks Array mit Task-Objekten
@@ -100,7 +141,6 @@ function findUpcomingDeadline(tasks) {
   return formatDeadlineDate(upcomingTasks[0].dueDate);
 }
 
-
 /**
  * Formatiert ein Datum für die Deadline-Anzeige
  * @param {string} dateString ISO-Datumsstring
@@ -114,7 +154,6 @@ function formatDeadlineDate(dateString) {
     day: "numeric",
   });
 }
-
 
 /**
  * Aktualisiert die DOM-Elemente mit den berechneten Metriken
@@ -135,7 +174,6 @@ function updateSummaryDisplay(metrics) {
   }
 }
 
-
 /**
  * Hilfsfunktion um Element-Inhalt sicher zu aktualisieren
  * @param {string} elementId ID des DOM-Elements
@@ -147,7 +185,6 @@ function updateElementById(elementId, value) {
     element.textContent = value.toString();
   }
 }
-
 
 /**
  * Zeigt Fallback-Werte an wenn keine Daten geladen werden können
@@ -171,13 +208,12 @@ function showFallbackMetrics() {
  */
 function resolveUserName() {
   const user = getActiveUser();
-  if (!user) return "Guest";
-  if (user.displayName && user.displayName.trim())
+  if (isGuestUser(user)) return "Guest";
+  if (user && user.displayName && user.displayName.trim())
     return user.displayName.trim();
-  if (user.email) return user.email.split("@")[0];
+  if (user && user.email) return user.email.split("@")[0];
   return "Guest";
 }
-
 
 /**
  * Erstellt das Begrüßungsprefix basierend auf der aktuellen Tageszeit
@@ -190,6 +226,16 @@ function buildGreetingPrefix() {
   return "Good evening,";
 }
 
+/**
+ * Erstellt die Begrüßung für Guest-User ohne Komma
+ * @returns {string} Begrüßungstext ohne Komma für Guest-User
+ */
+function buildGreetingPrefixForGuest() {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Good morning";
+  if (hour < 18) return "Good afternoon";
+  return "Good evening";
+}
 
 /**
  * Cleanup-Funktion die beim Verlassen der Seite aufgerufen wird
