@@ -1,8 +1,16 @@
+/**
+ * Contacts-Seite für Kontaktverwaltung
+ * @module contacts
+ */
+
 import { bootLayout } from "../common/layout.js";
 import { guardPage } from "../common/pageGuard.js";
 
 initContactsPage();
 
+/**
+ * Initialisiert die Contacts-Seite mit Authentication-Check und UI-Setup
+ */
 async function initContactsPage() {
   const allowed = await guardPage("./index.html");
   if (!allowed) return;
@@ -11,12 +19,19 @@ async function initContactsPage() {
   bindModalControls();
 }
 
+/**
+ * Bindet Event-Listener für die Kontaktliste
+ */
 function bindContactList() {
   document.querySelectorAll(".contact-person").forEach((entry) => {
     entry.addEventListener("click", () => showContactDetail(entry));
   });
 }
 
+/**
+ * Zeigt die Details eines ausgewählten Kontakts an
+ * @param {HTMLElement} entry Das Kontakt-Element
+ */
 function showContactDetail(entry) {
   const name = entry.querySelector("h3")?.textContent || "";
   const mail = entry.querySelector("a")?.getAttribute("href") || "mailto:";
@@ -28,12 +43,21 @@ function showContactDetail(entry) {
   );
 }
 
+/**
+ * Aktualisiert die Detailansicht mit Kontaktinformationen
+ * @param {string} name Name des Kontakts
+ * @param {string} mail E-Mail-Adresse
+ * @param {string} phone Telefonnummer
+ */
 function updateDetailView(name, mail, phone) {
   setText("contactDetailName", name);
   setLink("contactDetailMail", `mailto:${mail}`, mail);
   setLink("contactDetailPhone", `tel:${phone}`, phone);
 }
 
+/**
+ * Bindet Event-Listener für Modal-Steuerung
+ */
 function bindModalControls() {
   const openBtn = document.getElementById("addNewContactBtn");
   const closeBtn = document.getElementById("contactModalClose");

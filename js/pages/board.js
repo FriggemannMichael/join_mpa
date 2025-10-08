@@ -1,3 +1,8 @@
+/**
+ * Board-Seite für Task-Management und Kanban-View
+ * @module board
+ */
+
 import { bootLayout } from "../common/layout.js";
 import { guardPage } from "../common/pageGuard.js";
 import { subscribeToTasks } from "../common/tasks.js";
@@ -5,6 +10,9 @@ import { enableCardInteractions } from "../dragdrop/dragdrop.js";
 
 initBoardPage();
 
+/**
+ * Initialisiert die Board-Seite mit Authentication-Check und Layout-Loading
+ */
 async function initBoardPage() {
   const allowed = await guardPage("./index.html");
   if (!allowed) return;
@@ -16,6 +24,9 @@ async function initBoardPage() {
 
 let unsubscribeTasks = null;
 
+/**
+ * Abonniert Task-Änderungen und rendert das Board bei Updates
+ */
 async function observeTasks() {
   unsubscribeTasks = await subscribeToTasks((tasks) => {
     renderBoard(tasks || []);
@@ -26,6 +37,9 @@ async function observeTasks() {
   });
 }
 
+/**
+ * Bindet Event-Listener für die Suchfunktionalität
+ */
 function bindSearch() {
   const button =
     document.getElementById("searchButton") ||
@@ -39,6 +53,10 @@ function bindSearch() {
   toggleSearchMessage(false);
 }
 
+/**
+ * Führt eine Suche nach Tasks basierend auf dem Suchbegriff durch
+ * @param {string} term Der Suchbegriff
+ */
 function runSearch(term) {
   if (!term) return toggleSearchMessage(false);
   const cards = Array.from(document.querySelectorAll(".task_card"));
@@ -46,6 +64,12 @@ function runSearch(term) {
   toggleSearchMessage(!found);
 }
 
+/**
+ * Prüft ob eine Task-Karte dem Suchbegriff entspricht
+ * @param {HTMLElement} card Das Task-Karten-Element
+ * @param {string} term Der Suchbegriff
+ * @returns {boolean} True wenn der Task dem Suchbegriff entspricht
+ */
 function matchTask(card, term) {
   const title = card.querySelector(".task_header")?.textContent || "";
   const description =
@@ -54,12 +78,20 @@ function matchTask(card, term) {
   return text.includes(term.toLowerCase());
 }
 
+/**
+ * Zeigt oder versteckt die "Keine Ergebnisse"-Nachricht
+ * @param {boolean} show True um die Nachricht anzuzeigen
+ */
 function toggleSearchMessage(show) {
   const message = document.getElementById("search_error");
   if (!message) return;
   message.style.display = show ? "block" : "none";
 }
 
+/**
+ * Rendert alle Tasks auf dem Board in die entsprechenden Spalten
+ * @param {Array<Object>} tasks Array von Task-Objekten
+ */
 function renderBoard(tasks) {
   const columns = {
     todo: {
@@ -104,6 +136,11 @@ function renderBoard(tasks) {
   });
 }
 
+/**
+ * Gruppiert Tasks nach ihrem Status
+ * @param {Array<Object>} tasks Array von Task-Objekten
+ * @returns {Object} Gruppierte Tasks nach Status
+ */
 function groupTasksByStatus(tasks) {
   return tasks.reduce((acc, task) => {
     const status = task.status || "todo";
@@ -113,6 +150,11 @@ function groupTasksByStatus(tasks) {
   }, {});
 }
 
+/**
+ * Erstellt ein Element für leere Board-Spalten
+ * @param {string} text Der anzuzeigende Text
+ * @returns {HTMLElement} Das Empty-State-Element
+ */
 function buildEmptyState(text) {
   const node = document.createElement("div");
   node.className = "no_task_to_do";
@@ -126,6 +168,11 @@ function buildDropPlaceholder() {
   return node;
 }
 
+/**
+ * Erstellt eine HTML-Karte für einen Task
+ * @param {Object} task Das Task-Objekt
+ * @returns {HTMLElement} Das Task-Karten-Element
+ */
 function buildTaskCard(task) {
   const card = document.createElement("article");
   card.className = "task_card";

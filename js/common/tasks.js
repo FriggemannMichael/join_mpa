@@ -1,3 +1,8 @@
+/**
+ * Task-Service für Firebase Realtime Database Operations
+ * @module tasks
+ */
+
 import { auth } from "./firebase.js";
 import { loadFirebaseDatabase } from "./database.js";
 

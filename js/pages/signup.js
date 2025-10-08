@@ -1,8 +1,16 @@
+/**
+ * Signup-Seite für Benutzerregistrierung
+ * @module signup
+ */
+
 import { registerUser, readAuthError } from "../common/authService.js";
 import { redirectIfAuthenticated } from "../common/pageGuard.js";
 
 initSignupPage();
 
+/**
+ * Initialisiert die Signup-Seite mit Redirect-Check und UI-Setup
+ */
 async function initSignupPage() {
   await redirectIfAuthenticated("./summary.html");
   bindSignupForm();
@@ -10,6 +18,9 @@ async function initSignupPage() {
   bindPasswordToggles();
 }
 
+/**
+ * Bindet Event-Listener für das Signup-Formular
+ */
 function bindSignupForm() {
   const form = document.getElementById("signupForm");
   if (!form) return;
@@ -18,6 +29,9 @@ function bindSignupForm() {
   form.addEventListener("change", updateSubmitState);
 }
 
+/**
+ * Bindet Event-Listener für den Zurück-Button
+ */
 function bindBackButton() {
   const backBtn = document.getElementById("signupBackBtn");
   if (!backBtn) return;
@@ -26,6 +40,9 @@ function bindBackButton() {
   });
 }
 
+/**
+ * Bindet Event-Listener für Passwort-Sichtbarkeits-Toggles
+ */
 function bindPasswordToggles() {
   document.querySelectorAll("[data-toggle]").forEach((button) => {
     button.addEventListener("click", () =>
@@ -34,6 +51,10 @@ function bindPasswordToggles() {
   });
 }
 
+/**
+ * Verarbeitet das Signup-Formular-Submit
+ * @param {Event} event Das Submit-Event
+ */
 async function handleSignupSubmit(event) {
   event.preventDefault();
   if (!validateSignup()) return;

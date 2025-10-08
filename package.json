@@ -10,6 +10,7 @@
         "dev": "npx serve . -p 3000",
         "docs-serve": "npm run docs && npx serve documentation",
         "clean-docs": "powershell -NoLogo -NoProfile -Command \"Remove-Item -Recurse -Force ./docs,./docs_temp -ErrorAction SilentlyContinue\"",
+        "lint:css": "stylelint \"css/**/*.css\" --fix",
         "migrate:users": "node ./migration/migrateUsers.mjs"
     },
     "dependencies": {
@@ -18,7 +19,10 @@
     },
     "devDependencies": {
         "jsdoc": "^4.0.2",
-        "serve": "^14.2.1"
+        "serve": "^14.2.1",
+        "stylelint": "^16.8.0",
+        "stylelint-config-standard": "^36.0.0",
+        "stylelint-order": "^6.0.4"
     },
     "keywords": [
         "kanban",

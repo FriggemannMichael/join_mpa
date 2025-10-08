@@ -1,8 +1,16 @@
+/**
+ * Login-Seite für Benutzeranmeldung
+ * @module login
+ */
+
 import { login, startGuest, readAuthError } from "../common/authService.js";
 import { redirectIfAuthenticated } from "../common/pageGuard.js";
 
 initLoginPage();
 
+/**
+ * Initialisiert die Login-Seite mit Redirect-Check und UI-Setup
+ */
 async function initLoginPage() {
   await redirectIfAuthenticated("./summary.html");
   bindLoginForm();
@@ -11,12 +19,19 @@ async function initLoginPage() {
   runIntroAnimation();
 }
 
+/**
+ * Bindet Event-Listener für das Login-Formular
+ */
 function bindLoginForm() {
   const form = document.getElementById("loginForm");
   if (!form) return;
   form.addEventListener("submit", handleLoginSubmit);
 }
 
+/**
+ * Verarbeitet das Login-Formular-Submit
+ * @param {Event} event Das Submit-Event
+ */
 async function handleLoginSubmit(event) {
   event.preventDefault();
   const email = readInputValue("email");
@@ -33,6 +48,9 @@ async function handleLoginSubmit(event) {
   disableButton("loginBtn", false);
 }
 
+/**
+ * Bindet Event-Listener für den Guest-Button
+ */
 function bindGuestButton() {
   const guestBtn = document.getElementById("guestBtn");
   if (!guestBtn) return;
