@@ -1,184 +1,138 @@
 .add_contact {
-    display: flex;
-    flex-direction: row;
-    border-radius: 30px;
-    background-color: white;
-    height: 592px;
+  background-color: var(--white);
+  border-radius: 30px;
+  display: flex;
+  flex-direction: row;
+  height: 592px;
 }
 
 .add_contact_headline {
-    display: flex;
-    flex-direction: column;
-    align-items: left;
-    justify-content: center;
-    background-color: #2A3647;
-    border-top-left-radius: 30px;
-    border-bottom-left-radius: 30px;
-    width: 44%;
-    padding: 00 32px;
-    color: white;
-    gap: 8px;
+  align-items: flex-start;
+  background-color: var(--primary-color);
+  border-bottom-left-radius: 30px;
+  border-top-left-radius: 30px;
+  color: var(--white);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  justify-content: center;
+  padding: 0 32px;
+  width: 44%;
+}
 
-    img {
-        width: 55.6px;
-        height: auto;
-    }
+.add_contact_headline img {
+  height: auto;
+  width: 55.6px;
+}
 
-    h2 {
-        font-size: 61px;
-        font-weight: 700;
-    }
+.add_contact_headline h2 {
+  font-size: 61px;
+  font-weight: 700;
+}
 
-    span {
-        font-size: 27px;
-        font-weight: 400;
-    }
+.add_contact_headline span {
+  font-size: 27px;
+  font-weight: 400;
 }
 
 .add_contact_headline_seperator {
-    width: 90px;
-    border: 3px solid #29ABE2;
+  border: 3px solid var(--secondary-color);
+  width: 90px;
 }
 
 .add_contact_main {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-
-
-}
-
-#personeclipse {
-    display: flex;
-    width: 120px;
-    height: 120px;
-    border-radius: 70px;
-    border: 3px solid white;
-    background-color: rgba(209, 209, 209, 1);
-    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.1);
-    margin: 0 32px;
-    align-items: center;
-    justify-content: center;
+  align-items: center;
+  border: 3px solid var(--white);
+  border-radius: 70px;
+  display: flex;
+  flex-direction: row;
+  height: 120px;
+  justify-content: space-between;
+  justify-content: center;
+  justify-content: center;
+  width: 100%;
+  width: 120px;
 }
 
 #personimg {
-    filter: brightness(0) saturate(100%) invert(100%) sepia(3%) saturate(7500%) hue-rotate(197deg) brightness(106%) contrast(103%);
-    width: 64px;
-    height: 64px;
-    margin: 0 40px;
-
-}
-
-.add_contact_input {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-    padding-top: 48px;
-    padding-right: 48px;
-    width: 100%;
-    height: 100%;
-
-}
-
-#add_contact_close {
-    place-self: flex-end;
-    margin: 10px 0;
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
+  filter: brightness(0) saturate(100%) invert(100%) sepia(3%) saturate(7500%)
+    hue-rotate(197deg) brightness(106%) contrast(103%);
+  height: 64px;
+  margin: 0 40px;
+  width: 64px;
 }
 
 #add_contact_name {
+  display: flex;
+  gap: 24px;
+  margin: 10px 0;
+  padding: 12px 16px;
+  place-self: flex-end;
+  width: 32px;
+  width: 100%;
+
+  #add_contact_name,
+  #add_contact_email,
+  #add_contact_phone {
+    background-color: var(--white);
+    background-position: 95%;
+    background-repeat: no-repeat;
+    background-size: 24px;
+    border: 1px solid var(--color-separator);
+    border-radius: 10px;
+    font-family: Inter, Arial, sans-serif;
+    font-size: 16px;
+    padding: 12px 16px;
+    width: 100%;
+  }
+
+  #add_contact_name {
+    background-image: url("../img/icon/person.svg");
     margin-top: 25px;
-    width: 100%;
-    padding: 12px 16px;
-    font-size: 16px;
-    border: 1px solid #d1d1d1;
-    border-radius: 10px;
-    background-color: #ffffff;
-    font-family: "Inter", Arial, sans-serif;
-    background-image: url(../img/icon/person.svg);
-    background-repeat: no-repeat;
-    background-position: 95%;
-    background-size: 24px;
+  }
+
+  #add_contact_email {
+    background-image: url("../img/icon/mail.svg");
+  }
+
+  #add_contact_phone {
+    background-image: url("../img/icon/call.svg");
+  }
 }
 
-#add_contact_email {
-    width: 100%;
-    padding: 12px 16px;
-    font-size: 16px;
-    border: 1px solid #d1d1d1;
-    border-radius: 10px;
-    background-color: #ffffff;
-    font-family: "Inter", Arial, sans-serif;
-    background-image: url(../img/icon/mail.svg);
-    background-repeat: no-repeat;
-    background-position: 95%;
-    background-size: 24px;
-
-
+.add_contact_input_buttons button {
+  align-items: center;
+  background-color: transparent;
+  border: 1px solid var(--primary-color);
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  justify-content: center;
+  padding: 16px;
+  white-space: nowrap;
 }
 
-
-
-#add_contact_phone {
-    width: 100%;
-    padding: 12px 16px;
-    font-size: 16px;
-    border: 1px solid #d1d1d1;
-    border-radius: 10px;
-    background-color: #ffffff;
-    font-family: "Inter", Arial, sans-serif;
-    background-image: url(../img/icon/call.svg);
-    background-repeat: no-repeat;
-    background-position: 95%;
-    background-size: 24px;
-}
-
-.add_contact_input_buttons {
-    display: flex;
-
-    gap: 24px;
-
-    button {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: center;
-        white-space: nowrap;
-        padding: 16px;
-        background-color: transparent;
-        border: 1px solid #2A3647;
-        border-radius: 10px;
-        gap: 4px;
-        cursor: pointer;
-    }
-
-    img {
-        width: 24px;
-        height: 24px;
-        margin: 0;
-    }
-}
-
-::placeholder {
-    color: rgba(0, 0, 0, 0.25);
+.add_contact_input_buttons img {
+  height: 24px;
+  margin: 0;
+  width: 24px;
 }
 
 #add_contact_cancel {
-    font-size: 20px;
-    font-weight: 400;
+  font-size: 20px;
+  font-weight: 400;
 }
 
 #create_contact {
-    color: white;
-    background-color: #2A3647;
-    font-size: 21px;
-    font-weight: 700;
+  background-color: var(--primary-color);
+  color: var(--white);
+  font-size: 21px;
+  font-weight: 700;
+}
 
-    img {
-        filter: brightness(0) saturate(100%) invert(100%) sepia(3%) saturate(7500%) hue-rotate(197deg) brightness(106%) contrast(103%);
-    }
+#create_contact img {
+  filter: brightness(0) saturate(100%) invert(100%) sepia(3%) saturate(7500%)
+    hue-rotate(197deg) brightness(106%) contrast(103%);
 }

@@ -1,13 +1,3 @@
-* {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: "Inter", sans-serif;
-}
-
 h1 {
   font-size: 61px;
   font-weight: 700;
@@ -15,16 +5,16 @@ h1 {
 
 .heading {
   background-color: #f6f7f8;
-  padding-left: 96px;
   padding-bottom: 48px;
+  padding-left: 96px;
 }
 
 .add-task-container {
-  margin-top: 96px;
+  background-color: #f6f7f8;
   display: flex;
   flex-direction: column;
   margin-left: 232px;
-  background-color: #f6f7f8;
+  margin-top: 96px;
 }
 
 .form-container {
@@ -49,9 +39,9 @@ h1 {
 }
 
 .form-col-middle {
-  height: 424px;
-  border-left: 1px solid #d1d1d1;
   align-self: center;
+  border-left: 1px solid #d1d1d1;
+  height: 424px;
 }
 
 .form-group {
@@ -61,13 +51,13 @@ h1 {
 }
 
 .form-input {
-  border-radius: 10px;
-  padding: 12px 21px;
   border: 1px solid #d1d1d1;
+  border-radius: 10px;
+  cursor: pointer;
   font-family: inherit;
   font-size: 20px;
   height: 48px;
-  cursor: pointer;
+  padding: 12px 21px;
   width: min(440px, 100%);
 }
 
@@ -77,35 +67,35 @@ h1 {
 }
 
 .form-input:focus {
-  outline: none;
   border-color: #29abe2;
+  outline: none;
 }
 
 .dropdown-container {
-  position: relative;
   cursor: pointer;
+  position: relative;
   width: min(440px, 100%);
 }
 
 .select-btn {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  height: 48px;
-  padding: 0 16px;
+  background-color: #fff;
   border: 1px solid #d1d1d1;
   border-radius: 10px;
-  background-color: #fff;
-  font-size: 20px;
   cursor: pointer;
+  display: flex;
+  font-size: 20px;
+  height: 48px;
+  justify-content: space-between;
+  padding: 0 16px;
 }
 
 .select-btn-input {
   border: unset;
-  width: 100%;
-  height: 100%;
-  font-size: 20px;
   cursor: pointer;
+  font-size: 20px;
+  height: 100%;
+  width: 100%;
 }
 
 .select-btn-input:focus {
@@ -113,12 +103,12 @@ h1 {
 }
 
 .select-btn .arrow-down {
-  display: flex;
-  justify-content: center;
   align-items: center;
+  display: flex;
   height: 24px;
-  width: 24px;
+  justify-content: center;
   transition: 125ms;
+  width: 24px;
 }
 
 .select-btn.show-menu .arrow-down {
@@ -126,19 +116,19 @@ h1 {
 }
 
 .list-items {
-  position: absolute;
-  top: 48px;
-  width: 100%;
+  background-color: #fff;
+  border: 1px solid #d1d1d1;
+  border-radius: 0 0 10px 10px;
+  border-top: none;
+  display: none;
+  font-size: 20px;
   max-height: 250px;
   overflow-y: scroll;
   padding-top: 8px;
-  background-color: #fff;
-  border-radius: 0 0 10px 10px;
-  border: 1px solid #d1d1d1;
-  border-top: none;
-  display: none;
+  position: absolute;
+  top: 48px;
+  width: 100%;
   z-index: 2;
-  font-size: 20px;
 }
 
 .select-btn.show-menu {
@@ -151,50 +141,50 @@ h1 {
 }
 
 .list-items .list-item {
-  list-style: none;
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 7px 16px;
+  display: flex;
   height: 56px;
+  justify-content: space-between;
+  list-style: none;
+  padding: 7px 16px;
   transition: 125ms;
 }
 
 .list-items .list-item:hover {
-  background-color: #eeeeee;
+  background-color: #eee;
   border-radius: 10px;
 }
 
 .list-item-name {
-  display: flex;
   align-items: center;
+  display: flex;
   gap: 8px;
 }
 
 .selected-contacts-div {
-  padding: 18px 0;
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
+  padding: 18px 0;
 }
 
 .cicle {
-  display: flex;
   align-items: center;
-  justify-content: center;
   background-color: #9747ff;
-  color: #fff;
-  border-radius: 50%;
   border: 2px solid #fff;
-  width: 42px;
-  height: 42px;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
   font-size: 12px;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
 }
 
 .list-item.checked {
   background-color: #2a3647;
-  color: white;
   border-radius: 10px;
+  color: white;
 }
 
 .list-item.checked:hover {
@@ -206,24 +196,24 @@ h1 {
 }
 
 .list-item.category {
-  list-style: none;
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 0px 16px;
+  display: flex;
   height: 48px;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0 16px;
   transition: 500ms;
 }
 
 .list-item.category:hover {
-  background-color: #eeeeee;
+  background-color: #eee;
   border-radius: 10px;
 }
 
 .subtask-input-container {
+  cursor: pointer;
   display: flex;
   width: min(440px, 100%);
-  cursor: pointer;
 }
 
 .form-input.subtask-input {
@@ -233,54 +223,54 @@ h1 {
 }
 
 .subtask-input:focus ~ .subtask-btn {
-  outline: none;
   border-color: #29abe2;
+  outline: none;
 }
 
 .subtask-btn {
-  display: flex;
-  justify-content: flex-end;
   align-items: center;
-  padding: 0 16px;
   background-color: white;
   border: 1px solid #d1d1d1;
   border-left: 0;
   border-radius: 0 10px 10px 0;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 16px;
 }
 
 .subtask-btn img {
-  width: 14px;
   height: 14px;
+  width: 14px;
 }
 
 .check-cancel-div {
+  align-items: center;
   display: none;
   justify-content: flex-end;
-  align-items: center;
   padding: 0 8px;
 }
 
 .subtask-cancel {
-  display: flex;
-  justify-content: center;
   align-items: center;
   border-radius: 50%;
+  display: flex;
   height: 32px;
+  justify-content: center;
   width: 32px;
 }
 
 .subtask-divider {
-  width: 1px;
-  height: 67%;
   border-right: 1px solid #d1d1d1;
+  height: 67%;
   margin: 0 4px;
+  width: 1px;
 }
 
 .subtask-divider-2 {
-  width: 1px;
-  height: 24px;
   border-right: 1px solid #091931;
+  height: 24px;
   margin: 0 8px;
+  width: 1px;
 }
 
 .subtask-divider-2.subtask-divider-3 {
@@ -288,13 +278,13 @@ h1 {
 }
 
 .subtask-check {
-  display: flex;
-  justify-content: center;
   align-items: center;
   border-radius: 50%;
+  display: flex;
   height: 32px;
-  width: 32px;
+  justify-content: center;
   transition: 125ms;
+  width: 32px;
 }
 
 .subtask-cancel:hover,
@@ -303,21 +293,21 @@ h1 {
 }
 
 .subtasks-list {
-  padding: 8px 0;
-  overflow-y: auto;
   height: 100px;
   max-width: 440px;
+  overflow-y: auto;
+  padding: 8px 0;
 }
 
 .subtask-list-item {
-  list-style: none;
-  display: flex;
-  justify-content: space-between;
   align-items: center;
   border-radius: 10px;
-  padding: 4px 16px;
-  height: 32px;
   cursor: pointer;
+  display: flex;
+  height: 32px;
+  justify-content: space-between;
+  list-style: none;
+  padding: 4px 16px;
 }
 
 .subtask-list-item:hover {
@@ -338,9 +328,9 @@ h1 {
 }
 
 .subtask-edit-icon-div {
+  align-items: center;
   display: none;
   justify-content: center;
-  align-items: center;
 }
 
 .subtask-list-item:hover .subtask-edit-icon-div {
@@ -348,11 +338,11 @@ h1 {
 }
 
 .edit-subtask-input {
-  width: 100%;
-  height: 32px;
   border: none;
   border-bottom: 1px solid #29abe2;
+  height: 32px;
   padding: 4px 16px;
+  width: 100%;
 }
 
 .edit-subtask-input:focus {
@@ -360,24 +350,24 @@ h1 {
 }
 
 .edit-subtask-button-div {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  height: 32px;
-  gap: 4px;
-  padding: 0 16px;
   background-color: #fff;
   border-bottom: 1px solid #29abe2;
+  display: flex;
+  gap: 4px;
+  height: 32px;
+  justify-content: center;
+  padding: 0 16px;
 }
 
 .delete-subtask-btn.edit,
 .confirm-subtask-edit-btn {
-  display: flex;
   align-items: center;
-  justify-content: center;
   border-radius: 50%;
-  width: 24px;
+  display: flex;
   height: 24px;
+  justify-content: center;
+  width: 24px;
 }
 
 .delete-subtask-btn:hover,
@@ -386,20 +376,20 @@ h1 {
 }
 
 textarea {
-  padding: 16px;
-  height: 120px;
-  border-radius: 10px;
   border: 1px solid #d1d1d1;
+  border-radius: 10px;
+  cursor: pointer;
   font-family: inherit;
   font-size: 20px;
-  cursor: pointer;
-  width: min(440px, 100%);
+  height: 120px;
+  padding: 16px;
   resize: none;
+  width: min(440px, 100%);
 }
 
 textarea:focus {
-  outline: none;
   border-color: #29abe2;
+  outline: none;
 }
 
 .prio-buttons {
@@ -409,30 +399,30 @@ textarea:focus {
 }
 
 .prio-btn {
-  padding: 16px 10px;
-  display: flex;
-  justify-content: center;
   align-items: center;
+  background-color: white;
+  border: 1px solid #d1d1d1;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  flex: 1;
   font-size: 20px;
   gap: 8px;
-  background-color: white;
-  border-radius: 10px;
-  border: 1px solid #d1d1d1;
-  flex: 1;
-  cursor: pointer;
+  justify-content: center;
+  padding: 16px 10px;
 }
 
 .prio-btn:hover {
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 4px 0 rgb(0 0 0 / 25%);
 }
 
 .prio-btn.active {
   background-color: #ffa800;
-  color: white;
-  outline: none;
   box-shadow: none;
-  font-weight: 700;
+  color: white;
   font-size: 21px;
+  font-weight: 700;
+  outline: none;
 }
 
 .prio-btn.active.urgent {
@@ -444,10 +434,10 @@ textarea:focus {
 }
 
 .form-bottom {
-  margin: 0 0 128px 96px;
-  display: flex;
   align-items: flex-end;
+  display: flex;
   font-size: 20px;
+  margin: 0 0 128px 96px;
   max-width: 976px;
 }
 
@@ -458,25 +448,25 @@ textarea:focus {
 }
 
 .required {
-  color: #ff0000; /* Rot für Pflichtfelder */
+  color: #f00; /* Rot für Pflichtfelder */
   font-size: 0.65em; /* kleiner als Label-Text */
-  vertical-align: super; /* hochgestellt */
   line-height: 1;
   margin-left: 2px;
+  vertical-align: super; /* hochgestellt */
 }
 
 .clear-btn,
 .create-btn {
+  align-items: center;
+  background-color: white;
   border: 1px solid #2a3647;
   border-radius: 10px;
-  padding: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
   cursor: pointer;
+  display: flex;
   font-size: 20px;
-  background-color: white;
+  gap: 6px;
+  justify-content: center;
+  padding: 16px;
 }
 
 .create-btn {
@@ -487,24 +477,24 @@ textarea:focus {
 
 .clear-btn:hover {
   border: 1px solid #29abe2;
+  box-shadow: 0 4px 4px 0 rgb(0 0 0 / 25%);
   color: #29abe2;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 }
 
 .create-btn:hover {
   background-color: #29abe2;
   border: 1px solid #29abe2;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 4px 0 rgb(0 0 0 / 25%);
 }
 
 label {
   font-size: 20px;
 }
 
-@media screen and (max-width: 1369px) {
+@media screen and (width <= 1369px) {
   .form-col-container {
-    justify-content: center;
     gap: 0;
+    justify-content: center;
   }
 
   .form-col-left {
@@ -522,25 +512,25 @@ label {
   }
 
   .form-bottom {
-    max-width: 440px;
     flex-wrap: wrap;
     gap: 16px;
+    max-width: 440px;
   }
 }
 
-@media screen and (max-width: 1024px) {
+@media screen and (width <= 1024px) {
   .add-task-container {
     margin-left: 0;
   }
 }
 
-@media (max-width: 576px) {
+@media (width <= 576px) {
   .form-container {
     margin-top: 48px;
   }
 
   .form-col-container {
-    margin: 0 32px 32px 32px;
+    margin: 0 32px 32px;
   }
 
   h1 {
@@ -548,8 +538,8 @@ label {
   }
 
   .heading {
-    padding-left: 32px;
     padding-bottom: 32px;
+    padding-left: 32px;
   }
 
   .form-input,
@@ -565,11 +555,11 @@ label {
   }
 
   .form-bottom {
-    margin: 0 32px 128px 32px;
+    margin: 0 32px 128px;
   }
 }
 
-@media (max-width: 427px) {
+@media (width <= 427px) {
   .prio-buttons {
     flex-direction: column;
   }
