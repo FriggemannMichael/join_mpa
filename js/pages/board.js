@@ -1,6 +1,7 @@
 import { bootLayout } from "../common/layout.js";
 import { guardPage } from "../common/pageGuard.js";
 import { subscribeToTasks } from "../common/tasks.js";
+import { enableCardInteractions } from "../dragdrop/dragdrop.js";
 
 initBoardPage();
 
@@ -153,6 +154,7 @@ function buildTaskCard(task) {
   footer.className = "footer_task_card";
   footer.append(buildAssigneeGroup(task), buildPriority(task.priority));
   card.append(footer);
+  // enableCardInteractions(card)
 
   return card;
 }
