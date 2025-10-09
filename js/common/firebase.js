@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { getDatabase } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDHgcauGdhslZv1Qj8qwmtZtAIxaPM83hc",
@@ -19,3 +20,7 @@ export const auth = getAuth(firebaseApp);
 export function isUserLoggedIn() {
   return !!auth.currentUser;
 }
+
+// Zu testzwecken bei drag and drop
+const db = getDatabase(firebaseApp);
+export { db};

@@ -1,3 +1,6 @@
+import { db } from "../common/firebase.js";
+import { ref, update, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
 export async function loadTask(id) {
   const root = ref(db);
   const snap = await get(child(root, `tasks/${id}`));
@@ -16,6 +19,10 @@ export function renderTaskModal(id, task = {}) {
     status = "todo",
     dueDate = ""
   } = task;
+
+  const overlay = document.getElementById("taskOverlay");        // äußerer Wrapper (Backdrop-Klick-Ziel)
+  const backdrop = overlay?.querySelector(".backdrop_overlay");
+
 
   const section = document.getElementById("taskModal");
   section.dataset.taskId = id;
@@ -112,5 +119,56 @@ export function renderTaskModal(id, task = {}) {
     assigned,
     subtaskEl
   );
-  return section;
+
+  if (overlay && !overlay.dataset.bound) {
+    const onBackdropClick = (e) => {
+      // Klick direkt auf Overlay-Wrapper ODER expliziten Backdrop schließt
+      if (e.target === overlay || e.target === backdrop) closeOverlay();
+    };
+
+    const onKeydown = (e) => {
+      if (e.key === "Escape") closeOverlay();
+    };
+
+    // nur einmal binden
+    overlay.addEventListener("click", onBackdropClick);
+    document.addEventListener("keydown", onKeydown);
+    overlay.dataset.bound = "1";
+
+    // Cleanup beim Schließen
+    overlay._cleanup = () => {
+      overlay.removeEventListener("click", onBackdropClick);
+      document.removeEventListener("keydown", onKeydown);
+      delete overlay.dataset.bound;
+    };
+  }
+
+  // Klicks im Inhalt sollen NICHT das Overlay schließen
+  section.addEventListener("click", (e) => e.stopPropagation());
+
+  // Close-Button schließt immer
+  closeBtn.addEventListener("click", () => closeOverlay());
+
+  // Aktivieren (für CSS-Animationen wie .overlay.active)
+  overlay?.classList.add("active");
+
+  function closeOverlay() {
+    if (!overlay) return;
+    overlay.classList.remove("active");
+    return section;
+  }
+}
+
+
+
+
+
+// für später wichtig (classes)
+
+function toClassName(value = "") {
+  return String(value)
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9-_]/g, "");
 }

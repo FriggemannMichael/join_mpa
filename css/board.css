@@ -197,7 +197,7 @@ h2 {
   gap: var(--space-md);
 }
 
-.task_space .active{
+.task_column .active{
   background-color: rgba(10, 224, 63, 0.5);
 }
 
@@ -360,40 +360,47 @@ h5 {
 }
 
 /* ===============================
-   Overlays
+   Overlays/Modal
 ================================ */
 
-.overlay {
-  align-items: center;
-  display: none;
-  inset: 0;
-  justify-content: center;
+.overlay_board {
   position: fixed;
-  z-index: 50;
+    display: flex;
+    z-index: 50;
+    inset: 0;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 120ms ease, visibility 0s linear 120ms;
 }
 
-.overlay.active {
-  display: flex;
+.overlay_board.active {
+ opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition: opacity 120ms ease, visibility 0s;
 }
 
 .backdrop_overlay {
-  backdrop-filter: blur(3px);
-  background: rgb(0 0 0 / 45%);
-  inset: 0;
   position: absolute;
-  transition: opacity 0.3s ease;
-  z-index: 0;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(3px);
+    z-index: 0;
+    transition: opacity 0.3s ease;
 }
 
 .add_task_overlay {
-  background-color: var(--color-white);
-
-  /* border: var(); */
-  border-radius: 30px;
-  box-shadow: 0 0 4px 0 rgb(0 0 0 / 16%);
-  height: fit-content;
-  width: fit-content;
   z-index: 1;
+    width: fit-content;
+    height: fit-content;
+    background-color: var(--color-white);
+    /* border: var(); */
+    border-radius: 30px;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.16);
 }
 
 .container-add-task-test {
@@ -401,17 +408,16 @@ h5 {
 }
 
 .task-overlay {
-  background-color: var(--color-white);
-  border-radius: 30px;
-  box-shadow: 0 0 4px 0 rgb(0 0 0 / 16%);
-  display: grid;
-  gap: 24px;
-  height: fit-content;
-  padding: 48px 40px;
-
   /* position: fixed; */
-  width: 525px;
-  z-index: 1;
+    width: 525px;
+    height: fit-content;
+    padding: 48px 40px;
+    gap: 24px;
+    background-color: var(--color-white);
+    border-radius: 30px;
+    z-index: 1;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.16);
+    display: grid;
 }
 
 .header-task-overlay {
@@ -460,6 +466,18 @@ h5 {
   background-color: #e53935;
   height: 30px;
   width: 30px;
+}
+
+.add_task_overlay,
+.task-overlay {
+    position: relative;
+    transform: translateX(150%);
+    transition: transform 120ms ease-in-out;
+}
+
+.overlay_board.active .add_task_overlay,
+.overlay_board.active .task-overlay {
+    transform: translateX(0);
 }
 
 /* ===============================

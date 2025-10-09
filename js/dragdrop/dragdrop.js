@@ -1,4 +1,7 @@
-// import {renderTaskModal} from "../pages/taskModal.js"
+import { renderTaskModal } from "../pages/taskModal.js"
+import { db } from "../common/firebase.js";
+import { ref, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import {loadTask} from "../pages/taskModal.js"
 
 let currentDrag = null;
 
@@ -7,13 +10,14 @@ export function enableCardInteractions(card) {
 
   const HOLD_MS = 300;
   const MOVE_THRESHOLD = 5;
-  const MOUSE_DRAG_DELAY = 100;
 
   let timer = null;
   let startX = 0, startY = 0, startTime = 0;
   let dragging = false;
   let isTouch = false;
   let moved = false;
+  let isPointerDown = false;
+  let activePointerId = null;
 
   const clearHold = () => {
     if (timer) {
@@ -31,20 +35,23 @@ export function enableCardInteractions(card) {
     dragging = false;
     moved = false;
 
+    isPointerDown = true;
+    activePointerId = e.pointerId;
+
 
     if (isTouch) {
       timer = setTimeout(() => {
         startDragging(card, e);
         dragging = true;
       }, HOLD_MS);
-    } else {
-      startDragging(card, e);
-      timer = setTimeout(() => { }, MOUSE_DRAG_DELAY);
     }
   });
 
 
   card.addEventListener("pointermove", (e) => {
+    if (!isPointerDown || e.pointerId !== activePointerId) return;
+    if (!isTouch && e.buttons === 0) return;
+
     const movedx = Math.abs(e.clientX - startX);
     const movedy = Math.abs(e.clientY - startY);
 
@@ -58,6 +65,7 @@ export function enableCardInteractions(card) {
 
 
       if (!isTouch && (movedx > MOVE_THRESHOLD || movedy > MOVE_THRESHOLD)) {
+        startDragging(card, e);
         clearHold();
         dragging = true;
       }
@@ -80,12 +88,14 @@ export function enableCardInteractions(card) {
       if (holdTime < HOLD_MS) {
         const id = card.dataset.taskId;
         const task = await loadTask(id);
-        renderTaskModal(id, task);
-        document.getElementById("taskModal")?.classList.add("active");
+        await renderTaskModal(id, task);
+        document.getElementById("taskOverlay")?.classList.add("active");
       }
     }
 
     dragging = false;
+    isPointerDown = false;
+    activePointerId = null;
   });
 
 
@@ -101,6 +111,8 @@ export function enableCardInteractions(card) {
     }
     dragging = false;
     moved = false;
+    isPointerDown = false;
+    activePointerId = null;
   });
 }
 
@@ -160,9 +172,9 @@ function moveDragging(card, e) {
   const hoveredCol = el?.closest(".task_column");
 
   // Platzhalter hervorheben
-  document.querySelectorAll(".drop_placeholder").forEach(ph => {
-    const col = ph.closest(".task_column");
-    ph.classList.toggle("active", col === hoveredCol);
+  document.querySelectorAll(".drop_placeholder").forEach(e => {
+    const col = e.closest(".task_column");
+    e.classList.toggle("active", col === hoveredCol);
   });
 }
 
