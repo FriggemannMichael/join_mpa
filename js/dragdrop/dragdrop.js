@@ -1,7 +1,7 @@
 import { renderTaskModal } from "../pages/taskModal.js"
 import { db } from "../common/firebase.js";
 import { ref, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-import {loadTask} from "../pages/taskModal.js"
+import { loadTask } from "../pages/taskModal.js"
 
 let currentDrag = null;
 
@@ -26,8 +26,10 @@ export function enableCardInteractions(card) {
     }
   };
 
-
   card.addEventListener("pointerdown", (e) => {
+
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+
     isTouch = e.pointerType === "touch";
     startX = e.clientX;
     startY = e.clientY;
@@ -148,10 +150,10 @@ function startDragging(card, e) {
   const allColumns = document.querySelectorAll(".task_column");
   allColumns.forEach(col => {
     if (col !== originColumn) {
-      const ph = document.createElement("div");
-      ph.className = "drop_placeholder";
-      ph.style.height = `${rect.height}px`;
-      col.querySelector(".task_space")?.appendChild(ph);
+      const dropPh = document.createElement("div");
+      dropPh.className = "drop_placeholder";
+      dropPh.style.height = `${rect.height}px`;
+      col.querySelector(".task_space")?.appendChild(dropPh);
     }
   });
 
@@ -172,14 +174,16 @@ function moveDragging(card, e) {
   const hoveredCol = el?.closest(".task_column");
 
   // Platzhalter hervorheben
-  document.querySelectorAll(".drop_placeholder").forEach(e => {
-    const col = e.closest(".task_column");
-    e.classList.toggle("active", col === hoveredCol);
-  });
+document.querySelectorAll(".task_column").forEach(col => {
+  col.classList.toggle("active", col === hoveredCol);
+});
 }
 
 function endDragging(card, e) {
   document.body.classList.remove('no-select');
+  document.querySelectorAll(".task_column.active").forEach(col => {
+  col.classList.remove("active");
+});
   if (!currentDrag) return;
 
   const { ghost, originColumn } = currentDrag;
@@ -201,10 +205,13 @@ function endDragging(card, e) {
     space.appendChild(card);
     card.dataset.status = space.id;
     updateTaskStatus(card.dataset.taskId, space.id);
+
     console.log(`✅ Task ${card.dataset.taskId} verschoben nach ${space.id}`);
+
   } else {
     // kein gültiges Ziel → zurück zur Ursprungsspalte
     originColumn.querySelector(".task_space").appendChild(card);
+
     console.log("↩️ Kein gültiges Ziel – Karte zurückgesetzt");
   }
 

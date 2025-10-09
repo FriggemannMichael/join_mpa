@@ -97,12 +97,12 @@ function renderBoard(tasks) {
     todo: {
       id: "toDo",
       emptyText: "No task To do",
-      withPlaceholder: true,
+      withPlaceholder: false,
     },
     "in-progress": {
       id: "inProgress",
       emptyText: "No task in progress",
-      withPlaceholder: true,
+      withPlaceholder: false,
     },
     "await-feedback": {
       id: "awaitFeedback",
