@@ -201,7 +201,7 @@ function buildTaskCard(task) {
   footer.className = "footer_task_card";
   footer.append(buildAssigneeGroup(task), buildPriority(task.priority));
   card.append(footer);
-  // enableCardInteractions(card)
+  enableCardInteractions(card)
 
   return card;
 }

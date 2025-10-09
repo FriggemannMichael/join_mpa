@@ -1,3 +1,6 @@
+
+
+
 /* ===============================
    Headings
 ================================ */
@@ -194,6 +197,10 @@ h2 {
   gap: var(--space-md);
 }
 
+.task_space .active{
+  background-color: rgba(10, 224, 63, 0.5);
+}
+
 .no_task_to_do {
   align-items: center;
   background-color: var(--bg-no-task);
@@ -207,6 +214,9 @@ h2 {
   justify-content: center;
   width: 100%;
 }
+
+
+
 
 /* ===============================
    Task Card
@@ -459,6 +469,18 @@ h5 {
 .display_flex {
   display: flex;
 }
+
+.no-select, .no-select * {
+  user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+img {
+  -webkit-user-drag: none; 
+  user-drag: none;
+}
+
 
 @media (width <= 64rem) {
   .kanban_header {
