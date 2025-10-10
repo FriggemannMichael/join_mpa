@@ -234,6 +234,7 @@ h2 {
   gap: var(--gap-md);
   padding: var(--space-md);
   width: var(--task-width);
+  min-width: var(--task-width);
 }
 
 .task_card:hover {
@@ -588,10 +589,13 @@ img {
 
 
 .assignees { display:flex; flex-direction:column; gap:8px; }
-.assignee_row { display:flex; align-items:center; gap:10px; }
+.assignee_row { display:flex; align-items:center; gap:10px; height: 56px;
+font-size: var(--fs-input);
+  padding: 7px 16px;}
 .assignee_badge {
   width:28px; height:28px; border-radius:50%;
   display:grid; place-items:center; color:#fff; font-weight:700; font-size:12px;
+  
 }
 .assignee_label { font-size:14px; color:#1f2937; }
 
