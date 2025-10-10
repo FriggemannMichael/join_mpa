@@ -255,24 +255,30 @@ function buildInitials(name) {
 }
 
 function bindColumnShortcuts() {
-  const triggers = document.querySelectorAll(
-    ".add_task_button, .add_task_button_kanban"
-  );
-  triggers.forEach((trigger) => {
-    trigger.addEventListener("click", (event) => {
-      if (trigger.tagName !== "A") {
-        event.preventDefault();
-        window.location.href = "./add-task.html";
-      }
-    });
-
-    if (trigger.classList.contains("add_task_button_kanban")) {
-      trigger.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          window.location.href = "./add-task.html";
-        }
-      });
+  const onClick = (e) => {
+    const openBtn = e.target.closest("[data-overlay-open]");
+    if (openBtn) {
+      const selector = openBtn.dataset.overlayOpen;
+      document.querySelector(selector)?.classList.add("active"); return;
     }
-  });
+    const closeBtn = e.target.closest("[data-overlay-close]");
+    const isBackdrop = e.target.classList.contains("backdrop_overlay");
+    if (closeBtn || isBackdrop) {
+      e.target.closest(".overlay_board")?.classList.remove("active");
+      return;
+    }
+  };
+  const onKeydown = (e) => {
+    if (e.key === "Escape") {
+      document.querySelectorAll(".overlay_board.active").forEach(o => o.classList.remove("active")); return;
+
+    } if (e.key === "Enter" || e.key === " ") {
+      const kb = e.target.closest("[data-overlay-open],[data-overlay-close]"); if (kb) {
+        e.preventDefault(); kb.click();
+
+      }
+    }
+  };
+  document.addEventListener("click", onClick);
+  document.addEventListener("keydown", onKeydown);
 }
