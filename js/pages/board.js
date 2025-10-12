@@ -206,24 +206,16 @@ function buildTaskCard(task) {
   return card;
 }
 
-function buildAssigneeGroup(task) {
-  const assignees = document.createElement("div");
-  assignees.className = "assignees";
-  assignees.setAttribute("aria-label", "assignees");
-
-  const list = document.createElement("ul");
-  list.className = "avatar-group";
-  list.setAttribute("role", "list");
-
-  const entry = document.createElement("li");
-  entry.className = "avatar";
-  entry.textContent = buildInitials(
-    task.assignee?.name || task.assignee?.email || "?"
-  );
-  list.append(entry);
-  assignees.append(list);
-
-  return assignees;
+export function buildAssigneeGroup(task){
+  const wrap=document.createElement("div"); wrap.className="assignees"; wrap.ariaLabel="assignees";
+  const ul=document.createElement("ul"); ul.className="avatar-group"; ul.role="list";
+  const arr=Array.isArray(task.assignees)?task.assignees:(task.assignee?[task.assignee]:[]);
+  const shown=arr.slice(0,3), rest=Math.max(0,arr.length-3);
+  shown.forEach(a=>{ const li=document.createElement("li"); li.className="avatar";
+    const label=a?.name; li.title=label; li.textContent=buildInitials(a.name);
+    li.style.background=colorFromString(label); ul.append(li); });
+  if(rest){ const more=document.createElement("li"); more.className="avatar more"; more.textContent=`+${rest}`; ul.append(more); }
+  wrap.append(ul); return wrap;
 }
 
 function buildPriority(priority) {
@@ -281,4 +273,19 @@ function bindColumnShortcuts() {
   };
   document.addEventListener("click", onClick);
   document.addEventListener("keydown", onKeydown);
+}
+
+
+// zu testzwecken
+
+export function colorFromString(str) {
+  if (!str) return "#999";
+
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  const hue = Math.abs(hash) % 360;
+  return `hsl(${hue}, 65%, 55%)`;
 }

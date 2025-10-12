@@ -20,7 +20,7 @@ export async function renderTaskModal(id, task = {}) {
     dueDate = ""
   } = task;
 
-  const overlay = document.getElementById("taskOverlay");        // äußerer Wrapper (Backdrop-Klick-Ziel)
+  const overlay = document.getElementById("taskOverlay");        
   const backdrop = overlay?.querySelector(".backdrop_overlay");
 
 
@@ -38,7 +38,7 @@ export async function renderTaskModal(id, task = {}) {
   closeBtn.type = "button";
   closeBtn.textContent = "×";
   closeBtn.classList.add("close_button");
-  closeBtn.dataset.overlayClose = "#taskOverlay"; // FIX: korrektes data-Attribut
+  closeBtn.dataset.overlayClose = "#taskOverlay"; 
 
   head.append(taskCategory, closeBtn);
 
@@ -69,7 +69,7 @@ export async function renderTaskModal(id, task = {}) {
   const priorityP = document.createElement("p");
   priorityP.textContent = "Priority:";
   const prioritySpan = document.createElement("span");
-  prioritySpan.textContent = priority; // FIX: Variable benutzen
+  prioritySpan.textContent = priority; 
   priorityDiv.append(priorityP, prioritySpan);
 
   // Assignees
@@ -80,7 +80,7 @@ export async function renderTaskModal(id, task = {}) {
   const assigneesDiv = document.createElement("div");
 
   const contacts = await getContactsMap();
-  const assigneesArr = normAssignees(task); // aus task.assignees[] oder task.assignee
+  const assigneesArr = normAssignees(task); 
   renderAssignees(assigneesDiv, assigneesArr, contacts);
 
   assigned.append(assignedTo, assigneesDiv);
@@ -124,72 +124,48 @@ const subtaskWrap = document.createElement("div");
     headRow.innerHTML = `
       <div class="subtask_title_row">
         <span>Subtasks</span>
-        <span class="subtask_count"></span>
       </div>
-      <div class="subtask_progress"><div class="subtask_progress_fill"></div></div>
     `;
 
     // Items
-    normalized.forEach((s, idx) => {
-      const li = document.createElement("li");
-      li.className = "subtask_item";
+  normalized.forEach((s, idx) => {
+  const li = document.createElement("li");
+  li.className = "subtask_item";
 
-      const cb = document.createElement("input");
-      cb.type = "checkbox";
-      cb.checked = !!s.done;
+  const cb = document.createElement("input");
+  cb.type = "checkbox";
+  cb.id = `sub-${id}-${idx}`;       // wichtig für Label-Verknüpfung
+  cb.checked = !!s.done;
 
-      const label = document.createElement("label");
-      label.textContent = s?.text || String(s);
+  const label = document.createElement("label");
+  label.textContent = s?.text || String(s);
+  label.setAttribute("for", cb.id);
 
-      li.append(cb, label);
-      if (cb.checked) li.classList.add("done");
+  li.append(cb, label);
+  if (cb.checked) li.classList.add("done");
 
-      // Nur toggelbar, wenn NICHT readonly (also echtes Array-Feld in DB)
-      if (!s._readonly) {
-        cb.addEventListener("change", async () => {
-          await updateSubtaskDone(id, idx, cb.checked);
-          li.classList.toggle("done", cb.checked);
-          updateProgress(subtaskWrap);
-        });
-      } else {
-        // read-only: Checkbox deaktivieren
-        cb.disabled = true;
-      }
-
-      subtaskList.appendChild(li);
+  if (!s._readonly) {
+    cb.addEventListener("change", async () => {
+      await updateSubtaskDone(id, idx, cb.checked);
+      li.classList.toggle("done", cb.checked);
     });
+  }
+
+  subtaskList.appendChild(li);
+});
 
     subtaskWrap.append(headRow, subtaskList);
-    updateProgress(subtaskWrap);
+    // updateProgress(subtaskWrap);
   } else {
     const subtaskHead = document.createElement("div");
     subtaskHead.classList.add("subtask_header_task_overlay");
     subtaskHead.textContent = "Subtasks";
     const empty = document.createElement("ul");
     const li = document.createElement("li");
-    li.textContent = "Keine Subtasks";
+    li.textContent = "No Subtasks";
     empty.appendChild(li);
     subtaskWrap.append(subtaskHead, empty);
   }
-
-  // Progress neu berechnen (lokal)
-  function updateProgress(rootEl) {
-    const items = [...rootEl.querySelectorAll(".subtask_item")];
-    const done = items.filter(i => i.classList.contains("done")).length;
-    const total = Math.max(items.length, 1);
-    const bar = rootEl.querySelector(".subtask_progress");
-    const fill = bar?.querySelector(".subtask_progress_fill");
-    const count = rootEl.querySelector(".subtask_count");
-    if (fill) fill.style.width = `${(done / total) * 100}%`;
-    if (count) count.textContent = `${done}/${total}`;
-  }
-
-  // 
-  // 
-  // 
-  // 
-  // 
-
 
   section.replaceChildren(
     head,
@@ -340,7 +316,7 @@ function renderAssignees(container, assigneesArr, contactsMap) {
 // Subtasks: bevorzugt Array [{text,done}], sonst string "a,b,c" -> read-only
 function normalizeSubtasks(task) {
   if (Array.isArray(task.subtasks)) return task.subtasks;
-  if (Array.isArray(task.subtask)) return task.subtask; // falls schon Array
+  // if (Array.isArray(task.subtask)) return task.subtask; // falls schon Array
   if (typeof task.subtask === "string" && task.subtask.trim()) {
     return task.subtask.split(",").map(s => ({ text: s.trim(), done: false, _readonly: true }));
   }
