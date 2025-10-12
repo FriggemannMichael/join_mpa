@@ -197,6 +197,9 @@ function buildTaskCard(task) {
   descriptionSection.append(title, description);
   card.append(descriptionSection);
 
+  const progress = buildSubtaskProgress(task.subtasks);
+  if (progress) card.append(progress);
+
   const footer = document.createElement("div");
   footer.className = "footer_task_card";
   footer.append(buildAssigneeGroup(task), buildPriority(task.priority));
@@ -206,15 +209,17 @@ function buildTaskCard(task) {
   return card;
 }
 
-export function buildAssigneeGroup(task){
-  const wrap=document.createElement("div"); wrap.className="assignees"; wrap.ariaLabel="assignees";
-  const ul=document.createElement("ul"); ul.className="avatar-group"; ul.role="list";
-  const arr=Array.isArray(task.assignees)?task.assignees:(task.assignee?[task.assignee]:[]);
-  const shown=arr.slice(0,3), rest=Math.max(0,arr.length-3);
-  shown.forEach(a=>{ const li=document.createElement("li"); li.className="avatar";
-    const label=a?.name; li.title=label; li.textContent=buildInitials(a.name);
-    li.style.background=colorFromString(label); ul.append(li); });
-  if(rest){ const more=document.createElement("li"); more.className="avatar more"; more.textContent=`+${rest}`; ul.append(more); }
+export function buildAssigneeGroup(task) {
+  const wrap = document.createElement("div"); wrap.className = "assignees"; wrap.ariaLabel = "assignees";
+  const ul = document.createElement("ul"); ul.className = "avatar-group"; ul.role = "list";
+  const arr = Array.isArray(task.assignees) ? task.assignees : (task.assignee ? [task.assignee] : []);
+  const shown = arr.slice(0, 3), rest = Math.max(0, arr.length - 3);
+  shown.forEach(a => {
+    const li = document.createElement("li"); li.className = "avatar";
+    const label = a?.name; li.title = label; li.textContent = buildInitials(a.name);
+    li.style.background = colorFromString(label); ul.append(li);
+  });
+  if (rest) { const more = document.createElement("li"); more.className = "avatar more"; more.textContent = `+${rest}`; ul.append(more); }
   wrap.append(ul); return wrap;
 }
 
@@ -288,4 +293,29 @@ export function colorFromString(str) {
 
   const hue = Math.abs(hash) % 360;
   return `hsl(${hue}, 65%, 55%)`;
+}
+
+export function buildSubtaskProgress(subtasks = []) {
+  if (!Array.isArray(subtasks) || !subtasks.length) return null;
+  const done = subtasks.filter(st => st.done).length;
+  const total = subtasks.length;
+
+  const box = document.createElement("div");
+  box.className = "subtasks";
+  box.style.setProperty("--done", done);
+  box.style.setProperty("--total", total);
+
+  const bar = document.createElement("div");
+  bar.className = "subtasks_bar";
+  bar.setAttribute("role", "progressbar");
+  bar.setAttribute("aria-valuemin", "0");
+  bar.setAttribute("aria-valuemax", total);
+  bar.setAttribute("aria-valuenow", done);
+
+  const label = document.createElement("span");
+  label.className = "subtasks_label";
+  label.textContent = `${done}/${total} Subtasks`;
+
+  box.append(bar, label);
+  return box;
 }
