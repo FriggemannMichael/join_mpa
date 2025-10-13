@@ -442,6 +442,12 @@ h5 {
   gap: 44px
 }
 
+.priority span {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .assigned_to_task_overlay {
   font-size: var(--fs-input);
   gap: var(--space-xs);
@@ -713,9 +719,9 @@ img {
 }
 
 .subtask_item:hover {
-background-color: rgba(209, 209, 209, 1);
+  background-color: rgba(209, 209, 209, 1);
   border-radius: 12px;
-  }
+}
 
 .subtask_item input[type="checkbox"] {
   position: absolute;
@@ -755,4 +761,3 @@ background-color: rgba(209, 209, 209, 1);
   background-color: rgba(209, 209, 209, 1);
   border-radius: 51px;
 } */
-

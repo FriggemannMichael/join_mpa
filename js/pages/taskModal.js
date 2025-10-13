@@ -8,30 +8,18 @@ export async function loadTask(id) {
 }
 
 export async function renderTaskModal(id, task = {}) {
-  const {
-    title = "",
-    description = "",
-    category = "General",
-    priority = "medium",
-    subtasks = [],
-    assignees = [],
-    dueDate = ""
-  } = task;
-
   const overlay = document.getElementById("taskOverlay");
   const section = document.getElementById("taskModal");
   section.dataset.taskId = id;
-
   const h2 = document.createElement("h2");
-  h2.textContent = title;
-
+  h2.textContent = task.title;
 
   section.replaceChildren(
-    taskModalHeader(category),
+    taskModalHeader( task.categoryLabel),
     h2,
-    taskModalDescription(description),
-    taskModalDueDate(dueDate),
-    taskModalpriority(priority),
+    taskModalDescription(task.description),
+    taskModalDueDate(task.dueDate),
+    taskModalpriority(task.priority),
     await taskModalAssignees(task, id),
     await taskModalSubtask(task, id)
   );
@@ -41,13 +29,14 @@ export async function renderTaskModal(id, task = {}) {
 
 
 // Task Modal Sektionen
-function taskModalHeader(category) {
+function taskModalHeader(categoryLabel) {
   const head = document.createElement("div");
   head.classList.add("header-task-overlay");
 
   const taskCategory = document.createElement("div");
   taskCategory.classList.add("task_category");
-  taskCategory.textContent = category;
+  taskCategory.textContent = categoryLabel;
+  
 
   const closeBtn = document.createElement("button");
   closeBtn.type = "button";
@@ -89,8 +78,15 @@ function taskModalpriority(priority) {
   priorityP.classList.add("taskModal-label")
   priorityP.textContent = "Priority:";
   const prioritySpan = document.createElement("span");
-  prioritySpan.textContent = priority;
+  const formatted = priority.charAt(0).toUpperCase() + priority.slice(1).toLowerCase();
+  prioritySpan.textContent = formatted;
+  const icon = document.createElement("img");
+  icon.classList.add("priority-icon");
+  icon.alt = `${priority}`;
+  icon.src = `../img/icon/prio-${priority.toLowerCase()}.svg`;
+  prioritySpan.append(icon);
   priorityDiv.append(priorityP, prioritySpan);
+
   return priorityDiv;
 }
 
@@ -187,12 +183,10 @@ function taskModalEventlistener(overlay, section) {
       if (e.key === "Escape") closeTaskOverlay();
     };
 
-    // nur einmal binden
     overlay.addEventListener("click", onBackdropClick);
     document.addEventListener("keydown", onKeydown);
     overlay.dataset.bound = "1";
 
-    // Cleanup beim Schließen
     overlay._cleanup = () => {
       overlay.removeEventListener("click", onBackdropClick);
       document.removeEventListener("keydown", onKeydown);
@@ -200,11 +194,8 @@ function taskModalEventlistener(overlay, section) {
     };
   }
 
-  // Klicks im Inhalt sollen NICHT das Overlay schließen
   section.addEventListener("click", (e) => e.stopPropagation());
 
-
-  // Aktivieren (für CSS-Animationen wie .overlay.active)
   overlay?.classList.add("active");
 
 }
