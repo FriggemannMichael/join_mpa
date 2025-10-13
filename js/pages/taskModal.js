@@ -1,4 +1,4 @@
-import { db } from "../common/firebase.js";
+import { db, auth } from "../common/firebase.js";
 import { ref, update, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 export async function loadTask(id) {
@@ -6,7 +6,6 @@ export async function loadTask(id) {
   const snap = await get(child(root, `tasks/${id}`));
   return snap.exists() ? { id, ...snap.val() } : null;
 }
-
 
 export async function renderTaskModal(id, task = {}) {
   const {
@@ -16,17 +15,33 @@ export async function renderTaskModal(id, task = {}) {
     priority = "medium",
     subtasks = [],
     assignees = [],
-    status = "todo",
     dueDate = ""
   } = task;
 
-  const overlay = document.getElementById("taskOverlay");        
-  const backdrop = overlay?.querySelector(".backdrop_overlay");
-
-
+  const overlay = document.getElementById("taskOverlay");
   const section = document.getElementById("taskModal");
   section.dataset.taskId = id;
 
+  const h2 = document.createElement("h2");
+  h2.textContent = title;
+
+
+  section.replaceChildren(
+    taskModalHeader(category),
+    h2,
+    taskModalDescription(description),
+    taskModalDueDate(dueDate),
+    taskModalpriority(priority),
+    await taskModalAssignees(task, id),
+    await taskModalSubtask(task, id)
+  );
+
+  taskModalEventlistener(overlay, section)
+}
+
+
+// Task Modal Sektionen
+function taskModalHeader(category) {
   const head = document.createElement("div");
   head.classList.add("header-task-overlay");
 
@@ -36,80 +51,68 @@ export async function renderTaskModal(id, task = {}) {
 
   const closeBtn = document.createElement("button");
   closeBtn.type = "button";
-  closeBtn.textContent = "×";
+  closeBtn.textContent = "x";
   closeBtn.classList.add("close_button");
-  closeBtn.dataset.overlayClose = "#taskOverlay"; 
+  closeBtn.dataset.overlayClose = "#taskOverlay";
+  closeBtn.addEventListener("click", closeTaskOverlay);
 
   head.append(taskCategory, closeBtn);
+  return head
+}
 
-  const h2 = document.createElement("h2");
-  h2.textContent = title;
-
+function taskModalDescription(description) {
   const descriptionDiv = document.createElement("div");
   descriptionDiv.textContent = description;
   descriptionDiv.classList.add("task_description_overlay");
+  return descriptionDiv;
+}
 
-  // Due date
+function taskModalDueDate(dueDate) {
   const dueDateDiv = document.createElement("div");
   dueDateDiv.classList.add("due_date_task_overlay");
   const dueLabel = document.createElement("p");
+  dueLabel.classList.add("taskModal-label")
   dueLabel.textContent = "Due date:";
   const dueVal = document.createElement("span");
   if (dueDate) {
     const d = new Date(dueDate);
-    dueVal.textContent = isNaN(d) ? dueDate : d.toLocaleDateString("de-DE");
-  } else {
-    dueVal.textContent = "-";
+    dueVal.textContent = isNaN(d) ? dueDate : d.toLocaleDateString("en-GB");
   }
   dueDateDiv.append(dueLabel, dueVal);
+  return dueDateDiv;
+}
 
-  // Priority
+function taskModalpriority(priority) {
   const priorityDiv = document.createElement("div");
   priorityDiv.classList.add("priority");
   const priorityP = document.createElement("p");
+  priorityP.classList.add("taskModal-label")
   priorityP.textContent = "Priority:";
   const prioritySpan = document.createElement("span");
-  prioritySpan.textContent = priority; 
+  prioritySpan.textContent = priority;
   priorityDiv.append(priorityP, prioritySpan);
+  return priorityDiv;
+}
 
-  // Assignees
- const assigned = document.createElement("div");
+async function taskModalAssignees(task) {
+  const assigned = document.createElement("div");
   assigned.classList.add("assigned_to_task_overlay");
   const assignedTo = document.createElement("p");
+  assignedTo.classList.add("taskModal-label")
   assignedTo.textContent = "Assigned To:";
   const assigneesDiv = document.createElement("div");
 
   const contacts = await getContactsMap();
-  const assigneesArr = normAssignees(task); 
-  renderAssignees(assigneesDiv, assigneesArr, contacts);
+  const assigneesArr = normAssignees(task);
+  const user = getCurrentUser();
+  renderAssignees(assigneesDiv, assigneesArr, contacts, user);
 
   assigned.append(assignedTo, assigneesDiv);
+  return assigned;
+}
 
-
-
-
-
-  // Subtasks
-  // const subtaskEl = document.createElement("div");
-  // subtaskEl.classList.add("subtask_task_overlay");
-  // const subtaskHead = document.createElement("div");
-  // subtaskHead.classList.add("subtask_header_task_overlay");
-  // subtaskHead.textContent = "Subtasks";
-  // const subtaskCon = document.createElement("ul");
-  // if (Array.isArray(subtasks) && subtasks.length) {
-  //   subtasks.forEach(s => {
-  //     const li = document.createElement("li");
-  //     li.textContent = s?.text || String(s);
-  //     subtaskCon.appendChild(li);
-  //   });
-  // } else {
-  //   const li = document.createElement("li");
-  //   li.textContent = "Keine Subtasks";
-  //   subtaskCon.appendChild(li);
-  // }
-  // subtaskEl.append(subtaskHead, subtaskCon);
-
-const subtaskWrap = document.createElement("div");
+async function taskModalSubtask(task, id) {
+  const subtaskWrap = document.createElement("div");
   subtaskWrap.classList.add("subtask_task_overlay");
 
   const subtaskList = document.createElement("ul");
@@ -123,69 +126,65 @@ const subtaskWrap = document.createElement("div");
     headRow.className = "subtask_header_task_overlay";
     headRow.innerHTML = `
       <div class="subtask_title_row">
-        <span>Subtasks</span>
+        <span class="taskModal-label">Subtasks</span>
       </div>
     `;
 
     // Items
-  normalized.forEach((s, idx) => {
-  const li = document.createElement("li");
-  li.className = "subtask_item";
+    normalized.forEach((s, idx) => {
+      const li = document.createElement("li");
+      li.className = "subtask_item";
 
-  const cb = document.createElement("input");
-  cb.type = "checkbox";
-  cb.id = `sub-${id}-${idx}`;       // wichtig für Label-Verknüpfung
-  cb.checked = !!s.done;
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.id = `sub-${id}-${idx}`;       // wichtig für Label-Verknüpfung
+      cb.checked = !!s.done;
 
-  const label = document.createElement("label");
-  label.textContent = s?.text || String(s);
-  label.setAttribute("for", cb.id);
+      const label = document.createElement("label");
+      label.textContent = s?.text || String(s);
+      label.setAttribute("for", cb.id);
 
-  li.append(cb, label);
-  if (cb.checked) li.classList.add("done");
+      li.append(cb, label);
+      if (cb.checked) li.classList.add("done");
 
-  if (!s._readonly) {
-    cb.addEventListener("change", async () => {
-      await updateSubtaskDone(id, idx, cb.checked);
-      li.classList.toggle("done", cb.checked);
+      if (!s._readonly) {
+        cb.addEventListener("change", async () => {
+          await updateSubtaskDone(id, idx, cb.checked);
+          li.classList.toggle("done", cb.checked);
+        });
+      }
+
+      subtaskList.appendChild(li);
     });
-  }
-
-  subtaskList.appendChild(li);
-});
-
     subtaskWrap.append(headRow, subtaskList);
-    // updateProgress(subtaskWrap);
-  } else {
-    const subtaskHead = document.createElement("div");
-    subtaskHead.classList.add("subtask_header_task_overlay");
-    subtaskHead.textContent = "Subtasks";
-    const empty = document.createElement("ul");
-    const li = document.createElement("li");
-    li.textContent = "No Subtasks";
-    empty.appendChild(li);
-    subtaskWrap.append(subtaskHead, empty);
   }
 
-  section.replaceChildren(
-    head,
-    h2,
-    descriptionDiv,
-    dueDateDiv,
-    priorityDiv,
-    assigned,
-    // subtaskEl
-    subtaskWrap
-  );
+  return subtaskWrap;
+}
 
+
+
+
+
+// Helper
+
+export function closeTaskOverlay() {
+  const overlay = document.getElementById("taskOverlay");
+  if (!overlay) return;
+
+  overlay.classList.remove("active");
+  overlay._cleanup?.();
+}
+
+function taskModalEventlistener(overlay, section) {
+  const backdrop = overlay?.querySelector(".backdrop_overlay");
   if (overlay && !overlay.dataset.bound) {
     const onBackdropClick = (e) => {
-      // Klick direkt auf Overlay-Wrapper ODER expliziten Backdrop schließt
-      if (e.target === overlay || e.target === backdrop) closeOverlay();
+      if (e.target === overlay || e.target === backdrop) closeTaskOverlay();
     };
 
     const onKeydown = (e) => {
-      if (e.key === "Escape") closeOverlay();
+      if (e.key === "Escape") closeTaskOverlay();
     };
 
     // nur einmal binden
@@ -204,60 +203,22 @@ const subtaskWrap = document.createElement("div");
   // Klicks im Inhalt sollen NICHT das Overlay schließen
   section.addEventListener("click", (e) => e.stopPropagation());
 
-  // Close-Button schließt immer
-  closeBtn.addEventListener("click", () => closeOverlay());
 
   // Aktivieren (für CSS-Animationen wie .overlay.active)
   overlay?.classList.add("active");
 
-  function closeOverlay() {
-    if (!overlay) return;
-    overlay.classList.remove("active");
-    return section;
-  }
 }
-
-
-
-
-
-// für später wichtig (classes)
-
-function toClassName(value = "") {
-  return String(value)
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-_]/g, "");
-}
-
-
-function initials(str="") {
-  const s = (str.name || str).toString();
-  const parts = s.trim().split(/\s+/);
-  const ini = (parts[0]?.[0] || "") + (parts[1]?.[0] || "");
-  return ini.toUpperCase() || (str.email?.[0] || "?").toUpperCase();
-}
-
-function colorFromString(s="") {
-  // stabile, aber simple Farbgenerierung
-  let h = 0; for (let i=0;i<s.length;i++) h = (h*31 + s.charCodeAt(i))|0;
-  h = Math.abs(h) % 360;
-  return `hsl(${h} 70% 45%)`;
-}
-
-
 
 
 // testbereich
 
-let __contactsCache = null;
+let contactsCache = null;
 
 async function getContactsMap() {
-  if (__contactsCache) return __contactsCache;
+  if (contactsCache) return contactsCache;
   const snap = await get(child(ref(db), "contacts"));
-  __contactsCache = snap.exists() ? snap.val() : {};
-  return __contactsCache;
+  contactsCache = snap.exists() ? snap.val() : {};
+  return contactsCache;
 }
 
 function normAssignees(task) {
@@ -275,55 +236,47 @@ function initialsFrom(str = "") {
   return (ini || s[0]).toUpperCase();
 }
 
-function renderAssignees(container, assigneesArr, contactsMap) {
+export function renderAssignees(container, assigneesArr, contactsMap, currentUser) {
   container.classList.add("assignees");
   container.innerHTML = "";
-
-  if (!assigneesArr.length) {
-    container.textContent = "—";
-    return;
-  }
+  if (!assigneesArr.length) return container.textContent = "—";
 
   assigneesArr.forEach(a => {
     const uid = a?.id || a?.uid || "";
-    const contact = uid ? contactsMap[uid] : null;
-
-    const name = contact?.name || a?.name || a?.displayName || a?.email || "Unbekannt";
-    const badge = document.createElement("span");
-    badge.className = "assignee_badge";
-
-    // Farbe/Initialen bevorzugt aus contacts
-    const color = contact?.color || "#6c7ae0";
-    const ini = contact?.initials || initialsFrom(name);
-
-    badge.textContent = ini;
-    badge.title = name;
-    badge.style.backgroundColor = color;
-
-    // optional: zusätzlicher Text neben Badge
-    const label = document.createElement("span");
-    label.className = "assignee_label";
-    label.textContent = name;
-
+    const c = uid ? contactsMap[uid] : null;
+    const name = c?.name || a?.name || a?.displayName || a?.email || "Unbekannt";
+    const isYou = currentUser && (uid === currentUser.id || name === currentUser.name);
+    const color = c?.color || "#6c7ae0";
+    const ini = c?.initials || initialsFrom(name);
+    const badge = Object.assign(document.createElement("span"), {
+      className: "assignee_badge", textContent: ini, title: name,
+      style: `background-color:${color}`
+    });
+    const label = Object.assign(document.createElement("span"), {
+      className: "assignee_label", textContent: isYou ? `${name} (You)` : name
+    });
     const row = document.createElement("div");
     row.className = "assignee_row";
     row.append(badge, label);
-
-    container.appendChild(row);
+    container.append(row);
   });
 }
 
-// Subtasks: bevorzugt Array [{text,done}], sonst string "a,b,c" -> read-only
-function normalizeSubtasks(task) {
-  if (Array.isArray(task.subtasks)) return task.subtasks;
-  // if (Array.isArray(task.subtask)) return task.subtask; // falls schon Array
-  if (typeof task.subtask === "string" && task.subtask.trim()) {
-    return task.subtask.split(",").map(s => ({ text: s.trim(), done: false, _readonly: true }));
-  }
+
+function normalizeSubtasks(input) {
+  if (Array.isArray(input)) return input;
+  if (Array.isArray(input?.subtasks)) return input.subtasks;
+  if (typeof input?.subtask === "string" && input.subtask.trim())
+    return input.subtask.split(",").map(s => ({ text: s.trim(), done: false, _readonly: true }));
   return [];
 }
 
 async function updateSubtaskDone(taskId, index, done) {
   const path = `tasks/${taskId}/subtasks/${index}/done`;
   await update(ref(db), { [path]: !!done, [`tasks/${taskId}/updatedAt`]: Date.now() });
+}
+
+export function getCurrentUser() {
+  const user = auth.currentUser;
+  return user ? { id: user.uid, name: user.displayName, email: user.email } : null;
 }
