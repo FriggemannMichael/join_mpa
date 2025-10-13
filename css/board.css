@@ -588,7 +588,11 @@ img {
 
 
 /* test bereich */
+.taskModal-label {
+  color: rgba(66, 82, 110, 1);
+  font-size: 20px;
 
+}
 
 .assignees {
   display: flex;
@@ -606,20 +610,20 @@ img {
 }
 
 .assignee_badge {
-  width: 28px;
-  height: 28px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   display: grid;
   place-items: center;
-  color: #fff;
-  font-weight: 700;
+  color: rgba(255, 255, 255, 1);
+  font-weight: 400;
   font-size: 12px;
 
 }
 
 .assignee_label {
-  font-size: 14px;
-  color: #1f2937;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 1);
 }
 
 /* Subtasks */
@@ -702,8 +706,16 @@ img {
   position: relative;
   display: flex;
   align-items: center;
-  gap: .5rem
+  justify-content: center;
+  gap: .5rem;
+  width: fit-content;
+  margin: 0;
 }
+
+.subtask_item:hover {
+background-color: rgba(209, 209, 209, 1);
+  border-radius: 12px;
+  }
 
 .subtask_item input[type="checkbox"] {
   position: absolute;
@@ -734,7 +746,7 @@ img {
   background-image: url("../img/icon/checked-button.svg");
 }
 
-.subtask_item input[type="checkbox"]:not(:checked)+label:hover::before {
+/* .subtask_item input[type="checkbox"]:not(:checked)+label:hover::before {
   background-color: rgba(209, 209, 209, 1);
   border-radius: 51px;
 }
@@ -742,5 +754,5 @@ img {
 .subtask_item input[type="checkbox"]:checked+label:hover::before {
   background-color: rgba(209, 209, 209, 1);
   border-radius: 51px;
-}
+} */
 
