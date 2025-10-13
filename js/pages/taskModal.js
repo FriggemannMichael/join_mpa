@@ -15,7 +15,7 @@ export async function renderTaskModal(id, task = {}) {
   h2.textContent = task.title;
 
   section.replaceChildren(
-    taskModalHeader( task.categoryLabel),
+    taskModalHeader(task.categoryLabel),
     h2,
     taskModalDescription(task.description),
     taskModalDueDate(task.dueDate),
@@ -36,17 +36,20 @@ function taskModalHeader(categoryLabel) {
   const taskCategory = document.createElement("div");
   taskCategory.classList.add("task_category");
   taskCategory.textContent = categoryLabel;
-  
 
   const closeBtn = document.createElement("button");
   closeBtn.type = "button";
-  closeBtn.textContent = "x";
-  closeBtn.classList.add("close_button");
+  closeBtn.classList.add("close_button_taskModal");
   closeBtn.dataset.overlayClose = "#taskOverlay";
   closeBtn.addEventListener("click", closeTaskOverlay);
-
+  const icon = document.createElement("img");
+  icon.src = "../img/icon/close-btn.svg";  // Pfad anpassen, falls nötig
+  icon.alt = "Close";
+  icon.classList.add("icon-close");
+  closeBtn.append(icon);
   head.append(taskCategory, closeBtn);
-  return head
+  return head;
+
 }
 
 function taskModalDescription(description) {
