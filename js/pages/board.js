@@ -223,6 +223,44 @@ export function buildAssigneeGroup(task) {
   wrap.append(ul); return wrap;
 }
 
+
+// Wenn alle assignee sachen auf array umgestellt sind dann soll das hier verwendet werden 
+
+// export function buildAssigneeGroup(task) {
+//   const wrap = document.createElement("div");
+//   wrap.className = "assignees";
+//   wrap.ariaLabel = "assignees";
+
+//   const ul = document.createElement("ul");
+//   ul.className = "avatar-group";
+//   ul.role = "list";
+
+//   const shown = task.assignees.slice(0, 3);
+//   const rest = Math.max(0, task.assignees.length - 3);
+
+//   shown.forEach(a => {
+//     const li = document.createElement("li");
+//     li.className = "avatar";
+//     li.title = a.name;
+//     li.textContent = buildInitials(a.name);
+//     li.style.background = colorFromString(a.name);
+//     ul.append(li);
+//   });
+
+//   if (rest) {
+//     const more = document.createElement("li");
+//     more.className = "avatar more";
+//     more.textContent = `+${rest}`;
+//     ul.append(more);
+//   }
+
+//   wrap.append(ul);
+//   return wrap;
+// }
+// 
+
+
+
 function buildPriority(priority) {
   const wrapper = document.createElement("div");
   wrapper.className = "prio";
