@@ -600,6 +600,18 @@ img {
 
 }
 
+.close_button_taskModal {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.close_button_taskModal img{
+  width:32px ;
+  height: 32px;
+}
+
+
 .assignees {
   display: flex;
   flex-direction: column;
