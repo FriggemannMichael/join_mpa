@@ -14,12 +14,14 @@ initBoardPage();
  * Initialisiert die Board-Seite mit Authentication-Check und Layout-Loading
  */
 async function initBoardPage() {
+  setGlobalButtonsDisabled(true);
   const allowed = await guardPage("./index.html");
   if (!allowed) return;
   await bootLayout();
   bindSearch();
   bindColumnShortcuts();
   await observeTasks();
+  setGlobalButtonsDisabled(false);
 }
 
 let unsubscribeTasks = null;
@@ -94,7 +96,7 @@ function toggleSearchMessage(show) {
  */
 function renderBoard(tasks) {
   const columns = {
-    todo: {
+    toDo: {
       id: "toDo",
       emptyText: "No task To do",
       withPlaceholder: false,
@@ -356,4 +358,12 @@ export function buildSubtaskProgress(subtasks = []) {
 
   box.append(bar, label);
   return box;
+}
+
+function setGlobalButtonsDisabled(state, root = document.body) {
+  root.querySelectorAll("button").forEach(btn => {
+    btn.disabled = state;
+  });
+
+  document.body.classList.toggle("loading", state);
 }
