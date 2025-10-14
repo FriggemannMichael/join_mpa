@@ -95,21 +95,61 @@
               </div>
               <div class="form-group">
                 <label for="taskAssignees">Assigned to</label>
-                <select id="taskAssignees">
-                  <option value="">Kontakt für Zuweisung auswählen</option>
-                </select>
+                <div class="custom-multiselect">
+                  <div class="multiselect-header" id="assigneeHeader">
+                    <span id="selected-assignees-placeholder"
+                      >Select contacts to assign</span
+                    >
+                    <img
+                      src="./img/icon/arrow_drop_down.svg"
+                      class="dropdown-icon"
+                      alt="dropdown"
+                    />
+                  </div>
+                  <div
+                    class="multiselect-dropdown d-none"
+                    id="assignee-dropdown"
+                  >
+                    <!-- Dynamically filled -->
+                  </div>
+                </div>
+                <div
+                  class="selected-assignee-avatars"
+                  id="selected-assignee-avatars"
+                ></div>
               </div>
               <div class="form-group">
-                <label for="taskCategory"
-                  >Category<sup class="required" aria-hidden="true"
-                    >*</sup
-                  ></label
-                >
-                <select id="taskCategory">
-                  <option value="">Select task category</option>
-                  <option value="user-task">User Task</option>
-                  <option value="technical-task">Technical Task</option>
-                </select>
+                <label>Category <span class="required-marker">*</span></label>
+                <div class="custom-category-select">
+                  <div
+                    class="category-select-header"
+                    onclick="toggleCategoryDropdown()"
+                  >
+                    <span id="selected-catrgory-placeholder"
+                      >Select category</span
+                    >
+                    <img
+                      src="./img/icon/arrow_drop_down.svg"
+                      class="dropdown-icon"
+                    />
+                  </div>
+                  <div class="category-dropdown d-none" id="category-dropdown">
+                    <div
+                      class="category-option"
+                      onclick="selectCategory('technical-task')"
+                    >
+                      Technical Task
+                    </div>
+                    <div
+                      class="category-option"
+                      onclick="selectCategory('user-story')"
+                    >
+                      User Story
+                    </div>
+                  </div>
+                </div>
+                <input type="hidden" id="category" name="category" required />
+                <div class="field-error-message" id="error-category"></div>
               </div>
               <div class="form-group">
                 <label for="taskSubtasks">Subtasks</label>
