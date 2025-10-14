@@ -404,8 +404,8 @@ h5 {
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.16);
 }
 
-.container-add-task-test {
-  padding: 6rem;
+.container-add-task-board {
+  padding: 4rem;
 }
 
 .task-overlay {
@@ -473,10 +473,13 @@ h5 {
   padding: 6px 16px;
 }
 
-.cloase-button-test {
-  background-color: #e53935;
-  height: 30px;
-  width: 30px;
+.cloase-button-add-task {
+  position: absolute;
+  top: 64px;
+  right: 32px;
+  height: 32px;
+  width: 32px;
+  background-image: url("../img/icon/close-btn.svg");
 }
 
 .add_task_overlay,

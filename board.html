@@ -32,7 +32,7 @@
             Results not found. Adjust your search.
           </div>
         </div>
-        <a class="add_task_button"  data-overlay-open="#addTaskOverlay">
+        <a class="add_task_button" data-overlay-open="#addTaskOverlay">
           <span class="add_task_lable">Add task</span>
           <img class="" src="./img/icon/add.svg" alt="Plus Sign" />
         </a>
@@ -106,94 +106,95 @@
 
   <!-- AddTask -->
 
-<div class="overlay_board" id="addTaskOverlay">
+  <div class="overlay_board" id="addTaskOverlay">
 
-        <div class="backdrop_overlay"></div>
-        <div class="add_task_overlay add-task-main">
-            <div class="container-add-task-test"> <!-- Muss noch bearbeitet werden  -->
+    <div class="backdrop_overlay"></div>
+    <div class="add_task_overlay add-task-main">
+      <div class="cloase-button-add-task" data-overlay-close="#addTaskOverlay"></div>
+      <div class="container-add-task-board"> <!-- Muss noch bearbeitet werden  -->
 
-                <div class="cloase-button-test" data-overlay-close="#addTaskOverlay"></div>
-                <!-- Muss noch bearbeitet werden  -->
-                <h1 class="page-title">Add Task</h1>
 
-                <div class="form-wrapper">
-                    <!-- Linke Seite -->
-                    <div class="left-section">
-                        <!-- Title -->
-                        <div class="form-group">
-                            <label for="title">Title<sup class="required" aria-hidden="true">*</sup></label>
-                            <input type="text" id="title" placeholder="Enter a title">
-                        </div>
+        <!-- Muss noch bearbeitet werden  -->
+        <h1 class="page-title">Add Task</h1>
 
-                        <!-- Description -->
-                        <div class="form-group">
-                            <label for="description">Description</label>
-                            <textarea id="description" placeholder="Enter a Description"></textarea>
-                        </div>
-
-                        <!-- Due date -->
-                        <div class="form-group">
-                            <label for="due-date">Due date<sup class="required" aria-hidden="true">*</sup></label>
-                            <input type="date" id="due-date" placeholder="dd/mm/yyyy">
-                        </div>
-                    </div>
-
-                    <!-- Vertikale Trennlinie -->
-                    <div class="divider"></div>
-
-                    <!-- Rechte Seite -->
-                    <div class="right-section">
-                        <!-- Priority -->
-                        <div class="form-group">
-                            <label>Priority</label>
-                            <div class="priority-buttons">
-                                <button class="priority-btn" data-priority="urgent">Urgent <img class="prio-icon"
-                                        src="../assets/icon/prio-urgent.svg" alt="Urgent priority" /></button>
-                                <button class="priority-btn active" data-priority="medium">Medium <img class="prio-icon"
-                                        src="../assets/icon/prio-medium.svg" alt="Medium priority" /></button>
-                                <button class="priority-btn" data-priority="low">Low <img class="prio-icon"
-                                        src="../assets/icon/prio-low.svg" alt="Low priority" /></button>
-                            </div>
-                        </div>
-
-                        <!-- Assigned to -->
-                        <div class="form-group">
-                            <label for="assigned-to">Assigned to</label>
-                            <select id="assigned-to">
-                                <option>Select contacts to assign</option>
-                            </select>
-                        </div>
-
-                        <!-- Category -->
-                        <div class="form-group">
-                            <label for="category">Category<sup class="required" aria-hidden="true">*</sup></label>
-                            <select id="category" name="category" required>
-                                <option disabled selected>Select task category</option>
-                                <option value="userStory">User Story</option>
-                                <option value="technicalTask">Technical Task</option>
-                                <option value="improvement">Improvement</option>
-                            </select>
-                        </div>
-
-                        <!-- Subtasks -->
-                        <div class="form-group">
-                            <label for="subtasks">Subtasks</label>
-                            <input type="text" id="subtasks" placeholder="Add new subtask">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="button-group">
-                    <p class="required-text"><sup class="required" aria-hidden="true">*</sup> This field is required</p>
-                    <div class="buttons">
-                        <button class="btn-clear">Clear ✕</button>
-                        <button class="btn-create">Create Task ✓</button>
-                    </div>
-                </div>
+        <div class="form-wrapper">
+          <!-- Linke Seite -->
+          <div class="left-section">
+            <!-- Title -->
+            <div class="form-group">
+              <label for="title">Title<sup class="required" aria-hidden="true">*</sup></label>
+              <input type="text" id="title" placeholder="Enter a title">
             </div>
+
+            <!-- Description -->
+            <div class="form-group">
+              <label for="description">Description</label>
+              <textarea id="description" placeholder="Enter a Description"></textarea>
+            </div>
+
+            <!-- Due date -->
+            <div class="form-group">
+              <label for="due-date">Due date<sup class="required" aria-hidden="true">*</sup></label>
+              <input type="date" id="due-date" placeholder="dd/mm/yyyy">
+            </div>
+          </div>
+
+          <!-- Vertikale Trennlinie -->
+          <div class="divider"></div>
+
+          <!-- Rechte Seite -->
+          <div class="right-section">
+            <!-- Priority -->
+            <div class="form-group">
+              <label>Priority</label>
+              <div class="priority-buttons">
+                <button class="priority-btn" data-priority="urgent">Urgent <img class="prio-icon"
+                    src="../assets/icon/prio-urgent.svg" alt="Urgent priority" /></button>
+                <button class="priority-btn active" data-priority="medium">Medium <img class="prio-icon"
+                    src="../assets/icon/prio-medium.svg" alt="Medium priority" /></button>
+                <button class="priority-btn" data-priority="low">Low <img class="prio-icon"
+                    src="../assets/icon/prio-low.svg" alt="Low priority" /></button>
+              </div>
+            </div>
+
+            <!-- Assigned to -->
+            <div class="form-group">
+              <label for="assigned-to">Assigned to</label>
+              <select id="assigned-to">
+                <option>Select contacts to assign</option>
+              </select>
+            </div>
+
+            <!-- Category -->
+            <div class="form-group">
+              <label for="category">Category<sup class="required" aria-hidden="true">*</sup></label>
+              <select id="category" name="category" required>
+                <option disabled selected>Select task category</option>
+                <option value="userStory">User Story</option>
+                <option value="technicalTask">Technical Task</option>
+                <option value="improvement">Improvement</option>
+              </select>
+            </div>
+
+            <!-- Subtasks -->
+            <div class="form-group">
+              <label for="subtasks">Subtasks</label>
+              <input type="text" id="subtasks" placeholder="Add new subtask">
+            </div>
+          </div>
         </div>
 
+        <div class="button-group">
+          <p class="required-text"><sup class="required" aria-hidden="true">*</sup> This field is required</p>
+          <div>
+            <button class="btn-clear">Clear ✕</button>
+            <button class="btn-create">Create Task ✓</button>
+          </div>
+        </div>
+      </div>
     </div>
+
+  </div>
 
 
   <script type="module" src="./js/pages/board.js"></script>

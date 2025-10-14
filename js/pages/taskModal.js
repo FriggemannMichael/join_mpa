@@ -43,7 +43,7 @@ function taskModalHeader(categoryLabel) {
   closeBtn.dataset.overlayClose = "#taskOverlay";
   closeBtn.addEventListener("click", closeTaskOverlay);
   const icon = document.createElement("img");
-  icon.src = "../img/icon/close-btn.svg";  // Pfad anpassen, falls nötig
+  icon.src = "../img/icon/close-btn.svg"; 
   icon.alt = "Close";
   icon.classList.add("icon-close");
   closeBtn.append(icon);
