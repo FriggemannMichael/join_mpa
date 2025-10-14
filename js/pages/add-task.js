@@ -67,42 +67,61 @@ async function populateAssignees() {
     return;
   }
 
+  await loadAssigneesFromDatabase(select, currentUser.uid);
+}
+
+/**
+ * Lädt Kontakte aus der Firebase-Datenbank
+ */
+async function loadAssigneesFromDatabase(select, currentUserUid) {
   try {
-    const db = await loadFirebaseDatabase();
-    const snapshot = await db.get(db.ref(db.getDatabase(), "contacts"));
-    if (!snapshot.exists()) {
-      setAssigneeOptions(select, [], "Keine Kontakte verfügbar", true);
-      return;
-    }
-
-    const options = buildAssigneeOptions(snapshot.val(), currentUser.uid);
-    if (!options.length) {
-      setAssigneeOptions(select, [], "Keine Kontakte verfügbar", true);
-      return;
-    }
-
-    setAssigneeOptions(
-      select,
-      options,
-      "Kontakt für Zuweisung auswählen",
-      false
-    );
+    const contacts = await fetchContactsFromFirebase();
+    handleContactsLoaded(select, contacts, currentUserUid);
   } catch (error) {
-    console.error("Assignees konnten nicht geladen werden", error);
-    setAssigneeOptions(
-      select,
-      [],
-      "Kontakte konnten nicht geladen werden",
-      true
-    );
-    const isPermissionError =
-      typeof error?.code === "string" &&
-      error.code.includes("permission_denied");
-    const message = isPermissionError
-      ? "Zugriff auf Kontakte in der Datenbank verweigert. Bitte Regeln prüfen."
-      : "Kontakte konnten nicht geladen werden.";
-    setTaskStatus(message, true);
+    handleContactsLoadError(select, error);
   }
+}
+
+/**
+ * Holt Kontakte aus Firebase
+ */
+async function fetchContactsFromFirebase() {
+  const db = await loadFirebaseDatabase();
+  const snapshot = await db.get(db.ref(db.getDatabase(), "contacts"));
+  return snapshot.exists() ? snapshot.val() : null;
+}
+
+/**
+ * Behandelt erfolgreich geladene Kontakte
+ */
+function handleContactsLoaded(select, contacts, currentUserUid) {
+  if (!contacts) {
+    setAssigneeOptions(select, [], "Keine Kontakte verfügbar", true);
+    return;
+  }
+
+  const options = buildAssigneeOptions(contacts, currentUserUid);
+  if (!options.length) {
+    setAssigneeOptions(select, [], "Keine Kontakte verfügbar", true);
+    return;
+  }
+
+  setAssigneeOptions(select, options, "Kontakt für Zuweisung auswählen", false);
+}
+
+/**
+ * Behandelt Fehler beim Laden der Kontakte
+ */
+function handleContactsLoadError(select, error) {
+  console.error("Assignees konnten nicht geladen werden", error);
+  setAssigneeOptions(select, [], "Kontakte konnten nicht geladen werden", true);
+  
+  const isPermissionError = 
+    typeof error?.code === "string" && error.code.includes("permission_denied");
+  const message = isPermissionError
+    ? "Zugriff auf Kontakte in der Datenbank verweigert. Bitte Regeln prüfen."
+    : "Kontakte konnten nicht geladen werden.";
+  setTaskStatus(message, true);
 }
 
 function buildAssigneeOptions(rawUsers, currentUid) {
