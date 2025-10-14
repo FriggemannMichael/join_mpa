@@ -215,9 +215,6 @@ h2 {
   width: 100%;
 }
 
-
-
-
 /* ===============================
    Task Card
 ================================ */
@@ -244,7 +241,7 @@ h2 {
 
 .task_category {
   align-items: center;
-  background-color: var(--color-task-user-story);
+  background-color: var(--color-task-default);
   border-radius: var(--radius-sm);
   color: var(--color-white);
   display: flex;
@@ -762,17 +759,17 @@ img {
   transition: background-image .15s ease;
 }
 
-/* checked zuerst, dann hover-varianten */
 .subtask_item input[type="checkbox"]:checked+label::before {
   background-image: url("../img/icon/checked-button.svg");
 }
 
-/* .subtask_item input[type="checkbox"]:not(:checked)+label:hover::before {
-  background-color: rgba(209, 209, 209, 1);
-  border-radius: 51px;
+
+/* Task-Groups */
+
+.usertask, .user-task {
+background-color: var(--color-task-user-story);
 }
 
-.subtask_item input[type="checkbox"]:checked+label:hover::before {
-  background-color: rgba(209, 209, 209, 1);
-  border-radius: 51px;
-} */
+.technical-task {
+background-color: var(--color-technical-task);
+}

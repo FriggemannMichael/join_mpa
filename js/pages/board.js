@@ -180,7 +180,7 @@ function buildTaskCard(task) {
 
   const type = document.createElement("div");
   type.id = "taskType";
-  type.className = "task_category";
+  type.classList.add("task_category", task.category);
   type.textContent = task.categoryLabel || task.category || "Task";
   card.append(type);
 

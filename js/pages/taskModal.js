@@ -15,7 +15,7 @@ export async function renderTaskModal(id, task = {}) {
   h2.textContent = task.title;
 
   section.replaceChildren(
-    taskModalHeader(task.categoryLabel),
+    taskModalHeader(task.categoryLabel, task.category),
     h2,
     taskModalDescription(task.description),
     taskModalDueDate(task.dueDate),
@@ -29,12 +29,12 @@ export async function renderTaskModal(id, task = {}) {
 
 
 // Task Modal Sektionen
-function taskModalHeader(categoryLabel) {
+function taskModalHeader(categoryLabel, category) {
   const head = document.createElement("div");
   head.classList.add("header-task-overlay");
 
   const taskCategory = document.createElement("div");
-  taskCategory.classList.add("task_category");
+  taskCategory.classList.add("task_category" , category);
   taskCategory.textContent = categoryLabel;
 
   const closeBtn = document.createElement("button");

@@ -75,6 +75,7 @@
   --color-no-task: var(--grey-medium); /* board.css */
   --color-technical-task: #1fd7c1; /* board.css */
   --color-task-user-story: #0038ff; /* board.css */
+  --color-task-default: #ff4800;/* board.css */
   --color-text: #333; /* board.css */
   --color-text-strong: #42526e; /* board.css */
   --color-white: var(--white); /* board.css */
