@@ -144,6 +144,7 @@ h2 {
   padding-left: var(--pad-page-x);
   padding-right: var(--pad-page-x);
   padding-top: var(--space-4xl);
+  padding-bottom: var(--pad-page-x);
   text-decoration: none;
 }
 
@@ -446,6 +447,8 @@ h5 {
 }
 
 .assigned_to_task_overlay {
+  display: flex;
+  flex-direction: column;
   font-size: var(--fs-input);
   gap: var(--space-xs);
 }
@@ -534,7 +537,7 @@ img {
 
   .kanban-board {
     flex-direction: column;
-    padding: var(--space-lg) var(--pad-page-x-mobile) var(--pad-page-x-mobile) var(--pad-page-x-mobile);
+    padding: var(--space-lg) var(--pad-page-x-mobile) 6rem var(--pad-page-x-mobile);
   }
 
   .task_space {
@@ -772,4 +775,48 @@ background-color: var(--color-task-user-story);
 
 .technical-task {
 background-color: var(--color-technical-task);
+}
+
+
+body.loading {
+  cursor: progress;
+}
+body.loading button {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+.footer_taskModal{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  gap: 8px;
+}
+
+.edit-task-btn, .delete-task-btn{
+  font-size: 16px;
+  color: rgba(42, 54, 71, 1);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  
+}
+
+.edit-task-btn svg, .delete-task-btn svg {
+ width: 24px;
+ height: 24px;
+ fill: currentColor;
+}
+
+
+.separator-task-toolbar{
+background-color:rgba(209, 209, 209, 1);
+width: 1px;
+height:100%
 }
