@@ -1,5 +1,6 @@
 import { db, auth } from "../common/firebase.js";
 import { ref, update, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { icons } from "../common/svg-template.js";
 
 export async function loadTask(id) {
   const root = ref(db);
@@ -21,7 +22,8 @@ export async function renderTaskModal(id, task = {}) {
     taskModalDueDate(task.dueDate),
     taskModalpriority(task.priority),
     await taskModalAssignees(task, id),
-    await taskModalSubtask(task, id)
+    await taskModalSubtask(task, id),
+    taskModalEditDelete(task, id)
   );
 
   taskModalEventlistener(overlay, section)
@@ -34,7 +36,7 @@ function taskModalHeader(categoryLabel, category) {
   head.classList.add("header-task-overlay");
 
   const taskCategory = document.createElement("div");
-  taskCategory.classList.add("task_category" , category);
+  taskCategory.classList.add("task_category", category);
   taskCategory.textContent = categoryLabel;
 
   const closeBtn = document.createElement("button");
@@ -43,7 +45,7 @@ function taskModalHeader(categoryLabel, category) {
   closeBtn.dataset.overlayClose = "#taskOverlay";
   closeBtn.addEventListener("click", closeTaskOverlay);
   const icon = document.createElement("img");
-  icon.src = "../img/icon/close-btn.svg"; 
+  icon.src = "../img/icon/close-btn.svg";
   icon.alt = "Close";
   icon.classList.add("icon-close");
   closeBtn.append(icon);
@@ -111,16 +113,18 @@ async function taskModalAssignees(task) {
 }
 
 async function taskModalSubtask(task, id) {
-  const subtaskWrap = document.createElement("div");
-  subtaskWrap.classList.add("subtask_task_overlay");
-
-  const subtaskList = document.createElement("ul");
-  subtaskList.className = "subtask_list";
-
   const normalized = normalizeSubtasks(task);
 
-  if (normalized.length) {
-    // Header mit Fortschritt
+  if (normalized.length > 0) {
+
+    const subtaskWrap = document.createElement("div");
+    subtaskWrap.classList.add("subtask_task_overlay");
+
+    const subtaskList = document.createElement("ul");
+    subtaskList.className = "subtask_list";
+
+    const normalized = normalizeSubtasks(task);
+
     const headRow = document.createElement("div");
     headRow.className = "subtask_header_task_overlay";
     headRow.innerHTML = `
@@ -136,7 +140,7 @@ async function taskModalSubtask(task, id) {
 
       const cb = document.createElement("input");
       cb.type = "checkbox";
-      cb.id = `sub-${id}-${idx}`;       // wichtig für Label-Verknüpfung
+      cb.id = `sub-${id}-${idx}`;
       cb.checked = !!s.done;
 
       const label = document.createElement("label");
@@ -156,13 +160,34 @@ async function taskModalSubtask(task, id) {
       subtaskList.appendChild(li);
     });
     subtaskWrap.append(headRow, subtaskList);
+    return subtaskWrap;
   }
 
-  return subtaskWrap;
+  return document.createDocumentFragment()
 }
 
 
+function taskModalEditDelete(task, id) {
+  const footer = document.createElement("div");
+  footer.classList.add("footer_taskModal");
 
+  const editBtn = document.createElement("button");
+  editBtn.classList.add("edit-task-btn");
+  editBtn.type = "button";
+  editBtn.innerHTML = icons.edit + "<span>Edit</span>";
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.classList.add("delete-task-btn");
+  deleteBtn.type = "button";
+  deleteBtn.innerHTML = icons.delete + "<span>Delete</span>";
+
+  const separator = document.createElement("span");
+  separator.className = "separator-task-toolbar";
+  separator.setAttribute("aria-hidden", "true");
+
+  footer.append(deleteBtn, separator, editBtn);
+  return footer;
+}
 
 
 // Helper
