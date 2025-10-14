@@ -175,11 +175,15 @@ function taskModalEditDelete(task, id) {
   editBtn.classList.add("edit-task-btn");
   editBtn.type = "button";
   editBtn.innerHTML = icons.edit + "<span>Edit</span>";
+  editBtn.dataset.action = "edit";
+  editBtn.dataset.taskId = id;
 
   const deleteBtn = document.createElement("button");
   deleteBtn.classList.add("delete-task-btn");
   deleteBtn.type = "button";
+  deleteBtn.dataset.action = "delete";
   deleteBtn.innerHTML = icons.delete + "<span>Delete</span>";
+  deleteBtn.dataset.taskId = id;
 
   const separator = document.createElement("span");
   separator.className = "separator-task-toolbar";
@@ -202,6 +206,8 @@ export function closeTaskOverlay() {
 
 function taskModalEventlistener(overlay, section) {
   const backdrop = overlay?.querySelector(".backdrop_overlay");
+
+  // --- Close handling (Backdrop + ESC) ---
   if (overlay && !overlay.dataset.bound) {
     const onBackdropClick = (e) => {
       if (e.target === overlay || e.target === backdrop) closeTaskOverlay();
@@ -222,10 +228,27 @@ function taskModalEventlistener(overlay, section) {
     };
   }
 
-  section.addEventListener("click", (e) => e.stopPropagation());
+  // --- Klicks im Modal selbst ---
+  section.addEventListener("click", async (e) => {
+    e.stopPropagation(); // verhindert Overlay-Schließen
 
+    const btn = e.target.closest("[data-action]");
+    if (!btn) return;
+
+    const { action, taskId } = btn.dataset;
+
+    if (action === "edit") {
+      openEditForm(taskId);
+    }
+
+    if (action === "delete") {
+      const confirmed = confirm("Are you sure you want to delete this task?");
+      if (confirmed) await deleteTask(taskId);
+    }
+  });
+
+  // --- Overlay aktivieren ---
   overlay?.classList.add("active");
-
 }
 
 
@@ -298,4 +321,19 @@ async function updateSubtaskDone(taskId, index, done) {
 export function getCurrentUser() {
   const user = auth.currentUser;
   return user ? { id: user.uid, name: user.displayName, email: user.email } : null;
+}
+
+
+// muss noch bearbeitet werden
+function openEditForm(taskId) {
+  // Beispiel: Overlay schließen, Taskdaten laden, Edit-Form öffnen
+  closeTaskOverlay();
+  console.log("📝 Open edit form for task:", taskId);
+}
+
+async function deleteTask(taskId) {
+  const path = `tasks/${taskId}`;
+  await update(ref(db), { [path]: null });
+  console.log("🗑️ Task deleted:", taskId);
+  closeTaskOverlay();
 }
