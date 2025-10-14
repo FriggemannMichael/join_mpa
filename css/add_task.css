@@ -572,3 +572,354 @@ label {
     font-size: 16px;
   }
 }
+
+/* Custom Multiselect Dropdown */
+.custom-multiselect {
+  position: relative;
+  user-select: none;
+  width: 100%;
+}
+
+.multiselect-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border: 1px solid #d1d1d1;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  font-size: 20px;
+  height: 48px;
+  transition: border-color 0.3s ease;
+}
+
+.multiselect-header:hover {
+  border-color: #29abe2;
+}
+
+.multiselect-header.open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: none;
+}
+
+.dropdown-icon {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+  pointer-events: none;
+}
+
+.multiselect-header.open .dropdown-icon {
+  transform: rotate(180deg);
+}
+
+.multiselect-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #d1d1d1;
+  border-top: none;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 100;
+  padding: 8px 0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.checkbox-label:hover {
+  background-color: #f5f5f5;
+}
+
+.checkbox-label.selected {
+  background-color: #2a3647;
+  color: white;
+}
+
+.assignee-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.user-initials {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #29abe2;
+}
+
+.selected-assignee-avatars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.selected-assignee-avatars .avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
+
+.d-none {
+  display: none !important;
+}
+
+/* ===== CUSTOM MULTISELECT DROPDOWN ===== */
+.custom-multiselect {
+  position: relative;
+  user-select: none;
+  width: 100%;
+}
+
+.multiselect-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border: 1px solid #d1d1d1;
+  border-radius: 10px;
+  cursor: pointer;
+  background-color: #fff;
+  font-size: 20px;
+  height: 48px;
+  transition: border-color 0.3s ease;
+}
+
+.multiselect-header:hover {
+  border-color: #29abe2;
+}
+
+.multiselect-header.open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: none;
+  border-color: #29abe2;
+}
+
+.dropdown-icon {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+  pointer-events: none;
+}
+
+.multiselect-header.open .dropdown-icon {
+  transform: rotate(180deg);
+}
+
+.multiselect-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #29abe2;
+  border-top: none;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  max-height: 250px;
+  overflow-y: auto;
+  z-index: 100;
+  padding: 8px 0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 20px;
+}
+
+.checkbox-label:hover {
+  background-color: #f5f5f5;
+  border-radius: 10px;
+}
+
+.checkbox-label.selected {
+  background-color: #2a3647;
+  color: white;
+  border-radius: 10px;
+}
+
+.checkbox-label.selected span {
+  color: white;
+}
+
+.assignee-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.user-initials {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  accent-color: #29abe2;
+}
+
+.selected-assignee-avatars {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  min-height: 42px;
+}
+
+.selected-assignee-avatars .avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+}
+
+/* Scrollbar Styling */
+.multiselect-dropdown::-webkit-scrollbar {
+  width: 8px;
+}
+
+.multiselect-dropdown::-webkit-scrollbar-thumb {
+  background: #29abe2;
+  border-radius: 10px;
+}
+
+.multiselect-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #2a3647;
+}
+
+/* Responsive adjustments */
+@media (width <= 1369px) {
+  .custom-multiselect {
+    width: 100%;
+  }
+}
+
+@media (width <= 576px) {
+  .multiselect-header,
+  .checkbox-label {
+    font-size: 16px;
+  }
+
+  .user-initials {
+    width: 36px;
+    height: 36px;
+    font-size: 12px;
+  }
+
+  .selected-assignee-avatars .avatar {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+.required-marker {
+  color: red;
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+.custom-category-select {
+  position: relative;
+  user-select: none;
+}
+
+.category-select-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.category-dropdown {
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+}
+
+.category-option {
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.category-option:hover {
+  background-color: #f0f0f0;
+}
+
+.dropdown-icon {
+  pointer-events: none;
+}
+
+.d-none {
+  display: none;
+}
