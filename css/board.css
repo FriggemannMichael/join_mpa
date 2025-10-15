@@ -1,3 +1,7 @@
+* {
+  transition: all 100ms;
+}
+
 /* ===============================
    Headings
 ================================ */
@@ -230,6 +234,11 @@ h2 {
   padding: var(--space-md);
   width: var(--task-width);
   min-width: var(--task-width);
+}
+
+.drag-ghost {
+  transform: rotate(5deg);
+  transition: all 0ms;
 }
 
 .task_card:hover {
@@ -611,8 +620,8 @@ img {
   cursor: pointer;
 }
 
-.close_button_taskModal img{
-  width:32px ;
+.close_button_taskModal img {
+  width: 32px;
   height: 32px;
 }
 
@@ -768,25 +777,27 @@ img {
 
 /* Task-Groups */
 
-.usertask, .user-task {
-background-color: var(--color-task-user-story);
+.usertask,
+.user-task {
+  background-color: var(--color-task-user-story);
 }
 
 .technical-task {
-background-color: var(--color-technical-task);
+  background-color: var(--color-technical-task);
 }
 
 
 body.loading {
   cursor: progress;
 }
+
 body.loading button {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
 
-.footer_taskModal{
+.footer_taskModal {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -794,7 +805,8 @@ body.loading button {
   gap: 8px;
 }
 
-.edit-task-btn, .delete-task-btn{
+.edit-task-btn,
+.delete-task-btn {
   font-size: 16px;
   color: rgba(42, 54, 71, 1);
   display: flex;
@@ -804,18 +816,22 @@ body.loading button {
   border: none;
   outline: none;
   cursor: pointer;
-  
 }
 
-.edit-task-btn svg, .delete-task-btn svg {
- width: 24px;
- height: 24px;
- fill: currentColor;
+.edit-task-btn:hover,
+.delete-task-btn:hover {
+  color: var(--secondary-color);
 }
 
+.edit-task-btn svg,
+.delete-task-btn svg {
+  width: 24px;
+  height: 24px;
+  fill: currentColor;
+}
 
-.separator-task-toolbar{
-background-color:rgba(209, 209, 209, 1);
-width: 1px;
-height:100%
+.separator-task-toolbar {
+  background-color: rgba(209, 209, 209, 1);
+  width: 1px;
+  height: 100%
 }
