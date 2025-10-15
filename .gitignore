@@ -35,3 +35,6 @@ build/
 
 # Copilot instructions
 .copilot-instructions
+
+# Alte Daten ignorieren
+olddata/
