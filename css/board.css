@@ -523,7 +523,6 @@ img {
   user-drag: none;
 }
 
-
 @media (width <=64rem) {
   .kanban_header {
     flex-wrap: wrap;
@@ -666,7 +665,6 @@ img {
 .subtask_title_row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 6px;
   font-weight: 600;
 }
 
@@ -694,19 +692,52 @@ img {
 }
 
 .subtask_item {
+  position: relative;
   display: flex;
-  gap: 10px;
   align-items: center;
-}
-
-.subtask_item.done label {
-  text-decoration: line-through;
-  color: #6b7280;
+  justify-content: center;
+  gap: .5rem;
+  width: fit-content;
+  padding: 6px 16px;
+  margin: 0;
 }
 
 .subtask_item input[type="checkbox"] {
   width: 16px;
   height: 16px;
+}
+
+.subtask_item:hover {
+  background-color: rgba(209, 209, 209, 1);
+  border-radius: 12px;
+}
+
+.subtask_item input[type="checkbox"] {
+  position: absolute;
+  opacity: 0
+}
+
+.subtask_item label {
+  position: relative;
+  padding-left: 28px;
+  cursor: pointer;
+  margin-bottom: 0;
+}
+
+.subtask_item label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  background: url("../img/icon/check-button.svg") no-repeat center/contain;
+  transition: background-image .15s ease;
+}
+
+.subtask_item input[type="checkbox"]:checked+label::before {
+  background-image: url("../img/icon/checked-button.svg");
 }
 
 .avatar-group {
@@ -728,52 +759,6 @@ img {
   color: #fff;
   background: #999
 }
-
-
-
-.subtask_item {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: .5rem;
-  width: fit-content;
-  margin: 0;
-}
-
-.subtask_item:hover {
-  background-color: rgba(209, 209, 209, 1);
-  border-radius: 12px;
-}
-
-.subtask_item input[type="checkbox"] {
-  position: absolute;
-  opacity: 0
-}
-
-.subtask_item label {
-  position: relative;
-  padding-left: 28px;
-  cursor: pointer;
-  user-select: none
-}
-
-.subtask_item label::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
-  background: url("../img/icon/check-button.svg") no-repeat center/contain;
-  transition: background-image .15s ease;
-}
-
-.subtask_item input[type="checkbox"]:checked+label::before {
-  background-image: url("../img/icon/checked-button.svg");
-}
-
 
 /* Task-Groups */
 
@@ -807,6 +792,7 @@ body.loading button {
 
 .edit-task-btn,
 .delete-task-btn {
+  width: 80px;
   font-size: 16px;
   color: rgba(42, 54, 71, 1);
   display: flex;
@@ -821,6 +807,7 @@ body.loading button {
 .edit-task-btn:hover,
 .delete-task-btn:hover {
   color: var(--secondary-color);
+  font-weight: 700;
 }
 
 .edit-task-btn svg,
@@ -834,4 +821,9 @@ body.loading button {
   background-color: rgba(209, 209, 209, 1);
   width: 1px;
   height: 100%
+}
+
+.icon-close:hover {
+  border-radius: 50%;
+  background-color: rgba(209, 209, 209, 1);
 }
