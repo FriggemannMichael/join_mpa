@@ -96,17 +96,17 @@ function toggleSearchMessage(show) {
  */
 function renderBoard(tasks) {
   const columns = {
-    toDo: {
+    todo: {
       id: "toDo",
       emptyText: "No task To do",
       withPlaceholder: false,
     },
-    "inProgress": {
+    inProgress: {
       id: "inProgress",
       emptyText: "No task in progress",
       withPlaceholder: false,
     },
-    "awaitFeedback": {
+    awaitFeedback: {
       id: "awaitFeedback",
       emptyText: "No task await Feetback",
       withPlaceholder: false,
@@ -206,27 +206,45 @@ function buildTaskCard(task) {
   footer.className = "footer_task_card";
   footer.append(buildAssigneeGroup(task), buildPriority(task.priority));
   card.append(footer);
-  enableCardInteractions(card)
+  enableCardInteractions(card);
 
   return card;
 }
 
 export function buildAssigneeGroup(task) {
-  const wrap = document.createElement("div"); wrap.className = "assignees"; wrap.ariaLabel = "assignees";
-  const ul = document.createElement("ul"); ul.className = "avatar-group"; ul.role = "list";
-  const arr = Array.isArray(task.assignees) ? task.assignees : (task.assignee ? [task.assignee] : []);
-  const shown = arr.slice(0, 3), rest = Math.max(0, arr.length - 3);
-  shown.forEach(a => {
-    const li = document.createElement("li"); li.className = "avatar";
-    const label = a?.name; li.title = label; li.textContent = buildInitials(a.name);
-    li.style.background = colorFromString(label); ul.append(li);
+  const wrap = document.createElement("div");
+  wrap.className = "assignees";
+  wrap.ariaLabel = "assignees";
+  const ul = document.createElement("ul");
+  ul.className = "avatar-group";
+  ul.role = "list";
+  const arr = Array.isArray(task.assignees)
+    ? task.assignees
+    : task.assignee
+    ? [task.assignee]
+    : [];
+  const shown = arr.slice(0, 3),
+    rest = Math.max(0, arr.length - 3);
+  shown.forEach((a) => {
+    const li = document.createElement("li");
+    li.className = "avatar";
+    const label = a?.name;
+    li.title = label;
+    li.textContent = buildInitials(a.name);
+    li.style.background = colorFromString(label);
+    ul.append(li);
   });
-  if (rest) { const more = document.createElement("li"); more.className = "avatar more"; more.textContent = `+${rest}`; ul.append(more); }
-  wrap.append(ul); return wrap;
+  if (rest) {
+    const more = document.createElement("li");
+    more.className = "avatar more";
+    more.textContent = `+${rest}`;
+    ul.append(more);
+  }
+  wrap.append(ul);
+  return wrap;
 }
 
-
-// Wenn alle assignee sachen auf array umgestellt sind dann soll das hier verwendet werden 
+// Wenn alle assignee sachen auf array umgestellt sind dann soll das hier verwendet werden
 
 // export function buildAssigneeGroup(task) {
 //   const wrap = document.createElement("div");
@@ -259,9 +277,7 @@ export function buildAssigneeGroup(task) {
 //   wrap.append(ul);
 //   return wrap;
 // }
-// 
-
-
+//
 
 function buildPriority(priority) {
   const wrapper = document.createElement("div");
@@ -296,7 +312,8 @@ function bindColumnShortcuts() {
     const openBtn = e.target.closest("[data-overlay-open]");
     if (openBtn) {
       const selector = openBtn.dataset.overlayOpen;
-      document.querySelector(selector)?.classList.add("active"); return;
+      document.querySelector(selector)?.classList.add("active");
+      return;
     }
     const closeBtn = e.target.closest("[data-overlay-close]");
     const isBackdrop = e.target.classList.contains("backdrop_overlay");
@@ -307,19 +324,22 @@ function bindColumnShortcuts() {
   };
   const onKeydown = (e) => {
     if (e.key === "Escape") {
-      document.querySelectorAll(".overlay_board.active").forEach(o => o.classList.remove("active")); return;
-
-    } if (e.key === "Enter" || e.key === " ") {
-      const kb = e.target.closest("[data-overlay-open],[data-overlay-close]"); if (kb) {
-        e.preventDefault(); kb.click();
-
+      document
+        .querySelectorAll(".overlay_board.active")
+        .forEach((o) => o.classList.remove("active"));
+      return;
+    }
+    if (e.key === "Enter" || e.key === " ") {
+      const kb = e.target.closest("[data-overlay-open],[data-overlay-close]");
+      if (kb) {
+        e.preventDefault();
+        kb.click();
       }
     }
   };
   document.addEventListener("click", onClick);
   document.addEventListener("keydown", onKeydown);
 }
-
 
 // zu testzwecken
 
@@ -337,7 +357,7 @@ export function colorFromString(str) {
 
 export function buildSubtaskProgress(subtasks = []) {
   if (!Array.isArray(subtasks) || !subtasks.length) return null;
-  const done = subtasks.filter(st => st.done).length;
+  const done = subtasks.filter((st) => st.done).length;
   const total = subtasks.length;
 
   const box = document.createElement("div");
@@ -361,7 +381,7 @@ export function buildSubtaskProgress(subtasks = []) {
 }
 
 function setGlobalButtonsDisabled(state, root = document.body) {
-  root.querySelectorAll("button").forEach(btn => {
+  root.querySelectorAll("button").forEach((btn) => {
     btn.disabled = state;
   });
 

@@ -221,20 +221,6 @@
   border-right: 1px solid #d1d1d1;
 }
 
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
 .li-text::before {
   content: "";
   margin-right: 8px;
@@ -486,41 +472,6 @@ label {
   }
 }
 
-/* Custom Multiselect Dropdown */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* entfernt: doppelt, modernere Version weiter unten */
-
-/* ===== CUSTOM MULTISELECT DROPDOWN ===== */
 .custom-multiselect {
   position: relative;
   user-select: none;

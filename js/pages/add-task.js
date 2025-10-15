@@ -9,7 +9,6 @@ import { auth } from "../common/firebase.js";
 import { loadFirebaseDatabase } from "../common/database.js";
 import { createTask } from "../common/tasks.js";
 import { icons } from "../common/svg-template.js";
-
 initAddTaskPage();
 
 /**
@@ -40,15 +39,18 @@ function bindPriorityButtons() {
  */
 function setActivePriority(activeButton) {
   document.querySelectorAll(".priority-btn").forEach((button) => {
-    const isActive = button === activeButton;
-    button.classList.toggle("active", isActive);
+    if (button === activeButton) {
+      button.classList.add("active");
+    } else {
+      button.classList.remove("active");
+    }
 
     // Icon für aktiven Zustand ändern
     const iconContainer = button.querySelector(".prio-icon");
     const priority = button.dataset.priority;
 
     if (iconContainer && priority) {
-      if (isActive) {
+      if (button === activeButton) {
         // Aktive Icons verwenden - SVG direkt aus template einsetzen
         switch (priority) {
           case "urgent":
@@ -200,16 +202,15 @@ function renderAssigneeDropdown(dropdown, options) {
       ? `${option.label} (Du)`
       : option.label;
 
+    // Label umschließt das Input, kein for-Attribut nötig
     const labelEl = document.createElement("label");
     labelEl.className = "checkbox-label";
-    labelEl.htmlFor = checkboxId;
-
     labelEl.innerHTML = `
+      <input type="checkbox" id="${checkboxId}" value="${option.value}" data-name="${displayName}" data-email="${option.email}">
       <div class="assignee-info">
         <div class="user-initials" style="background-color: ${color};">${initials}</div>
         <span>${displayName}</span>
       </div>
-      <input type="checkbox" id="${checkboxId}" value="${option.value}" data-name="${displayName}" data-email="${option.email}">
     `;
 
     dropdown.appendChild(labelEl);
@@ -374,18 +375,21 @@ function readTaskData() {
     email: cb.dataset.email,
   }));
 
-  const categorySelect = document.getElementById("taskCategory");
-  const categoryLabel = categorySelect?.selectedOptions?.[0]?.textContent || "";
+  // Category aus hidden input auslesen
+  const categoryValue = readValue("category");
+  const categoryLabel =
+    document.getElementById("selected-category-placeholder")?.textContent || "";
 
+  // Subtasks-Array übernehmen
   return {
     title: readValue("taskTitle"),
     description: readValue("taskDescription"),
     dueDate: readValue("taskDueDate"),
-    category: readValue("taskCategory"),
+    category: categoryValue,
     categoryLabel,
     priority: readActivePriority(),
     assignees: assignees,
-    subtask: readValue("taskSubtasks"),
+    subtasks: subtasks.slice(), // Array kopieren
     status: "todo",
   };
 }
@@ -447,6 +451,10 @@ function clearTaskForm() {
 
   // Reset assignee display
   updateAssigneeSelection();
+
+  // Subtasks-Array leeren und Liste neu rendern
+  subtasks = [];
+  renderSubtasks();
 
   setTaskStatus("Formular zurückgesetzt", false);
 }
