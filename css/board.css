@@ -145,10 +145,7 @@ h2 {
   flex-direction: row;
   gap: var(--space-lg);
   justify-content: space-between;
-  padding-left: var(--pad-page-x);
-  padding-right: var(--pad-page-x);
-  padding-top: var(--space-4xl);
-  padding-bottom: var(--pad-page-x);
+  padding: var(--space-4xl) var(--pad-page-x) var(--pad-page-x) var(--pad-page-x);
   text-decoration: none;
 }
 
@@ -200,9 +197,11 @@ h2 {
 }
 
 .task_column.active {
-  background-color: rgba(10, 224, 63, 0.1);
+  background-color: rgb(10 224 63 / 10%);
+
   /* border: 1px solid #e53935; */
   border-radius: 30px;
+
   /* padding-top: 20px; */
 }
 
@@ -231,9 +230,9 @@ h2 {
   display: flex;
   flex-direction: column;
   gap: var(--gap-md);
+  min-width: var(--task-width);
   padding: var(--space-md);
   width: var(--task-width);
-  min-width: var(--task-width);
 }
 
 .drag-ghost {
@@ -372,43 +371,43 @@ h5 {
 ================================ */
 
 .overlay_board {
-  position: fixed;
-  display: flex;
-  z-index: 50;
-  inset: 0;
   align-items: center;
+  display: flex;
+  inset: 0;
   justify-content: center;
-
   opacity: 0;
-  visibility: hidden;
   pointer-events: none;
+  position: fixed;
   transition: opacity 120ms ease, visibility 0s linear 120ms;
+  visibility: hidden;
+  z-index: 50;
 }
 
 .overlay_board.active {
   opacity: 1;
-  visibility: visible;
   pointer-events: auto;
   transition: opacity 120ms ease, visibility 0s;
+  visibility: visible;
 }
 
 .backdrop_overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(3px);
-  z-index: 0;
+  background: rgb(0 0 0 / 45%);
+  inset: 0;
+  position: absolute;
   transition: opacity 0.3s ease;
+  z-index: 0;
 }
 
 .add_task_overlay {
-  z-index: 1;
-  width: fit-content;
-  height: fit-content;
   background-color: var(--color-white);
+
   /* border: var(); */
   border-radius: 30px;
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.16);
+  box-shadow: 0 0 4px 0 rgb(0 0 0 / 16%);
+  height: fit-content;
+  width: fit-content;
+  z-index: 1;
 }
 
 .container-add-task-board {
@@ -416,16 +415,17 @@ h5 {
 }
 
 .task-overlay {
-  /* position: fixed; */
-  width: 525px;
-  height: fit-content;
-  padding: 48px 40px;
-  gap: 24px;
   background-color: var(--color-white);
   border-radius: 30px;
-  z-index: 1;
-  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.16);
+  box-shadow: 0 0 4px 0 rgb(0 0 0 / 16%);
   display: grid;
+  gap: 24px;
+  height: fit-content;
+  padding: 48px 40px;
+
+  /* position: fixed; */
+  width: 525px;
+  z-index: 1;
 }
 
 .header-task-overlay {
@@ -438,20 +438,20 @@ h5 {
 }
 
 .due_date_task_overlay {
-  font-size: var(--fs-input);
   display: flex;
+  font-size: var(--fs-input);
   gap: 25px
 }
 
 .priority {
-  font-size: var(--fs-input);
   display: flex;
+  font-size: var(--fs-input);
   gap: 44px
 }
 
 .priority span {
-  display: flex;
   align-items: center;
+  display: flex;
   gap: 10px;
 }
 
@@ -483,12 +483,12 @@ h5 {
 }
 
 .cloase-button-add-task {
-  position: absolute;
-  top: 64px;
-  right: 32px;
-  height: 32px;
-  width: 32px;
   background-image: url("../img/icon/close-btn.svg");
+  height: 32px;
+  position: absolute;
+  right: 32px;
+  top: 64px;
+  width: 32px;
 }
 
 .add_task_overlay,
@@ -514,8 +514,6 @@ h5 {
 .no-select,
 .no-select * {
   user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
 }
 
 img {
@@ -606,10 +604,10 @@ img {
 
 /* test bereich */
 .taskModal-label {
-  color: rgba(66, 82, 110, 1);
-  font-size: 20px;
-  display: flex;
   align-items: center;
+  color: rgb(66 82 110 / 100%);
+  display: flex;
+  font-size: 20px;
 
 }
 
@@ -620,8 +618,8 @@ img {
 }
 
 .close_button_taskModal img {
-  width: 32px;
   height: 32px;
+  width: 32px;
 }
 
 
@@ -632,29 +630,29 @@ img {
 }
 
 .assignee_row {
-  display: flex;
   align-items: center;
+  display: flex;
+  font-size: var(--fs-input);
   gap: 10px;
   height: 56px;
-  font-size: var(--fs-input);
   padding: 7px 16px;
 }
 
 .assignee_badge {
-  width: 42px;
-  height: 42px;
   border-radius: 50%;
+  color: rgb(255 255 255 / 100%);
   display: grid;
-  place-items: center;
-  color: rgba(255, 255, 255, 1);
-  font-weight: 400;
   font-size: 12px;
+  font-weight: 400;
+  height: 42px;
+  place-items: center;
+  width: 42px;
 
 }
 
 .assignee_label {
+  color: rgb(0 0 0 / 100%);
   font-size: 16px;
-  color: rgba(0, 0, 0, 1);
 }
 
 /* Subtasks */
@@ -664,76 +662,76 @@ img {
 
 .subtask_title_row {
   display: flex;
-  justify-content: space-between;
   font-weight: 600;
+  justify-content: space-between;
 }
 
 .subtask_progress {
-  height: 6px;
   background: #e9edf3;
   border-radius: 999px;
+  height: 6px;
   overflow: hidden;
 }
 
 .subtask_progress_fill {
-  height: 100%;
-  width: 0;
   background: #3b82f6;
+  height: 100%;
   transition: width .15s ease;
+  width: 0;
 }
 
 .subtask_list {
-  list-style: none;
-  padding: 0;
-  margin: 12px 0 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
 }
 
 .subtask_item {
-  position: relative;
-  display: flex;
   align-items: center;
-  justify-content: center;
+  display: flex;
   gap: .5rem;
-  width: fit-content;
-  padding: 6px 16px;
+  justify-content: center;
   margin: 0;
+  padding: 6px 16px;
+  position: relative;
+  width: fit-content;
 }
 
 .subtask_item input[type="checkbox"] {
-  width: 16px;
   height: 16px;
+  width: 16px;
 }
 
 .subtask_item:hover {
-  background-color: rgba(209, 209, 209, 1);
+  background-color: rgb(209 209 209 / 100%);
   border-radius: 12px;
 }
 
 .subtask_item input[type="checkbox"] {
-  position: absolute;
-  opacity: 0
+  opacity: 0;
+  position: absolute
 }
 
 .subtask_item label {
-  position: relative;
-  padding-left: 28px;
   cursor: pointer;
   margin-bottom: 0;
+  padding-left: 28px;
+  position: relative;
 }
 
 .subtask_item label::before {
+  background: url("../img/icon/check-button.svg") no-repeat center/contain;
   content: "";
-  position: absolute;
+  height: 24px;
   left: 0;
+  position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
-  background: url("../img/icon/check-button.svg") no-repeat center/contain;
   transition: background-image .15s ease;
+  width: 24px;
 }
 
 .subtask_item input[type="checkbox"]:checked+label::before {
@@ -749,15 +747,15 @@ img {
 }
 
 .avatar {
-  width: 32px;
-  height: 32px;
-  font-size: 12px;
-  border-radius: 50%;
-  display: flex;
   align-items: center;
-  justify-content: center;
+  background: #999;
+  border-radius: 50%;
   color: #fff;
-  background: #999
+  display: flex;
+  font-size: 12px;
+  height: 32px;
+  justify-content: center;
+  width: 32px
 }
 
 /* Task-Groups */
@@ -777,31 +775,31 @@ body.loading {
 }
 
 body.loading button {
-  opacity: 0.6;
   cursor: not-allowed;
+  opacity: 0.6;
 }
 
 
 .footer_taskModal {
-  display: flex;
   align-items: center;
+  display: flex;
+  gap: 8px;
   justify-content: center;
   margin-left: auto;
-  gap: 8px;
 }
 
 .edit-task-btn,
 .delete-task-btn {
-  width: 80px;
-  font-size: 16px;
-  color: rgba(42, 54, 71, 1);
-  display: flex;
   align-items: center;
-  gap: 8px;
   background: none;
   border: none;
-  outline: none;
+  color: rgb(42 54 71 / 100%);
   cursor: pointer;
+  display: flex;
+  font-size: 16px;
+  gap: 8px;
+  outline: none;
+  width: 80px;
 }
 
 .edit-task-btn:hover,
@@ -812,18 +810,18 @@ body.loading button {
 
 .edit-task-btn svg,
 .delete-task-btn svg {
-  width: 24px;
+  fill: currentcolor;
   height: 24px;
-  fill: currentColor;
+  width: 24px;
 }
 
 .separator-task-toolbar {
-  background-color: rgba(209, 209, 209, 1);
-  width: 1px;
-  height: 100%
+  background-color: rgb(209 209 209 / 100%);
+  height: 100%;
+  width: 1px
 }
 
 .icon-close:hover {
+  background-color: rgb(209 209 209 / 100%);
   border-radius: 50%;
-  background-color: rgba(209, 209, 209, 1);
 }

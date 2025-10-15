@@ -210,62 +210,6 @@
   border-radius: 10px;
 }
 
-.subtask-input-container {
-  cursor: pointer;
-  display: flex;
-  width: min(440px, 100%);
-}
-
-.form-input.subtask-input {
-  border-radius: 10px 0 0 10px;
-  border-right: 0;
-  width: calc(100% - 48px);
-}
-
-.subtask-input:focus ~ .subtask-btn {
-  border-color: #29abe2;
-  outline: none;
-}
-
-.subtask-btn {
-  align-items: center;
-  background-color: white;
-  border: 1px solid #d1d1d1;
-  border-left: 0;
-  border-radius: 0 10px 10px 0;
-  display: flex;
-  justify-content: flex-end;
-  padding: 0 16px;
-}
-
-.subtask-btn img {
-  height: 14px;
-  width: 14px;
-}
-
-.check-cancel-div {
-  align-items: center;
-  display: none;
-  justify-content: flex-end;
-  padding: 0 8px;
-}
-
-.subtask-cancel {
-  align-items: center;
-  border-radius: 50%;
-  display: flex;
-  height: 32px;
-  justify-content: center;
-  width: 32px;
-}
-
-.subtask-divider {
-  border-right: 1px solid #d1d1d1;
-  height: 67%;
-  margin: 0 4px;
-  width: 1px;
-}
-
 .subtask-divider-2 {
   border-right: 1px solid #091931;
   height: 24px;
@@ -277,48 +221,19 @@
   border-right: 1px solid #d1d1d1;
 }
 
-.subtask-check {
-  align-items: center;
-  border-radius: 50%;
-  display: flex;
-  height: 32px;
-  justify-content: center;
-  transition: 125ms;
-  width: 32px;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.subtask-cancel:hover,
-.subtask-check:hover {
-  background-color: #ecebeb;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.subtasks-list {
-  max-width: 440px;
-  padding: 4px 0;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.subtask-list-item {
-  align-items: center;
+/* entfernt: doppelt, modernere Version weiter unten */
 
-  cursor: pointer;
-  display: flex;
-  height: 32px;
-  justify-content: space-between;
-  list-style: none;
-  padding: 4px 16px;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.subtask-list-item:hover {
-  background-color: #f0f0f0;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.subtask-list-item.subtask-list-item-edit {
-  padding: 0;
-}
-
-.subtask-list-item.subtask-list-item-edit:hover {
-  background-color: #f6f7f8;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
 .li-text::before {
   content: "";
@@ -572,132 +487,38 @@ label {
 }
 
 /* Custom Multiselect Dropdown */
-.custom-multiselect {
-  position: relative;
-  user-select: none;
-  width: 100%;
-}
 
-.multiselect-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-  border: 1px solid #d1d1d1;
-  border-radius: 10px;
-  cursor: pointer;
-  background-color: #fff;
-  font-size: 20px;
-  height: 48px;
-  transition: border-color 0.3s ease;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.multiselect-header:hover {
-  border-color: #29abe2;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.multiselect-header.open {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  border-bottom: none;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.dropdown-icon {
-  width: 24px;
-  height: 24px;
-  transition: transform 0.3s ease;
-  pointer-events: none;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.multiselect-header.open .dropdown-icon {
-  transform: rotate(180deg);
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.multiselect-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
-  background-color: #fff;
-  border: 1px solid #d1d1d1;
-  border-top: none;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 100;
-  padding: 8px 0;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.checkbox-label:hover {
-  background-color: #f5f5f5;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.checkbox-label.selected {
-  background-color: #2a3647;
-  color: white;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.assignee-info {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex: 1;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.user-initials {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  color: white;
-  font-size: 14px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid white;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.checkbox-label input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-  accent-color: #29abe2;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.selected-assignee-avatars {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 12px;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.selected-assignee-avatars .avatar {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  font-size: 12px;
-  font-weight: 600;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid white;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
-.d-none {
-  display: none !important;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
+
+/* entfernt: doppelt, modernere Version weiter unten */
 
 /* ===== CUSTOM MULTISELECT DROPDOWN ===== */
 .custom-multiselect {
@@ -707,16 +528,16 @@ label {
 }
 
 .multiselect-header {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 12px 16px;
+  background-color: #fff;
   border: 1px solid #d1d1d1;
   border-radius: 10px;
   cursor: pointer;
-  background-color: #fff;
+  display: flex;
   font-size: 20px;
   height: 48px;
+  justify-content: space-between;
+  padding: 12px 16px;
   transition: border-color 0.3s ease;
 }
 
@@ -725,17 +546,17 @@ label {
 }
 
 .multiselect-header.open {
+  border-bottom: none;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  border-bottom: none;
   border-color: #29abe2;
 }
 
 .dropdown-icon {
-  width: 12px;
   height: 12px;
-  transition: transform 0.3s ease;
   pointer-events: none;
+  transition: transform 0.3s ease;
+  width: 12px;
 }
 
 .multiselect-header.open .dropdown-icon {
@@ -743,30 +564,30 @@ label {
 }
 
 .multiselect-dropdown {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 100%;
   background-color: #fff;
   border: 1px solid #29abe2;
-  border-top: none;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-top: none;
+  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
+  left: 0;
   max-height: 250px;
   overflow-y: auto;
-  z-index: 100;
   padding: 8px 0;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  z-index: 100;
 }
 
 .checkbox-label {
-  display: flex;
   align-items: center;
+  cursor: pointer;
+  display: flex;
+  font-size: 20px;
   justify-content: space-between;
   padding: 8px 16px;
-  cursor: pointer;
   transition: background-color 0.2s ease;
-  font-size: 20px;
 }
 
 .checkbox-label:hover {
@@ -776,8 +597,8 @@ label {
 
 .checkbox-label.selected {
   background-color: #2a3647;
-  color: white;
   border-radius: 10px;
+  color: white;
 }
 
 .checkbox-label.selected span {
@@ -785,30 +606,30 @@ label {
 }
 
 .assignee-info {
-  display: flex;
   align-items: center;
-  gap: 12px;
+  display: flex;
   flex: 1;
+  gap: 12px;
 }
 
 .user-initials {
-  width: 42px;
-  height: 42px;
+  align-items: center;
+  border: 2px solid white;
   border-radius: 50%;
   color: white;
+  display: flex;
   font-size: 14px;
   font-weight: 500;
-  display: flex;
-  align-items: center;
+  height: 42px;
   justify-content: center;
-  border: 2px solid white;
+  width: 42px;
 }
 
 .checkbox-label input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
   accent-color: #29abe2;
+  cursor: pointer;
+  height: 18px;
+  width: 18px;
 }
 
 .selected-assignee-avatars {
@@ -820,16 +641,16 @@ label {
 }
 
 .selected-assignee-avatars .avatar {
-  width: 42px;
-  height: 42px;
+  align-items: center;
+  border: 2px solid white;
   border-radius: 50%;
-  font-size: 12px;
-  font-weight: 600;
   color: white;
   display: flex;
-  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  height: 42px;
   justify-content: center;
-  border: 2px solid white;
+  width: 42px;
 }
 
 /* Scrollbar Styling */
@@ -860,14 +681,14 @@ label {
   }
 
   .user-initials {
-    width: 36px;
-    height: 36px;
     font-size: 12px;
+    height: 36px;
+    width: 36px;
   }
 
   .selected-assignee-avatars .avatar {
-    width: 36px;
     height: 36px;
+    width: 36px;
   }
 }
 
@@ -883,40 +704,38 @@ label {
 }
 
 .category-select-header {
-  display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 6px;
   cursor: pointer;
-  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
 }
 
 .category-dropdown {
-  width: 100%;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  z-index: 10;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 10%);
   display: flex;
   flex-direction: column;
+  width: 100%;
+  z-index: 10;
 }
 
 .category-option {
-  padding: 10px;
-  font-size: 14px;
   cursor: pointer;
+  font-size: 14px;
+  padding: 10px;
 }
 
 .category-option:hover {
   background-color: #f0f0f0;
 }
 
-.dropdown-icon {
-  pointer-events: none;
-}
+/* entfernt: doppelt, modernere Version weiter unten */
 
 .d-none {
   display: none;
@@ -940,10 +759,10 @@ label {
   font-family: var(--font-family);
   font-size: var(--font-lg);
   font-weight: 400;
-  line-height: 120%;
-  letter-spacing: 0%;
   gap: 8px;
   justify-content: center;
+  letter-spacing: 0%;
+  line-height: 120%;
   padding: 16px 10px;
 }
 
@@ -957,10 +776,10 @@ label {
   color: white;
   font-family: var(--font-family);
   font-size: var(--font-xl);
-  font-weight: 700;
   font-style: normal;
-  line-height: 120%;
+  font-weight: 700;
   letter-spacing: 0%;
+  line-height: 120%;
   outline: none;
 }
 
@@ -975,264 +794,91 @@ label {
 
 /* Priority icon styling for both img and div containers */
 .priority-btn .prio-icon {
-  display: flex;
   align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  height: 20px;
   justify-content: center;
   width: 20px;
-  height: 20px;
-  flex-shrink: 0;
 }
 
 .priority-btn .prio-icon img {
-  width: 20px;
   height: 20px;
   object-fit: contain;
+  width: 20px;
 }
 
 .priority-btn .prio-icon svg {
-  width: 20px;
-  height: 20px;
   flex-shrink: 0;
+  height: 20px;
+  width: 20px;
 }
 
 /* Specific sizing for different priority icons */
 .priority-btn[data-priority="urgent"] .prio-icon svg {
-  width: 18px;
   height: 16px;
+  width: 18px;
 }
 
 .priority-btn[data-priority="medium"] .prio-icon svg {
-  width: 18px;
   height: 8px;
+  width: 18px;
 }
 
 .priority-btn[data-priority="low"] .prio-icon svg {
+  height: 16px;
   width: 18px;
-  height: 16px;
 }
 
-/* ===== SUBTASK STYLES ===== */
 .subtask-input-container {
+  align-items: center;
   display: flex;
-  width: min(440px, 100%);
   position: relative;
-}
-
-.subtask-input {
-  flex: 1;
-  border: 1px solid #d1d1d1;
-  border-right: none;
-  border-radius: 10px 0 0 10px;
-  padding: 12px 16px;
-  font-size: var(--font-lg);
-  font-family: var(--font-family);
-}
-
-.subtask-input:focus {
-  outline: none;
-  border-color: #29abe2;
-}
-
-.subtask-btn {
-  display: flex;
-  align-items: center;
-  background-color: white;
-  border: 1px solid #d1d1d1;
-  border-left: none;
-  border-radius: 0 10px 10px 0;
-  padding: 0 16px;
-  width: 48px;
-  justify-content: center;
-}
-
-.subtask-btn img {
-  height: 24px;
-  width: 24px;
-  cursor: pointer;
-}
-
-.subtask-btn img#subtaskAddIcon {
-  display: block;
-}
-
-.check-cancel-div {
-  align-items: center;
-  display: none;
-  gap: 8px;
-}
-
-.check-cancel-div.active {
-  display: flex;
-}
-
-.check-cancel-div.active ~ img#subtaskAddIcon {
-  display: none;
-}
-
-.subtask-cancel {
-  align-items: center;
-  border-radius: 50%;
-  display: flex;
-  height: 24px;
-  justify-content: center;
-  width: 24px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.subtask-divider {
-  width: 1px;
-  height: 20px;
-  background-color: #d1d1d1;
-  margin: 0 4px;
-}
-
-.subtask-check {
-  align-items: center;
-  border-radius: 50%;
-  display: flex;
-  height: 24px;
-  justify-content: center;
-  width: 24px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.subtask-cancel:hover,
-.subtask-check:hover {
-  background-color: #f0f0f0;
-}
-
-/* Subtask List Styles */
-.subtasks-list {
-  margin-top: 16px;
-  max-height: 200px;
-  overflow-y: auto;
-}
-
-.subtask-list-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 8px 16px;
-  margin: 4px 0;
-  border-radius: 10px;
-  background-color: #f6f7f8;
-  transition: background-color 0.2s ease;
-}
-
-.subtask-list-item:hover {
-  background-color: #e7e8ea;
-}
-
-.subtask-content {
-  display: flex;
-  align-items: center;
-  flex: 1;
-}
-
-.subtask-bullet {
-  margin-right: 8px;
-  font-weight: bold;
-}
-
-.subtask-text {
-  flex: 1;
-  cursor: pointer;
-}
-
-.subtask-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.subtask-action-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-}
-
-.subtask-action-btn:hover {
-  background-color: #d1d1d1;
-}
-
-.subtask-action-btn svg {
-  width: 16px;
-  height: 16px;
-}
-
-.subtask-edit-input {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid #29abe2;
-  font-size: var(--font-lg);
-  font-family: var(--font-family);
-  outline: none;
-  width: 100%;
-  padding: 4px 0;
-}
-
-.subtask-list-item.editing {
-  background-color: white;
-  border: 1px solid #29abe2;
-}
-
-/* ===== SUBTASK EINGABEFELD - DESIGN WIE IM SVG ===== */
-.subtask-input-container {
-  position: relative;
-  display: flex;
-  align-items: center;
   width: min(440px, 100%);
 }
 
 .subtask-input {
-  flex: 1;
+  background-color: #fff !important;
   border: 1px solid #d1d1d1 !important;
   border-radius: 10px !important;
+  box-sizing: border-box !important;
+  flex: 1;
+  font-family: var(--font-family) !important;
+  font-size: var(--font-lg) !important;
+  height: 48px !important;
   padding: 12px 16px !important;
   padding-right: 50px !important; /* Platz für Icons */
-  font-size: var(--font-lg) !important;
-  font-family: var(--font-family) !important;
-  height: 48px !important;
-  box-sizing: border-box !important;
   width: auto !important; /* Override globales width: 100% */
-  background-color: #fff !important;
 }
 
 .subtask-input:focus {
-  outline: none;
   border-color: #29abe2;
+  outline: none;
 }
 
 .subtask-btn {
-  position: absolute;
-  right: 12px;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  height: 24px;
   background: none;
   border: none;
   cursor: pointer;
+  display: flex;
+  height: 24px;
+  justify-content: center;
+  position: absolute;
+  right: 12px;
 }
 
 /* Standard-Zustand: Nur Add-Icon */
 .subtask-btn #subtaskAddIcon {
   display: block;
-  width: 24px;
   height: 24px;
+  width: 24px;
 }
 
 /* Aktiver Zustand: Close/Check Icons */
 .subtask-btn .check-cancel-div {
-  display: none;
   align-items: center;
+  display: none;
   gap: 4px;
 }
 
@@ -1247,14 +893,14 @@ label {
 /* Close und Check Icons */
 .subtask-cancel,
 .subtask-check {
-  width: 24px;
-  height: 24px;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
   border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  height: 24px;
+  justify-content: center;
   transition: background-color 0.2s ease;
+  width: 24px;
 }
 
 .subtask-cancel:hover,
@@ -1264,35 +910,34 @@ label {
 
 /* Trennlinie zwischen Close und Check */
 .subtask-divider {
-  width: 1px;
-  height: 20px;
   background-color: #d1d1d1;
+  height: 20px;
   margin: 0 4px;
+  width: 1px;
 }
 
 /* ===== SUBTASK LISTE - DESIGN WIE IM SVG ===== */
 .subtasks-list {
   margin-top: 16px;
   max-height: 200px;
-  overflow-y: auto;
-  overflow-x: hidden; /* Verhindert horizontale Scrollbar */
+  overflow: hidden auto; /* Verhindert horizontale Scrollbar */
   width: 100%;
 }
 
 .subtask-list-item {
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: 8px 16px;
-  margin: 4px 0;
-  border-radius: 10px;
   background-color: #f6f7f8;
+  border-radius: 10px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  margin: 4px 0;
+  max-width: 100%;
+  min-height: 40px;
+  overflow: hidden; /* Verhindert Überlauf des Inhalts */
+  padding: 8px 16px;
   transition: background-color 0.2s ease;
   width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  overflow: hidden; /* Verhindert Überlauf des Inhalts */
-  min-height: 40px;
 }
 
 .subtask-list-item:hover {
@@ -1301,8 +946,8 @@ label {
 
 /* Subtask Content */
 .subtask-content {
-  display: flex;
   align-items: center;
+  display: flex;
   flex: 1;
   gap: 8px;
   min-width: 0; /* Ermöglicht Flexbox-Schrumpfung */
@@ -1310,22 +955,22 @@ label {
 }
 
 .subtask-bullet {
-  font-weight: bold;
   color: #2a3647;
-  font-size: 16px;
   flex-shrink: 0; /* Bullet soll nicht schrumpfen */
+  font-size: 16px;
+  font-weight: bold;
 }
 
 .subtask-text {
-  flex: 1;
+  color: #2a3647;
   cursor: pointer;
+  flex: 1;
+  font-family: var(--font-family);
+  font-size: var(--font-md);
   min-width: 0; /* Ermöglicht Text-Schrumpfung */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: var(--font-md);
-  font-family: var(--font-family);
-  color: #2a3647;
 }
 
 /* Action Buttons rechts - standardmäßig ausgeblendet */
@@ -1337,22 +982,22 @@ label {
 
 /* Action Buttons nur bei Hover oder im Bearbeitungsmodus anzeigen */
 .subtask-list-item:hover .subtask-actions {
-  display: flex;
   align-items: center;
-  gap: 4px;
+  display: flex;
   flex-shrink: 0;
+  gap: 4px;
 }
 
 .subtask-action-btn {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  flex-shrink: 0; /* Buttons sollen nicht schrumpfen */
   border-radius: 50%;
   cursor: pointer;
+  display: flex;
+  flex-shrink: 0; /* Buttons sollen nicht schrumpfen */
+  height: 24px;
+  justify-content: center;
   transition: background-color 0.2s ease;
+  width: 24px;
 }
 
 .subtask-action-btn:hover {
@@ -1360,62 +1005,53 @@ label {
 }
 
 .subtask-action-btn svg {
-  width: 16px;
   height: 16px;
+  width: 16px;
 }
 
 /* Edit Mode */
-.subtask-edit-input {
-  background: white;
-  border: none;
-  border-bottom: 1px solid #29abe2;
-  font-size: var(--font-md);
-  font-family: var(--font-family);
-  outline: none;
-  width: 100%;
-  padding: 4px 0;
-  color: #2a3647;
-}
+
+/* entfernt: doppelt, modernere Version weiter unten */
 
 .subtask-list-item.editing {
   background-color: white;
   border: none;
   border-bottom: 1px solid #29abe2;
   border-radius: 0;
-  padding: 0;
   overflow: hidden; /* Verhindert horizontale Scrollbar */
+  padding: 0;
 }
 
 /* Bearbeitungscontainer entsprechend dem Original-SVG-Design */
 .subtask-edit-container {
-  position: relative;
-  display: flex;
   align-items: center;
-  background-color: #ffffff;
+  background-color: #fff;
   border: none;
   border-bottom: 1px solid #29abe2;
   border-radius: 0;
-  height: 48px;
-  padding: 0 16px;
-  width: 100%;
-  max-width: 100%; /* Verhindert Überbreite */
   box-sizing: border-box;
+  display: flex;
+  height: 48px;
+  max-width: 100%; /* Verhindert Überbreite */
   overflow: hidden; /* Verhindert horizontale Scrollbar */
+  padding: 0 16px;
+  position: relative;
+  width: 100%;
 }
 
 .subtask-edit-input {
-  flex: 1;
-  border: none !important;
-  outline: none;
   background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  color: #000;
+  flex: 1;
   font-family: var(--font-family) !important;
   font-size: var(--font-md) !important;
-  color: #000000;
   height: 100% !important;
+  outline: none;
   padding: 0 !important;
   padding-right: 80px !important; /* Platz für zwei Icons */
   width: auto !important;
-  border-radius: 0 !important;
 }
 
 .subtask-edit-input::placeholder {
@@ -1424,19 +1060,19 @@ label {
 }
 
 .subtask-edit-actions {
+  align-items: center;
+  display: flex;
+  gap: 8px;
   position: absolute;
   right: 12px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
   z-index: 10; /* Über dem Input */
 }
 
 .subtask-edit-actions .subtask-divider {
-  width: 1px;
-  height: 20px;
   background-color: #d1d1d1;
+  height: 20px;
   margin: 0 4px;
+  width: 1px;
 }
 
 /* Normale Actions ausblenden im Bearbeitungsmodus */

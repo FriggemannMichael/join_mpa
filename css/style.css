@@ -1140,6 +1140,7 @@ button.btn-outline:hover {
   padding-top: calc(
     20.9375rem - 12.875rem - 4.5625rem
   ); /* 335px - 206px - 73px */
+
   width: 100%;
 }
 
