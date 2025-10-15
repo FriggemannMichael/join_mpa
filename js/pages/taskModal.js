@@ -128,9 +128,7 @@ async function taskModalSubtask(task, id) {
     const headRow = document.createElement("div");
     headRow.className = "subtask_header_task_overlay";
     headRow.innerHTML = `
-      <div class="subtask_title_row">
         <span class="taskModal-label">Subtasks</span>
-      </div>
     `;
 
     // Items
