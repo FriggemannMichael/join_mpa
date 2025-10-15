@@ -827,3 +827,9 @@ body.loading button {
   border-radius: 50%;
   background-color: rgba(209, 209, 209, 1);
 }
+
+.editing-task {
+  display: flex;
+  flex-direction: column;
+  padding: 48px 40px;
+}
