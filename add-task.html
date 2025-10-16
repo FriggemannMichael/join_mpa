@@ -68,7 +68,7 @@
                     />
                   </button>
                   <button
-                    class="priority-btn active"
+                    class="priority-btn"
                     data-priority="medium"
                     type="button"
                   >
@@ -125,7 +125,7 @@
                     class="category-select-header"
                     onclick="toggleCategoryDropdown()"
                   >
-                    <span id="selected-catrgory-placeholder"
+                    <span id="selected-category-placeholder"
                       >Select category</span
                     >
                     <img
@@ -153,11 +153,33 @@
               </div>
               <div class="form-group">
                 <label for="taskSubtasks">Subtasks</label>
-                <input
-                  type="text"
-                  id="taskSubtasks"
-                  placeholder="Add new subtask"
-                />
+                <div class="subtask-input-container">
+                  <input
+                    type="text"
+                    id="taskSubtasks"
+                    class="form-input subtask-input"
+                    placeholder="Add new subtask"
+                  />
+                  <div class="subtask-btn">
+                    <div class="check-cancel-div" id="subtaskIcons">
+                      <div class="subtask-cancel" id="subtaskClose">
+                        <!-- Close icon wird hier eingefügt -->
+                      </div>
+                      <div class="subtask-divider"></div>
+                      <div class="subtask-check" id="subtaskCheck">
+                        <!-- Check icon wird hier eingefügt -->
+                      </div>
+                    </div>
+                    <img
+                      src="./img/icon/add.svg"
+                      alt="Add subtask"
+                      id="subtaskAddIcon"
+                    />
+                  </div>
+                </div>
+                <div class="subtasks-list" id="subtasksList">
+                  <!-- Subtasks werden hier dynamisch hinzugefügt -->
+                </div>
               </div>
             </div>
           </div>

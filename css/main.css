@@ -746,7 +746,7 @@ main {
 
 /* Privacy Policy Typografie */
 .privacy-policy-section h1 {
-  font-family: Inter, sans-serif;
+  font-family: var(--font-family);
   font-size: 61px;
   font-style: normal;
   font-weight: 700;
@@ -755,7 +755,7 @@ main {
 }
 
 .privacy-policy-section h2 {
-  font-family: Inter, sans-serif;
+  font-family: var(--font-family);
   font-size: 27px;
   font-style: normal;
   font-weight: 700;
@@ -766,7 +766,7 @@ main {
 .privacy-policy-section p,
 .privacy-policy-section ul,
 .privacy-policy-section li {
-  font-family: Inter, sans-serif;
+  font-family: var(--font-family);
   font-size: 16px;
   font-style: normal;
   font-weight: 400;

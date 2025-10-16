@@ -62,7 +62,7 @@ Nutze stattdessen die spezifische Klasse .contact-page für das Kontaktseiten-La
   color: white;
   cursor: pointer;
   display: flex;
-  font-family: Inter;
+  font-family: var(--font-family);
   font-size: 21px;
   font-weight: 700;
   gap: 16px;

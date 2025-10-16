@@ -8,7 +8,7 @@ import { guardPage } from "../common/pageGuard.js";
 import { auth } from "../common/firebase.js";
 import { loadFirebaseDatabase } from "../common/database.js";
 import { createTask } from "../common/tasks.js";
-
+import { icons } from "../common/svg-template.js";
 initAddTaskPage();
 
 /**
@@ -21,6 +21,7 @@ async function initAddTaskPage() {
   await populateAssignees();
   bindPriorityButtons();
   bindActionButtons();
+  initSubtaskInput();
 }
 
 /**
@@ -38,7 +39,45 @@ function bindPriorityButtons() {
  */
 function setActivePriority(activeButton) {
   document.querySelectorAll(".priority-btn").forEach((button) => {
-    button.classList.toggle("active", button === activeButton);
+    if (button === activeButton) {
+      button.classList.add("active");
+    } else {
+      button.classList.remove("active");
+    }
+
+    // Icon für aktiven Zustand ändern
+    const iconContainer = button.querySelector(".prio-icon");
+    const priority = button.dataset.priority;
+
+    if (iconContainer && priority) {
+      if (button === activeButton) {
+        // Aktive Icons verwenden - SVG direkt aus template einsetzen
+        switch (priority) {
+          case "urgent":
+            iconContainer.outerHTML = `<div class="prio-icon">${icons.prioHighwhite}</div>`;
+            break;
+          case "medium":
+            iconContainer.outerHTML = `<div class="prio-icon">${icons.priomediumwhite}</div>`;
+            break;
+          case "low":
+            iconContainer.outerHTML = `<div class="prio-icon">${icons.arrowdownwhite}</div>`;
+            break;
+        }
+      } else {
+        // Standard Icons für inaktive Buttons - wieder zu img-Tags zurück
+        switch (priority) {
+          case "urgent":
+            iconContainer.outerHTML = `<img class="prio-icon" src="./img/icon/prio-urgent.svg" alt="Urgent priority" />`;
+            break;
+          case "medium":
+            iconContainer.outerHTML = `<img class="prio-icon" src="./img/icon/prio-medium.svg" alt="Medium priority" />`;
+            break;
+          case "low":
+            iconContainer.outerHTML = `<img class="prio-icon" src="./img/icon/prio-low.svg" alt="Low priority" />`;
+            break;
+        }
+      }
+    }
   });
 }
 
@@ -163,16 +202,15 @@ function renderAssigneeDropdown(dropdown, options) {
       ? `${option.label} (Du)`
       : option.label;
 
+    // Label umschließt das Input, kein for-Attribut nötig
     const labelEl = document.createElement("label");
     labelEl.className = "checkbox-label";
-    labelEl.htmlFor = checkboxId;
-
     labelEl.innerHTML = `
+      <input type="checkbox" id="${checkboxId}" value="${option.value}" data-name="${displayName}" data-email="${option.email}">
       <div class="assignee-info">
         <div class="user-initials" style="background-color: ${color};">${initials}</div>
         <span>${displayName}</span>
       </div>
-      <input type="checkbox" id="${checkboxId}" value="${option.value}" data-name="${displayName}" data-email="${option.email}">
     `;
 
     dropdown.appendChild(labelEl);
@@ -337,18 +375,21 @@ function readTaskData() {
     email: cb.dataset.email,
   }));
 
-  const categorySelect = document.getElementById("taskCategory");
-  const categoryLabel = categorySelect?.selectedOptions?.[0]?.textContent || "";
+  // Category aus hidden input auslesen
+  const categoryValue = readValue("category");
+  const categoryLabel =
+    document.getElementById("selected-category-placeholder")?.textContent || "";
 
+  // Subtasks-Array übernehmen
   return {
     title: readValue("taskTitle"),
     description: readValue("taskDescription"),
     dueDate: readValue("taskDueDate"),
-    category: readValue("taskCategory"),
+    category: categoryValue,
     categoryLabel,
     priority: readActivePriority(),
     assignees: assignees,
-    subtask: readValue("taskSubtasks"),
+    subtasks: subtasks.slice(), // Array kopieren
     status: "todo",
   };
 }
@@ -403,16 +444,17 @@ function clearTaskForm() {
       cb.checked = false;
     });
 
-  // Reset priority buttons
+  // Reset priority buttons - alle bleiben inaktiv
   document.querySelectorAll(".priority-btn").forEach((btn) => {
     btn.classList.remove("active");
   });
-  document
-    .querySelector('.priority-btn[data-priority="medium"]')
-    ?.classList.add("active");
 
   // Reset assignee display
   updateAssigneeSelection();
+
+  // Subtasks-Array leeren und Liste neu rendern
+  subtasks = [];
+  renderSubtasks();
 
   setTaskStatus("Formular zurückgesetzt", false);
 }
@@ -422,8 +464,8 @@ function clearTaskForm() {
  */
 async function handleTaskCreate() {
   const data = readTaskData();
-  if (!data.title || !data.dueDate || !data.category) {
-    setTaskStatus("Bitte alle Pflichtfelder ausfüllen", true);
+  if (!data.title || !data.dueDate || !data.category || !data.priority) {
+    setTaskStatus("Bitte alle Pflichtfelder ausfüllen (inkl. Priorität)", true);
     return;
   }
   const createBtn = document.getElementById("taskCreateBtn");
@@ -444,10 +486,10 @@ async function handleTaskCreate() {
  * Toggle für das Category-Dropdown (wird inline per onclick in HTML aufgerufen)
  */
 function toggleCategoryDropdown() {
-  const header = document.querySelector('.category-select-header');
-  const dropdown = document.getElementById('category-dropdown');
-  dropdown?.classList.toggle('d-none');
-  header?.classList.toggle('open');
+  const header = document.querySelector(".category-select-header");
+  const dropdown = document.getElementById("category-dropdown");
+  dropdown?.classList.toggle("d-none");
+  header?.classList.toggle("open");
 }
 
 /**
@@ -455,25 +497,29 @@ function toggleCategoryDropdown() {
  * @param {string} value Kategorie-Wert (z.B. 'technical-task')
  */
 function selectCategory(value) {
-  const input = document.getElementById('category');
-  const placeholder = document.getElementById('selected-catrgory-placeholder'); // note: id contains typo in HTML, keep consistent
-  const dropdown = document.getElementById('category-dropdown');
+  const input = document.getElementById("category");
+  const placeholder = document.getElementById("selected-catrgory-placeholder"); // note: id contains typo in HTML, keep consistent
+  const dropdown = document.getElementById("category-dropdown");
 
   if (input) input.value = value;
 
   if (placeholder) {
-    const text = value === 'technical-task' ? 'Technical Task' : value === 'user-story' ? 'User Story' : value;
+    const text =
+      value === "technical-task"
+        ? "Technical Task"
+        : value === "user-story"
+        ? "User Story"
+        : value;
     placeholder.textContent = text;
   }
 
-  dropdown?.classList.add('d-none');
-  document.querySelector('.category-select-header')?.classList.remove('open');
+  dropdown?.classList.add("d-none");
+  document.querySelector(".category-select-header")?.classList.remove("open");
 }
 
 // Expose functions to global scope so inline onclick attributes in add-task.html can call them
 window.toggleCategoryDropdown = toggleCategoryDropdown;
 window.selectCategory = selectCategory;
-
 
 export function colorFromString(str) {
   if (!str) return "#999";
@@ -485,4 +531,256 @@ export function colorFromString(str) {
 
   const hue = Math.abs(hash) % 360;
   return `hsl(${hue}, 65%, 55%)`;
+}
+
+/**
+ * Initialisiert das Subtask-Eingabefeld mit Icons und Event-Handlers
+ */
+function initSubtaskInput() {
+  const subtaskInput = document.getElementById("taskSubtasks");
+  const subtaskIcons = document.getElementById("subtaskIcons");
+  const closeIcon = document.getElementById("subtaskClose");
+  const checkIcon = document.getElementById("subtaskCheck");
+
+  if (!subtaskInput || !subtaskIcons || !closeIcon || !checkIcon) {
+    return;
+  }
+
+  // Icons in die Container einfügen
+  closeIcon.innerHTML = icons.close;
+  checkIcon.innerHTML = icons.check;
+
+  // Event-Listener für das Eingabefeld
+  subtaskInput.addEventListener("focus", () => {
+    subtaskIcons.classList.add("active");
+  });
+
+  subtaskInput.addEventListener("blur", (e) => {
+    // Verzögerung hinzufügen, damit Icon-Klicks funktionieren
+    setTimeout(() => {
+      if (!subtaskInput.value.trim()) {
+        subtaskIcons.classList.remove("active");
+      }
+    }, 150);
+  });
+
+  subtaskInput.addEventListener("input", () => {
+    if (subtaskInput.value.trim()) {
+      subtaskIcons.classList.add("active");
+    } else {
+      subtaskIcons.classList.remove("active");
+    }
+  });
+
+  // Event-Listener für die Icons
+  closeIcon.addEventListener("click", () => {
+    clearSubtaskInput();
+  });
+
+  checkIcon.addEventListener("click", () => {
+    addSubtask();
+  });
+
+  // Enter-Taste für das Hinzufügen von Subtasks
+  subtaskInput.addEventListener("keypress", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      addSubtask();
+    }
+  });
+}
+
+/**
+ * Löscht den Inhalt des Subtask-Eingabefeldes
+ */
+function clearSubtaskInput() {
+  const subtaskInput = document.getElementById("taskSubtasks");
+  const subtaskIcons = document.getElementById("subtaskIcons");
+
+  if (subtaskInput) {
+    subtaskInput.value = "";
+    subtaskInput.focus();
+  }
+
+  if (subtaskIcons) {
+    subtaskIcons.classList.remove("active");
+  }
+}
+
+/**
+ * Array zur Speicherung aller Subtasks
+ */
+let subtasks = [];
+
+/**
+ * Fügt eine neue Subtask hinzu
+ */
+function addSubtask() {
+  const subtaskInput = document.getElementById("taskSubtasks");
+
+  if (!subtaskInput || !subtaskInput.value.trim()) return;
+
+  const subtaskText = subtaskInput.value.trim();
+
+  // Neue Subtask zum Array hinzufügen
+  const newSubtask = {
+    id: Date.now(), // Einfache ID-Generierung
+    text: subtaskText,
+    completed: false,
+  };
+
+  subtasks.push(newSubtask);
+
+  // Subtask-Liste aktualisieren
+  renderSubtasks();
+
+  // Eingabefeld zurücksetzen
+  clearSubtaskInput();
+
+  // Erfolgs-Feedback (optional)
+  setTaskStatus("Subtask hinzugefügt", false);
+}
+
+/**
+ * Rendert alle Subtasks in der Liste
+ */
+function renderSubtasks() {
+  const subtasksList = document.getElementById("subtasksList");
+  if (!subtasksList) return;
+
+  subtasksList.innerHTML = "";
+
+  subtasks.forEach((subtask) => {
+    const subtaskElement = createSubtaskElement(subtask);
+    subtasksList.appendChild(subtaskElement);
+  });
+}
+
+/**
+ * Erstellt ein DOM-Element für eine Subtask
+ */
+function createSubtaskElement(subtask) {
+  const subtaskDiv = document.createElement("div");
+  subtaskDiv.className = "subtask-list-item";
+  subtaskDiv.dataset.id = subtask.id;
+
+  subtaskDiv.innerHTML = `
+    <div class="subtask-content">
+      <span class="subtask-bullet">•</span>
+      <span class="subtask-text">${subtask.text}</span>
+    </div>
+    <div class="subtask-actions">
+      <div class="subtask-action-btn subtask-edit-btn" title="Edit subtask">
+        ${icons.edit}
+      </div>
+      <div class="subtask-divider"></div>
+      <div class="subtask-action-btn subtask-delete-btn" title="Delete subtask">
+        ${icons.delete}
+      </div>
+    </div>
+  `;
+
+  // Event-Listener direkt hinzufügen
+  const editBtn = subtaskDiv.querySelector(".subtask-edit-btn");
+  const deleteBtn = subtaskDiv.querySelector(".subtask-delete-btn");
+  const subtaskText = subtaskDiv.querySelector(".subtask-text");
+
+  editBtn.addEventListener("click", () => editSubtask(subtask.id));
+  deleteBtn.addEventListener("click", () => deleteSubtask(subtask.id));
+
+  // Klick auf den Text startet auch die Bearbeitung
+  subtaskText.addEventListener("click", () => editSubtask(subtask.id));
+
+  // Cursor-Stil für bessere UX
+  subtaskText.style.cursor = "pointer";
+
+  return subtaskDiv;
+}
+
+/**
+ * Löscht eine Subtask
+ */
+function deleteSubtask(id) {
+  subtasks = subtasks.filter((subtask) => subtask.id !== id);
+  renderSubtasks();
+  setTaskStatus("Subtask entfernt", false);
+}
+
+/**
+ * Bearbeitet eine Subtask
+ */
+function editSubtask(id) {
+  const subtask = subtasks.find((s) => s.id === id);
+  if (!subtask) return;
+
+  const subtaskElement = document.querySelector(`[data-id="${id}"]`);
+
+  // Edit-Modus aktivieren - komplette Zeile wird zu einem Input-Container wie beim Hinzufügen
+  subtaskElement.classList.add("editing");
+
+  // Erstelle Container ähnlich wie beim Hinzufügen
+  subtaskElement.innerHTML = `
+    <div class="subtask-edit-container">
+      <input type="text" class="subtask-edit-input" value="${subtask.text}" placeholder="Subtasks">
+      <div class="subtask-edit-actions">
+        <div class="subtask-action-btn subtask-cancel-btn" title="Cancel">
+          ${icons.close}
+        </div>
+        <div class="subtask-divider"></div>
+        <div class="subtask-action-btn subtask-save-btn" title="Save">
+          ${icons.check}
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Input fokussieren und Text selektieren
+  const input = subtaskElement.querySelector(".subtask-edit-input");
+  input.focus();
+  input.select();
+
+  // Event-Listener für die neuen Buttons
+  const saveBtn = subtaskElement.querySelector(".subtask-save-btn");
+  const cancelBtn = subtaskElement.querySelector(".subtask-cancel-btn");
+
+  saveBtn.addEventListener("click", () => saveSubtaskEdit(id));
+  cancelBtn.addEventListener("click", () => cancelSubtaskEdit(id));
+
+  // Enter und Escape Handler
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      saveSubtaskEdit(id);
+    } else if (e.key === "Escape") {
+      cancelSubtaskEdit(id);
+    }
+  });
+}
+
+/**
+ * Speichert die bearbeitete Subtask
+ */
+function saveSubtaskEdit(id) {
+  const subtaskElement = document.querySelector(`[data-id="${id}"]`);
+  const input = subtaskElement.querySelector(".subtask-edit-input");
+  const newText = input.value.trim();
+
+  if (!newText) {
+    deleteSubtask(id);
+    return;
+  }
+
+  // Subtask aktualisieren
+  const subtask = subtasks.find((s) => s.id === id);
+  if (subtask) {
+    subtask.text = newText;
+    renderSubtasks();
+    setTaskStatus("Subtask aktualisiert", false);
+  }
+}
+
+/**
+ * Bricht die Bearbeitung ab
+ */
+function cancelSubtaskEdit(id) {
+  renderSubtasks();
 }
