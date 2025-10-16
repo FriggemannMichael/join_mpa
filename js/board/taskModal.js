@@ -1,7 +1,7 @@
 import { db, auth } from "../common/firebase.js";
 import { ref, update, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { icons } from "../common/svg-template.js";
-import {initialsFrom, getCurrentUser} from "./utils.js"
+import {initialsFrom, getCurrentUser, ScrollLock} from "./utils.js"
 import { boardTemplates } from "./board-templates.js";
 
 
@@ -11,6 +11,9 @@ export async function renderTaskModal(id, task = {}) {
   section.dataset.taskId = id;
   const h2 = document.createElement("h2");
   h2.textContent = task.title;
+
+  ScrollLock.set()
+
 
   section.replaceChildren(
     taskModalHeader(task.categoryLabel, task.category),
@@ -219,6 +222,7 @@ function taskModalEventlistener(overlay, section) {
     overlay._cleanup = () => {
       overlay.removeEventListener("click", onBackdropClick);
       document.removeEventListener("keydown", onKeydown);
+      ScrollLock.release()
       delete overlay.dataset.bound;
     };
   }
