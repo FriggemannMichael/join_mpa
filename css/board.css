@@ -233,6 +233,7 @@ h2 {
   min-width: var(--task-width);
   padding: var(--space-md);
   width: var(--task-width);
+  overflow: hidden;
 }
 
 .drag-ghost {
@@ -858,15 +859,13 @@ body.loading button {
   gap: 8px;
 }
 
-/* Scrollbarer Body */
+
 .task-editor_body {
   flex: 1;
-  min-height: 0;
   overflow: auto;
   padding: 16px;
 }
 
-/* Optional: nicer scrollbar */
 .task-editor__body::-webkit-scrollbar {
   width: 8px;
 }
@@ -874,4 +873,11 @@ body.loading button {
 .task-editor__body::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, .2);
   border-radius: 4px;
+}
+
+.flex-1{
+  flex: 1;
+  overflow: auto;
+  overflow-wrap: break-word;   
+  word-break: break-word; 
 }

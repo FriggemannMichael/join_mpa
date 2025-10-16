@@ -1,28 +1,30 @@
 import { db, auth } from "../common/firebase.js";
 import { ref, update, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { icons } from "../common/svg-template.js";
-import {initialsFrom, getCurrentUser, ScrollLock} from "./utils.js"
+import { initialsFrom, getCurrentUser, ScrollLock } from "./utils.js"
 import { boardTemplates } from "./board-templates.js";
 
 
 export async function renderTaskModal(id, task = {}) {
+  ScrollLock.set()
   const overlay = document.getElementById("taskOverlay");
   const section = document.getElementById("taskModal");
   section.dataset.taskId = id;
   const h2 = document.createElement("h2");
   h2.textContent = task.title;
 
-  ScrollLock.set()
-
-
-  section.replaceChildren(
-    taskModalHeader(task.categoryLabel, task.category),
-    h2,
+  const scrollableSection = document.createElement("div")
+  scrollableSection.classList.add("flex-1");
+  scrollableSection.append(h2,
     taskModalDescription(task.description),
     taskModalDueDate(task.dueDate),
     taskModalpriority(task.priority),
     await taskModalAssignees(task, id),
-    await taskModalSubtask(task, id),
+    await taskModalSubtask(task, id))
+
+  section.replaceChildren(
+    taskModalHeader(task.categoryLabel, task.category),
+    scrollableSection,
     taskModalEditDelete(task, id)
   );
 
@@ -312,8 +314,8 @@ async function updateSubtaskDone(taskId, index, done) {
 
 // muss noch bearbeitet werden
 function openEditForm(taskId) {
-  const section = document.getElementById("taskModal"); 
- 
+  const section = document.getElementById("taskModal");
+
   const header = document.createElement("div");
   header.className = "task-editor_header";
   const closeBtn = document.createElement("button");
@@ -326,7 +328,7 @@ function openEditForm(taskId) {
 
   const body = document.createElement("div");
   body.classList.add("task-editor_body")
-  body.innerHTML = boardTemplates.editTask;  
+  body.innerHTML = boardTemplates.editTask;
 
   const footer = document.createElement("div");
   footer.className = "task-editor_footer";
@@ -338,7 +340,7 @@ function openEditForm(taskId) {
   footer.append(updateBtn);
 
   section.replaceChildren(header, body, footer);
- 
+
 
   // optional: Formular mit vorhandenen Werten füllen
   // fillEdit(taskId);
