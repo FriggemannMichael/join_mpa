@@ -6,7 +6,7 @@
 import { bootLayout } from "../common/layout.js";
 import { guardPage } from "../common/pageGuard.js";
 import { subscribeToTasks } from "../common/tasks.js";
-import { enableCardInteractions } from "../dragdrop/dragdrop.js";
+import { enableCardInteractions } from "../board/dragdrop.js";
 
 initBoardPage();
 

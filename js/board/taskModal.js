@@ -1,12 +1,9 @@
 import { db, auth } from "../common/firebase.js";
 import { ref, update, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { icons } from "../common/svg-template.js";
+import {initialsFrom, getCurrentUser, ScrollLock} from "./utils.js"
+import { boardTemplates } from "./board-templates.js";
 
-export async function loadTask(id) {
-  const root = ref(db);
-  const snap = await get(child(root, `tasks/${id}`));
-  return snap.exists() ? { id, ...snap.val() } : null;
-}
 
 export async function renderTaskModal(id, task = {}) {
   const overlay = document.getElementById("taskOverlay");
@@ -14,6 +11,9 @@ export async function renderTaskModal(id, task = {}) {
   section.dataset.taskId = id;
   const h2 = document.createElement("h2");
   h2.textContent = task.title;
+
+  ScrollLock.set()
+
 
   section.replaceChildren(
     taskModalHeader(task.categoryLabel, task.category),
@@ -222,6 +222,7 @@ function taskModalEventlistener(overlay, section) {
     overlay._cleanup = () => {
       overlay.removeEventListener("click", onBackdropClick);
       document.removeEventListener("keydown", onKeydown);
+      ScrollLock.release()
       delete overlay.dataset.bound;
     };
   }
@@ -250,11 +251,10 @@ function taskModalEventlistener(overlay, section) {
 }
 
 
-// testbereich
 
-let contactsCache = null;
 
 async function getContactsMap() {
+  let contactsCache = null;
   if (contactsCache) return contactsCache;
   const snap = await get(child(ref(db), "contacts"));
   contactsCache = snap.exists() ? snap.val() : {};
@@ -266,14 +266,6 @@ function normAssignees(task) {
   if (Array.isArray(task.assignees) && task.assignees.length) return task.assignees;
   if (task.assignee && (task.assignee.id || task.assignee.name || task.assignee.email)) return [task.assignee];
   return [];
-}
-
-function initialsFrom(str = "") {
-  const s = String(str).trim();
-  if (!s) return "?";
-  const parts = s.split(/\s+/);
-  const ini = (parts[0]?.[0] || "") + (parts[1]?.[0] || "");
-  return (ini || s[0]).toUpperCase();
 }
 
 export function renderAssignees(container, assigneesArr, contactsMap, currentUser) {
@@ -302,7 +294,6 @@ export function renderAssignees(container, assigneesArr, contactsMap, currentUse
   });
 }
 
-
 function normalizeSubtasks(input) {
   if (Array.isArray(input)) return input;
   if (Array.isArray(input?.subtasks)) return input.subtasks;
@@ -316,22 +307,73 @@ async function updateSubtaskDone(taskId, index, done) {
   await update(ref(db), { [path]: !!done, [`tasks/${taskId}/updatedAt`]: Date.now() });
 }
 
-export function getCurrentUser() {
-  const user = auth.currentUser;
-  return user ? { id: user.uid, name: user.displayName, email: user.email } : null;
-}
+
 
 
 // muss noch bearbeitet werden
 function openEditForm(taskId) {
-  // Beispiel: Overlay schließen, Taskdaten laden, Edit-Form öffnen
-  closeTaskOverlay();
-  console.log("📝 Open edit form for task:", taskId);
-}
+  const section = document.getElementById("taskModal"); 
+ 
+  const header = document.createElement("div");
+  header.className = "task-editor_header";
+  const closeBtn = document.createElement("button");
+  closeBtn.className = "close_button_taskModal";
+  closeBtn.dataset.overlayClose = "#taskOverlay";
+  closeBtn.setAttribute("aria-label", "Close");
+  closeBtn.innerHTML = icons.close;
+  closeBtn.addEventListener("click", closeTaskOverlay);
+  header.append(closeBtn);
 
+  const body = document.createElement("div");
+  body.classList.add("task-editor_body")
+  body.innerHTML = boardTemplates.editTask;  
+
+  const footer = document.createElement("div");
+  footer.className = "task-editor_footer";
+  const updateBtn = document.createElement("button");
+  updateBtn.type = "button";
+  updateBtn.className = "update-task-btn";
+  updateBtn.textContent = "Update";
+  updateBtn.addEventListener("click", () => updateTask(taskId));
+  footer.append(updateBtn);
+
+  section.replaceChildren(header, body, footer);
+ 
+
+  // optional: Formular mit vorhandenen Werten füllen
+  // fillEdit(taskId);
+}
 async function deleteTask(taskId) {
   const path = `tasks/${taskId}`;
   await update(ref(db), { [path]: null });
   console.log("🗑️ Task deleted:", taskId);
   closeTaskOverlay();
+}
+
+// function updateTask(taskId) {
+//   console.log("📝 Task wird aktualisiert:", taskId);
+//   // Hier später: Werte aus den Inputs holen und in Firebase speichern
+// }
+
+function updateTask(taskId) {
+  const root = document.querySelector(".task-editor");
+  if (!root) return;
+
+  const title = root.querySelector("#editTaskTitle")?.value?.trim() || "";
+  const description = root.querySelector("#editTaskDescription")?.value?.trim() || "";
+  const dueDate = root.querySelector("#editTaskDueDate")?.value || "";
+
+
+
+  // Assignees/Subtasks falls du schon Helpr hast:
+  // const assignees = getSelectedAssignees(); 
+  // const subtasks  = getEditedSubtasks();
+
+  console.log("update payload:", { taskId, title, description, dueDate });
+
+  // hier dein tatsächlicher Update-Call (Firebase o.ä.)
+  // await updateTaskInDb(taskId, { title, description, dueDate, , assignees, subtasks });
+
+  // danach ggf. schließen:
+  // closeTaskOverlay();
 }

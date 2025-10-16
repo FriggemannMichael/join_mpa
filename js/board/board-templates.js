@@ -1,7 +1,7 @@
 export const boardTemplates = {
 
-    editTask:`
-<div class="editing-task">
+    editTask: `
+
 
         <div class="form-group">
             <label for="editTaskTitle">Title</label>
@@ -57,7 +57,7 @@ export const boardTemplates = {
             <input type="text" id="editTaskSubtasks" placeholder="Edit subtask" />
         </div>
 
-    </div>
+    
     `
 
-    }
+}

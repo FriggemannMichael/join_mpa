@@ -415,16 +415,17 @@ h5 {
 }
 
 .task-overlay {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   background-color: var(--color-white);
-  border-radius: 30px;
-  box-shadow: 0 0 4px 0 rgb(0 0 0 / 16%);
-  display: grid;
-  gap: 24px;
-  height: fit-content;
-  padding: 48px 40px;
-
-  /* position: fixed; */
   width: 525px;
+  height: fit-content;
+  max-height: 95%;
+  padding: 48px 40px;
+  gap: 24px;
+  border-radius: 30px;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.16);
   z-index: 1;
 }
 
@@ -597,10 +598,6 @@ img {
     background-image: url("../img/icon/add-task-click.svg");
   }
 }
-
-
-
-
 
 /* test bereich */
 .taskModal-label {
@@ -824,4 +821,57 @@ body.loading button {
 .icon-close:hover {
   background-color: rgb(209 209 209 / 100%);
   border-radius: 50%;
+  background-color: rgba(209, 209, 209, 1);
+}
+
+.editing-task {
+  display: flex;
+  flex-direction: column;
+  padding: 48px 40px;
+}
+
+.task-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+
+/* Muss noch bearbeitet werden */
+.task-editor_header,
+.task-editor_footer {
+  flex-shrink: 0;
+  padding: 16px;
+  background: #fafafa;
+}
+
+.task-editor_header {
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.task-editor_footer {
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Scrollbarer Body */
+.task-editor_body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 16px;
+}
+
+/* Optional: nicer scrollbar */
+.task-editor__body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.task-editor__body::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, .2);
+  border-radius: 4px;
 }

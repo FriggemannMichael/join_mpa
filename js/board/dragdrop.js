@@ -1,7 +1,7 @@
-import { renderTaskModal } from "../pages/taskModal.js"
+import { renderTaskModal } from "./taskModal.js"
 import { db } from "../common/firebase.js";
 import { ref, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-import { loadTask } from "../pages/taskModal.js"
+import { loadTask } from "./utils.js"
 
 let currentDrag = null;
 
@@ -256,8 +256,6 @@ export async function updateTaskStatus(taskId, newStatus) {
   try {
     const taskRef = ref(db, `tasks/${taskId}`);
     await update(taskRef, { status: newStatus, updatedAt: Date.now() });
-    console.log(`Task "${taskId}" erfolgreich auf "${newStatus}" aktualisiert.`);
   } catch (error) {
-    console.error(`Fehler beim Aktualisieren von Task "${taskId}":`, error);
   }
 }
