@@ -416,17 +416,18 @@ h5 {
 }
 
 .task-overlay {
-  /* position: fixed; */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: var(--color-white);
   width: 525px;
   height: fit-content;
-  max-height: 100%;
+  max-height: 95%;
   padding: 48px 40px;
   gap: 24px;
-  background-color: var(--color-white);
   border-radius: 30px;
-  z-index: 1;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.16);
-  display: grid;
+  z-index: 1;
 }
 
 .header-task-overlay {
@@ -829,4 +830,50 @@ body.loading button {
   display: flex;
   flex-direction: column;
   padding: 48px 40px;
+}
+
+.task-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+
+/* Muss noch bearbeitet werden */
+.task-editor_header,
+.task-editor_footer {
+  flex-shrink: 0;
+  padding: 16px;
+  background: #fafafa;
+}
+
+.task-editor_header {
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.task-editor_footer {
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Scrollbarer Body */
+.task-editor_body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 16px;
+}
+
+/* Optional: nicer scrollbar */
+.task-editor__body::-webkit-scrollbar {
+  width: 8px;
+}
+
+.task-editor__body::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, .2);
+  border-radius: 4px;
 }
