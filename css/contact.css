@@ -1,3 +1,80 @@
+.contacts-list-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  /* max-width: 569px; */
+  min-height: 73px;
+  gap: 16px;
+  margin: 2rem 0 1rem 0;
+  opacity: 1;
+}
+.contacts-list-header h1 {
+  font-size: 4.56rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0;
+  text-align: left;
+}
+
+.contacts-slogan {
+  font-size: 1.1rem;
+  color: var(--grey-medium);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.contacts-separator {
+  width: 3px;
+  height: 3.68rem;
+  background: var(--secondary-color);
+  border-radius: 2px;
+  margin: 0 12px 0 12px;
+}
+
+.contacts-list-header p {
+  font-size: 1.7685rem;
+  color: var(--grey-medium);
+  margin: 0;
+  text-align: left;
+}
+
+.contacts-slogan {
+  font-size: 1.1rem;
+  color: var(--grey-medium);
+  margin-bottom: 1rem;
+}
+
+.contacts-separator {
+  width: 100%;
+  height: 3px;
+  background: var(--secondary-color);
+  border-radius: 2px;
+  margin-bottom: 1.5rem;
+}
+
+.add-contact-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--primary-color);
+  color: var(--white);
+  border: none;
+  border-radius: var(--border-radius-md);
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.add-contact-btn img {
+  width: 24px;
+  height: 24px;
+}
+.add-contact-btn:hover {
+  background: var(--secondary-color);
+}
 /* Overlay styling for contacts modal */
 
 .overlay {
@@ -34,9 +111,123 @@ Diese Regel wurde auskommentiert, um Konflikte mit anderen Seiten zu vermeiden.
 Nutze stattdessen die spezifische Klasse .contact-page für das Kontaktseiten-Layout.
 */
 
-/* Spezifisches Layout nur für die Kontaktseite */
-.layout {
+/* Layout für die Kontaktseite analog zu Board/Add-Task */
+.contacts__container {
+  display: flex;
+  flex-direction: column;
   height: 100vh;
+  background: var(--background-color);
+}
+
+.contacts-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 2rem;
+  height: 100%;
+  padding: 2rem 2rem 2rem 0;
+}
+
+.contacts-list-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* background: var(--white); */
+  /* border-radius: var(--border-radius-lg); */
+  /* box-shadow: 5px 0 0 0 var(--box-shadow-light); */
+  padding: 2rem 1rem;
+  min-width: auto;
+  max-width: 400px;
+  height: 100%;
+}
+/* Korrigierte .contacts-separator Definition */
+.contacts-separator {
+  width: 3px;
+  height: 40px;
+  background: var(--secondary-color);
+  border-radius: 2px;
+  margin: 0.5rem 0 0.5rem 0;
+}
+
+.add-contact-btn:hover {
+  background: var(--secondary-color);
+}
+
+.contacts-list {
+  list-style: none;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* .contact-detail-section {
+  background: var(--white);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--box-shadow-light);
+  padding: 2rem;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+} */
+
+.contact-detail-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.placeholder-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--grey-medium);
+  text-align: center;
+}
+
+.placeholder-icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 1.5rem;
+  opacity: 0.5;
+}
+
+.placeholder-content h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.placeholder-content p {
+  font-size: 1.1rem;
+  color: var(--grey-light);
+}
+
+@media (max-width: 1024px) {
+  .contacts-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .contact-detail-section {
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .contacts__container {
+    padding-left: 0;
+    padding-top: 4rem;
+  }
+  .contacts-list-section,
+  .contact-detail-section {
+    padding: 1rem;
+    min-width: unset;
+    max-width: unset;
+  }
 }
 
 .contact-page {

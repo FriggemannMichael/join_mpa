@@ -15,160 +15,42 @@
     <div class="layout">
       <div id="layout-header" data-template="header"></div>
       <aside id="layout-sidebar" data-template="sidebar"></aside>
-      <main id="pageContent" class="main__container contact-page" tabindex="-1">
-        <div id="contact-list" class="contact_list">
-          <button class="contact-btn" type="button" id="addNewContactBtn">
-            Add new Contact
-            <img src="./img/icon/person_add.png" alt="add Person" />
-          </button>
-
-          <p class="beginning-letter">A</p>
-          <div class="contact-seperator"></div>
-          <div class="contact-person">
-            <div class="initals">AM</div>
-            <div class="small-info">
-              <h3>Anton Mayer</h3>
-              <a href="mailto:antonm@gmail.com">antonm@gmail.com</a>
+      <main
+        id="pageContent"
+        class="main__container contacts__container"
+        tabindex="-1"
+      >
+        <section class="contacts-grid">
+          <div class="contacts-list-section">
+            <ul class="contacts-list" id="contact-list">
+              <!-- Kontaktliste wird hier dynamisch eingefügt -->
+            </ul>
+          </div>
+          <div class="contact-detail-section">
+            <!-- Detailansicht des Kontakts -->
+            <div class="contacts-list-header">
+              <h1>Contacts</h1>
+              <div class="contacts-separator"></div>
+              <p>Better with a team</p>
             </div>
-          </div>
-          <div class="contact-person">
-            <div class="initals">AM</div>
-            <div class="small-info">
-              <h3>Anton Mayer</h3>
-              <a href="mailto:antonm@gmail.com">antonm@gmail.com</a>
-            </div>
-          </div>
-          <div class="contact-person">
-            <div class="initals">AM</div>
-            <div class="small-info">
-              <h3>Anton Mayer</h3>
-              <a href="mailto:antonm@gmail.com">antonm@gmail.com</a>
-            </div>
-          </div>
-          <div class="contact-person">
-            <div class="initals">AM</div>
-            <div class="small-info">
-              <h3>Anton Mayer</h3>
-              <a href="mailto:antonm@gmail.com">antonm@gmail.com</a>
-            </div>
-          </div>
-          <p class="beginning-letter">B</p>
-          <div class="contact-seperator"></div>
-          <div class="contact-person">
-            <div class="initals">BM</div>
-            <div class="small-info">
-              <h3>Bernd Mayer</h3>
-              <a href="mailto:antonm@gmail.com">antonm@gmail.com</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="contact-info">
-          <div class="contact-headline">
-            <h3>Contacts</h3>
-            <div class="headline-seperator"></div>
-            <span>Better with a team</span>
-          </div>
-          <div class="contact-big">
-            <div class="initals-big">BM</div>
-            <div class="name-big">
-              <span id="contactDetailName">Bernd Mayer</span>
-              <div class="changebtns">
-                <button type="button" id="editContactBtn">
-                  <img src="./img/icon/edit.svg" alt="Edit" />Edit
-                </button>
-                <button type="button" id="deleteContactBtn">
-                  <img src="./img/icon/delete.svg" alt="Delete" />Delete
-                </button>
+            <div class="contact-detail-placeholder">
+              <div class="placeholder-content">
+                <img
+                  src="./img/icon/person_add.png"
+                  alt="Kontakt wählen"
+                  class="placeholder-icon"
+                />
+                <h2>Wähle einen Kontakt aus</h2>
+                <p>
+                  Bitte wähle links einen Kontakt, um die Details anzuzeigen.
+                </p>
               </div>
             </div>
           </div>
-          <div class="contact-big-information">
-            <span>Contact Information</span>
-            <div class="contact-deep-info">
-              <div class="contact-mail">
-                <span>E-Mail</span>
-                <a id="contactDetailMail" href="mailto:antonm@gmail.com"
-                  >antonm@gmail.com</a
-                >
-              </div>
-              <div class="contact-phone">
-                <span>Phone</span>
-                <a id="contactDetailPhone" href="tel:+491111111111"
-                  >+49 111 111 1111</a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
+        </section>
       </main>
-      <section class="overlay" id="contactOverlay" data-modal hidden>
-        <div class="overlay__backdrop" id="contactOverlayBackdrop"></div>
-        <div
-          class="overlay__content"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="contactModalTitle"
-        >
-          <article class="add_contact">
-            <header class="add_contact_headline">
-              <img src="./img/icon/logo.svg" alt="Join Logo" />
-              <h2 id="contactModalTitle">Add contact</h2>
-              <p>Tasks are better with a team!</p>
-              <div
-                class="add_contact_headline_seperator"
-                aria-hidden="true"
-              ></div>
-            </header>
-            <div class="add_contact_main">
-              <div id="personeclipse">
-                <img id="personimg" src="./img/icon/person.svg" alt="Avatar" />
-              </div>
-              <form class="add_contact_input" id="contactForm" novalidate>
-                <button
-                  type="button"
-                  class="close-modal"
-                  id="contactModalClose"
-                  aria-label="Close"
-                >
-                  <img src="./img/icon/close.svg" alt="Close" />
-                </button>
-                <input
-                  id="contactName"
-                  class="input_icon"
-                  type="text"
-                  placeholder="Name"
-                  required
-                />
-                <input
-                  id="contactEmail"
-                  class="input_icon"
-                  type="email"
-                  placeholder="E-Mail"
-                  required
-                />
-                <input
-                  id="contactPhone"
-                  class="input_icon"
-                  type="tel"
-                  placeholder="Phone"
-                />
-                <div class="add_contact_input_buttons">
-                  <button type="button" id="contactCancelBtn">
-                    Cancel
-                    <img src="./img/icon/close.svg" alt="Cancel" />
-                  </button>
-                  <button type="submit" id="contactCreateBtn">
-                    Create contact
-                    <img src="./img/icon/check.svg" alt="Create" />
-                  </button>
-                </div>
-              </form>
-            </div>
-          </article>
-        </div>
-      </section>
     </div>
+
     <script type="module" src="./js/pages/contacts.js"></script>
   </body>
 </html>
