@@ -14,7 +14,7 @@ initAddTaskPage();
 /**
  * Initialisiert die Add-Task-Seite mit Authentication-Check und UI-Setup
  */
-async function initAddTaskPage() {
+export async function initAddTaskPage() {
   const allowed = await guardPage("./index.html");
   if (!allowed) return;
   await bootLayout();
@@ -27,7 +27,7 @@ async function initAddTaskPage() {
 /**
  * Bindet Event-Listener für Prioritäts-Buttons
  */
-function bindPriorityButtons() {
+export function bindPriorityButtons() {
   document.querySelectorAll(".priority-btn").forEach((button) => {
     button.addEventListener("click", () => setActivePriority(button));
   });
@@ -37,7 +37,7 @@ function bindPriorityButtons() {
  * Setzt einen Prioritäts-Button als aktiv und deaktiviert andere
  * @param {HTMLElement} activeButton Der zu aktivierende Button
  */
-function setActivePriority(activeButton) {
+export function setActivePriority(activeButton) {
   document.querySelectorAll(".priority-btn").forEach((button) => {
     if (button === activeButton) {
       button.classList.add("active");
@@ -84,7 +84,7 @@ function setActivePriority(activeButton) {
 /**
  * Bindet Event-Listener für Aktions-Buttons (Clear, Create)
  */
-function bindActionButtons() {
+export function bindActionButtons() {
   const clearBtn = document.getElementById("taskClearBtn");
   const createBtn = document.getElementById("taskCreateBtn");
   if (clearBtn) clearBtn.addEventListener("click", clearTaskForm);
@@ -94,7 +94,7 @@ function bindActionButtons() {
 /**
  * Lädt und füllt die Assignee-Auswahlliste mit Kontakten
  */
-async function populateAssignees() {
+export async function populateAssignees() {
   const header = document.getElementById("assigneeHeader");
   const dropdown = document.getElementById("assignee-dropdown");
   if (!header || !dropdown) return;
@@ -114,7 +114,7 @@ async function populateAssignees() {
 /**
  * Lädt Kontakte aus der Firebase-Datenbank
  */
-async function loadAssigneesFromDatabase(dropdown, currentUserUid) {
+export async function loadAssigneesFromDatabase(dropdown, currentUserUid) {
   try {
     const contacts = await fetchContactsFromFirebase();
     handleContactsLoaded(dropdown, contacts, currentUserUid);
@@ -126,7 +126,7 @@ async function loadAssigneesFromDatabase(dropdown, currentUserUid) {
 /**
  * Holt Kontakte aus Firebase
  */
-async function fetchContactsFromFirebase() {
+export async function fetchContactsFromFirebase() {
   const db = await loadFirebaseDatabase();
   const snapshot = await db.get(db.ref(db.getDatabase(), "contacts"));
   return snapshot.exists() ? snapshot.val() : null;
@@ -135,7 +135,7 @@ async function fetchContactsFromFirebase() {
 /**
  * Behandelt erfolgreich geladene Kontakte
  */
-function handleContactsLoaded(dropdown, contacts, currentUserUid) {
+export function handleContactsLoaded(dropdown, contacts, currentUserUid) {
   if (!contacts) {
     setAssigneeLoading(false);
     return;
@@ -154,7 +154,7 @@ function handleContactsLoaded(dropdown, contacts, currentUserUid) {
 /**
  * Behandelt Fehler beim Laden der Kontakte
  */
-function handleContactsLoadError(error) {
+export function handleContactsLoadError(error) {
   console.error("Assignees konnten nicht geladen werden", error);
   setAssigneeLoading(false);
 
@@ -169,7 +169,7 @@ function handleContactsLoadError(error) {
 /**
  * Baut Assignee-Optionen aus rohen Kontakt-Daten
  */
-function buildAssigneeOptions(rawUsers, currentUid) {
+export function buildAssigneeOptions(rawUsers, currentUid) {
   const users = rawUsers && typeof rawUsers === "object" ? rawUsers : {};
   return Object.values(users)
     .filter((entry) => entry && typeof entry === "object")
@@ -191,7 +191,7 @@ function buildAssigneeOptions(rawUsers, currentUid) {
 /**
  * Rendert die Assignee-Dropdown-Liste mit Checkboxen
  */
-function renderAssigneeDropdown(dropdown, options) {
+export function renderAssigneeDropdown(dropdown, options) {
   dropdown.innerHTML = "";
 
   options.forEach((option, index) => {
@@ -220,7 +220,7 @@ function renderAssigneeDropdown(dropdown, options) {
 /**
  * Bindet Event-Listener für Assignee-Dropdown
  */
-function bindAssigneeEvents() {
+export function bindAssigneeEvents() {
   const header = document.getElementById("assigneeHeader");
   const dropdown = document.getElementById("assignee-dropdown");
 
@@ -251,7 +251,7 @@ function bindAssigneeEvents() {
 /**
  * Togglet die Sichtbarkeit des Assignee-Dropdowns
  */
-function toggleAssigneeDropdown() {
+export function toggleAssigneeDropdown() {
   const header = document.getElementById("assigneeHeader");
   const dropdown = document.getElementById("assignee-dropdown");
 
@@ -262,7 +262,7 @@ function toggleAssigneeDropdown() {
 /**
  * Aktualisiert die Anzeige der ausgewählten Assignees
  */
-function updateAssigneeSelection() {
+export function updateAssigneeSelection() {
   const avatarsContainer = document.getElementById("selected-assignee-avatars");
   const placeholder = document.getElementById("selected-assignees-placeholder");
   const checkboxes = document.querySelectorAll(
@@ -322,7 +322,7 @@ function updateAssigneeSelection() {
 /**
  * Setzt den Loading-Status für Assignees
  */
-function setAssigneeLoading(isLoading) {
+export function setAssigneeLoading(isLoading) {
   const placeholder = document.getElementById("selected-assignees-placeholder");
   if (placeholder) {
     placeholder.textContent = isLoading
@@ -334,7 +334,7 @@ function setAssigneeLoading(isLoading) {
 /**
  * Extrahiert Initialen aus einem Namen
  */
-function getInitials(name) {
+export function getInitials(name) {
   if (!name) return "??";
   const cleanName = name.replace(/\s*\(Du\)\s*$/i, "").trim();
   const parts = cleanName.split(" ");
@@ -345,7 +345,7 @@ function getInitials(name) {
 /**
  * Generiert eine Farbe basierend auf Initialen
  */
-function getColorForInitials(initials) {
+export function getColorForInitials(initials) {
   const colors = [
     "#FF6B6B",
     "#00B8D4",
@@ -365,7 +365,7 @@ function getColorForInitials(initials) {
 /**
  * Liest die Task-Daten aus dem Formular
  */
-function readTaskData() {
+export function readTaskData() {
   const checkboxes = document.querySelectorAll(
     '#assignee-dropdown input[type="checkbox"]:checked'
   );
@@ -397,7 +397,7 @@ function readTaskData() {
 /**
  * Liest den Wert eines Formularfeldes
  */
-function readValue(id) {
+export function readValue(id) {
   const field = document.getElementById(id);
   return field ? field.value.trim() : "";
 }
@@ -405,7 +405,7 @@ function readValue(id) {
 /**
  * Liest die aktive Priorität
  */
-function readActivePriority() {
+export function readActivePriority() {
   const active = document.querySelector(".priority-btn.active");
   return active ? active.dataset.priority || "" : "";
 }
@@ -413,7 +413,7 @@ function readActivePriority() {
 /**
  * Setzt den Task-Status
  */
-function setTaskStatus(message, isError) {
+export function setTaskStatus(message, isError) {
   const status = document.getElementById("taskStatus");
   if (!status) return;
   status.textContent = message;
@@ -423,7 +423,7 @@ function setTaskStatus(message, isError) {
 /**
  * Löscht das Formular und setzt es zurück
  */
-function clearTaskForm() {
+export function clearTaskForm() {
   // Reset text inputs, textareas, and selects
   document
     .querySelectorAll(
@@ -462,7 +462,7 @@ function clearTaskForm() {
 /**
  * Behandelt das Erstellen eines Tasks
  */
-async function handleTaskCreate() {
+export async function handleTaskCreate() {
   const data = readTaskData();
   if (!data.title || !data.dueDate || !data.category || !data.priority) {
     setTaskStatus("Bitte alle Pflichtfelder ausfüllen (inkl. Priorität)", true);
@@ -485,7 +485,7 @@ async function handleTaskCreate() {
 /**
  * Toggle für das Category-Dropdown (wird inline per onclick in HTML aufgerufen)
  */
-function toggleCategoryDropdown() {
+export function toggleCategoryDropdown() {
   const header = document.querySelector(".category-select-header");
   const dropdown = document.getElementById("category-dropdown");
   dropdown?.classList.toggle("d-none");
@@ -496,7 +496,7 @@ function toggleCategoryDropdown() {
  * Setzt die Kategorie (wird inline per onclick in HTML aufgerufen)
  * @param {string} value Kategorie-Wert (z.B. 'technical-task')
  */
-function selectCategory(value) {
+export function selectCategory(value) {
   const input = document.getElementById("category");
   const placeholder = document.getElementById("selected-catrgory-placeholder"); // note: id contains typo in HTML, keep consistent
   const dropdown = document.getElementById("category-dropdown");
@@ -536,7 +536,7 @@ export function colorFromString(str) {
 /**
  * Initialisiert das Subtask-Eingabefeld mit Icons und Event-Handlers
  */
-function initSubtaskInput() {
+export function initSubtaskInput() {
   const subtaskInput = document.getElementById("taskSubtasks");
   const subtaskIcons = document.getElementById("subtaskIcons");
   const closeIcon = document.getElementById("subtaskClose");
@@ -593,7 +593,7 @@ function initSubtaskInput() {
 /**
  * Löscht den Inhalt des Subtask-Eingabefeldes
  */
-function clearSubtaskInput() {
+export function clearSubtaskInput() {
   const subtaskInput = document.getElementById("taskSubtasks");
   const subtaskIcons = document.getElementById("subtaskIcons");
 
@@ -615,7 +615,7 @@ let subtasks = [];
 /**
  * Fügt eine neue Subtask hinzu
  */
-function addSubtask() {
+export function addSubtask() {
   const subtaskInput = document.getElementById("taskSubtasks");
 
   if (!subtaskInput || !subtaskInput.value.trim()) return;
@@ -644,7 +644,7 @@ function addSubtask() {
 /**
  * Rendert alle Subtasks in der Liste
  */
-function renderSubtasks() {
+export function renderSubtasks() {
   const subtasksList = document.getElementById("subtasksList");
   if (!subtasksList) return;
 
@@ -659,7 +659,7 @@ function renderSubtasks() {
 /**
  * Erstellt ein DOM-Element für eine Subtask
  */
-function createSubtaskElement(subtask) {
+export function createSubtaskElement(subtask) {
   const subtaskDiv = document.createElement("div");
   subtaskDiv.className = "subtask-list-item";
   subtaskDiv.dataset.id = subtask.id;
@@ -700,7 +700,7 @@ function createSubtaskElement(subtask) {
 /**
  * Löscht eine Subtask
  */
-function deleteSubtask(id) {
+export function deleteSubtask(id) {
   subtasks = subtasks.filter((subtask) => subtask.id !== id);
   renderSubtasks();
   setTaskStatus("Subtask entfernt", false);
@@ -709,7 +709,7 @@ function deleteSubtask(id) {
 /**
  * Bearbeitet eine Subtask
  */
-function editSubtask(id) {
+export function editSubtask(id) {
   const subtask = subtasks.find((s) => s.id === id);
   if (!subtask) return;
 
@@ -759,7 +759,7 @@ function editSubtask(id) {
 /**
  * Speichert die bearbeitete Subtask
  */
-function saveSubtaskEdit(id) {
+export function saveSubtaskEdit(id) {
   const subtaskElement = document.querySelector(`[data-id="${id}"]`);
   const input = subtaskElement.querySelector(".subtask-edit-input");
   const newText = input.value.trim();
@@ -781,6 +781,6 @@ function saveSubtaskEdit(id) {
 /**
  * Bricht die Bearbeitung ab
  */
-function cancelSubtaskEdit(id) {
+export function cancelSubtaskEdit(id) {
   renderSubtasks();
 }
