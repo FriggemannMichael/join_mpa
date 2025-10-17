@@ -7,6 +7,7 @@ import { bootLayout } from "../common/layout.js";
 import { guardPage } from "../common/pageGuard.js";
 import { subscribeToTasks } from "../common/tasks.js";
 import { enableCardInteractions } from "../board/dragdrop.js";
+import {colorFromString} from "../board/utils.js"
 
 
 initBoardPage();
@@ -212,9 +213,6 @@ function buildTaskCard(task) {
   return card;
 }
 
-
-// Wenn alle assignee sachen auf array umgestellt sind dann soll das hier verwendet werden
-
 export function buildAssigneeGroup(task = {}) {
   const wrap = document.createElement("div"); wrap.className = "assignees";
   wrap.setAttribute("aria-label","assignees");
@@ -238,7 +236,6 @@ function getAssignees(task = {}) {
   if (task.assignee && typeof task.assignee === "object") return [task.assignee];
   return [];
 }
-
 
 function buildPriority(priority) {
   const wrapper = document.createElement("div");
@@ -303,18 +300,6 @@ function bindColumnShortcuts() {
 }
 
 // zu testzwecken
-
-export function colorFromString(str) {
-  if (!str) return "#999";
-
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  const hue = Math.abs(hash) % 360;
-  return `hsl(${hue}, 65%, 55%)`;
-}
 
 export function buildSubtaskProgress(subtasks = []) {
   if (!Array.isArray(subtasks) || !subtasks.length) return null;

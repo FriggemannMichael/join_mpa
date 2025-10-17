@@ -1,8 +1,8 @@
 import { db, auth } from "../common/firebase.js";
 import { ref, update, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { icons } from "../common/svg-template.js";
-import { initialsFrom, getCurrentUser, ScrollLock } from "./utils.js"
-import { boardTemplates } from "./board-templates.js";
+import { initialsFrom, getCurrentUser, ScrollLock, loadTask } from "./utils.js"
+import {openEditForm} from "../board/editTask.js"
 
 
 
@@ -54,7 +54,6 @@ function taskModalHeader(categoryLabel, category) {
   closeBtn.append(icon);
   head.append(taskCategory, closeBtn);
   return head;
-
 }
 
 function taskModalDescription(description) {
@@ -105,12 +104,10 @@ async function taskModalAssignees(task) {
   assignedTo.classList.add("taskModal-label")
   assignedTo.textContent = "Assigned To:";
   const assigneesDiv = document.createElement("div");
-
   const contacts = await getContactsMap();
   const assigneesArr = normAssignees(task);
   const user = getCurrentUser();
   renderAssignees(assigneesDiv, assigneesArr, contacts, user);
-
   assigned.append(assignedTo, assigneesDiv);
   return assigned;
 }
@@ -255,8 +252,6 @@ function taskModalEventlistener(overlay, section) {
 }
 
 
-
-
 async function getContactsMap() {
   let contactsCache = null;
   if (contactsCache) return contactsCache;
@@ -311,73 +306,11 @@ async function updateSubtaskDone(taskId, index, done) {
   await update(ref(db), { [path]: !!done, [`tasks/${taskId}/updatedAt`]: Date.now() });
 }
 
-
-// muss noch bearbeitet werden
-function openEditForm(taskId) {
-  const section = document.getElementById("taskModal");
-
-  const header = document.createElement("div");
-  header.className = "task-editor_header";
-  const closeBtn = document.createElement("button");
-  closeBtn.className = "close_button_taskModal";
-  closeBtn.dataset.overlayClose = "#taskOverlay";
-  closeBtn.setAttribute("aria-label", "Close");
-  closeBtn.innerHTML = icons.close;
-  closeBtn.addEventListener("click", closeTaskOverlay);
-  header.append(closeBtn);
-
-  const body = document.createElement("div");
-  body.classList.add("task-editor_body")
-  body.innerHTML = boardTemplates.editTask;
-
-  const footer = document.createElement("div");
-  footer.className = "task-editor_footer";
-  const updateBtn = document.createElement("button");
-  updateBtn.type = "button";
-  updateBtn.className = "update-task-btn";
-  updateBtn.textContent = "Update";
-  updateBtn.addEventListener("click", () => updateTask(taskId));
-  footer.append(updateBtn);
-
-  section.replaceChildren(header, body, footer)
-
-
-
-  // optional: Formular mit vorhandenen Werten füllen
-  // fillEdit(taskId);
-}
+// async function openEditForm(taskId)  jetzt in editTask.js
 
 async function deleteTask(taskId) {
   const path = `tasks/${taskId}`;
   await update(ref(db), { [path]: null });
   console.log("🗑️ Task deleted:", taskId);
   closeTaskOverlay();
-}
-
-// function updateTask(taskId) {
-//   console.log("📝 Task wird aktualisiert:", taskId);
-//   // Hier später: Werte aus den Inputs holen und in Firebase speichern
-// }
-
-function updateTask(taskId) {
-  const root = document.querySelector(".task-editor");
-  if (!root) return;
-
-  const title = root.querySelector("#editTaskTitle")?.value?.trim() || "";
-  const description = root.querySelector("#editTaskDescription")?.value?.trim() || "";
-  const dueDate = root.querySelector("#editTaskDueDate")?.value || "";
-
-
-
-  // Assignees/Subtasks falls du schon Helpr hast:
-  // const assignees = getSelectedAssignees(); 
-  // const subtasks  = getEditedSubtasks();
-
-  console.log("update payload:", { taskId, title, description, dueDate });
-
-  // hier dein tatsächlicher Update-Call (Firebase o.ä.)
-  // await updateTaskInDb(taskId, { title, description, dueDate, , assignees, subtasks });
-
-  // danach ggf. schließen:
-  // closeTaskOverlay();
 }
