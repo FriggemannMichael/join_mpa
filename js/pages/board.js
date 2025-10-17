@@ -8,6 +8,7 @@ import { guardPage } from "../common/pageGuard.js";
 import { subscribeToTasks } from "../common/tasks.js";
 import { enableCardInteractions } from "../board/dragdrop.js";
 
+
 initBoardPage();
 
 /**
@@ -211,73 +212,33 @@ function buildTaskCard(task) {
   return card;
 }
 
-export function buildAssigneeGroup(task) {
-  const wrap = document.createElement("div");
-  wrap.className = "assignees";
-  wrap.ariaLabel = "assignees";
-  const ul = document.createElement("ul");
-  ul.className = "avatar-group";
-  ul.role = "list";
-  const arr = Array.isArray(task.assignees)
-    ? task.assignees
-    : task.assignee
-    ? [task.assignee]
-    : [];
-  const shown = arr.slice(0, 3),
-    rest = Math.max(0, arr.length - 3);
-  shown.forEach((a) => {
-    const li = document.createElement("li");
-    li.className = "avatar";
-    const label = a?.name;
-    li.title = label;
-    li.textContent = buildInitials(a.name);
-    li.style.background = colorFromString(label);
-    ul.append(li);
-  });
-  if (rest) {
-    const more = document.createElement("li");
-    more.className = "avatar more";
-    more.textContent = `+${rest}`;
-    ul.append(more);
-  }
-  wrap.append(ul);
-  return wrap;
-}
 
 // Wenn alle assignee sachen auf array umgestellt sind dann soll das hier verwendet werden
 
-// export function buildAssigneeGroup(task) {
-//   const wrap = document.createElement("div");
-//   wrap.className = "assignees";
-//   wrap.ariaLabel = "assignees";
+export function buildAssigneeGroup(task = {}) {
+  const wrap = document.createElement("div"); wrap.className = "assignees";
+  wrap.setAttribute("aria-label","assignees");
+  const ul = document.createElement("ul"); ul.className = "avatar-group";
+  ul.setAttribute("role","list");
+  const list = getAssignees(task), shown = list.slice(0,3), rest = Math.max(0, list.length-3);
+  shown.forEach(a => {
+    const name = a?.name ;
+    const li = document.createElement("li"); li.className = "avatar"; li.title = name;
+    li.textContent = buildInitials(name || "");
+    li.style.background = colorFromString(name || "");
+    ul.append(li);
+  });
+  if (rest) { const more = document.createElement("li"); more.className = "avatar more"; more.textContent = `+${rest}`; ul.append(more); }
+  wrap.append(ul); return wrap;
+}
 
-//   const ul = document.createElement("ul");
-//   ul.className = "avatar-group";
-//   ul.role = "list";
+function getAssignees(task = {}) {
+  if (Array.isArray(task.assignees)) return task.assignees;
+  if (Array.isArray(task.assignee))  return task.assignee;
+  if (task.assignee && typeof task.assignee === "object") return [task.assignee];
+  return [];
+}
 
-//   const shown = task.assignees.slice(0, 3);
-//   const rest = Math.max(0, task.assignees.length - 3);
-
-//   shown.forEach(a => {
-//     const li = document.createElement("li");
-//     li.className = "avatar";
-//     li.title = a.name;
-//     li.textContent = buildInitials(a.name);
-//     li.style.background = colorFromString(a.name);
-//     ul.append(li);
-//   });
-
-//   if (rest) {
-//     const more = document.createElement("li");
-//     more.className = "avatar more";
-//     more.textContent = `+${rest}`;
-//     ul.append(more);
-//   }
-
-//   wrap.append(ul);
-//   return wrap;
-// }
-//
 
 function buildPriority(priority) {
   const wrapper = document.createElement("div");

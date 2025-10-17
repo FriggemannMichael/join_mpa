@@ -5,6 +5,7 @@ import { initialsFrom, getCurrentUser, ScrollLock } from "./utils.js"
 import { boardTemplates } from "./board-templates.js";
 
 
+
 export async function renderTaskModal(id, task = {}) {
   ScrollLock.set()
   const overlay = document.getElementById("taskOverlay");
@@ -14,7 +15,7 @@ export async function renderTaskModal(id, task = {}) {
   h2.textContent = task.title;
 
   const scrollableSection = document.createElement("div")
-  scrollableSection.classList.add("flex-1");
+  scrollableSection.classList.add("taskModal-main");
   scrollableSection.append(h2,
     taskModalDescription(task.description),
     taskModalDueDate(task.dueDate),
@@ -188,6 +189,7 @@ function taskModalEditDelete(task, id) {
   const separator = document.createElement("span");
   separator.className = "separator-task-toolbar";
   separator.setAttribute("aria-hidden", "true");
+  separator.innerHTML = "|"
 
   footer.append(deleteBtn, separator, editBtn);
   return footer;
@@ -310,8 +312,6 @@ async function updateSubtaskDone(taskId, index, done) {
 }
 
 
-
-
 // muss noch bearbeitet werden
 function openEditForm(taskId) {
   const section = document.getElementById("taskModal");
@@ -339,12 +339,14 @@ function openEditForm(taskId) {
   updateBtn.addEventListener("click", () => updateTask(taskId));
   footer.append(updateBtn);
 
-  section.replaceChildren(header, body, footer);
+  section.replaceChildren(header, body, footer)
+
 
 
   // optional: Formular mit vorhandenen Werten füllen
   // fillEdit(taskId);
 }
+
 async function deleteTask(taskId) {
   const path = `tasks/${taskId}`;
   await update(ref(db), { [path]: null });
