@@ -748,12 +748,17 @@ img {
   align-items: center;
   background: #999;
   border-radius: 50%;
+  border: 1px solid #fff;
   color: #fff;
   display: flex;
   font-size: 12px;
   height: 32px;
+  width: 32px;
   justify-content: center;
-  width: 32px
+}
+
+.avatar:not(:first-child) {
+  margin-left: -16px;
 }
 
 /* Task-Groups */
@@ -814,9 +819,10 @@ body.loading button {
 }
 
 .separator-task-toolbar {
-  background-color: rgb(209 209 209 / 100%);
+  color: rgba(168, 168, 168, 1);
   height: 100%;
-  width: 1px
+  width: fit-content;
+  cursor: default;
 }
 
 .icon-close:hover {
@@ -875,9 +881,12 @@ body.loading button {
   border-radius: 4px;
 }
 
-.flex-1{
+.taskModal-main {
   flex: 1;
   overflow: auto;
-  overflow-wrap: break-word;   
-  word-break: break-word; 
+  overflow-wrap: break-word;
+  word-break: break-word;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
