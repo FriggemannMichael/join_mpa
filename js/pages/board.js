@@ -8,6 +8,7 @@ import { guardPage } from "../common/pageGuard.js";
 import { subscribeToTasks } from "../common/tasks.js";
 import { enableCardInteractions } from "../board/dragdrop.js";
 import {colorFromString} from "../board/utils.js"
+import { initBoardSearch } from "../board/search.js";
 
 
 initBoardPage();
@@ -20,7 +21,7 @@ async function initBoardPage() {
   const allowed = await guardPage("./index.html");
   if (!allowed) return;
   await bootLayout();
-  bindSearch();
+  initBoardSearch(); 
   bindColumnShortcuts();
   await observeTasks();
   setGlobalButtonsDisabled(false);
