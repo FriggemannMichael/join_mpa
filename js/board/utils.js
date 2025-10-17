@@ -20,6 +20,18 @@ export function getCurrentUser() {
     return user ? { id: user.uid, name: user.displayName, email: user.email } : null;
 }
 
+export function colorFromString(str) {
+  if (!str) return "#999";
+
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  const hue = Math.abs(hash) % 360;
+  return `hsl(${hue}, 65%, 55%)`;
+}
+
 
 export const ScrollLock = (() => {
     let y = 0;
@@ -50,3 +62,49 @@ export const ScrollLock = (() => {
 
     return { set: lock, release: unlock };
 })();
+
+
+// später ersetzen 
+
+
+/**
+ * Generiert eine Farbe basierend auf Initialen
+ */
+
+export function getColorForInitials(initials) {
+  const colors = [
+    "#FF6B6B",
+    "#00B8D4",
+    "#1DE9B6",
+    "#00CFAE",
+    "#00BCD4",
+    "#2196F3",
+    "#3D5AFE",
+    "#7C4DFF",
+    "#AB47BC",
+    "#E040FB",
+  ];
+  const charCode = initials.charCodeAt(0);
+  return colors[charCode % colors.length];
+}
+
+/**
+ * Extrahiert Initialen aus einem Namen
+ */
+export function getInitials(name) {
+  if (!name) return "??";
+  const cleanName = name.replace(/\s*\(Du\)\s*$/i, "").trim();
+  const parts = cleanName.split(" ");
+  if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+/**
+ * Setzt den Task-Status
+ */
+export function setTaskStatus(message, isError) {
+  const status = document.getElementById("taskStatus");
+  if (!status) return;
+  status.textContent = message;
+  status.classList.toggle("error", !!isError);
+}
