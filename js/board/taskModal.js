@@ -2,7 +2,8 @@ import { db, auth } from "../common/firebase.js";
 import { ref, update, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { icons } from "../common/svg-template.js";
 import { initialsFrom, getCurrentUser, ScrollLock, loadTask } from "./utils.js"
-import {openEditForm} from "../board/editTask.js"
+import { openEditForm } from "../board/editTask.js"
+import { handleOutsideDropdownClick } from '../pages/add-task.js';
 
 
 
@@ -148,13 +149,6 @@ async function taskModalSubtask(task, id) {
       li.append(cb, label);
       if (cb.checked) li.classList.add("done");
 
-      if (!s._readonly) {
-        cb.addEventListener("change", async () => {
-          await updateSubtaskDone(id, idx, cb.checked);
-          li.classList.toggle("done", cb.checked);
-        });
-      }
-
       subtaskList.appendChild(li);
     });
     subtaskWrap.append(headRow, subtaskList);
@@ -200,7 +194,7 @@ export function closeTaskOverlay() {
   if (!overlay) return;
 
   overlay.classList.remove("active");
-  overlay._cleanup?.();
+  overlay.cleanup?.();
 }
 
 function taskModalEventlistener(overlay, section) {
@@ -220,9 +214,10 @@ function taskModalEventlistener(overlay, section) {
     document.addEventListener("keydown", onKeydown);
     overlay.dataset.bound = "1";
 
-    overlay._cleanup = () => {
+    overlay.cleanup = () => {
       overlay.removeEventListener("click", onBackdropClick);
       document.removeEventListener("keydown", onKeydown);
+      document.removeEventListener("click", handleOutsideDropdownClick)
       ScrollLock.release()
       delete overlay.dataset.bound;
     };
@@ -296,9 +291,7 @@ export function renderAssignees(container, assigneesArr, contactsMap, currentUse
 function normalizeSubtasks(input) {
   if (Array.isArray(input)) return input;
   if (Array.isArray(input?.subtasks)) return input.subtasks;
-  if (typeof input?.subtask === "string" && input.subtask.trim())
-    return input.subtask.split(",").map(s => ({ text: s.trim(), done: false, _readonly: true }));
-  return [];
+    return input.subtask.split(",").map(s => ({ text: s.trim(), done: false }));
 }
 
 async function updateSubtaskDone(taskId, index, done) {
