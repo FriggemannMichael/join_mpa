@@ -220,33 +220,54 @@ export function renderAssigneeDropdown(dropdown, options) {
 /**
  * Bindet Event-Listener für Assignee-Dropdown
  */
+// export function bindAssigneeEvents() {
+//   const header = document.getElementById("assigneeHeader");
+//   const dropdown = document.getElementById("assignee-dropdown");
+
+//   if (header) {
+//     header.addEventListener("click", (e) => {
+//       e.stopPropagation();
+//       toggleAssigneeDropdown();
+//     });
+//   }
+
+//   if (dropdown) {
+//     dropdown.addEventListener("change", (e) => {
+//       if (e.target.type === "checkbox") {
+//         updateAssigneeSelection();
+//       }
+//     });
+//   }
+
+//   // Schließen bei Klick außerhalb
+// document.addEventListener("click", handleOutsideDropdownClick);
+// }
+// 
+// Funktionaler für andere seiten ->
+
 export function bindAssigneeEvents() {
   const header = document.getElementById("assigneeHeader");
   const dropdown = document.getElementById("assignee-dropdown");
-
-  if (header) {
-    header.addEventListener("click", (e) => {
-      e.stopPropagation();
-      toggleAssigneeDropdown();
-    });
+  if (!header.dataset.bound) {
+    header.dataset.bound = "1";
+    header.addEventListener("click", (e) => { e.stopPropagation(); toggleAssigneeDropdown(); });
   }
-
-  if (dropdown) {
+  if (!dropdown.dataset.bound) {
+    dropdown.dataset.bound = "1";
     dropdown.addEventListener("change", (e) => {
-      if (e.target.type === "checkbox") {
-        updateAssigneeSelection();
-      }
+      if (e.target.type === "checkbox") updateAssigneeSelection();
     });
   }
-
-  // Schließen bei Klick außerhalb
-  document.addEventListener("click", (e) => {
-    if (!header?.contains(e.target) && !dropdown?.contains(e.target)) {
-      dropdown?.classList.add("d-none");
-      header?.classList.remove("open");
-    }
+  dropdown.closeCtrl?.abort();
+  const ctrl = new AbortController();
+  dropdown.closeCtrl = ctrl;
+  document.addEventListener("click", handleOutsideDropdownClick, {
+    capture: true,
+    signal: ctrl.signal
   });
 }
+
+
 
 /**
  * Togglet die Sichtbarkeit des Assignee-Dropdowns
@@ -536,7 +557,7 @@ export function colorFromString(str) {
 /**
  * Initialisiert das Subtask-Eingabefeld mit Icons und Event-Handlers
  */
-export function initSubtaskInput() {
+export function initSubtaskInput(list = subtasks) {
   const subtaskInput = document.getElementById("taskSubtasks");
   const subtaskIcons = document.getElementById("subtaskIcons");
   const closeIcon = document.getElementById("subtaskClose");
@@ -578,14 +599,14 @@ export function initSubtaskInput() {
   });
 
   checkIcon.addEventListener("click", () => {
-    addSubtask();
+    addSubtask(list);
   });
 
   // Enter-Taste für das Hinzufügen von Subtasks
   subtaskInput.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      addSubtask();
+      addSubtask(list);
     }
   });
 }
@@ -610,7 +631,7 @@ export function clearSubtaskInput() {
 /**
  * Array zur Speicherung aller Subtasks
  */
-let subtasks = [];
+export let subtasks = [];
 
 /**
  * Fügt eine neue Subtask hinzu
@@ -786,3 +807,28 @@ export function cancelSubtaskEdit(id) {
 }
 
 
+export function setSubtasksFrom(list) {
+  const arr = Array.isArray(list) ? list : [];
+  subtasks.length = 0;
+  arr.forEach((s, i) => {
+    subtasks.push({
+      id: s?.id ?? (Date.now() + i),
+      text: (s?.text ?? "").trim(),
+      completed: !!(s?.completed ?? s?.done),
+    });
+  });
+}
+
+
+
+export function handleOutsideDropdownClick(e) {
+  const header   = document.getElementById("assigneeHeader");
+  const dropdown = document.getElementById("assignee-dropdown");
+  if (!header || !dropdown) return;
+
+  if (!header.contains(e.target) && !dropdown.contains(e.target)) {
+    dropdown.classList.add("d-none");
+    header.classList.remove("open");
+    // Der AbortController entfernt den Listener automatisch
+  }
+}
