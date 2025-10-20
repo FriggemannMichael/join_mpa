@@ -178,6 +178,7 @@ h2 {
   justify-content: center;
   padding: 3px;
   width: var(--add-task-button-kanban);
+  border: none;
 }
 
 .add_task_button_kanban:hover {
@@ -845,21 +846,19 @@ body.loading button {
 
 
 /* Muss noch bearbeitet werden */
-.task-editor_header,
+/* .task-editor_header,
 .task-editor_footer {
   flex-shrink: 0;
   padding: 16px;
   background: #fafafa;
-}
+} */
 
 .task-editor_header {
-  border-bottom: 1px solid #eee;
   display: flex;
   justify-content: flex-end;
 }
 
 .task-editor_footer {
-  border-top: 1px solid #eee;
   display: flex;
   justify-content: flex-end;
   gap: 8px;
@@ -872,11 +871,11 @@ body.loading button {
   padding: 16px;
 }
 
-.task-editor__body::-webkit-scrollbar {
+.task-editor_body::-webkit-scrollbar {
   width: 8px;
 }
 
-.task-editor__body::-webkit-scrollbar-thumb {
+.task-editor_body::-webkit-scrollbar-thumb {
   background: rgba(0, 0, 0, .2);
   border-radius: 4px;
 }
