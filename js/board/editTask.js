@@ -1,6 +1,6 @@
 import { boardTemplates } from "./board-templates.js";
 // import { setActivePriority } from "../board/addTask-Board.js"
-import { getInitials, getColorForInitials, colorFromString, setTaskStatus, loadTask  } from "../board/utils.js"
+import { getInitials, getColorForInitials, colorFromString, setTaskStatus, loadTask } from "../board/utils.js"
 import {
   // --- Assignees ---
   populateAssignees,
@@ -23,14 +23,14 @@ import {
   saveSubtaskEdit,
   cancelSubtaskEdit,
   clearSubtaskInput,
-  initSubtaskInput,
+  // initSubtaskInput,
 
   // --- Form ---
   readValue,
   readActivePriority
 } from '../pages/add-task.js';
 
-import {icons} from "../common/svg-template.js"
+import { icons } from "../common/svg-template.js"
 import { closeTaskOverlay } from "../board/taskModal.js"
 
 
@@ -49,7 +49,7 @@ export async function openEditForm(taskId) {
 
   const body = document.createElement("div");
   body.classList.add("task-editor_body");
-  body.innerHTML = boardTemplates.editTask; 
+  body.innerHTML = boardTemplates.editTask;
 
   const footer = document.createElement("div");
   footer.className = "task-editor_footer";
@@ -62,10 +62,12 @@ export async function openEditForm(taskId) {
 
   section.replaceChildren(header, body, footer);
 
-  
+
   await populateAssignees();
   bindPriorityButtons();
-  await fillEdit(taskId); 
+  // await initSubtaskInput()
+  await fillEdit(taskId);
+
 }
 
 function setField(scope, selector, value) {
@@ -89,6 +91,10 @@ export async function fillEdit(taskId) {
 
   // Assignees vorwählen
   preselectAssignees(Array.isArray(task.assignees) ? task.assignees : []);
+
+  // console.log(task.subtasks)
+
+renderSubtasks(task.subtasks);
 }
 
 function preselectAssignees(selected) {
@@ -98,18 +104,3 @@ function preselectAssignees(selected) {
   });
   updateAssigneeSelection();
 }
-
-// die beiden folgenden können ggf durch die add Task geschichten ersetzt werden 
-
-
-function renderAssigneeSelection(list) {
-  const wrap = document.querySelector("#selected-assignee-avatars");
-  wrap.innerHTML = "";
-  list.forEach(a => {
-    const div = document.createElement("div");
-    div.className = "assignee_item";
-    div.textContent = a.name || a.email || "Unbekannt";
-    wrap.append(div);
-  });
-}
-

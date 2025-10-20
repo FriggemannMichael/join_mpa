@@ -644,13 +644,13 @@ export function addSubtask() {
 /**
  * Rendert alle Subtasks in der Liste
  */
-export function renderSubtasks() {
+export function renderSubtasks(list = subtasks) {
   const subtasksList = document.getElementById("subtasksList");
   if (!subtasksList) return;
 
   subtasksList.innerHTML = "";
 
-  subtasks.forEach((subtask) => {
+  list.forEach((subtask) => {
     const subtaskElement = createSubtaskElement(subtask);
     subtasksList.appendChild(subtaskElement);
   });
@@ -784,3 +784,5 @@ export function saveSubtaskEdit(id) {
 export function cancelSubtaskEdit(id) {
   renderSubtasks();
 }
+
+
