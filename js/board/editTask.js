@@ -64,7 +64,6 @@ export async function openEditForm(taskId) {
 
   
   await populateAssignees();
-  bindAssigneeEvents();
   bindPriorityButtons();
   await fillEdit(taskId); 
 }
@@ -90,8 +89,6 @@ export async function fillEdit(taskId) {
 
   // Assignees vorwählen
   preselectAssignees(Array.isArray(task.assignees) ? task.assignees : []);
-
-
 }
 
 function preselectAssignees(selected) {
