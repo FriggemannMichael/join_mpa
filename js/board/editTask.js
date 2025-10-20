@@ -23,11 +23,14 @@ import {
   saveSubtaskEdit,
   cancelSubtaskEdit,
   clearSubtaskInput,
-  // initSubtaskInput,
+  initSubtaskInput,
 
   // --- Form ---
   readValue,
-  readActivePriority
+  readActivePriority,
+
+  // subtasks,
+  setSubtasksFrom
 } from '../pages/add-task.js';
 
 import { icons } from "../common/svg-template.js"
@@ -65,7 +68,6 @@ export async function openEditForm(taskId) {
 
   await populateAssignees();
   bindPriorityButtons();
-  // await initSubtaskInput()
   await fillEdit(taskId);
 
 }
@@ -84,17 +86,15 @@ export async function fillEdit(taskId) {
   setField(scope, "#taskDescription", task.description);
   setField(scope, "#taskDueDate", task.dueDate);
 
-  // Prio
   scope.querySelectorAll(".priority-btn").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.priority === task.priority);
   });
 
-  // Assignees vorwählen
   preselectAssignees(Array.isArray(task.assignees) ? task.assignees : []);
 
-  // console.log(task.subtasks)
-
-renderSubtasks(task.subtasks);
+ setSubtasksFrom(task.subtasks || [])
+initSubtaskInput()
+renderSubtasks();
 }
 
 function preselectAssignees(selected) {
