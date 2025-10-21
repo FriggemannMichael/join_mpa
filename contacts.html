@@ -46,9 +46,53 @@
                 </p>
               </div>
             </div>
+            <div class="contact-info"></div>
           </div>
         </section>
       </main>
+    </div>
+
+    <!-- Modal für Kontakt hinzufügen/bearbeiten -->
+    <div id="contactOverlay" class="overlay" hidden>
+      <div class="overlay__backdrop"></div>
+      <div class="overlay__content">
+        <div class="contact-modal">
+          <button
+            type="button"
+            id="contactModalClose"
+            class="modal-close"
+            aria-label="Schließen"
+          >
+            ×
+          </button>
+          <h2>Add Contact</h2>
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="contactName">Name *</label>
+              <input type="text" id="contactName" name="contactName" required />
+            </div>
+            <div class="form-group">
+              <label for="contactEmail">E-Mail *</label>
+              <input
+                type="email"
+                id="contactEmail"
+                name="contactEmail"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="contactPhone">Phone</label>
+              <input type="tel" id="contactPhone" name="contactPhone" />
+            </div>
+            <div class="modal-actions">
+              <button type="button" id="contactCancelBtn" class="btn-secondary">
+                Cancel
+              </button>
+              <button type="submit" class="btn-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
 
     <script type="module" src="./js/pages/contacts.js"></script>
