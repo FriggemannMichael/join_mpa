@@ -317,23 +317,26 @@ function bindModalControls() {
   if (nameInput) {
     nameInput.addEventListener("input", () => updateAddContactAvatar());
   }
-/**
- * Aktualisiert den Avatar im Add-Contact-Modal live
- */
-function updateAddContactAvatar() {
-  const name = document.getElementById("addContactName")?.value || "";
-  const initials = buildInitials(name);
-  const color = getColorForInitials(initials || "?");
-  const avatar = document.getElementById("addContactAvatar");
-  const initialsElem = document.getElementById("addContactInitials");
-  const placeholderImg = document.getElementById("addContactAvatarPlaceholder");
-  if (avatar) avatar.style.backgroundColor = initials ? color : "";
-  if (initialsElem) {
-    initialsElem.textContent = initials || "?";
-    initialsElem.style.display = initials ? "block" : "none";
+  /**
+   * Aktualisiert den Avatar im Add-Contact-Modal live
+   */
+  function updateAddContactAvatar() {
+    const name = document.getElementById("addContactName")?.value || "";
+    const initials = buildInitials(name);
+    const color = getColorForInitials(initials || "?");
+    const avatar = document.getElementById("addContactAvatar");
+    const initialsElem = document.getElementById("addContactInitials");
+    const placeholderImg = document.getElementById(
+      "addContactAvatarPlaceholder"
+    );
+    if (avatar) avatar.style.backgroundColor = initials ? color : "";
+    if (initialsElem) {
+      initialsElem.textContent = initials || "?";
+      initialsElem.style.display = initials ? "block" : "none";
+    }
+    if (placeholderImg)
+      placeholderImg.style.display = initials ? "none" : "block";
   }
-  if (placeholderImg) placeholderImg.style.display = initials ? "none" : "block";
-}
   // Add-Contact-Modal Controls
   const addCloseBtn = document.getElementById("addContactModalClose");
   const addCancelBtn = document.getElementById("addContactCancelBtn");
@@ -361,10 +364,10 @@ function updateAddContactAvatar() {
       phone: readValue("addContactPhone"),
     };
     if (!data.name || !data.email) return;
-  await saveContactToFirebase(data);
-  resetAddContactForm();
-  updateAddContactAvatar();
-  toggleAddContactOverlay(false);
+    await saveContactToFirebase(data);
+    resetAddContactForm();
+    updateAddContactAvatar();
+    toggleAddContactOverlay(false);
   }
 
   /**
