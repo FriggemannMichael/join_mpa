@@ -1,7 +1,7 @@
 import { db, auth } from "../common/firebase.js";
 import { ref, update, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { icons } from "../common/svg-template.js";
-import { initialsFrom, getCurrentUser, ScrollLock, loadTask } from "./utils.js"
+import { initialsFrom, getCurrentUser, ScrollLock, colorFromString, loadTask } from "./utils.js"
 import { openEditForm } from "../board/editTask.js"
 import { handleOutsideDropdownClick } from '../pages/add-task.js';
 
@@ -267,7 +267,6 @@ function normAssignees(task) {
 }
 
 
-// muss überarbeitet werden --> Color und Initials
 export function renderAssignees(container, assigneesArr = [], contactsMap = {}, currentUser) {
   container.classList.add("assignees");
   container.innerHTML = "";
@@ -282,8 +281,8 @@ export function renderAssignees(container, assigneesArr = [], contactsMap = {}, 
     const contact = contactsMap[uid];
     const name = contact?.name || a?.name || "Unbekannt";
     const isYou = currentUser && (uid === currentUser.uid);
-    const color = contact?.color || "#6c7ae0";
-    const initials = contact?.initials || initialsFrom(name);
+    const color = colorFromString(name);
+    const initials = initialsFrom(name);
 
     const badge = document.createElement("span");
     badge.className = "assignee_badge";
