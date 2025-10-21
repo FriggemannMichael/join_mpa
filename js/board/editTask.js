@@ -39,6 +39,7 @@ import { closeTaskOverlay } from "../board/taskModal.js"
 
 export async function openEditForm(taskId) {
   const section = document.getElementById("taskModal");
+  section.classList.add("task-overlay")
 
   const header = document.createElement("div");
   header.className = "task-editor_header";
@@ -80,27 +81,27 @@ function setField(scope, selector, value) {
 
 export async function fillEdit(taskId) {
   const task = await loadTask(taskId);
-
   const scope = document.getElementById("taskModal");
+
   setField(scope, "#taskTitle", task.title);
   setField(scope, "#taskDescription", task.description);
   setField(scope, "#taskDueDate", task.dueDate);
 
+  const prio = task.priority.toLowerCase();
   scope.querySelectorAll(".priority-btn").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.priority === task.priority);
+    btn.classList.toggle("active", btn.dataset.priority === prio);
   });
 
-  preselectAssignees(Array.isArray(task.assignees) ? task.assignees : []);
-
- setSubtasksFrom(task.subtasks || [])
-initSubtaskInput()
-renderSubtasks();
+  preselectAssignees(task.assignees || []);
+  setSubtasksFrom(task.subtasks || []);
+  initSubtaskInput();
+  renderSubtasks();
 }
 
 function preselectAssignees(selected) {
-  const selectedIds = new Set(selected.map(a => a.uid || a.value || a.id));
-  document.querySelectorAll('#assignee-dropdown input[type="checkbox"]').forEach(cb => {
-    cb.checked = selectedIds.has(cb.value);
-  });
+  const selectedIds = new Set(selected.map(a => a.uid));
+  document
+    .querySelectorAll('#assignee-dropdown input[type="checkbox"]')
+    .forEach(cb => cb.checked = selectedIds.has(cb.value));
   updateAssigneeSelection();
 }

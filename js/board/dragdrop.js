@@ -141,7 +141,7 @@ function startDragging(card, e) {
   currentDrag = { card, ghost, originColumn, offsetX, offsetY };
   document.body.appendChild(ghost);
 
-  buildPlaceholdersbuildPlaceholders(originColumn, rect.height);
+  buildPlaceholders(originColumn, rect.height);
   card.classList.add("dragging");
 }
 
