@@ -299,10 +299,8 @@ export function renderAssignees(container, assigneesArr, contactsMap, currentUse
   });
 }
 
-function normalizeSubtasks(input) {
-  if (Array.isArray(input)) return input;
-  if (Array.isArray(input?.subtasks)) return input.subtasks;
-    return input.subtask.split(",").map(s => ({ text: s.trim(), done: false }));
+function normalizeSubtasks(task) {
+  return Array.isArray(task?.subtasks) ? task.subtasks : [];
 }
 
 async function updateSubtaskDone(taskId, index, done) {
