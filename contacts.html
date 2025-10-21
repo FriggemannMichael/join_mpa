@@ -52,45 +52,143 @@
       </main>
     </div>
 
-    <!-- Modal für Kontakt hinzufügen/bearbeiten -->
+    <!-- Modal für Kontakt bearbeiten -->
     <div id="contactOverlay" class="overlay" hidden>
       <div class="overlay__backdrop"></div>
       <div class="overlay__content">
-        <div class="contact-modal">
-          <button
-            type="button"
-            id="contactModalClose"
-            class="modal-close"
-            aria-label="Schließen"
-          >
-            ×
-          </button>
-          <h2>Add Contact</h2>
-          <form id="contactForm">
-            <div class="form-group">
-              <label for="contactName">Name *</label>
-              <input type="text" id="contactName" name="contactName" required />
+        <div class="addcontact">
+          <div class="leftside">
+            <div class="content">
+              <img class="imglogo" src="./img/icon/logo.svg" alt="Logo" />
+              <div class="titleblock">
+                <h1>Edit contact</h1>
+                <img
+                  class="separator"
+                  src="./img/icon/seperator_blue.png"
+                  alt="Separator"
+                />
+              </div>
             </div>
-            <div class="form-group">
-              <label for="contactEmail">E-Mail *</label>
-              <input
-                type="email"
-                id="contactEmail"
-                name="contactEmail"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="contactPhone">Phone</label>
-              <input type="tel" id="contactPhone" name="contactPhone" />
-            </div>
-            <div class="modal-actions">
-              <button type="button" id="contactCancelBtn" class="btn-secondary">
-                Cancel
+          </div>
+          <div class="rightside">
+            <div class="avatar-modal"><p id="contactInitials">AM</p></div>
+            <div class="form">
+              <button
+                class="btnclosemodal"
+                id="contactModalClose"
+                aria-label="Schließen"
+              >
+                X
               </button>
-              <button type="submit" class="btn-primary">Save</button>
+              <form id="contactForm">
+                <div class="input">
+                  <input
+                    type="text"
+                    id="contactName"
+                    name="contactName"
+                    placeholder="Name"
+                    required
+                  />
+                </div>
+                <div class="input">
+                  <input
+                    type="email"
+                    id="contactEmail"
+                    name="contactEmail"
+                    placeholder="Email"
+                    required
+                  />
+                </div>
+                <div class="input">
+                  <input
+                    type="tel"
+                    id="contactPhone"
+                    name="contactPhone"
+                    placeholder="+4914555555"
+                    required
+                  />
+                </div>
+                <div class="btneditcontact">
+                  <button type="button" id="deleteContactBtn" class="delbtn">
+                    Delete
+                  </button>
+                  <button type="submit" class="savebtn">Save</button>
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal für neuen Kontakt erstellen -->
+    <div id="addContactOverlay" class="overlay" hidden>
+      <div class="overlay__backdrop"></div>
+      <div class="overlay__content">
+        <div class="addcontact">
+          <div class="leftside">
+            <div class="content">
+              <img class="imglogo" src="./img/icon/logo.svg" alt="Logo" />
+              <div class="titleblock">
+                <h1>Add contact</h1>
+                <span class="taskbetter">Tasks are better with a team!</span>
+                <img
+                  class="separator"
+                  src="./img/icon/seperator_blue.png"
+                  alt="Separator"
+                />
+              </div>
+            </div>
+          </div>
+          <div class="rightside">
+            <div class="avatar-modal">
+              <img src="./img/icon/avatarplaceholder.svg" alt="Avatar" />
+            </div>
+            <div class="form">
+              <button
+                class="btnclosemodal"
+                id="addContactModalClose"
+                aria-label="Schließen"
+              >
+                X
+              </button>
+              <form id="addContactForm">
+                <div class="input">
+                  <input
+                    type="text"
+                    id="addContactName"
+                    name="addContactName"
+                    placeholder="Name"
+                    required
+                  />
+                </div>
+                <div class="input">
+                  <input
+                    type="email"
+                    id="addContactEmail"
+                    name="addContactEmail"
+                    placeholder="Email"
+                    required
+                  />
+                </div>
+                <div class="input">
+                  <input
+                    type="tel"
+                    id="addContactPhone"
+                    name="addContactPhone"
+                    placeholder="+4914555555"
+                    required
+                  />
+                </div>
+                <div class="btneditcontact">
+                  <button type="button" id="addContactCancelBtn" class="delbtn">
+                    Cancel
+                  </button>
+                  <button type="submit" class="creatbtn">Create contact</button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </div>
