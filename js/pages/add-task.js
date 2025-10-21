@@ -206,11 +206,11 @@ export function renderAssigneeDropdown(dropdown, options) {
     const labelEl = document.createElement("label");
     labelEl.className = "checkbox-label";
     labelEl.innerHTML = `
-      <input type="checkbox" id="${checkboxId}" value="${option.value}" data-name="${displayName}" data-email="${option.email}">
       <div class="assignee-info">
         <div class="user-initials" style="background-color: ${color};">${initials}</div>
         <span>${displayName}</span>
       </div>
+      <input type="checkbox" id="${checkboxId}" value="${option.value}" data-name="${displayName}" data-email="${option.email}">
     `;
 
     dropdown.appendChild(labelEl);
