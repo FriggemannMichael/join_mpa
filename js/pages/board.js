@@ -7,9 +7,10 @@ import { bootLayout } from "../common/layout.js";
 import { guardPage } from "../common/pageGuard.js";
 import { subscribeToTasks } from "../common/tasks.js";
 import { enableCardInteractions } from "../board/dragdrop.js";
-import {colorFromString} from "../board/utils.js"
+import { colorFromString } from "../board/utils.js"
 import { initBoardSearch } from "../board/search.js";
-
+import { initAddTask } from "../board/addTaskModal.js"
+import { clearModal } from "../board/taskModal.js"
 
 initBoardPage();
 
@@ -21,7 +22,7 @@ async function initBoardPage() {
   const allowed = await guardPage("./index.html");
   if (!allowed) return;
   await bootLayout();
-  initBoardSearch(); 
+  initBoardSearch();
   bindColumnShortcuts();
   await observeTasks();
   setGlobalButtonsDisabled(false);
@@ -42,32 +43,7 @@ async function observeTasks() {
   });
 }
 
-/**
- * Bindet Event-Listener für die Suchfunktionalität
- */
-function bindSearch() {
-  const button =
-    document.getElementById("searchButton") ||
-    document.querySelector(".search_button");
-  const input = document.getElementById("searchInput");
-  if (!button || !input) return;
-  button.addEventListener("click", () => runSearch(input.value.trim()));
-  input.addEventListener("keydown", (event) => {
-    if (event.key === "Enter") runSearch(input.value.trim());
-  });
-  toggleSearchMessage(false);
-}
 
-/**
- * Führt eine Suche nach Tasks basierend auf dem Suchbegriff durch
- * @param {string} term Der Suchbegriff
- */
-function runSearch(term) {
-  if (!term) return toggleSearchMessage(false);
-  const cards = Array.from(document.querySelectorAll(".task_card"));
-  const found = cards.some((card) => matchTask(card, term));
-  toggleSearchMessage(!found);
-}
 
 /**
  * Prüft ob eine Task-Karte dem Suchbegriff entspricht
@@ -216,12 +192,12 @@ function buildTaskCard(task) {
 
 export function buildAssigneeGroup(task = {}) {
   const wrap = document.createElement("div"); wrap.className = "assignees";
-  wrap.setAttribute("aria-label","assignees");
+  wrap.setAttribute("aria-label", "assignees");
   const ul = document.createElement("ul"); ul.className = "avatar-group";
-  ul.setAttribute("role","list");
-  const list = getAssignees(task), shown = list.slice(0,3), rest = Math.max(0, list.length-3);
+  ul.setAttribute("role", "list");
+  const list = getAssignees(task), shown = list.slice(0, 3), rest = Math.max(0, list.length - 3);
   shown.forEach(a => {
-    const name = a?.name ;
+    const name = a?.name;
     const li = document.createElement("li"); li.className = "avatar"; li.title = name;
     li.textContent = buildInitials(name || "");
     li.style.background = colorFromString(name || "");
@@ -233,7 +209,7 @@ export function buildAssigneeGroup(task = {}) {
 
 function getAssignees(task = {}) {
   if (Array.isArray(task.assignees)) return task.assignees;
-  if (Array.isArray(task.assignee))  return task.assignee;
+  if (Array.isArray(task.assignee)) return task.assignee;
   if (task.assignee && typeof task.assignee === "object") return [task.assignee];
   return [];
 }
@@ -266,28 +242,52 @@ function buildInitials(name) {
     .slice(0, 2);
 }
 
-function bindColumnShortcuts() {
-  const onClick = (e) => {
+export function bindColumnShortcuts() {
+  const onClick = async (e) => {
     const openBtn = e.target.closest("[data-overlay-open]");
     if (openBtn) {
-      const selector = openBtn.dataset.overlayOpen;
-      document.querySelector(selector)?.classList.add("active");
+      const selector = openBtn.dataset.overlayOpen; // z. B. "#addTaskOverlay"
+      const overlay = document.querySelector("#taskOverlay"); // zentrales Overlay
+      const modal = document.querySelector("#taskModal");   // zentraler Inhaltsbereich
+
+      if (!overlay || !modal) return;
+
+      overlay.classList.add("active");
+
+      // Inhalte gezielt je nach Typ rendern
+      if (selector === "#addTaskOverlay") {
+        await initAddTask();
+      }
+
       return;
     }
+
+    // === Schließen-Handling ===
     const closeBtn = e.target.closest("[data-overlay-close]");
     const isBackdrop = e.target.classList.contains("backdrop_overlay");
+
     if (closeBtn || isBackdrop) {
-      e.target.closest(".overlay_board")?.classList.remove("active");
+      const overlay = document.querySelector("#taskOverlay");
+      if (overlay) {
+        overlay.classList.remove("active");
+
+        // Nach kurzer Zeit Modal-Inhalt leeren (Animation berücksichtigen)
+        await clearModal()
+      }
       return;
     }
   };
+
   const onKeydown = (e) => {
     if (e.key === "Escape") {
-      document
-        .querySelectorAll(".overlay_board.active")
-        .forEach((o) => o.classList.remove("active"));
+      const overlay = document.querySelector("#taskOverlay");
+      if (overlay?.classList.contains("active")) {
+        overlay.classList.remove("active");
+        clearModal();
+      }
       return;
     }
+
     if (e.key === "Enter" || e.key === " ") {
       const kb = e.target.closest("[data-overlay-open],[data-overlay-close]");
       if (kb) {
@@ -296,6 +296,7 @@ function bindColumnShortcuts() {
       }
     }
   };
+
   document.addEventListener("click", onClick);
   document.addEventListener("keydown", onKeydown);
 }
@@ -334,3 +335,6 @@ function setGlobalButtonsDisabled(state, root = document.body) {
 
   document.body.classList.toggle("loading", state);
 }
+
+
+
