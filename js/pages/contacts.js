@@ -73,7 +73,18 @@ function renderAddButton(list) {
   btn.id = "addNewContactBtn";
   btn.innerHTML = `Add new Contact<img src="./img/icon/person_add.png" alt="add Person" />`;
   list.appendChild(btn);
-  btn.addEventListener("click", () => toggleOverlay(true));
+  btn.addEventListener("click", () => toggleAddContactOverlay(true));
+}
+
+/**
+ * Zeigt oder verbirgt das Add-Contact-Modal
+ * @param {boolean} show - true zum Anzeigen, false zum Verbergen
+ */
+function toggleAddContactOverlay(show) {
+  const overlay = document.getElementById("addContactOverlay");
+  if (!overlay) return;
+  if (show) overlay.removeAttribute("hidden");
+  else overlay.setAttribute("hidden", "hidden");
 }
 
 /**
@@ -301,6 +312,47 @@ function renderContactDetail({ name, email, phone, initials, color }) {
  * Bindet Event-Listener für Modal-Steuerung
  */
 function bindModalControls() {
+  // Add-Contact-Modal Controls
+  const addCloseBtn = document.getElementById("addContactModalClose");
+  const addCancelBtn = document.getElementById("addContactCancelBtn");
+  const addForm = document.getElementById("addContactForm");
+  if (addCloseBtn) {
+    addCloseBtn.addEventListener("click", () => toggleAddContactOverlay(false));
+  }
+  if (addCancelBtn) {
+    addCancelBtn.addEventListener("click", () =>
+      toggleAddContactOverlay(false)
+    );
+  }
+  if (addForm) {
+    addForm.addEventListener("submit", handleAddContactCreate);
+  }
+  /**
+   * Behandelt das Erstellen eines neuen Kontakts aus dem Add-Contact-Modal
+   * @param {Event} event - Das Submit-Event
+   */
+  async function handleAddContactCreate(event) {
+    event.preventDefault();
+    const data = {
+      name: readValue("addContactName"),
+      email: readValue("addContactEmail"),
+      phone: readValue("addContactPhone"),
+    };
+    if (!data.name || !data.email) return;
+    await saveContactToFirebase(data);
+    resetAddContactForm();
+    toggleAddContactOverlay(false);
+  }
+
+  /**
+   * Setzt das Add-Contact-Formular zurück
+   */
+  function resetAddContactForm() {
+    ["addContactName", "addContactEmail", "addContactPhone"].forEach((id) => {
+      const field = document.getElementById(id);
+      if (field) field.value = "";
+    });
+  }
   const closeBtn = document.getElementById("contactModalClose");
   const cancelBtn = document.getElementById("contactCancelBtn");
   const form = document.getElementById("contactForm");
@@ -310,7 +362,7 @@ function bindModalControls() {
   if (cancelBtn) {
     cancelBtn.addEventListener("click", () => toggleOverlay(false));
   }
-  if (form) form.addEventListener("submit", handleContactCreate);
+  // Der Submit-Handler wird dynamisch beim Editieren gesetzt (setupEditFormHandler)
 }
 
 /**
