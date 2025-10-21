@@ -117,14 +117,11 @@ async function taskModalSubtask(task, id) {
   const normalized = normalizeSubtasks(task);
 
   if (normalized.length > 0) {
-
     const subtaskWrap = document.createElement("div");
     subtaskWrap.classList.add("subtask_task_overlay");
 
     const subtaskList = document.createElement("ul");
     subtaskList.className = "subtask_list";
-
-    const normalized = normalizeSubtasks(task);
 
     const headRow = document.createElement("div");
     headRow.className = "subtask_header_task_overlay";
@@ -146,16 +143,30 @@ async function taskModalSubtask(task, id) {
       label.textContent = s?.text || String(s);
       label.setAttribute("for", cb.id);
 
+      // --- Eventlistener für Statusänderung ---
+      cb.addEventListener("change", async () => {
+        const prev = !cb.checked; // für Rollback bei Fehler
+        li.classList.toggle("done", cb.checked); // sofortiges UI-Feedback
+
+        try {
+          await updateSubtaskDone(id, idx, cb.checked);
+        } catch (err) {
+          console.error("updateSubtaskDone failed:", err);
+          cb.checked = prev; // Zustand zurücksetzen
+          li.classList.toggle("done", cb.checked);
+        }
+      });
+
       li.append(cb, label);
       if (cb.checked) li.classList.add("done");
-
       subtaskList.appendChild(li);
     });
+
     subtaskWrap.append(headRow, subtaskList);
     return subtaskWrap;
   }
 
-  return document.createDocumentFragment()
+  return document.createDocumentFragment();
 }
 
 
