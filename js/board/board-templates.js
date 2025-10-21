@@ -1,6 +1,6 @@
 export const boardTemplates = {
 
-    editTask: `
+  editTask: `
         <div class="form-group">
             <label for="taskTitle">Title</label>
             <input type="text" id="taskTitle" placeholder="Enter a title" />
@@ -123,11 +123,8 @@ export const boardTemplates = {
               </div>
     `,
 
-    addTask:
+  addTask:
     `
-      <div class="overlay_board" id="addTaskOverlay">
-
-    <div class="backdrop_overlay"></div>
     <div class="add_task_overlay add-task-main">
       <div class="cloase-button-add-task" data-overlay-close="#addTaskOverlay"></div>
       <div class="container-add-task-board"> <!-- Muss noch bearbeitet werden  -->
@@ -241,7 +238,7 @@ export const boardTemplates = {
       </div>
     </div>
 
-  </div>
+
     `
 
 }

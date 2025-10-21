@@ -529,8 +529,8 @@ export function selectCategory(value) {
       value === "technical-task"
         ? "Technical Task"
         : value === "user-story"
-        ? "User Story"
-        : value;
+          ? "User Story"
+          : value;
     placeholder.textContent = text;
   }
 
@@ -822,7 +822,9 @@ export function setSubtasksFrom(list) {
 
 
 export function handleOutsideDropdownClick(e) {
-  const header   = document.getElementById("assigneeHeader");
+  if (e.cancelBubble) return;
+
+  const header = document.getElementById("assigneeHeader");
   const dropdown = document.getElementById("assignee-dropdown");
   if (!header || !dropdown) return;
 

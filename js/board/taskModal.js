@@ -10,6 +10,7 @@ export async function renderTaskModal(id, task = {}) {
   ScrollLock.set()
   const overlay = document.getElementById("taskOverlay");
   const section = document.getElementById("taskModal");
+  section.classList.add("task-overlay")
   section.dataset.taskId = id;
   const h2 = document.createElement("h2");
   h2.textContent = task.title;
@@ -207,6 +208,7 @@ export function closeTaskOverlay() {
 
   overlay.classList.remove("active");
   overlay.cleanup?.();
+  clearModal()
 }
 
 function taskModalEventlistener(overlay, section) {
@@ -236,7 +238,7 @@ function taskModalEventlistener(overlay, section) {
   }
 
   section.addEventListener("click", async (e) => {
-    e.stopPropagation(); 
+    e.stopPropagation();
 
     const btn = e.target.closest("[data-action]");
     if (!btn) return;
@@ -316,4 +318,16 @@ async function deleteTask(taskId) {
   await update(ref(db), { [path]: null });
   console.log("🗑️ Task deleted:", taskId);
   closeTaskOverlay();
+}
+
+export function clearModal(delay = 300) {
+  const section = document.getElementById("taskModal");
+  if (!section) return;
+
+  setTimeout(() => {
+    section.innerHTML = "";
+    [...section.attributes].forEach(attr => {
+      if (attr.name !== "id") section.removeAttribute(attr.name);
+    });
+  }, delay);
 }
