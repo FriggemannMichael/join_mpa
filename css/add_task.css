@@ -346,12 +346,13 @@ textarea:focus {
   margin-left: auto;
 }
 
-.required {
-  color: #f00; /* Rot f├╝r Pflichtfelder */
-  font-size: 0.65em; /* kleiner als Label-Text */
+.required,
+sup.required {
+  color: #f00;
+  font-size: 0.65em;
   line-height: 1;
   margin-left: 2px;
-  vertical-align: super; /* hochgestellt */
+  vertical-align: super !important;
 }
 
 .clear-btn,
