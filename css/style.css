@@ -16,6 +16,9 @@
   padding-bottom: 16px;
   width: 100%;
 }
+h1 {
+  color: #fff;
+}
 
 .login-footer button {
   align-items: center;
