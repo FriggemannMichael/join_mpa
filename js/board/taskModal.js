@@ -6,7 +6,6 @@ import { openEditForm } from "../board/editTask.js"
 import { handleOutsideDropdownClick } from '../pages/add-task.js';
 
 
-
 export async function renderTaskModal(id, task = {}) {
   ScrollLock.set()
   const overlay = document.getElementById("taskOverlay");
@@ -37,23 +36,25 @@ export async function renderTaskModal(id, task = {}) {
 // Task Modal Sektionen
 function taskModalHeader(categoryLabel, category) {
   const head = document.createElement("div");
-  head.classList.add("header-task-overlay");
+  head.className = "header-task-overlay";
 
-  const taskCategory = document.createElement("div");
-  taskCategory.classList.add("task_category", category);
-  taskCategory.textContent = categoryLabel;
+  const cat = document.createElement("div");
+  cat.className = `task_category ${category}`;
+  cat.textContent = categoryLabel;
 
-  const closeBtn = document.createElement("button");
-  closeBtn.type = "button";
-  closeBtn.classList.add("close_button_taskModal");
-  closeBtn.dataset.overlayClose = "#taskOverlay";
-  closeBtn.addEventListener("click", closeTaskOverlay);
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "close_button_taskModal";
+  btn.dataset.overlayClose = "#taskOverlay";
+  btn.addEventListener("click", closeTaskOverlay);
+
   const icon = document.createElement("img");
   icon.src = "../img/icon/close-btn.svg";
   icon.alt = "Close";
-  icon.classList.add("icon-close");
-  closeBtn.append(icon);
-  head.append(taskCategory, closeBtn);
+  icon.className = "icon-close";
+
+  btn.append(icon);
+  head.append(cat, btn);
   return head;
 }
 
@@ -65,18 +66,18 @@ function taskModalDescription(description) {
 }
 
 function taskModalDueDate(dueDate) {
-  const dueDateDiv = document.createElement("div");
-  dueDateDiv.classList.add("due_date_task_overlay");
-  const dueLabel = document.createElement("p");
-  dueLabel.classList.add("taskModal-label")
-  dueLabel.textContent = "Due date:";
-  const dueVal = document.createElement("span");
-  if (dueDate) {
-    const d = new Date(dueDate);
-    dueVal.textContent = isNaN(d) ? dueDate : d.toLocaleDateString("en-GB");
-  }
-  dueDateDiv.append(dueLabel, dueVal);
-  return dueDateDiv;
+  const div = document.createElement("div");
+  div.className = "due_date_task_overlay";
+
+  const label = document.createElement("p");
+  label.className = "taskModal-label";
+  label.textContent = "Due date:";
+
+  const value = document.createElement("span");
+  value.textContent = new Date(dueDate).toLocaleDateString("en-GB");
+
+  div.append(label, value);
+  return div;
 }
 
 function taskModalpriority(priority) {
@@ -234,9 +235,8 @@ function taskModalEventlistener(overlay, section) {
     };
   }
 
-  // --- Klicks im Modal selbst ---
   section.addEventListener("click", async (e) => {
-    e.stopPropagation(); // verhindert Overlay-Schließen
+    e.stopPropagation(); 
 
     const btn = e.target.closest("[data-action]");
     if (!btn) return;
@@ -253,48 +253,52 @@ function taskModalEventlistener(overlay, section) {
     }
   });
 
-  // --- Overlay aktivieren ---
   overlay?.classList.add("active");
 }
 
 
-async function getContactsMap() {
-  let contactsCache = null;
-  if (contactsCache) return contactsCache;
+export async function getContactsMap() {
   const snap = await get(child(ref(db), "contacts"));
-  contactsCache = snap.exists() ? snap.val() : {};
-  return contactsCache;
+  return snap.exists() ? snap.val() : {};
 }
 
 function normAssignees(task) {
-  // akzeptiert: task.assignees = [ {id,name,email}, ... ] ODER task.assignee = {id,name,email}
-  if (Array.isArray(task.assignees) && task.assignees.length) return task.assignees;
-  if (task.assignee && (task.assignee.id || task.assignee.name || task.assignee.email)) return [task.assignee];
-  return [];
+  return Array.isArray(task?.assignees) ? task.assignees : [];
 }
 
-export function renderAssignees(container, assigneesArr, contactsMap, currentUser) {
+
+// muss überarbeitet werden --> Color und Initials
+export function renderAssignees(container, assigneesArr = [], contactsMap = {}, currentUser) {
   container.classList.add("assignees");
   container.innerHTML = "";
-  if (!assigneesArr.length) return container.textContent = "—";
+
+  if (!assigneesArr.length) {
+    container.textContent = "—";
+    return;
+  }
 
   assigneesArr.forEach(a => {
-    const uid = a?.id || a?.uid || "";
-    const c = uid ? contactsMap[uid] : null;
-    const name = c?.name || a?.name || a?.displayName || a?.email || "Unbekannt";
-    const isYou = currentUser && (uid === currentUser.id || name === currentUser.name);
-    const color = c?.color || "#6c7ae0";
-    const ini = c?.initials || initialsFrom(name);
-    const badge = Object.assign(document.createElement("span"), {
-      className: "assignee_badge", textContent: ini, title: name,
-      style: `background-color:${color}`
-    });
-    const label = Object.assign(document.createElement("span"), {
-      className: "assignee_label", textContent: isYou ? `${name} (You)` : name
-    });
+    const uid = a?.uid;
+    const contact = contactsMap[uid];
+    const name = contact?.name || a?.name || "Unbekannt";
+    const isYou = currentUser && (uid === currentUser.uid);
+    const color = contact?.color || "#6c7ae0";
+    const initials = contact?.initials || initialsFrom(name);
+
+    const badge = document.createElement("span");
+    badge.className = "assignee_badge";
+    badge.textContent = initials;
+    badge.title = name;
+    badge.style.backgroundColor = color;
+
+    const label = document.createElement("span");
+    label.className = "assignee_label";
+    label.textContent = isYou ? `${name} (You)` : name;
+
     const row = document.createElement("div");
     row.className = "assignee_row";
     row.append(badge, label);
+
     container.append(row);
   });
 }
@@ -307,8 +311,6 @@ async function updateSubtaskDone(taskId, index, done) {
   const path = `tasks/${taskId}/subtasks/${index}/done`;
   await update(ref(db), { [path]: !!done, [`tasks/${taskId}/updatedAt`]: Date.now() });
 }
-
-// async function openEditForm(taskId)  jetzt in editTask.js
 
 async function deleteTask(taskId) {
   const path = `tasks/${taskId}`;
