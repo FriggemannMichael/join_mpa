@@ -369,10 +369,10 @@ Nutze stattdessen die spezifische Klasse .contact-page für das Kontaktseiten-La
 }
 
 .contact-info {
-  display: flex;
+  display: none;
   flex-direction: column;
   gap: 32px;
-  padding-left: 55px;
+  padding: 2rem;
 }
 
 .contact-big {
@@ -380,6 +380,17 @@ Nutze stattdessen die spezifische Klasse .contact-page für das Kontaktseiten-La
   display: flex;
   gap: 54px;
   padding-top: 32px;
+}
+
+.changebtns {
+  display: flex;
+  gap: 25px;
+  padding-top: 25px;
+}
+
+.name-big span {
+  font-size: 2.9375rem;
+  font-weight: 500;
 }
 
 .name-big button {
@@ -402,6 +413,7 @@ Nutze stattdessen die spezifische Klasse .contact-page für das Kontaktseiten-La
   display: flex;
   flex-direction: column;
   gap: 22px;
+  padding-top: 1.5rem;
 }
 
 .contact-big-information span {

@@ -1,4 +1,24 @@
-// Farb-Logik aus add-task.js übernommen
+/**
+ * Contacts-Seite für Kontaktverwaltung
+ * @module contacts
+ */
+
+import { bootLayout } from "../common/layout.js";
+import { guardPage } from "../common/pageGuard.js";
+import { db } from "../common/firebase.js";
+import {
+  ref,
+  onValue,
+  push,
+  set,
+  remove,
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+
+/**
+ * Generiert eine Farbe basierend auf den Initialen
+ * @param {string} initials - Die Initialen des Kontakts
+ * @returns {string} Hex-Farbcode
+ */
 function getColorForInitials(initials) {
   const colors = [
     "#FF6B6B",
@@ -15,20 +35,6 @@ function getColorForInitials(initials) {
   const charCode = initials.charCodeAt(0);
   return colors[charCode % colors.length];
 }
-/**
- * Contacts-Seite für Kontaktverwaltung
- * @module contacts
- */
-
-import { bootLayout } from "../common/layout.js";
-import { guardPage } from "../common/pageGuard.js";
-import { db } from "../common/firebase.js";
-import {
-  ref,
-  onValue,
-  push,
-  set,
-} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 initContactsPage();
 
@@ -44,57 +50,85 @@ async function initContactsPage() {
 }
 
 /**
- * Bindet Event-Listener für die Kontaktliste
+ * Lädt Kontakte aus Firebase und rendert die Liste
  */
-
-function bindContactList() {
-  document.querySelectorAll(".contact-person").forEach((entry) => {
-    entry.addEventListener("click", () => showContactDetail(entry));
-  });
-}
-
 async function loadAndRenderContacts() {
   const list = document.getElementById("contact-list");
   if (!list) return;
-  list.innerHTML = `
-    <button class="contact-btn" type="button" id="addNewContactBtn">
-      Add new Contact
-      <img src="./img/icon/person_add.png" alt="add Person" />
-    </button>
-  `;
   const contactsRef = ref(db, "/contacts");
   onValue(contactsRef, (snapshot) => {
-    // Nach Anfangsbuchstaben gruppieren
-    const contacts = [];
-    snapshot.forEach((child) => {
-      const val = child.val();
-      contacts.push({ key: child.key, ...val });
-    });
+    const contacts = extractContactsFromSnapshot(snapshot);
     renderContactList(contacts);
   });
+}
+
+/**
+ * Rendert den "Add new Contact"-Button
+ * @param {HTMLElement} list - Das Listen-Element
+ */
+function renderAddButton(list) {
+  const btn = document.createElement("button");
+  btn.className = "contact-btn";
+  btn.type = "button";
+  btn.id = "addNewContactBtn";
+  btn.innerHTML = `Add new Contact<img src="./img/icon/person_add.png" alt="add Person" />`;
+  list.appendChild(btn);
+  btn.addEventListener("click", () => toggleOverlay(true));
+}
+
+/**
+ * Extrahiert Kontakte aus Firebase Snapshot
+ * @param {Object} snapshot - Firebase Snapshot
+ * @returns {Array} Array von Kontakten
+ */
+function extractContactsFromSnapshot(snapshot) {
+  const contacts = [];
+  snapshot.forEach((child) => {
+    contacts.push({ key: child.key, ...child.val() });
+  });
+  return contacts;
 }
 
 let contactsCache = [];
 let selectedContactKey = null;
 
+/**
+ * Rendert die Kontaktliste gruppiert nach Anfangsbuchstaben
+ * @param {Array} contacts - Array von Kontakten
+ */
 function renderContactList(contacts) {
-  // Kontakte ohne Name oder E-Mail herausfiltern
   contacts = contacts.filter((c) => c.name && c.email);
   contactsCache = contacts;
   const list = document.getElementById("contact-list");
   if (!list) return;
-  // Button bleibt oben
-  const addBtn = list.querySelector(".contact-btn");
   list.innerHTML = "";
-  if (addBtn) list.appendChild(addBtn);
+  renderAddButton(list);
   if (!contacts.length) return;
-  // Nach Anfangsbuchstaben gruppieren
+  const grouped = groupContactsByLetter(contacts);
+  renderGroupedContacts(list, grouped);
+}
+
+/**
+ * Gruppiert Kontakte nach Anfangsbuchstaben
+ * @param {Array} contacts - Array von Kontakten
+ * @returns {Object} Gruppierte Kontakte
+ */
+function groupContactsByLetter(contacts) {
   const grouped = {};
   contacts.forEach((c) => {
     const letter = (c.name?.[0] || "?").toUpperCase();
     if (!grouped[letter]) grouped[letter] = [];
     grouped[letter].push(c);
   });
+  return grouped;
+}
+
+/**
+ * Rendert gruppierte Kontakte in die Liste
+ * @param {HTMLElement} list - Das Listen-Element
+ * @param {Object} grouped - Gruppierte Kontakte
+ */
+function renderGroupedContacts(list, grouped) {
   Object.keys(grouped)
     .sort()
     .forEach((letter) => {
@@ -119,9 +153,9 @@ function renderContactList(contacts) {
 
 /**
  * Zeigt die Details eines ausgewählten Kontakts an
- * @param {HTMLElement} entry Das Kontakt-Element
+ * @param {HTMLElement} entry - Das Kontakt-Element
+ * @param {string} key - Der Firebase-Key des Kontakts
  */
-
 function showContactDetail(entry, key) {
   selectedContactKey = key;
   const contact = contactsCache.find((c) => c.key === key);
@@ -138,6 +172,9 @@ function showContactDetail(entry, key) {
   setTimeout(bindEditDeleteButtons, 0);
 }
 
+/**
+ * Bindet Event-Listener für Edit und Delete Buttons
+ */
 function bindEditDeleteButtons() {
   const editBtn = document.getElementById("editContactBtn");
   const deleteBtn = document.getElementById("deleteContactBtn");
@@ -145,76 +182,90 @@ function bindEditDeleteButtons() {
   if (deleteBtn) deleteBtn.addEventListener("click", handleDeleteContact);
 }
 
+/**
+ * Behandelt das Löschen eines Kontakts
+ */
 async function handleDeleteContact() {
   if (!selectedContactKey) return;
   if (!confirm("Kontakt wirklich löschen?")) return;
   try {
-    const { ref: dbRef, remove } = await import(
-      "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"
-    );
-    const contactRef = dbRef(db, `/contacts/${selectedContactKey}`);
+    const contactRef = ref(db, `/contacts/${selectedContactKey}`);
     await remove(contactRef);
     selectedContactKey = null;
-    // Nach dem Löschen: Detailansicht leeren
     const info = document.querySelector(".contact-info");
-    if (info) info.innerHTML = "";
-  } catch (e) {
-    alert("Fehler beim Löschen des Kontakts.");
-    console.error(e);
+    const placeholder = document.querySelector(".contact-detail-placeholder");
+    if (info) {
+      info.innerHTML = "";
+      info.style.display = "none";
+    }
+    if (placeholder) placeholder.style.display = "flex";
+  } catch (error) {
+    alert("Fehler beim Löschen: " + error.message);
   }
 }
 
+/**
+ * Behandelt das Bearbeiten eines Kontakts
+ */
 function handleEditContact() {
   if (!selectedContactKey) return;
   const contact = contactsCache.find((c) => c.key === selectedContactKey);
   if (!contact) return;
-  // Modal öffnen und Felder füllen
+  openEditModal(contact);
+  setupEditFormHandler();
+}
+
+/**
+ * Öffnet das Modal mit Kontaktdaten
+ * @param {Object} contact - Das Kontakt-Objekt
+ */
+function openEditModal(contact) {
   toggleOverlay(true);
   document.getElementById("contactName").value = contact.name;
   document.getElementById("contactEmail").value = contact.email;
   document.getElementById("contactPhone").value = contact.phone || "";
-  // Submit-Handler anpassen
+}
+
+/**
+ * Richtet den Submit-Handler für Bearbeitung ein
+ */
+function setupEditFormHandler() {
   const form = document.getElementById("contactForm");
-  if (form) {
-    form.onsubmit = async (event) => {
-      event.preventDefault();
-      const data = {
-        name: readValue("contactName"),
-        email: readValue("contactEmail"),
-        phone: readValue("contactPhone"),
-      };
-      if (!data.name || !data.email) return;
-      await updateContactInFirebase(selectedContactKey, data);
-      resetContactForm();
-      toggleOverlay(false);
-      // Nach dem Editieren: Detailansicht aktualisieren
-      showContactDetail(
-        { dataset: { key: selectedContactKey } },
-        selectedContactKey
-      );
-      // Submit-Handler zurücksetzen
-      form.onsubmit = handleContactCreate;
+  if (!form) return;
+  form.onsubmit = async (event) => {
+    event.preventDefault();
+    const data = {
+      name: readValue("contactName"),
+      email: readValue("contactEmail"),
+      phone: readValue("contactPhone"),
     };
-  }
+    if (!data.name || !data.email) return;
+    const { ref: dbRef, update } = await import(
+      "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"
+    );
+    await update(dbRef(db, `/contacts/${selectedContactKey}`), data);
+    resetContactForm();
+    toggleOverlay(false);
+    showContactDetail(
+      { dataset: { key: selectedContactKey } },
+      selectedContactKey
+    );
+    form.onsubmit = handleContactCreate;
+  };
 }
 
-async function updateContactInFirebase(key, data) {
-  const { ref: dbRef, update } = await import(
-    "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"
-  );
-  const contactRef = dbRef(db, `/contacts/${key}`);
-  await update(contactRef, data);
-}
-
+/**
+ * Rendert die Detailansicht eines Kontakts
+ * @param {Object} contact - Kontakt-Objekt mit name, email, phone, initials, color
+ */
 function renderContactDetail({ name, email, phone, initials, color }) {
+  const placeholder = document.querySelector(".contact-detail-placeholder");
   const info = document.querySelector(".contact-info");
   if (!info) return;
+
+  if (placeholder) placeholder.style.display = "none";
+
   info.innerHTML = `
-    <div class="contact-headline">
-      <h3>Contacts</h3>
-      <div class="headline-seperator"></div>
-      <span>Better with a team</span>
-    </div>
     <div class="contact-big">
       <div class="initals-big" style="background-color: ${color};">${initials}</div>
       <div class="name-big">
@@ -243,32 +294,29 @@ function renderContactDetail({ name, email, phone, initials, color }) {
       </div>
     </div>
   `;
+  info.style.display = "block";
 }
-
-/**
- * Aktualisiert die Detailansicht mit Kontaktinformationen
- * @param {string} name Name des Kontakts
- * @param {string} mail E-Mail-Adresse
- * @param {string} phone Telefonnummer
- */
-
-// updateDetailView entfällt, da die Detailansicht komplett gerendert wird
 
 /**
  * Bindet Event-Listener für Modal-Steuerung
  */
 function bindModalControls() {
-  const openBtn = document.getElementById("addNewContactBtn");
   const closeBtn = document.getElementById("contactModalClose");
   const cancelBtn = document.getElementById("contactCancelBtn");
   const form = document.getElementById("contactForm");
-  if (openBtn) openBtn.addEventListener("click", () => toggleOverlay(true));
-  if (closeBtn) closeBtn.addEventListener("click", () => toggleOverlay(false));
-  if (cancelBtn)
+  if (closeBtn) {
+    closeBtn.addEventListener("click", () => toggleOverlay(false));
+  }
+  if (cancelBtn) {
     cancelBtn.addEventListener("click", () => toggleOverlay(false));
+  }
   if (form) form.addEventListener("submit", handleContactCreate);
 }
 
+/**
+ * Zeigt oder verbirgt das Modal-Overlay
+ * @param {boolean} show - true zum Anzeigen, false zum Verbergen
+ */
 function toggleOverlay(show) {
   const overlay = document.getElementById("contactOverlay");
   if (!overlay) return;
@@ -276,6 +324,10 @@ function toggleOverlay(show) {
   else overlay.setAttribute("hidden", "hidden");
 }
 
+/**
+ * Behandelt das Erstellen eines neuen Kontakts
+ * @param {Event} event - Das Submit-Event
+ */
 async function handleContactCreate(event) {
   event.preventDefault();
   const data = {
@@ -289,25 +341,30 @@ async function handleContactCreate(event) {
   toggleOverlay(false);
 }
 
+/**
+ * Speichert einen neuen Kontakt in Firebase
+ * @param {Object} data - Die Kontaktdaten
+ */
 async function saveContactToFirebase(data) {
   const contactsRef = ref(db, "/contacts");
-  const newRef = push(contactsRef);
-  await set(newRef, data);
+  await set(push(contactsRef), data);
 }
 
-// appendContact entfällt, da alles über Firebase läuft
-
+/**
+ * Erstellt das HTML-Markup für einen Kontakt
+ * @param {Object} contact - Das Kontakt-Objekt
+ * @returns {string} HTML-String
+ */
 function buildContactMarkup({ name, email }) {
   const initials = buildInitials(name);
   const color = getColorForInitials(initials);
-  return `
-    <div class="initals" style="background-color: ${color};">${initials}</div>
-    <div class="small-info">
-      <h3>${name}</h3>
-      <a href="mailto:${email}">${email}</a>
-    </div>`;
+  return `<div class="initals" style="background-color: ${color};">${initials}</div>
+    <div class="small-info"><h3>${name}</h3><span>${email}</span></div>`;
 }
 
+/**
+ * Setzt das Kontaktformular zurück
+ */
 function resetContactForm() {
   ["contactName", "contactEmail", "contactPhone"].forEach((id) => {
     const field = document.getElementById(id);
@@ -315,28 +372,26 @@ function resetContactForm() {
   });
 }
 
+/**
+ * Liest den Wert aus einem Input-Feld
+ * @param {string} id - Die ID des Input-Feldes
+ * @returns {string} Der getrimmte Wert
+ */
 function readValue(id) {
   const field = document.getElementById(id);
   return field ? field.value.trim() : "";
 }
 
+/**
+ * Erstellt Initialen aus einem Namen
+ * @param {string} name - Der vollständige Name
+ * @returns {string} Die Initialen (max. 2 Buchstaben)
+ */
 function buildInitials(name) {
   return name
     .split(/\s+/)
     .filter(Boolean)
-    .map((part) => part[0].toUpperCase())
+    .map((p) => p[0].toUpperCase())
     .slice(0, 2)
     .join("");
-}
-
-function setText(id, value) {
-  const node = document.getElementById(id);
-  if (node) node.textContent = value;
-}
-
-function setLink(id, href, text) {
-  const node = document.getElementById(id);
-  if (!node) return;
-  node.href = href;
-  node.textContent = text;
 }
