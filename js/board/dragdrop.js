@@ -11,115 +11,121 @@ export function enableCardInteractions(card) {
   const HOLD_MS = 300;
   const MOVE_THRESHOLD = 5;
 
-  let timer = null;
-  let startX = 0, startY = 0, startTime = 0;
-  let dragging = false;
-  let isTouch = false;
-  let moved = false;
-  let isPointerDown = false;
-  let activePointerId = null;
+  const s = initDragState();
 
-  const clearHold = () => {
-    if (timer) {
-      clearTimeout(timer);
-      timer = null;
-    }
+  card.addEventListener("pointerdown", (e) => onDown(card, e, s, HOLD_MS));
+  card.addEventListener("pointermove", (e) => onMove(card, e, s, MOVE_THRESHOLD));
+  card.addEventListener("pointerup", (e) => onUp(card, e, s, HOLD_MS));
+  card.addEventListener("pointercancel", (e) => onUp(card, e, s, HOLD_MS));
+}
+
+/* ----------------- Helpers ----------------- */
+function initDragState() {
+  return {
+    timer: null,
+    startX: 0, startY: 0, startTime: 0,
+    dragging: false, moved: false,
+    isTouch: false, isPointerDown: false,
+    pointerId: null,
   };
+}
 
-  card.addEventListener("pointerdown", (e) => {
+function onDown(card, e, s, HOLD_MS) {
+  if (e.pointerType === "mouse" && e.button !== 0) return;
 
-    if (e.pointerType === "mouse" && e.button !== 0) return;
+  s.isTouch = e.pointerType === "touch";
+  s.startX = e.clientX;
+  s.startY = e.clientY;
+  s.startTime = Date.now();
+  s.dragging = false;
+  s.moved = false;
+  s.isPointerDown = true;
+  s.pointerId = e.pointerId;
 
-    isTouch = e.pointerType === "touch";
-    startX = e.clientX;
-    startY = e.clientY;
-    startTime = Date.now();
-    dragging = false;
-    moved = false;
+  if (s.isTouch) startHoldTimer(card, e, s, HOLD_MS);
+}
 
-    isPointerDown = true;
-    activePointerId = e.pointerId;
+function onMove(card, e, s, THRESHOLD) {
+  if (!samePointer(e, s)) return;
+  if (!s.isTouch && e.buttons === 0) return;
 
-
-    if (isTouch) {
-      timer = setTimeout(() => {
-        startDragging(card, e);
-        dragging = true;
-      }, HOLD_MS);
-    }
-  });
-
-
-  card.addEventListener("pointermove", (e) => {
-    if (!isPointerDown || e.pointerId !== activePointerId) return;
-    if (!isTouch && e.buttons === 0) return;
-
-    const movedx = Math.abs(e.clientX - startX);
-    const movedy = Math.abs(e.clientY - startY);
-
-    if (!dragging) {
-
-      if (isTouch && (movedx > MOVE_THRESHOLD || movedy > MOVE_THRESHOLD)) {
-        moved = true;
-        clearHold();
-        return;
-      }
-
-
-      if (!isTouch && (movedx > MOVE_THRESHOLD || movedy > MOVE_THRESHOLD)) {
-        startDragging(card, e);
-        clearHold();
-        dragging = true;
-      }
+  if (!s.dragging) {
+    if (s.isTouch && exceededThreshold(e, s, THRESHOLD)) {
+      s.moved = true;
+      clearHoldTimer(s);
       return;
     }
-
-
-    moveDragging(card, e);
-  });
-
-
-  card.addEventListener("pointerup", async (e) => {
-    clearHold();
-
-    if (dragging) {
-      endDragging(card, e);
-    } else if (!moved) {
-
-      const holdTime = Date.now() - startTime;
-      if (holdTime < HOLD_MS) {
-        const id = card.dataset.taskId;
-        const task = await loadTask(id);
-        await renderTaskModal(id, task);
-        document.getElementById("taskOverlay")?.classList.add("active");
-      }
+    if (!s.isTouch && exceededThreshold(e, s, THRESHOLD)) {
+      startDrag(card, e, s);
+      return;
     }
+    return;
+  }
 
-    dragging = false;
-    isPointerDown = false;
-    activePointerId = null;
-  });
+  e.preventDefault();
+  moveDragging(card, e);
+}
 
+async function onUp(card, e, s, HOLD_MS) {
+  clearHoldTimer(s);
 
-  card.addEventListener("pointercancel", (e) => {   // CHANGE: (e) + Cleanup
-    clearHold();
-    if (currentDrag) {
-      try { card.releasePointerCapture?.(e.pointerId); } catch { }
-      currentDrag.ghost?.remove();
-      document.querySelectorAll(".drop_placeholder").forEach(ph => ph.remove());
-      card.classList.remove("dragging");
-      card.style.touchAction = "auto";
-      currentDrag = null;
-    }
-    dragging = false;
-    moved = false;
-    isPointerDown = false;
-    activePointerId = null;
-  });
+  if (s.dragging) {
+    endDragging(card, e);
+  } else if (!s.moved && isTap(s, HOLD_MS)) {
+    await openModal(card);
+  }
+
+  resetPointerState(card, e, s);
+}
+
+/* ---- tiny utilities ---- */
+function startHoldTimer(card, e, s, HOLD_MS) {
+  clearHoldTimer(s);
+  s.timer = setTimeout(() => {
+    if (!s.isPointerDown || s.pointerId !== e.pointerId) return;
+    startDrag(card, e, s);
+  }, HOLD_MS);
+}
+
+function clearHoldTimer(s) {
+  if (s.timer) { clearTimeout(s.timer); s.timer = null; }
+}
+
+function samePointer(e, s) {
+  return s.isPointerDown && e.pointerId === s.pointerId;
+}
+
+function exceededThreshold(e, s, t) {
+  return Math.abs(e.clientX - s.startX) > t || Math.abs(e.clientY - s.startY) > t;
+}
+
+function isTap(s, HOLD_MS) {
+  return Date.now() - s.startTime < HOLD_MS;
+}
+
+function startDrag(card, e, s) {
+  startDragging(card, e);
+  clearHoldTimer(s);
+  s.dragging = true;
+}
+
+function resetPointerState(card, e, s) {
+  card.releasePointerCapture?.(e.pointerId);
+  s.dragging = false;
+  s.moved = false;
+  s.isPointerDown = false;
+  s.pointerId = null;
+}
+
+async function openModal(card) {
+  const id = card.dataset.taskId;
+  const task = await loadTask(id);
+  await renderTaskModal(id, task);
 }
 
 
 
+// ab hier ist alles alt 
 function startDragging(card, e) {
   const rect = card.getBoundingClientRect();
   const originColumn = card.closest(".task_column");
@@ -128,7 +134,62 @@ function startDragging(card, e) {
 
   document.body.classList.add('no-select');
 
-  // Ghost erstellen
+  const ghost = buildGhost(card, rect);
+  const offsetX = e.clientX - rect.left;
+  const offsetY = e.clientY - rect.top;
+
+  currentDrag = { card, ghost, originColumn, offsetX, offsetY };
+  document.body.appendChild(ghost);
+
+  buildPlaceholdersbuildPlaceholders(originColumn, rect.height);
+  card.classList.add("dragging");
+}
+
+
+function moveDragging(card, e) {
+  if (!currentDrag) return;
+
+  const { ghost, offsetX, offsetY } = currentDrag;
+  ghost.style.left = `${e.clientX - offsetX}px`;
+  ghost.style.top = `${e.clientY - offsetY}px`;
+
+  const el = document.elementFromPoint(e.clientX, e.clientY);
+  const hoveredCol = el?.closest(".task_column");
+
+  document.querySelectorAll(".task_column").forEach(col => {
+    col.classList.toggle("active", col === hoveredCol);
+  });
+}
+
+function endDragging(card, e) {
+  document.body.classList.remove('no-select');
+  document.querySelectorAll(".task_column.active").forEach(col => {
+    col.classList.remove("active");
+  });
+  if (!currentDrag) return;
+  const { ghost, originColumn } = currentDrag;
+  card.releasePointerCapture(e.pointerId);
+  let el = document.elementFromPoint(e.clientX, e.clientY);
+  let targetCol = el?.closest(".task_column");
+
+  if (!targetCol) {
+    const nearestSpace = findNearestSpace(e.clientX, e.clientY);
+    targetCol = nearestSpace?.closest(".task_column");
+  }
+
+  if (targetCol && targetCol !== originColumn) {
+    const space = targetCol.querySelector(".task_space");
+    space.appendChild(card);
+    card.dataset.status = space.id;
+    updateTaskStatus(card.dataset.taskId, space.id);
+  }
+
+  deleteDragSettings(card);
+}
+
+
+
+function buildGhost(card, rect) {
   const ghost = card.cloneNode(true);
   ghost.classList.add("drag-ghost");
   Object.assign(ghost.style, {
@@ -140,92 +201,28 @@ function startDragging(card, e) {
     pointerEvents: "none",
     zIndex: 1000,
   });
-  const offsetX = e.clientX - rect.left;
-  const offsetY = e.clientY - rect.top;
+  return ghost;
+}
 
-  currentDrag = { card, ghost, originColumn, offsetX, offsetY };
-  document.body.appendChild(ghost);
-
-  // Platzhalter in andere Spalten erstellen
-  const allColumns = document.querySelectorAll(".task_column");
-  allColumns.forEach(col => {
+function buildPlaceholders(originColumn, height) {
+  document.querySelectorAll(".task_column").forEach(col => {
     if (col !== originColumn) {
       const dropPh = document.createElement("div");
       dropPh.className = "drop_placeholder";
-      dropPh.style.height = `${rect.height}px`;
+      dropPh.style.height = `${height}px`;
       col.querySelector(".task_space")?.appendChild(dropPh);
     }
   });
-
-  card.classList.add("dragging");
 }
 
-
-function moveDragging(card, e) {
-  if (!currentDrag) return;
-
-  const { ghost, offsetX, offsetY } = currentDrag;
-  // Ghost an Maus bewegen
-  ghost.style.left = `${e.clientX - offsetX}px`;
-  ghost.style.top = `${e.clientY - offsetY}px`;
-
-  // Spalte unter Maus bestimmen
-  const el = document.elementFromPoint(e.clientX, e.clientY);
-  const hoveredCol = el?.closest(".task_column");
-
-  // Platzhalter hervorheben
-document.querySelectorAll(".task_column").forEach(col => {
-  col.classList.toggle("active", col === hoveredCol);
-});
-}
-
-function endDragging(card, e) {
-  document.body.classList.remove('no-select');
-  document.querySelectorAll(".task_column.active").forEach(col => {
-  col.classList.remove("active");
-});
-  if (!currentDrag) return;
-
-  const { ghost, originColumn } = currentDrag;
-  card.releasePointerCapture(e.pointerId);
-
-  // Drop-Ziel ermitteln
-  let el = document.elementFromPoint(e.clientX, e.clientY);
-  let targetCol = el?.closest(".task_column");
-
-  // Falls kein Treffer, wähle die nächste Spalte anhand Distanz
-  if (!targetCol) {
-    const nearestSpace = findNearestSpace(e.clientX, e.clientY);
-    targetCol = nearestSpace?.closest(".task_column");
-  }
-
-  // Gültigen Drop ausführen
-  if (targetCol && targetCol !== originColumn) {
-    const space = targetCol.querySelector(".task_space");
-    space.appendChild(card);
-    card.dataset.status = space.id;
-    updateTaskStatus(card.dataset.taskId, space.id);
-
-    console.log(`✅ Task ${card.dataset.taskId} verschoben nach ${space.id}`);
-
-  } else {
-    // kein gültiges Ziel → zurück zur Ursprungsspalte
-    originColumn.querySelector(".task_space").appendChild(card);
-
-    console.log("↩️ Kein gültiges Ziel – Karte zurückgesetzt");
-  }
-
-  // Ghost & Platzhalter entfernen
-  document.querySelectorAll('.drag-ghost').forEach(el => el.remove());
-  document.querySelectorAll(".drop_placeholder").forEach(e => e.remove());
-
-  // Status & Stile zurücksetzen
+function deleteDragSettings(card) {
+  document.querySelectorAll(".drag-ghost").forEach(n => n.remove());
+  document.querySelectorAll(".drop_placeholder").forEach(n => n.remove());
   card.classList.remove("dragging");
   card.style.touchAction = "auto";
   document.body.style.cursor = "";
   currentDrag = null;
 }
-
 
 // Helper 
 
@@ -251,11 +248,7 @@ function findNearestSpace(clientX, clientY) {
   return nearest;
 }
 
-
 export async function updateTaskStatus(taskId, newStatus) {
-  try {
-    const taskRef = ref(db, `tasks/${taskId}`);
-    await update(taskRef, { status: newStatus, updatedAt: Date.now() });
-  } catch (error) {
-  }
+  const taskRef = ref(db, `tasks/${taskId}`);
+  await update(taskRef, { status: newStatus, updatedAt: Date.now() });
 }
