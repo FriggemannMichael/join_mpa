@@ -660,7 +660,7 @@ h5 {
   padding: 0
 }
 
-.avatar {
+.task-card-avatar {
   align-items: center;
   background: #999;
   border-radius: 50%;
@@ -673,7 +673,7 @@ h5 {
   justify-content: center;
 }
 
-.avatar:not(:first-child) {
+.task-card-avatar:not(:first-child) {
   margin-left: -16px;
 }
 

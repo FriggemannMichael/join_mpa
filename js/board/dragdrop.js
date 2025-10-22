@@ -50,7 +50,7 @@ function onDown(card, e, s, HOLD_MS) {
   s.pointerId = e.pointerId;
 
   if (s.isTouch || window.innerWidth < 900) {
-    try { card.setPointerCapture(e.pointerId); } catch { }
+    card.setPointerCapture(e.pointerId);
     card.style.touchAction = "none";
   }
   if (s.isTouch) startHoldTimer(card, e, s, HOLD_MS);
@@ -178,7 +178,7 @@ function endDragging(card, e) {
   document.querySelectorAll(".task_column.active").forEach(col => { col.classList.remove("active"); });
   const { originColumn } = currentDrag;
   card.releasePointerCapture(e.pointerId);
-  
+
   let el = document.elementFromPoint(e.clientX, e.clientY);
   let targetCol = el?.closest(".task_column");
 

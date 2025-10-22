@@ -198,7 +198,7 @@ export function buildAssigneeGroup(task = {}) {
   const list = getAssignees(task), shown = list.slice(0, 3), rest = Math.max(0, list.length - 3);
   shown.forEach(a => {
     const name = a?.name;
-    const li = document.createElement("li"); li.className = "avatar"; li.title = name;
+    const li = document.createElement("li"); li.className = "task-card-avatar"; li.title = name;
     li.textContent = buildInitials(name || "");
     li.style.background = colorFromString(name || "");
     ul.append(li);

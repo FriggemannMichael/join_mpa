@@ -1,36 +1,7 @@
 import { boardTemplates } from "./board-templates.js";
-// import { setActivePriority } from "../board/addTask-Board.js"
-import { getInitials, getColorForInitials, colorFromString, setTaskStatus, loadTask } from "../board/utils.js"
-import {
-  // --- Assignees ---
-  populateAssignees,
-  buildAssigneeOptions,
-  renderAssigneeDropdown,
-  bindAssigneeEvents,
-  updateAssigneeSelection,
-  setAssigneeLoading,
-
-  // --- Priorität ---
-  bindPriorityButtons,
-  setActivePriority,
-
-  // --- Subtasks ---
-  addSubtask,
-  renderSubtasks,
-  createSubtaskElement,
-  deleteSubtask,
-  editSubtask,
-  saveSubtaskEdit,
-  cancelSubtaskEdit,
-  clearSubtaskInput,
-  initSubtaskInput,
-
-  // --- Form ---
-  readValue,
-  readActivePriority,
-
-  // subtasks,
-  setSubtasksFrom
+import {loadTask } from "../board/utils.js"
+import {populateAssignees,updateAssigneeSelection,
+  bindPriorityButtons, renderSubtasks, initSubtaskInput, setSubtasksFrom
 } from '../pages/add-task.js';
 
 import { icons } from "../common/svg-template.js"
