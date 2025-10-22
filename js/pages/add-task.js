@@ -411,7 +411,7 @@ export function readTaskData() {
     priority: readActivePriority(),
     assignees: assignees,
     subtasks: subtasks.slice(), // Array kopieren
-    status: "todo",
+    status: "toDo",
   };
 }
 
