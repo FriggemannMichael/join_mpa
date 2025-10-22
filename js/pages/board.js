@@ -7,10 +7,10 @@ import { bootLayout } from "../common/layout.js";
 import { guardPage } from "../common/pageGuard.js";
 import { subscribeToTasks } from "../common/tasks.js";
 import { enableCardInteractions } from "../board/dragdrop.js";
-import { colorFromString } from "../board/utils.js"
+import { colorFromString, clearModal, ScrollLock } from "../board/utils.js"
 import { initBoardSearch } from "../board/search.js";
 import { initAddTask } from "../board/addTaskModal.js"
-import { clearModal } from "../board/taskModal.js"
+
 
 initBoardPage();
 
@@ -250,28 +250,28 @@ export function bindColumnShortcuts() {
       const overlay = document.querySelector("#taskOverlay"); // zentrales Overlay
       const modal = document.querySelector("#taskModal");   // zentraler Inhaltsbereich
 
-      if (!overlay || !modal) return;
-
-      overlay.classList.add("active");
-
       // Inhalte gezielt je nach Typ rendern
       if (selector === "#addTaskOverlay") {
         await initAddTask();
       }
 
+      if (!overlay || !modal) return;
+
+      overlay.classList.add("active");
+
       return;
     }
 
     // === Schließen-Handling ===
-    const closeBtn = e.target.closest("[data-overlay-close]");
+
     const isBackdrop = e.target.classList.contains("backdrop_overlay");
 
-    if (closeBtn || isBackdrop) {
+    if (isBackdrop) {
       const overlay = document.querySelector("#taskOverlay");
       if (overlay) {
         overlay.classList.remove("active");
+        ScrollLock.release()
 
-        // Nach kurzer Zeit Modal-Inhalt leeren (Animation berücksichtigen)
         await clearModal()
       }
       return;

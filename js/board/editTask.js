@@ -34,7 +34,7 @@ import {
 } from '../pages/add-task.js';
 
 import { icons } from "../common/svg-template.js"
-import { closeTaskOverlay } from "../board/taskModal.js"
+import { closeTaskOverlay } from "../board/utils.js"
 
 
 export async function openEditForm(taskId) {

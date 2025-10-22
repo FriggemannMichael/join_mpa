@@ -4,6 +4,7 @@ import { icons } from "../common/svg-template.js";
 import { initialsFrom, getCurrentUser, ScrollLock, colorFromString, loadTask } from "./utils.js"
 import { openEditForm } from "../board/editTask.js"
 import { handleOutsideDropdownClick } from '../pages/add-task.js';
+import {closeTaskOverlay} from "./utils.js"
 
 
 export async function renderTaskModal(id, task = {}) {
@@ -32,7 +33,6 @@ export async function renderTaskModal(id, task = {}) {
 
   taskModalEventlistener(overlay, section)
 }
-
 
 // Task Modal Sektionen
 function taskModalHeader(categoryLabel, category) {
@@ -145,16 +145,15 @@ async function taskModalSubtask(task, id) {
       label.textContent = s?.text || String(s);
       label.setAttribute("for", cb.id);
 
-      // --- Eventlistener für Statusänderung ---
       cb.addEventListener("change", async () => {
-        const prev = !cb.checked; // für Rollback bei Fehler
-        li.classList.toggle("done", cb.checked); // sofortiges UI-Feedback
+        const prev = !cb.checked; 
+        li.classList.toggle("done", cb.checked); 
 
         try {
           await updateSubtaskDone(id, idx, cb.checked);
         } catch (err) {
           console.error("updateSubtaskDone failed:", err);
-          cb.checked = prev; // Zustand zurücksetzen
+          cb.checked = prev; 
           li.classList.toggle("done", cb.checked);
         }
       });
@@ -201,15 +200,6 @@ function taskModalEditDelete(task, id) {
 
 
 // Helper
-
-export function closeTaskOverlay() {
-  const overlay = document.getElementById("taskOverlay");
-  if (!overlay) return;
-
-  overlay.classList.remove("active");
-  overlay.cleanup?.();
-  clearModal()
-}
 
 function taskModalEventlistener(overlay, section) {
   const backdrop = overlay?.querySelector(".backdrop_overlay");
@@ -320,14 +310,3 @@ async function deleteTask(taskId) {
   closeTaskOverlay();
 }
 
-export function clearModal(delay = 300) {
-  const section = document.getElementById("taskModal");
-  if (!section) return;
-
-  setTimeout(() => {
-    section.innerHTML = "";
-    [...section.attributes].forEach(attr => {
-      if (attr.name !== "id") section.removeAttribute(attr.name);
-    });
-  }, delay);
-}
