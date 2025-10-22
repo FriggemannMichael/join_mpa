@@ -1,11 +1,15 @@
 import { boardTemplates } from "./board-templates.js";
-import {loadTask } from "../board/utils.js"
-import {populateAssignees,updateAssigneeSelection,
-  bindPriorityButtons, renderSubtasks, initSubtaskInput, setSubtasksFrom
+import { loadTask } from "../board/utils.js"
+import {
+  populateAssignees, updateAssigneeSelection,
+  bindPriorityButtons, renderSubtasks, initSubtaskInput, setSubtasksFrom, readTaskData
 } from '../pages/add-task.js';
 
 import { icons } from "../common/svg-template.js"
 import { closeTaskOverlay } from "../board/utils.js"
+import { updateTaskStatus } from "./dragdrop.js";
+import { db } from "../common/firebase.js";
+import { ref, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 
 export async function openEditForm(taskId) {
@@ -32,7 +36,7 @@ export async function openEditForm(taskId) {
   updateBtn.type = "button";
   updateBtn.className = "update-task-btn";
   updateBtn.textContent = "Update";
-  updateBtn.addEventListener("click", () => handleUpdateClick(taskId));
+  updateBtn.addEventListener("click", () => handleUpdate(taskId));
   footer.append(updateBtn);
 
   section.replaceChildren(header, body, footer);
@@ -75,4 +79,34 @@ function preselectAssignees(selected) {
     .querySelectorAll('#assignee-dropdown input[type="checkbox"]')
     .forEach(cb => cb.checked = selectedIds.has(cb.value));
   updateAssigneeSelection();
+}
+
+
+export async function handleUpdate(taskId) {
+  const get = sel => document.querySelector(sel);
+  const title = get('#taskTitle').value.trim();
+  if (!title) return alert('Please enter a title');
+
+  const task = {
+    title,
+    description: get('#taskDescription').value.trim(),
+    dueDate: get('#taskDueDate').value || null,
+    priority: document.querySelector('.priority-btn.active')?.dataset.priority || null,
+    assignee: [...document.querySelectorAll('#selected-assignee-avatars [data-id]')]
+      .map(a => ({ id: a.dataset.id, name: a.dataset.name, email: a.dataset.email })),
+    subtasks: [...document.querySelectorAll('#subtasksList .subtask-item')]
+      .map(s => ({ text: s.dataset.text || '', done: s.querySelector('input')?.checked || false })),
+    updatedAt: Date.now()
+  };
+
+  await updateTask(taskId, task);
+}
+
+export async function updateTask(taskId, task) {
+
+  const taskRef = ref(db, `tasks/${taskId}`);
+  await update(taskRef, task);
+  console.log(`✅ Task ${taskId} updated`);
+  return true;
+
 }
