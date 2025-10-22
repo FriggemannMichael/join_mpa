@@ -478,6 +478,7 @@ h5 {
 
 .subtask_header_task_overlay {
   font-size: var(--fs-input);
+  margin-top: 12px;
 }
 
 .subtask_task_overlay-2 {
@@ -521,13 +522,6 @@ h5 {
 .no-select * {
   user-select: none;
 }
-
-img {
-  -webkit-user-drag: none;
-  user-drag: none;
-}
-
-
 
 /* test bereich */
 .taskModal-label {
@@ -583,10 +577,6 @@ img {
 }
 
 /* Subtasks */
-.subtask_header_task_overlay {
-  margin-top: 12px;
-}
-
 .subtask_title_row {
   display: flex;
   font-weight: 600;
@@ -630,16 +620,13 @@ img {
 .subtask_item input[type="checkbox"] {
   height: 16px;
   width: 16px;
+  opacity: 0;
+  position: absolute
 }
 
 .subtask_item:hover {
   background-color: rgb(209 209 209 / 100%);
   border-radius: 12px;
-}
-
-.subtask_item input[type="checkbox"] {
-  opacity: 0;
-  position: absolute
 }
 
 .subtask_item label {
