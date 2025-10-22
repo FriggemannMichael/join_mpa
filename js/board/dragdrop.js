@@ -3,7 +3,9 @@ import { db } from "../common/firebase.js";
 import { ref, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { loadTask } from "./utils.js"
 
+
 let currentDrag = null;
+
 
 export function enableCardInteractions(card) {
   const MOBILE_BREAKPOINT = 900;
@@ -26,7 +28,7 @@ export function enableCardInteractions(card) {
   card.addEventListener("pointercancel", (e) => onUp(card, e, s, HOLD_MS));
 }
 
-/* ----------------- Helpers ----------------- */
+
 function initDragState() {
   return {
     timer: null,
@@ -36,6 +38,7 @@ function initDragState() {
     pointerId: null,
   };
 }
+
 
 function onDown(card, e, s, HOLD_MS) {
   if (e.pointerType === "mouse" && e.button !== 0) return;
@@ -56,27 +59,24 @@ function onDown(card, e, s, HOLD_MS) {
   if (s.isTouch) startHoldTimer(card, e, s, HOLD_MS);
 }
 
+
 function onMove(card, e, s, THRESHOLD) {
   if (!samePointer(e, s)) return;
   if (!s.isTouch && e.buttons === 0) return;
   if (s.isTouch && e.cancelable) e.preventDefault();
-
   if (!s.dragging) {
     if (s.isTouch && exceededThreshold(e, s, THRESHOLD)) {
       s.moved = true;
       clearHoldTimer(s);
-      return;
-    }
+      return; }
     if (!s.isTouch && exceededThreshold(e, s, THRESHOLD)) {
       startDrag(card, e, s);
-      return;
-    }
-    return;
-  }
-
+      return;}
+    return;}
   if (e.cancelable) e.preventDefault();
   moveDragging(card, e);
 }
+
 
 async function onUp(card, e, s, HOLD_MS) {
   clearHoldTimer(s);
@@ -90,6 +90,7 @@ async function onUp(card, e, s, HOLD_MS) {
   resetPointerState(card, e, s);
 }
 
+
 function startHoldTimer(card, e, s, HOLD_MS) {
   clearHoldTimer(s);
   s.timer = setTimeout(() => {
@@ -98,27 +99,33 @@ function startHoldTimer(card, e, s, HOLD_MS) {
   }, HOLD_MS);
 }
 
+
 function clearHoldTimer(s) {
   if (s.timer) { clearTimeout(s.timer); s.timer = null; }
 }
+
 
 function samePointer(e, s) {
   return s.isPointerDown && e.pointerId === s.pointerId;
 }
 
+
 function exceededThreshold(e, s, t) {
   return Math.abs(e.clientX - s.startX) > t || Math.abs(e.clientY - s.startY) > t;
 }
 
+
 function isTap(s, HOLD_MS) {
   return Date.now() - s.startTime < HOLD_MS;
 }
+
 
 function startDrag(card, e, s) {
   startDragging(card, e);
   clearHoldTimer(s);
   s.dragging = true;
 }
+
 
 function resetPointerState(card, e, s) {
   try { card.releasePointerCapture?.(e.pointerId); } catch { }
@@ -133,13 +140,12 @@ function resetPointerState(card, e, s) {
   }
 }
 
+
 async function openModal(card) {
   const id = card.dataset.taskId;
   const task = await loadTask(id);
   await renderTaskModal(id, task);
 }
-
-
 
 
 function startDragging(card, e) {
@@ -157,6 +163,7 @@ function startDragging(card, e) {
   card.classList.add("dragging");
 }
 
+
 function moveDragging(card, e) {
   if (!currentDrag) return;
 
@@ -172,6 +179,7 @@ function moveDragging(card, e) {
   });
   autoScrollOnEdge(e);
 }
+
 
 function endDragging(card, e) {
   document.body.classList.remove('no-select');
@@ -194,6 +202,7 @@ function endDragging(card, e) {
   deleteDragSettings(card);
 }
 
+
 function buildGhost(card, rect) {
   const ghost = card.cloneNode(true);
   ghost.classList.add("drag-ghost");
@@ -209,6 +218,7 @@ function buildGhost(card, rect) {
   return ghost;
 }
 
+
 function buildPlaceholders(originColumn, height) {
   document.querySelectorAll(".task_column").forEach(col => {
     if (col !== originColumn) {
@@ -219,6 +229,7 @@ function buildPlaceholders(originColumn, height) {
     }
   });
 }
+
 
 function deleteDragSettings(card) {
   document.querySelectorAll(".drag-ghost").forEach(n => n.remove());
@@ -255,10 +266,12 @@ function findNearestSpace(clientX, clientY) {
   return nearest;
 }
 
+
 export async function updateTaskStatus(taskId, newStatus) {
   const taskRef = ref(db, `tasks/${taskId}`);
   await update(taskRef, { status: newStatus, updatedAt: Date.now() });
 }
+
 
 function autoScrollOnEdge(e) {
   const SCROLL_ZONE = 80;
