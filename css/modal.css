@@ -15,9 +15,7 @@
 }
 
 .avatar-modal img {
-  height: 60%;
   object-fit: contain;
-  width: 60%;
 }
 
 /* Edit-Button für Modal (z.B. Speichern) wie Add-Button */
@@ -37,10 +35,6 @@
   min-width: 160px;
   padding: 15px 24px;
   transition: all 0.3s ease;
-}
-
-.savebtn:hover {
-  background-color: #1a2637;
 }
 
 .addcontact {

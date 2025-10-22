@@ -6,6 +6,13 @@ Ein leichtgewichtiges Kanban- / Task- und Kontakt-Management Tool mit Vanilla Ja
 
 Aktueller Stand: **Multi Page Application (MPA)** mit dedizierten HTML-Dokumenten pro Bereich. Öffentliche Seiten (`index.html`, `signup.html`, `privacy.html`, `legal.html`) stehen ohne Auth zur Verfügung. Authentifizierte Seiten (`summary.html`, `board.html`, `add-task.html`, `contacts.html`, `profile.html`, `settings.html`) schützen sich beim Laden über einen gemeinsamen Auth-Guard. Header und Sidebar werden als Templates ausgeliefert und pro Seite dynamisch eingebunden.
 
+### Modale & SVG-Icon-Integration
+
+- **Kontakt-Modale**: Für das Erstellen und Bearbeiten von Kontakten werden eigene Modale verwendet (`contacts.html`).
+- **Input-Icons**: Alle relevanten Input-Felder (Name, Email, Telefon) besitzen rechts ein Icon (`<span class="input__icon--right">`), das per JS aus `svg-template.js` gesetzt wird.
+- **SVG-Icons**: Die Icons werden zentral in `js/common/svg-template.js` als String-Objekte verwaltet und dynamisch per `innerHTML` in die jeweiligen `<span>`- oder Button-Elemente eingefügt.
+- **Button-Icons**: Die Save-/Create-Buttons in den Modalen nutzen SVG-Icons (z. B. `checkwhite`), die immer in der gewünschten Farbe (z. B. weiß) per JS gesetzt werden. CSS-Hover-Effekte werden gezielt überschrieben, um die Farbe zu fixieren.
+
 ## 📁 Projektstruktur (Ist-Zustand)
 
 ```
@@ -24,11 +31,13 @@ join/
 │   ├── root.css               # Design Tokens / Reset
 │   ├── main.css               # Layout / Navigation / Standalone Pages
 │   └── *.css                  # Feature-spezifische Styles (Contacts, Board, …)
+│   ├── modal.css             # Modale für Kontakte, inkl. Icon-Positionierung
 ├── img/
 │   ├── icon/                  # SVGs & PNGs
 │   └── fonts/                 # Schriftdateien (Inter)
 ├── js/
 │   ├── common/                # Shared Utilities & Services (Firebase, Auth, Layout)
+│   │   ├── svg-template.js   # Zentrale SVG-Icon-Sammlung (dynamisch)
 │   └── pages/                 # Seiten-spezifische Controller (login, summary, …)
 ├── templates/
 │   ├── header.html            # Partials für Layout-Shell
@@ -100,15 +109,14 @@ chmod +x .husky/pre-commit
 | Guarding       | `pageGuard.ensureAuthenticated()` auf geschützten Seiten |
 | UI Komponenten | Summary, Board, Add Task, Contacts, Profile, Settings    |
 | Erweiterbar    | Persistente Tasks & Kontakt-CRUD, Firestore optional     |
+| Modale & Icons | Dynamische SVG-Icon-Integration, Input-Icons, Kontakt-Modale |
 
 ## 🖥️ Browser-Unterstützung
 
 Getestet / Zielumgebung:
 
-- Chrome / Edge 90+
-- Firefox 88+
-- Safari 14+
-- Mobile (iOS Safari, Chrome Mobile)
+
+Modale und SVG-Icons sind in allen Zielbrowsern getestet und funktionieren konsistent.
 
 ## ✅ Code- & Stil-Richtlinien
 

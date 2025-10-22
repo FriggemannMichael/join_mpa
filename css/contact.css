@@ -437,6 +437,7 @@ Nutze stattdessen die spezifische Klasse .contact-page für das Kontaktseiten-La
   height: 120px;
   justify-content: center;
   width: 120px;
+  aspect-ratio: 1;
 }
 
 .small-info h3 {

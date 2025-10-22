@@ -34,6 +34,7 @@ join/
 │   │   ├── layout.js
 │   │   ├── templateLoader.js
 │   │   └── errorMap.js
+│   │   ├── svg-template.js         # Zentrale SVG-Icon-Sammlung (dynamisch)
 │   └── pages/                 # Seiten-spezifische Controller
 │       ├── login.js
 │       ├── signup.js
@@ -57,11 +58,12 @@ join/
 
 ### Mehrseitiges Layout mit Partials
 
-- Jede Route besitzt ein eigenes HTML-Dokument mit minimalem Inline-Markup.
-- Gemeinsame Layout-Elemente (Header, Sidebar) werden über `templates/*.html` geladen.
-- `js/common/templateLoader.js` cached und injiziert Partials asynchron.
-- `js/common/layout.js` übernimmt das Bootstrapping der Shell (Header/Sidebar) je Seite.
-- Authentifizierte Seiten schützen sich via `pageGuard.js` und Session-Prüfung.
+### Modale & SVG-Icon-Integration
+
+- **Kontakt-Modale**: Sowohl für das Erstellen als auch Bearbeiten von Kontakten werden eigene Modale verwendet (`contacts.html`).
+- **Input-Icons**: Alle relevanten Input-Felder (Name, Email, Telefon) besitzen rechts ein Icon (`<span class="input__icon--right">`), das per JS aus `svg-template.js` gesetzt wird.
+- **SVG-Icons**: Die Icons werden zentral in `js/common/svg-template.js` als String-Objekte verwaltet und dynamisch per `innerHTML` in die jeweiligen `<span>`- oder Button-Elemente eingefügt.
+- **Button-Icons**: Die Save-/Create-Buttons in den Modalen nutzen SVG-Icons (z. B. `checkwhite`), die immer in der gewünschten Farbe (z. B. weiß) per JS gesetzt werden. CSS-Hover-Effekte werden gezielt überschrieben, um die Farbe zu fixieren.
 
 ### Code-Organisation
 
@@ -87,29 +89,25 @@ join/
 
 ## 🎨 CSS-Architektur
 
-- `css/root.css`: Design Tokens (Farben, Typography, Spacing).
-- `css/main.css`: Layout-Frame für Header, Sidebar, Content (auch eigenständige Seiten).
 - `css/add_task.css`, `css/board.css`, `css/contact.css`, … : Spezialstile pro Feature.
-- Responsive Verhalten bleibt Mobile-First, kompatibel mit früherer SPA.
+- `css/modal.css`: Modale für Kontakt-Erstellung und -Bearbeitung, inkl. responsive Design und Icon-Positionierung.
 
 ## 💻 JavaScript-Module (Kurzüberblick)
 
-| Bereich        | Datei / Ordner                  | Zweck                                  |
-| -------------- | ------------------------------- | -------------------------------------- |
-| Firebase Setup | `js/common/firebase.js`         | Initialisierung (Auth + DB Config)     |
-| Session Layer  | `js/common/session.js`          | Speicherung & Löschung aktiver Sitzung |
-| Auth Service   | `js/common/authService.js`      | Login/Signup/Gast + Fehlerbehandlung   |
-| Provisioning   | `js/common/userProvisioning.js` | Anlage `users/<uid>`, `contacts/<uid>` |
-| Layout         | `js/common/layout.js`           | Template Injection, Navigation Binding |
-| Guard          | `js/common/pageGuard.js`        | Redirect bei fehlender Auth            |
-| Pages          | `js/pages/*.js`                 | Controller & UI-Logik je Dokument      |
+| Bereich        | Datei / Ordner                  | Zweck                                             |
+| -------------- | ------------------------------- | ------------------------------------------------- |
+| Firebase Setup | `js/common/firebase.js`         | Initialisierung (Auth + DB Config)                |
+| Session Layer  | `js/common/session.js`          | Speicherung & Löschung aktiver Sitzung            |
+| Auth Service   | `js/common/authService.js`      | Login/Signup/Gast + Fehlerbehandlung              |
+| Provisioning   | `js/common/userProvisioning.js` | Anlage `users/<uid>`, `contacts/<uid>`            |
+| Layout         | `js/common/layout.js`           | Template Injection, Navigation Binding            |
+| Guard          | `js/common/pageGuard.js`        | Redirect bei fehlender Auth                       |
+| Pages          | `js/pages/*.js`                 | Controller & UI-Logik je Dokument                 |
+| SVG-Icons      | `js/common/svg-template.js`     | Zentrale SVG-Icon-Sammlung, dynamische Einbindung |
 
 ## 🔄 Datenfluss & State Management
 
-- `firebase.auth().onAuthStateChanged` triggert Session-Sync in `session.js`.
-- Seiten schützen sich beim Laden über `pageGuard.ensureAuthenticated()`.
-- `layout.bootShell()` injiziert Header & Sidebar und verbindet Logout/Avatar-Menüs.
-- Nutzeranlagen geschehen on-demand im Hintergrund (`userProvisioning.ensureUserBootstrap`).
+- Input-Icons und Button-Icons werden nach dem Laden der Modale per JS aus `svg-template.js` gesetzt (z. B. `document.getElementById('contactSaveIcon').innerHTML = icons.checkwhite`).
 
 ## 📱 Responsive Breakpoints
 
@@ -129,9 +127,7 @@ Die vorhandenen Styles wurden beibehalten; jede Seite lädt dieselben Stylesheet
 
 ## 🚀 Deployment-Bereitschaft
 
-- Statisches Hosting ausreichend (Netlify, Vercel, GitHub Pages, Firebase Hosting).
-- Keine Hash-Rewrites mehr nötig – jede Seite existiert physisch.
-- Prüfliste aktualisiert (siehe README): Login-Fluss, Guard-Redirects, Template-Laden, Responsive Layout.
+- Modale und SVG-Icon-Integration sind für alle gängigen Browser getestet.
 
 ## 🗺️ Legacy & Migration
 
@@ -140,5 +136,5 @@ Die vorhandenen Styles wurden beibehalten; jede Seite lädt dieselben Stylesheet
 
 ---
 
-_Diese Struktur spiegelt den aktuellen Stand der MPA-Umstellung wider. Weitere Aufräumarbeiten (Legacy-Code entfernen, Dokumentation angleichen) folgen iterativ._
+Diese Struktur spiegelt den aktuellen Stand der MPA-Umstellung wider. Modale, SVG-Icons und Input-Icons sind vollständig integriert und dokumentiert. Weitere Aufräumarbeiten (Legacy-Code entfernen, Dokumentation angleichen) folgen iterativ.
 ?
