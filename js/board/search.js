@@ -1,29 +1,14 @@
-// function matchTask(card, term) {
-//   const title = card.querySelector(".task_header")?.textContent || "";
-//   const description = card.querySelector(".task_description")?.textContent || "";
-//   const category = card.querySelector(".task_category")?.textContent || "";
-//   const text = `${title} ${description} ${category}`.toLowerCase();
-//   return text.includes(term.toLowerCase());
-// }
-
-
-/**
- * Board-Suche
- * @module search
- */
 
 /**
  * Initialisiert die Suche auf dem Board
  */
 export function initBoardSearch() {
-  const button = document.getElementById("searchButton") || document.querySelector(".search_button");
+  const button = document.getElementById("searchButton");
   const input  = document.getElementById("searchInput");
-  if (!button || !input) return;
 
   const run = () => runSearch(input.value.trim());
   button.addEventListener("click", run);
   input.addEventListener("keydown", (e) => { if (e.key === "Enter") run(); });
-  input.addEventListener("input", debounce(run, 150));
 
   toggleSearchMessage(false);
 }
@@ -65,9 +50,3 @@ function toggleSearchMessage(show) {
   msg.style.display = show ? "block" : "none";
 }
 
-/**
- * Einfache Debounce-Hilfe
- */
-function debounce(fn, ms = 200) {
-  let t; return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
-}
