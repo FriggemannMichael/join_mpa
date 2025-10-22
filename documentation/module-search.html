@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: login</title>
+    <title>JSDoc: Module: search</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: login</h1>
+    <h1 class="page-title">Module: search</h1>
 
     
 
@@ -38,7 +38,7 @@
     <div class="container-overview">
     
         
-            <div class="description">Login-Seite für Benutzeranmeldung</div>
+            <div class="description">Board-Suche</div>
         
 
         
@@ -87,7 +87,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pages_login.js.html">pages/login.js</a>, <a href="pages_login.js.html#line1">line 1</a>
+        <a href="board_search.js.html">board/search.js</a>, <a href="board_search.js.html#line10">line 10</a>
     </li></ul></dd>
     
 
@@ -144,7 +144,7 @@
     
 
     
-    <h4 class="name" id="~bindGuestButton"><span class="type-signature">(inner) </span>bindGuestButton<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".initBoardSearch"><span class="type-signature">(static) </span>initBoardSearch<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -152,7 +152,7 @@
 
 
 <div class="description">
-    Bindet Event-Listener für den Guest-Button
+    Initialisiert die Suche auf dem Board
 </div>
 
 
@@ -196,7 +196,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pages_login.js.html">pages/login.js</a>, <a href="pages_login.js.html#line54">line 54</a>
+        <a href="board_search.js.html">board/search.js</a>, <a href="board_search.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -232,7 +232,7 @@
     
 
     
-    <h4 class="name" id="~bindLoginForm"><span class="type-signature">(inner) </span>bindLoginForm<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~debounce"><span class="type-signature">(inner) </span>debounce<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -240,7 +240,7 @@
 
 
 <div class="description">
-    Bindet Event-Listener für das Login-Formular
+    Einfache Debounce-Hilfe
 </div>
 
 
@@ -284,7 +284,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pages_login.js.html">pages/login.js</a>, <a href="pages_login.js.html#line25">line 25</a>
+        <a href="board_search.js.html">board/search.js</a>, <a href="board_search.js.html#line71">line 71</a>
     </li></ul></dd>
     
 
@@ -320,7 +320,7 @@
     
 
     
-    <h4 class="name" id="~handleLoginSubmit"><span class="type-signature">(async, inner) </span>handleLoginSubmit<span class="signature">(event)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~matchTask"><span class="type-signature">(inner) </span>matchTask<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -328,7 +328,7 @@
 
 
 <div class="description">
-    Verarbeitet das Login-Formular-Submit
+    Prüft Titel, Beschreibung, Kategorie
 </div>
 
 
@@ -337,55 +337,6 @@
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>event</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Event</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">Das Submit-Event</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -421,7 +372,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pages_login.js.html">pages/login.js</a>, <a href="pages_login.js.html#line35">line 35</a>
+        <a href="board_search.js.html">board/search.js</a>, <a href="board_search.js.html#line51">line 51</a>
     </li></ul></dd>
     
 
@@ -457,7 +408,7 @@
     
 
     
-    <h4 class="name" id="~initLoginPage"><span class="type-signature">(async, inner) </span>initLoginPage<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="~runSearch"><span class="type-signature">(inner) </span>runSearch<span class="signature">()</span><span class="type-signature"></span></h4>
     
 
     
@@ -465,7 +416,7 @@
 
 
 <div class="description">
-    Initialisiert die Login-Seite mit Redirect-Check und UI-Setup
+    Führt die Suche aus und blendet Karten ein/aus
 </div>
 
 
@@ -509,7 +460,95 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="pages_login.js.html">pages/login.js</a>, <a href="pages_login.js.html#line14">line 14</a>
+        <a href="board_search.js.html">board/search.js</a>, <a href="board_search.js.html#line34">line 34</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="~toggleSearchMessage"><span class="type-signature">(inner) </span>toggleSearchMessage<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Zeigt oder versteckt „Keine Ergebnisse“-Nachricht
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="board_search.js.html">board/search.js</a>, <a href="board_search.js.html#line62">line 62</a>
     </li></ul></dd>
     
 
