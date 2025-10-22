@@ -1,29 +1,40 @@
-import { db, auth } from "../common/firebase.js";
-import { ref, update, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { db } from "../common/firebase.js";
+import {
+  ref,
+  update,
+  get,
+  child,
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { icons } from "../common/svg-template.js";
-import { initialsFrom, getCurrentUser, ScrollLock, colorFromString, loadTask } from "./utils.js"
-import { openEditForm } from "../board/editTask.js"
-import { handleOutsideDropdownClick } from '../pages/add-task.js';
-import {closeTaskOverlay} from "./utils.js"
-
+import {
+  initialsFrom,
+  getCurrentUser,
+  ScrollLock,
+  colorFromString,
+} from "./utils.js";
+import { openEditForm } from "../board/editTask.js";
+import { handleOutsideDropdownClick } from "../pages/add-task.js";
+import { closeTaskOverlay } from "./utils.js";
 
 export async function renderTaskModal(id, task = {}) {
-  ScrollLock.set()
+  ScrollLock.set();
   const overlay = document.getElementById("taskOverlay");
   const section = document.getElementById("taskModal");
-  section.classList.add("task-overlay")
+  section.classList.add("task-overlay");
   section.dataset.taskId = id;
   const h2 = document.createElement("h2");
   h2.textContent = task.title;
 
-  const scrollableSection = document.createElement("div")
+  const scrollableSection = document.createElement("div");
   scrollableSection.classList.add("taskModal-main");
-  scrollableSection.append(h2,
+  scrollableSection.append(
+    h2,
     taskModalDescription(task.description),
     taskModalDueDate(task.dueDate),
     taskModalpriority(task.priority),
     await taskModalAssignees(task, id),
-    await taskModalSubtask(task, id))
+    await taskModalSubtask(task, id)
+  );
 
   section.replaceChildren(
     taskModalHeader(task.categoryLabel, task.category),
@@ -31,7 +42,7 @@ export async function renderTaskModal(id, task = {}) {
     taskModalEditDelete(task, id)
   );
 
-  taskModalEventlistener(overlay, section)
+  taskModalEventlistener(overlay, section);
 }
 
 // Task Modal Sektionen
@@ -85,10 +96,11 @@ function taskModalpriority(priority) {
   const priorityDiv = document.createElement("div");
   priorityDiv.classList.add("priority");
   const priorityP = document.createElement("p");
-  priorityP.classList.add("taskModal-label")
+  priorityP.classList.add("taskModal-label");
   priorityP.textContent = "Priority:";
   const prioritySpan = document.createElement("span");
-  const formatted = priority.charAt(0).toUpperCase() + priority.slice(1).toLowerCase();
+  const formatted =
+    priority.charAt(0).toUpperCase() + priority.slice(1).toLowerCase();
   prioritySpan.textContent = formatted;
   const icon = document.createElement("img");
   icon.classList.add("priority-icon");
@@ -104,7 +116,7 @@ async function taskModalAssignees(task) {
   const assigned = document.createElement("div");
   assigned.classList.add("assigned_to_task_overlay");
   const assignedTo = document.createElement("p");
-  assignedTo.classList.add("taskModal-label")
+  assignedTo.classList.add("taskModal-label");
   assignedTo.textContent = "Assigned To:";
   const assigneesDiv = document.createElement("div");
   const contacts = await getContactsMap();
@@ -146,14 +158,14 @@ async function taskModalSubtask(task, id) {
       label.setAttribute("for", cb.id);
 
       cb.addEventListener("change", async () => {
-        const prev = !cb.checked; 
-        li.classList.toggle("done", cb.checked); 
+        const prev = !cb.checked;
+        li.classList.toggle("done", cb.checked);
 
         try {
           await updateSubtaskDone(id, idx, cb.checked);
         } catch (err) {
           console.error("updateSubtaskDone failed:", err);
-          cb.checked = prev; 
+          cb.checked = prev;
           li.classList.toggle("done", cb.checked);
         }
       });
@@ -169,7 +181,6 @@ async function taskModalSubtask(task, id) {
 
   return document.createDocumentFragment();
 }
-
 
 function taskModalEditDelete(task, id) {
   const footer = document.createElement("div");
@@ -192,12 +203,11 @@ function taskModalEditDelete(task, id) {
   const separator = document.createElement("span");
   separator.className = "separator-task-toolbar";
   separator.setAttribute("aria-hidden", "true");
-  separator.innerHTML = "|"
+  separator.innerHTML = "|";
 
   footer.append(deleteBtn, separator, editBtn);
   return footer;
 }
-
 
 // Helper
 
@@ -221,8 +231,8 @@ function taskModalEventlistener(overlay, section) {
     overlay.cleanup = () => {
       overlay.removeEventListener("click", onBackdropClick);
       document.removeEventListener("keydown", onKeydown);
-      document.removeEventListener("click", handleOutsideDropdownClick)
-      ScrollLock.release()
+      document.removeEventListener("click", handleOutsideDropdownClick);
+      ScrollLock.release();
       delete overlay.dataset.bound;
     };
   }
@@ -248,7 +258,6 @@ function taskModalEventlistener(overlay, section) {
   overlay?.classList.add("active");
 }
 
-
 export async function getContactsMap() {
   const snap = await get(child(ref(db), "contacts"));
   return snap.exists() ? snap.val() : {};
@@ -258,8 +267,12 @@ function normAssignees(task) {
   return Array.isArray(task?.assignees) ? task.assignees : [];
 }
 
-
-export function renderAssignees(container, assigneesArr = [], contactsMap = {}, currentUser) {
+export function renderAssignees(
+  container,
+  assigneesArr = [],
+  contactsMap = {},
+  currentUser
+) {
   container.classList.add("assignees");
   container.innerHTML = "";
 
@@ -268,11 +281,11 @@ export function renderAssignees(container, assigneesArr = [], contactsMap = {}, 
     return;
   }
 
-  assigneesArr.forEach(a => {
+  assigneesArr.forEach((a) => {
     const uid = a?.uid;
     const contact = contactsMap[uid];
     const name = contact?.name || a?.name || "Unbekannt";
-    const isYou = currentUser && (uid === currentUser.uid);
+    const isYou = currentUser && uid === currentUser.uid;
     const color = colorFromString(name);
     const initials = initialsFrom(name);
 
@@ -300,7 +313,10 @@ function normalizeSubtasks(task) {
 
 async function updateSubtaskDone(taskId, index, done) {
   const path = `tasks/${taskId}/subtasks/${index}/done`;
-  await update(ref(db), { [path]: !!done, [`tasks/${taskId}/updatedAt`]: Date.now() });
+  await update(ref(db), {
+    [path]: !!done,
+    [`tasks/${taskId}/updatedAt`]: Date.now(),
+  });
 }
 
 async function deleteTask(taskId) {
@@ -309,4 +325,3 @@ async function deleteTask(taskId) {
   console.log("🗑️ Task deleted:", taskId);
   closeTaskOverlay();
 }
-
