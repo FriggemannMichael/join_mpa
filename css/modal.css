@@ -15,9 +15,7 @@
 }
 
 .avatar-modal img {
-  height: 60%;
   object-fit: contain;
-  width: 60%;
 }
 
 /* Edit-Button für Modal (z.B. Speichern) wie Add-Button */
@@ -37,10 +35,6 @@
   min-width: 160px;
   padding: 15px 24px;
   transition: all 0.3s ease;
-}
-
-.savebtn:hover {
-  background-color: #1a2637;
 }
 
 .addcontact {
@@ -151,6 +145,21 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+.input {
+  position: relative; /* nötig, damit das Icon relativ zum Input positioniert werden kann */
+}
+
+.input__icon--right {
+  position: absolute;
+  right: 16px; /* Abstand vom rechten Rand */
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none; /* verhindert, dass das Icon klicks blockiert */
+}
+
+.input-with-icon {
+  padding-right: 40px; /* je nach Icongröße anpassen */
 }
 
 .input input {

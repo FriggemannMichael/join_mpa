@@ -624,7 +624,6 @@ body.dark-theme .goback:hover {
   align-self: stretch;
   background: var(--grey-light);
   border-radius: 1rem;
-  margin: 0 1.5rem;
   width: 0.125rem;
 }
 
