@@ -120,3 +120,72 @@ export const icons = {
 </svg>
 `,
 };
+
+export function call(props = {}) {
+  // Alias für phone-Icon
+  const svg = icons.phone;
+  let svgTag = svg;
+  // Attribute dynamisch einfügen
+  if (Object.keys(props).length > 0) {
+    svgTag = svg.replace(
+      "<svg ",
+      `<svg ${Object.entries(props)
+        .map(([k, v]) => `${k}="${v}"`)
+        .join(" ")} `
+    );
+  }
+  return svgTag;
+}
+
+export function person(props = {}) {
+  const svg = icons.person;
+  let svgTag = svg;
+  if (Object.keys(props).length > 0) {
+    svgTag = svg.replace(
+      "<svg ",
+      `<svg ${Object.entries(props)
+        .map(([k, v]) => `${k}="${v}"`)
+        .join(" ")} `
+    );
+  }
+  return svgTag;
+}
+export function mail(props = {}) {
+  const svg = icons.mail;
+  let svgTag = svg;
+  if (Object.keys(props).length > 0) {
+    svgTag = svg.replace(
+      "<svg ",
+      `<svg ${Object.entries(props)
+        .map(([k, v]) => `${k}="${v}"`)
+        .join(" ")} `
+    );
+  }
+  return svgTag;
+}
+export function check(props = {}) {
+  const svg = icons.check;
+  let svgTag = svg;
+  if (Object.keys(props).length > 0) {
+    svgTag = svg.replace(
+      "<svg ",
+      `<svg ${Object.entries(props)
+        .map(([k, v]) => `${k}="${v}"`)
+        .join(" ")} `
+    );
+  }
+  return svgTag;
+}
+export function close(props = {}) {
+  const svg = icons.close;
+  let svgTag = svg;
+  if (Object.keys(props).length > 0) {
+    svgTag = svg.replace(
+      "<svg ",
+      `<svg ${Object.entries(props)
+        .map(([k, v]) => `${k}="${v}"`)
+        .join(" ")} `
+    );
+  }
+  return svgTag;
+}

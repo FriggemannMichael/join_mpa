@@ -1,4 +1,42 @@
-/* Avatar für Modale */
+.input input + .input__icon--right ~ input {
+  padding-right: 40px;
+}
+.input input.input-with-icon {
+  padding-right: 40px;
+}
+.btn__icon--right svg {
+  fill: #fff !important;
+  color: #fff !important;
+}
+/* SVG-Icon-Integration für Inputs und Buttons */
+.input__icon--right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  height: 24px;
+  width: 24px;
+  pointer-events: none;
+}
+.input {
+  position: relative;
+}
+.btn__icon--right {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  min-width: 24px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.icon--btn {
+  height: 24px;
+  width: 24px;
+  display: inline-block;
+  vertical-align: middle;
+}
 .avatar-modal {
   width: 120px;
   height: 120px;
@@ -13,18 +51,29 @@
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   flex-shrink: 0;
 }
-/* Add-Contact Modal spezifische Klassen */
 .creatbtn {
   padding: 15px 24px;
   background-color: #2a3647;
   border: none;
   border-radius: 8px;
-  width: 214px;
   height: 57px;
   font-size: 21px;
   font-weight: 700;
   color: #ffffff;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 220px;
+  min-width: 160px;
+}
+.creatbtn .btn__icon--left svg {
+  fill: #fff;
+  color: #fff;
+}
+.creatbtn .btn__icon--right svg {
+  fill: #fff;
+  color: #fff;
 }
 
 .taskbetter {
@@ -484,150 +533,3 @@ Nutze stattdessen die spezifische Klasse .contact-page für das Kontaktseiten-La
 }
 
 /* Modal Styles aus modal.html */
-.addcontact {
-  width: 1212px;
-  height: 592px;
-  border-radius: 30px;
-  background-color: #ffffff;
-  display: flex;
-  overflow: hidden;
-  border: 1px solid #d0d7e2;
-}
-.leftside {
-  width: 453px;
-  height: 100%;
-  background-color: #2a3647;
-  border-radius: 20px 0 0 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  padding-left: 40px;
-  gap: 40px;
-}
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 40px;
-}
-.titleblock {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 5px;
-}
-.imglogo {
-  width: 54px;
-  height: 67px;
-}
-.separator {
-  width: 90px;
-  height: 3px;
-  margin: 0;
-}
-.rightside {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 40px;
-  padding-left: 60px;
-  flex: 1;
-  background-color: #ffffff;
-  position: relative;
-}
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  flex-shrink: 0;
-  padding-left: 60px;
-}
-.form form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-.input input {
-  width: 350px;
-  padding: 12px 16px;
-  border: 1px solid #d0d7e2;
-  border-radius: 8px;
-  font-size: 16px;
-}
-.btneditcontact {
-  display: flex;
-  gap: 24px;
-  margin-top: 16px;
-  align-items: flex-start;
-}
-.delbtn {
-  padding: 15px 24px;
-  background-color: #ffffff;
-  border: 1px solid #d0d7e2;
-  border-radius: 8px;
-  width: 113px;
-  height: 55px;
-  font-size: 21px;
-  font-weight: 700;
-  cursor: pointer;
-}
-.savebtn {
-  padding: 15px 24px;
-  background-color: #2a3647;
-  border: none;
-  border-radius: 8px;
-  width: 113px;
-  height: 55px;
-  font-size: 21px;
-  font-weight: 700;
-  color: #ffffff;
-  cursor: pointer;
-}
-.btnclosemodal {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: transparent;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-}
-@media (max-width: 1000px) {
-  .addcontact {
-    flex-direction: column;
-    width: 90%;
-    height: auto;
-  }
-  .leftside {
-    width: 100%;
-    border-radius: 20px 20px 0 0;
-    padding-left: 20px;
-    gap: 20px;
-  }
-  .rightside {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 40px;
-    padding-left: 60px;
-    flex: 1;
-    background-color: #ffffff;
-    position: relative;
-  }
-  .avatar {
-    margin-bottom: 20px;
-  }
-  .form form {
-    align-items: center;
-    padding-left: 80px;
-  }
-  .input input {
-    width: 100%;
-  }
-  .btneditcontact {
-    justify-content: center;
-  }
-}
