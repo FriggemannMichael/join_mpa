@@ -1,35 +1,4 @@
-import {
-    // --- Assignees ---
-    populateAssignees,
-    buildAssigneeOptions,
-    renderAssigneeDropdown,
-    bindAssigneeEvents,
-    updateAssigneeSelection,
-    setAssigneeLoading,
-
-    // --- Priorität ---
-    bindPriorityButtons,
-    setActivePriority,
-
-    // --- Subtasks ---
-    addSubtask,
-    renderSubtasks,
-    createSubtaskElement,
-    deleteSubtask,
-    editSubtask,
-    saveSubtaskEdit,
-    cancelSubtaskEdit,
-    clearSubtaskInput,
-    initSubtaskInput,
-
-    // --- Form ---
-    readValue,
-    readActivePriority,
-    bindActionButtons,
-
-    // subtasks,
-    setSubtasksFrom
-} from '../pages/add-task.js';
+import { populateAssignees, bindPriorityButtons, initSubtaskInput, bindActionButtons } from '../pages/add-task.js';
 import { boardTemplates } from "./board-templates.js";
 import { closeTaskOverlay, ScrollLock } from "./utils.js"
 
