@@ -203,7 +203,7 @@ export function buildAssigneeGroup(task = {}) {
     li.style.background = colorFromString(name || "");
     ul.append(li);
   });
-  if (rest) { const more = document.createElement("li"); more.className = "avatar more"; more.textContent = `+${rest}`; ul.append(more); }
+  if (rest) { const more = document.createElement("li"); more.className = "task-card-avatar more"; more.textContent = `+${rest}`; ul.append(more); }
   wrap.append(ul); return wrap;
 }
 
