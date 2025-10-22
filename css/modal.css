@@ -1,0 +1,329 @@
+/* Avatar für Edit-Modal wie Add-Modal */
+.avatar-modal {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: #d0d7e2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 48px;
+  color: #ffffff;
+  border: 3px solid #ffffff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.avatar-modal img {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+}
+
+/* Edit-Button für Modal (z.B. Speichern) wie Add-Button */
+.savebtn {
+  padding: 15px 24px;
+  background-color: #2a3647;
+  border: none;
+  border-radius: 8px;
+  min-width: 160px;
+  height: 55px;
+  font-size: 21px;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.savebtn:hover {
+  background-color: #1a2637;
+}
+/* Edit-Button für Modal (z.B. Speichern) */
+.savebtn {
+  padding: 15px 24px;
+  background-color: #2a3647;
+  border: none;
+  border-radius: 8px;
+  width: 113px;
+  height: 55px;
+  font-size: 21px;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.savebtn:hover {
+  background-color: #1a2637;
+}
+.addcontact {
+  width: 100%;
+  max-width: 1212px;
+  height: auto;
+  min-height: 592px;
+  border-radius: 30px;
+  background-color: #ffffff;
+  display: flex;
+  overflow: hidden;
+  border: 1px solid #d0d7e2;
+}
+
+.leftside {
+  width: 453px;
+  min-height: 592px;
+  background-color: #2a3647;
+  border-radius: 20px 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px;
+  gap: 40px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.titleblock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.imglogo {
+  width: 54px;
+  height: 67px;
+}
+
+h1 {
+  font-weight: 600;
+  font-size: 61px;
+  line-height: 120%;
+  color: #ffffff;
+}
+
+.taskbetter {
+  font-weight: 400;
+  font-size: 27px;
+  line-height: 120%;
+  color: #ffffff;
+}
+
+.separator {
+  width: 90px;
+  height: 3px;
+}
+
+.rightside {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 40px;
+  padding: 60px;
+  flex: 1;
+  background-color: #ffffff;
+  position: relative;
+}
+
+.avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: #d0d7e2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 48px;
+  color: #ffffff;
+  border: 3px solid #ffffff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.avatar img {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  flex: 1;
+  max-width: 400px;
+}
+
+.form form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d0d7e2;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: "Poppins", sans-serif;
+}
+
+.input input:focus {
+  outline: none;
+  border-color: #2a3647;
+}
+
+.btneditcontact {
+  display: flex;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+.delbtn {
+  padding: 15px 24px;
+  background-color: #ffffff;
+  border: 1px solid #d0d7e2;
+  border-radius: 8px;
+  min-width: 113px;
+  height: 55px;
+  font-size: 21px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.delbtn:hover {
+  background-color: #f5f5f5;
+}
+
+.creatbtn {
+  padding: 15px 24px;
+  background-color: #2a3647;
+  border: none;
+  border-radius: 8px;
+  min-width: 160px;
+  height: 55px;
+  font-size: 21px;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.creatbtn:hover {
+  background-color: #1a2637;
+}
+
+.btnclosemodal {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: transparent;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+  color: #2a3647;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.btnclosemodal:hover {
+  transform: scale(1.1);
+}
+
+@media (max-width: 1000px) {
+  body {
+    padding: 10px;
+  }
+
+  .addcontact {
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .leftside {
+    width: 100%;
+    min-height: auto;
+    border-radius: 20px 20px 0 0;
+    padding: 30px 20px;
+    gap: 20px;
+  }
+
+  h1 {
+    font-size: 40px;
+  }
+
+  .taskbetter {
+    font-size: 20px;
+  }
+
+  .rightside {
+    flex-direction: column;
+    padding: 40px 20px;
+    gap: 30px;
+  }
+
+  .avatar {
+    margin: 0;
+  }
+
+  .form {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .input input {
+    width: 100%;
+  }
+
+  .btneditcontact {
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .delbtn,
+  .creatbtn {
+    flex: 1;
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 500px) {
+  h1 {
+    font-size: 32px;
+  }
+
+  .taskbetter {
+    font-size: 18px;
+  }
+
+  .btneditcontact {
+    flex-direction: column;
+  }
+
+  .delbtn,
+  .creatbtn {
+    width: 100%;
+  }
+}
