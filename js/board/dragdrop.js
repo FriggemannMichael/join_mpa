@@ -6,7 +6,14 @@ import { loadTask } from "./utils.js"
 let currentDrag = null;
 
 export function enableCardInteractions(card) {
-  card.style.touchAction = "auto";
+  const MOBILE_BREAKPOINT = 900;
+  const updateTouchAction = () => {
+    const isMobileView = window.innerWidth < MOBILE_BREAKPOINT;
+    card.style.touchAction = isMobileView ? "none" : "auto";
+    card.style.webkitUserSelect = isMobileView ? "none" : "auto";
+  };
+  updateTouchAction();
+  window.addEventListener("resize", updateTouchAction);
 
   const HOLD_MS = 300;
   const MOVE_THRESHOLD = 5;
@@ -42,12 +49,17 @@ function onDown(card, e, s, HOLD_MS) {
   s.isPointerDown = true;
   s.pointerId = e.pointerId;
 
+  if (s.isTouch || window.innerWidth < 900) {
+    try { card.setPointerCapture(e.pointerId); } catch { }
+    card.style.touchAction = "none";
+  }
   if (s.isTouch) startHoldTimer(card, e, s, HOLD_MS);
 }
 
 function onMove(card, e, s, THRESHOLD) {
   if (!samePointer(e, s)) return;
   if (!s.isTouch && e.buttons === 0) return;
+  if (s.isTouch && e.cancelable) e.preventDefault();
 
   if (!s.dragging) {
     if (s.isTouch && exceededThreshold(e, s, THRESHOLD)) {
@@ -62,7 +74,7 @@ function onMove(card, e, s, THRESHOLD) {
     return;
   }
 
-  e.preventDefault();
+  if (e.cancelable) e.preventDefault();
   moveDragging(card, e);
 }
 
@@ -78,7 +90,6 @@ async function onUp(card, e, s, HOLD_MS) {
   resetPointerState(card, e, s);
 }
 
-/* ---- tiny utilities ---- */
 function startHoldTimer(card, e, s, HOLD_MS) {
   clearHoldTimer(s);
   s.timer = setTimeout(() => {
@@ -110,11 +121,16 @@ function startDrag(card, e, s) {
 }
 
 function resetPointerState(card, e, s) {
-  card.releasePointerCapture?.(e.pointerId);
+  try { card.releasePointerCapture?.(e.pointerId); } catch { }
   s.dragging = false;
   s.moved = false;
   s.isPointerDown = false;
   s.pointerId = null;
+
+  if (window.innerWidth >= 900) {
+    card.style.touchAction = "auto";
+    card.style.webkitUserSelect = "auto";
+  }
 }
 
 async function openModal(card) {
@@ -125,26 +141,21 @@ async function openModal(card) {
 
 
 
-// ab hier ist alles alt 
+
 function startDragging(card, e) {
   const rect = card.getBoundingClientRect();
   const originColumn = card.closest(".task_column");
   card.setPointerCapture(e.pointerId);
   card.style.touchAction = "none";
-
   document.body.classList.add('no-select');
-
   const ghost = buildGhost(card, rect);
   const offsetX = e.clientX - rect.left;
   const offsetY = e.clientY - rect.top;
-
   currentDrag = { card, ghost, originColumn, offsetX, offsetY };
   document.body.appendChild(ghost);
-
   buildPlaceholders(originColumn, rect.height);
   card.classList.add("dragging");
 }
-
 
 function moveDragging(card, e) {
   if (!currentDrag) return;
@@ -159,16 +170,15 @@ function moveDragging(card, e) {
   document.querySelectorAll(".task_column").forEach(col => {
     col.classList.toggle("active", col === hoveredCol);
   });
+  autoScrollOnEdge(e);
 }
 
 function endDragging(card, e) {
   document.body.classList.remove('no-select');
-  document.querySelectorAll(".task_column.active").forEach(col => {
-    col.classList.remove("active");
-  });
-  if (!currentDrag) return;
-  const { ghost, originColumn } = currentDrag;
+  document.querySelectorAll(".task_column.active").forEach(col => { col.classList.remove("active"); });
+  const { originColumn } = currentDrag;
   card.releasePointerCapture(e.pointerId);
+  
   let el = document.elementFromPoint(e.clientX, e.clientY);
   let targetCol = el?.closest(".task_column");
 
@@ -179,15 +189,10 @@ function endDragging(card, e) {
 
   if (targetCol && targetCol !== originColumn) {
     const space = targetCol.querySelector(".task_space");
-    space.appendChild(card);
-    card.dataset.status = space.id;
     updateTaskStatus(card.dataset.taskId, space.id);
   }
-
   deleteDragSettings(card);
 }
-
-
 
 function buildGhost(card, rect) {
   const ghost = card.cloneNode(true);
@@ -219,12 +224,14 @@ function deleteDragSettings(card) {
   document.querySelectorAll(".drag-ghost").forEach(n => n.remove());
   document.querySelectorAll(".drop_placeholder").forEach(n => n.remove());
   card.classList.remove("dragging");
-  card.style.touchAction = "auto";
+
+  if (window.innerWidth >= 900) {
+    card.style.touchAction = "auto";
+  }
   document.body.style.cursor = "";
   currentDrag = null;
 }
 
-// Helper 
 
 function findNearestSpace(clientX, clientY) {
   const spaces = document.querySelectorAll(".task_space");
@@ -251,4 +258,18 @@ function findNearestSpace(clientX, clientY) {
 export async function updateTaskStatus(taskId, newStatus) {
   const taskRef = ref(db, `tasks/${taskId}`);
   await update(taskRef, { status: newStatus, updatedAt: Date.now() });
+}
+
+function autoScrollOnEdge(e) {
+  const SCROLL_ZONE = 80;
+  const SCROLL_SPEED = 15;
+
+  const { clientY } = e;
+  const vh = window.innerHeight;
+
+  if (clientY < SCROLL_ZONE) {
+    window.scrollBy({ top: -SCROLL_SPEED, behavior: "instant" });
+  } else if (clientY > vh - SCROLL_ZONE) {
+    window.scrollBy({ top: SCROLL_SPEED, behavior: "instant" });
+  }
 }

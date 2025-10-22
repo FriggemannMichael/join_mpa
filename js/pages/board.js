@@ -75,7 +75,7 @@ function toggleSearchMessage(show) {
  */
 function renderBoard(tasks) {
   const columns = {
-    todo: {
+    toDo : {
       id: "toDo",
       emptyText: "No task To do",
       withPlaceholder: false,
