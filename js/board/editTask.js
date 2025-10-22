@@ -36,11 +36,10 @@ export async function openEditForm(taskId) {
   updateBtn.type = "button";
   updateBtn.className = "update-task-btn";
   updateBtn.textContent = "Update";
-  updateBtn.addEventListener("click", () => handleUpdate(taskId));
   footer.append(updateBtn);
-
   section.replaceChildren(header, body, footer);
 
+  updateBtn.addEventListener("click", () => handleUpdate(taskId, section));
 
   await populateAssignees();
   bindPriorityButtons();
@@ -82,25 +81,29 @@ function preselectAssignees(selected) {
 }
 
 
-export async function handleUpdate(taskId) {
-  const get = sel => document.querySelector(sel);
-  const title = get('#taskTitle').value.trim();
+export async function handleUpdate(taskId, root = document) {
+  const get = sel => root.querySelector(sel);
+  const all = sel => [...root.querySelectorAll(sel)];
+
+  const titleEl = get('#taskTitle');
+  const title = titleEl.value.trim();
   if (!title) return alert('Please enter a title');
 
   const task = {
     title,
-    description: get('#taskDescription').value.trim(),
-    dueDate: get('#taskDueDate').value || null,
-    priority: document.querySelector('.priority-btn.active')?.dataset.priority || null,
-    assignee: [...document.querySelectorAll('#selected-assignee-avatars [data-id]')]
+    description: get('#taskDescription')?.value.trim() || '',
+    dueDate: get('#taskDueDate')?.value || null,
+    priority: get('.priority-btn.active')?.dataset.priority || null,
+    assignee: all('#selected-assignee-avatars [data-id]')
       .map(a => ({ id: a.dataset.id, name: a.dataset.name, email: a.dataset.email })),
-    subtasks: [...document.querySelectorAll('#subtasksList .subtask-item')]
+    subtasks: all('#subtasksList .subtask-item')
       .map(s => ({ text: s.dataset.text || '', done: s.querySelector('input')?.checked || false })),
     updatedAt: Date.now()
   };
 
   await updateTask(taskId, task);
 }
+
 
 export async function updateTask(taskId, task) {
 
