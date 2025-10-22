@@ -13,6 +13,7 @@ import {
   set,
   remove,
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { person, mail, call, check, close } from "../common/svg-template.js";
 
 /**
  * Generiert eine Farbe basierend auf den Initialen
@@ -235,6 +236,15 @@ function openEditModal(contact) {
   document.getElementById("contactName").value = contact.name;
   document.getElementById("contactEmail").value = contact.email;
   document.getElementById("contactPhone").value = contact.phone || "";
+
+  // Avatar im Edit-Modal aktualisieren
+  const initials = buildInitials(contact.name);
+  const color = getColorForInitials(initials);
+  const initialsElem = document.getElementById("contactInitials");
+  if (initialsElem) {
+    initialsElem.textContent = initials;
+    initialsElem.parentElement.style.backgroundColor = color;
+  }
 }
 
 /**
@@ -317,6 +327,117 @@ function bindModalControls() {
   if (nameInput) {
     nameInput.addEventListener("input", () => updateAddContactAvatar());
   }
+
+  // --- ICONS RENDERN: Edit Contact Modal ---
+  const contactModalCloseIcon = document.getElementById(
+    "contactModalCloseIcon"
+  );
+  if (contactModalCloseIcon) {
+    contactModalCloseIcon.innerHTML = close({
+      class: "icon icon--btn",
+      width: 24,
+      height: 24,
+      "aria-hidden": "true",
+    });
+  }
+
+  const contactNameIcon = document.getElementById("contactNameIcon");
+  if (contactNameIcon) {
+    contactNameIcon.innerHTML = person({
+      width: 24,
+      height: 24,
+      "aria-hidden": "true",
+    });
+  }
+
+  const contactEmailIcon = document.getElementById("contactEmailIcon");
+  if (contactEmailIcon) {
+    contactEmailIcon.innerHTML = mail({
+      width: 24,
+      height: 24,
+      "aria-hidden": "true",
+    });
+  }
+
+  const contactPhoneIcon = document.getElementById("contactPhoneIcon");
+  if (contactPhoneIcon) {
+    contactPhoneIcon.innerHTML = call({
+      width: 24,
+      height: 24,
+      "aria-hidden": "true",
+    });
+  }
+
+  const contactSaveIcon = document.getElementById("contactSaveIcon");
+  if (contactSaveIcon) {
+    contactSaveIcon.innerHTML = check({
+      class: "icon icon--btn btn__icon--right",
+      width: 24,
+      height: 24,
+      "aria-hidden": "true",
+    });
+  }
+
+  // --- ICONS RENDERN: Add Contact Modal ---
+  const addContactModalCloseIcon = document.getElementById(
+    "addContactModalCloseIcon"
+  );
+  if (addContactModalCloseIcon) {
+    addContactModalCloseIcon.innerHTML = close({
+      class: "icon icon--btn",
+      width: 24,
+      height: 24,
+      "aria-hidden": "true",
+    });
+  }
+
+  const addContactNameIcon = document.getElementById("addContactNameIcon");
+  if (addContactNameIcon) {
+    addContactNameIcon.innerHTML = person({
+      width: 24,
+      height: 24,
+      "aria-hidden": "true",
+    });
+  }
+
+  const addContactEmailIcon = document.getElementById("addContactEmailIcon");
+  if (addContactEmailIcon) {
+    addContactEmailIcon.innerHTML = mail({
+      width: 24,
+      height: 24,
+      "aria-hidden": "true",
+    });
+  }
+
+  const addContactPhoneIcon = document.getElementById("addContactPhoneIcon");
+  if (addContactPhoneIcon) {
+    addContactPhoneIcon.innerHTML = call({
+      width: 24,
+      height: 24,
+      "aria-hidden": "true",
+    });
+  }
+
+  const addContactCancelIcon = document.getElementById("addContactCancelIcon");
+  if (addContactCancelIcon) {
+    addContactCancelIcon.innerHTML = close({
+      class: "icon icon--btn btn__icon--right",
+      width: 24,
+      height: 24,
+      "aria-hidden": "true",
+    });
+  }
+
+  const addContactCreateIcon = document.getElementById("addContactCreateIcon");
+  if (addContactCreateIcon) {
+    addContactCreateIcon.innerHTML = check({
+      class: "icon icon--btn btn__icon--right",
+      width: 24,
+      height: 24,
+      "aria-hidden": "true",
+    });
+  }
+
   /**
    * Aktualisiert den Avatar im Add-Contact-Modal live
    */
@@ -329,29 +450,42 @@ function bindModalControls() {
     const placeholderImg = document.getElementById(
       "addContactAvatarPlaceholder"
     );
+
     if (avatar) avatar.style.backgroundColor = initials ? color : "";
     if (initialsElem) {
       initialsElem.textContent = initials || "?";
       initialsElem.style.display = initials ? "block" : "none";
     }
-    if (placeholderImg)
+    if (placeholderImg) {
       placeholderImg.style.display = initials ? "none" : "block";
+    }
   }
+
   // Add-Contact-Modal Controls
   const addCloseBtn = document.getElementById("addContactModalClose");
   const addCancelBtn = document.getElementById("addContactCancelBtn");
   const addForm = document.getElementById("addContactForm");
+
   if (addCloseBtn) {
-    addCloseBtn.addEventListener("click", () => toggleAddContactOverlay(false));
+    addCloseBtn.addEventListener("click", () => {
+      resetAddContactForm();
+      updateAddContactAvatar();
+      toggleAddContactOverlay(false);
+    });
   }
+
   if (addCancelBtn) {
-    addCancelBtn.addEventListener("click", () =>
-      toggleAddContactOverlay(false)
-    );
+    addCancelBtn.addEventListener("click", () => {
+      resetAddContactForm();
+      updateAddContactAvatar();
+      toggleAddContactOverlay(false);
+    });
   }
+
   if (addForm) {
     addForm.addEventListener("submit", handleAddContactCreate);
   }
+
   /**
    * Behandelt das Erstellen eines neuen Kontakts aus dem Add-Contact-Modal
    * @param {Event} event - Das Submit-Event
@@ -379,16 +513,15 @@ function bindModalControls() {
       if (field) field.value = "";
     });
   }
+
+  // Edit-Contact-Modal Controls
   const closeBtn = document.getElementById("contactModalClose");
-  const cancelBtn = document.getElementById("contactCancelBtn");
-  const form = document.getElementById("contactForm");
   if (closeBtn) {
-    closeBtn.addEventListener("click", () => toggleOverlay(false));
+    closeBtn.addEventListener("click", () => {
+      resetContactForm();
+      toggleOverlay(false);
+    });
   }
-  if (cancelBtn) {
-    cancelBtn.addEventListener("click", () => toggleOverlay(false));
-  }
-  // Der Submit-Handler wird dynamisch beim Editieren gesetzt (setupEditFormHandler)
 }
 
 /**
