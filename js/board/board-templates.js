@@ -7,18 +7,24 @@ export const boardTemplates = {
         </div>
 
         <div class="form-group">
-            <label for="taskDescription">Description</label>
-            <textarea id="taskDescription" placeholder="Enter a Description"></textarea>
+         <label for="taskDescription">Description</label>
+                <textarea
+                  id="taskDescription"
+                  placeholder="Enter a Description"
+                ></textarea>
         </div>
 
         <div class="form-group">
-            <label for="taskDueDate">Due date</label>
-            <input type="date" lang="en-GB" id="taskDueDate" />
+            <label for="taskDueDate"
+                  >Due date<sup class="required" aria-hidden="true"
+                    >*</sup
+            ></label
+            <input type="date" id="taskDueDate" placeholder="dd/mm/yyyy" />
         </div>
 
 
         <div class="form-group">
-                <label>Priority</label>
+                    <label>Priority</label>
                 <div
                   class="priority-buttons"
                   role="group"
@@ -92,7 +98,7 @@ export const boardTemplates = {
 
         
        <div class="form-group">
-                <label for="subtasks">Subtasks</label>
+                <label for="taskSubtasks">Subtasks</label>
                 <div class="subtask-input-container">
                   <input
                     type="text"
