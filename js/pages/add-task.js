@@ -392,7 +392,7 @@ export function readTaskData() {
   );
   const assignees = Array.from(checkboxes).map((cb) => ({
     uid: cb.value,
-    name: cb.dataset.name,
+    name: cb.dataset.name?.replace(/\s*\(Du\)$/i, "").trim() || "",
     email: cb.dataset.email,
   }));
 
