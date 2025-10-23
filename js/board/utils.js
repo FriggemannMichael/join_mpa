@@ -1,5 +1,6 @@
 import { db, auth } from "../common/firebase.js";
 import { ref, update, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { icons } from "../common/svg-template.js";
 
 export async function loadTask(id) {
   const root = ref(db);
@@ -111,4 +112,31 @@ export function clearModal(delay = 300) {
       if (attr.name !== "id") section.removeAttribute(attr.name);
     });
   }, delay);
+}
+
+
+export function showAlert(type, ms = 1800) {
+  const alert = document.createElement('div');
+  alert.className = 'alert task-added';
+  document.body.append(alert);
+
+  const texts = {
+    created: `Task added to board ${icons.board} `,
+    updated: 'Task updated successfully',
+    deleted: 'Task deleted from board',
+    signUp: 'You Signed Up successfully',
+    createContact: 'Contact successfully created'
+  };
+
+  alert.innerHTML = texts[type];
+  if (type === 'created') alert.classList.add('center');
+
+  requestAnimationFrame(() => alert.classList.add('visible'));
+
+  clearTimeout(alert.t);
+  alert.t = setTimeout(() => {
+    alert.classList.remove('visible', 'center');
+    alert.remove();
+    if (type === 'created') closeTaskOverlay?.();
+  }, ms);
 }

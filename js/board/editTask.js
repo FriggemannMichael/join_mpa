@@ -6,7 +6,7 @@ import {
 } from '../pages/add-task.js';
 
 import { icons } from "../common/svg-template.js"
-import { closeTaskOverlay } from "../board/utils.js"
+import { closeTaskOverlay,showAlert } from "../board/utils.js"
 import { updateTaskStatus } from "./dragdrop.js";
 import { db } from "../common/firebase.js";
 import { ref, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
@@ -102,14 +102,13 @@ export async function handleUpdate(taskId, root = document) {
   };
 
   await updateTask(taskId, task);
+  closeTaskOverlay()
 }
 
 
 export async function updateTask(taskId, task) {
-
   const taskRef = ref(db, `tasks/${taskId}`);
   await update(taskRef, task);
-  console.log(`✅ Task ${taskId} updated`);
+  showAlert('updated');
   return true;
-
 }

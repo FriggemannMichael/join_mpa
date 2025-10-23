@@ -14,7 +14,7 @@ import {
 } from "./utils.js";
 import { openEditForm } from "../board/editTask.js";
 import { handleOutsideDropdownClick } from "../pages/add-task.js";
-import { closeTaskOverlay } from "./utils.js";
+import { closeTaskOverlay,showAlert } from "./utils.js";
 
 export async function renderTaskModal(id, task = {}) {
   ScrollLock.set();
@@ -231,7 +231,7 @@ export function taskModalEventlistener(overlay, section) {
       if (section?._handler) section.removeEventListener("click", section._handler);
       delete overlay.dataset.bound;
       delete section._handler;
-      ScrollLock.release(); 
+      ScrollLock.release();
     };
   }
 
@@ -270,10 +270,9 @@ export function renderAssignees(
     const uid = a?.uid;
     const contact = contactsMap[uid];
     const name = contact?.name || a?.name;
-   
-    const isYou = (currentUser && uid == currentUser.uid) || (a?.email &&  a.email === currentUser.email);;
+
+    const isYou = (currentUser && uid == currentUser.uid) || (a?.email && a.email === currentUser.email);;
     const color = colorFromString(name);
-    console.log(name)
     const initials = getInitials(name);
 
     const badge = document.createElement("span");
@@ -311,6 +310,7 @@ async function deleteTask(taskId) {
   await update(ref(db), { [path]: null });
   console.log("🗑️ Task deleted:", taskId);
   closeTaskOverlay();
+  showAlert('deleted');
 }
 
 function handleSectionClick(e) {
@@ -319,7 +319,33 @@ function handleSectionClick(e) {
 
   const { action, taskId } = btn.dataset;
   if (action === "edit") return openEditForm(taskId);
-  if (action === "delete" && confirm("Are you sure you want to delete this task?")) {
-    return deleteTask(taskId);
+  if (action === "delete") {
+    confirmModal("Are you sure you want to delete this task?", () => {
+      deleteTask(taskId);
+    });
   }
+}
+
+export function confirmModal(message = "Are you sure?", onConfirm) {
+  const overlay = document.createElement("div");
+  overlay.className = "modal_overlay";
+
+  const modal = document.createElement("div");
+  modal.className = "modal_box";
+
+  modal.innerHTML = `
+    <p class="modal_message">${message}</p>
+    <div class="modal_actions">
+      <button class="btn_cancel">Cancel</button>
+      <button class="btn_confirm">Delete</button>
+    </div>
+  `;
+
+  overlay.append(modal);
+  document.body.append(overlay);
+  modal.querySelector(".btn_cancel").addEventListener("click", () => overlay.remove());
+  modal.querySelector(".btn_confirm").addEventListener("click", () => {
+    overlay.remove();
+    onConfirm?.(); 
+  });
 }
