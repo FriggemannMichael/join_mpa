@@ -242,7 +242,7 @@ export function renderAssigneeDropdown(dropdown, options) {
 //   // Schließen bei Klick außerhalb
 // document.addEventListener("click", handleOutsideDropdownClick);
 // }
-// 
+//
 // Funktionaler für andere seiten ->
 
 export function bindAssigneeEvents() {
@@ -250,7 +250,10 @@ export function bindAssigneeEvents() {
   const dropdown = document.getElementById("assignee-dropdown");
   if (!header.dataset.bound) {
     header.dataset.bound = "1";
-    header.addEventListener("click", (e) => { e.stopPropagation(); toggleAssigneeDropdown(); });
+    header.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleAssigneeDropdown();
+    });
   }
   if (!dropdown.dataset.bound) {
     dropdown.dataset.bound = "1";
@@ -263,11 +266,9 @@ export function bindAssigneeEvents() {
   dropdown.closeCtrl = ctrl;
   document.addEventListener("click", handleOutsideDropdownClick, {
     capture: true,
-    signal: ctrl.signal
+    signal: ctrl.signal,
   });
 }
-
-
 
 /**
  * Togglet die Sichtbarkeit des Assignee-Dropdowns
@@ -529,8 +530,8 @@ export function selectCategory(value) {
       value === "technical-task"
         ? "Technical Task"
         : value === "user-story"
-          ? "User Story"
-          : value;
+        ? "User Story"
+        : value;
     placeholder.textContent = text;
   }
 
@@ -806,20 +807,17 @@ export function cancelSubtaskEdit(id) {
   renderSubtasks();
 }
 
-
 export function setSubtasksFrom(list) {
   const arr = Array.isArray(list) ? list : [];
   subtasks.length = 0;
   arr.forEach((s, i) => {
     subtasks.push({
-      id: s?.id ?? (Date.now() + i),
+      id: s?.id ?? Date.now() + i,
       text: (s?.text ?? "").trim(),
       completed: !!(s?.completed ?? s?.done),
     });
   });
 }
-
-
 
 export function handleOutsideDropdownClick(e) {
   if (e.cancelBubble) return;
