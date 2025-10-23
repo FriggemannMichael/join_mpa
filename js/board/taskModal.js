@@ -7,7 +7,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { icons } from "../common/svg-template.js";
 import {
-  initialsFrom,
+  getInitials,
   getCurrentUser,
   ScrollLock,
   colorFromString,
@@ -211,18 +211,14 @@ function taskModalEditDelete(task, id) {
 
 // Helper
 
-function taskModalEventlistener(overlay, section) {
+export function taskModalEventlistener(overlay, section) {
   const backdrop = overlay?.querySelector(".backdrop_overlay");
-
-  // --- Close handling (Backdrop + ESC) ---
-  if (overlay && !overlay.dataset.bound) {
+  if (!overlay) return;
+  if (!overlay.dataset.bound) {
     const onBackdropClick = (e) => {
       if (e.target === overlay || e.target === backdrop) closeTaskOverlay();
     };
-
-    const onKeydown = (e) => {
-      if (e.key === "Escape") closeTaskOverlay();
-    };
+    const onKeydown = (e) => { if (e.key === "Escape") closeTaskOverlay(); };
 
     overlay.addEventListener("click", onBackdropClick);
     document.addEventListener("keydown", onKeydown);
@@ -232,30 +228,19 @@ function taskModalEventlistener(overlay, section) {
       overlay.removeEventListener("click", onBackdropClick);
       document.removeEventListener("keydown", onKeydown);
       document.removeEventListener("click", handleOutsideDropdownClick);
-      ScrollLock.release();
+      if (section?._handler) section.removeEventListener("click", section._handler);
       delete overlay.dataset.bound;
+      delete section._handler;
+      ScrollLock.release(); 
     };
   }
 
-  section.addEventListener("click", async (e) => {
-    e.stopPropagation();
+  if (!section._handler) {
+    section._handler = handleSectionClick;
+    section.addEventListener("click", section._handler);
+  }
 
-    const btn = e.target.closest("[data-action]");
-    if (!btn) return;
-
-    const { action, taskId } = btn.dataset;
-
-    if (action === "edit") {
-      openEditForm(taskId);
-    }
-
-    if (action === "delete") {
-      const confirmed = confirm("Are you sure you want to delete this task?");
-      if (confirmed) await deleteTask(taskId);
-    }
-  });
-
-  overlay?.classList.add("active");
+  overlay.classList.add("active");
 }
 
 export async function getContactsMap() {
@@ -284,10 +269,12 @@ export function renderAssignees(
   assigneesArr.forEach((a) => {
     const uid = a?.uid;
     const contact = contactsMap[uid];
-    const name = contact?.name || a?.name || "Unbekannt";
-    const isYou = currentUser && uid === currentUser.uid;
+    const name = contact?.name || a?.name;
+   
+    const isYou = (currentUser && uid == currentUser.uid) || (a?.email &&  a.email === currentUser.email);;
     const color = colorFromString(name);
-    const initials = initialsFrom(name);
+    console.log(name)
+    const initials = getInitials(name);
 
     const badge = document.createElement("span");
     badge.className = "assignee_badge";
@@ -324,4 +311,15 @@ async function deleteTask(taskId) {
   await update(ref(db), { [path]: null });
   console.log("🗑️ Task deleted:", taskId);
   closeTaskOverlay();
+}
+
+function handleSectionClick(e) {
+  const btn = e.target.closest("[data-action]");
+  if (!btn) return;
+
+  const { action, taskId } = btn.dataset;
+  if (action === "edit") return openEditForm(taskId);
+  if (action === "delete" && confirm("Are you sure you want to delete this task?")) {
+    return deleteTask(taskId);
+  }
 }
