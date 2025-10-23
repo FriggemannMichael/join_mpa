@@ -1,7 +1,18 @@
+/* Spezifischer linker Abstand nur für die Kontakte-Seite */
+.contacts__container {
+  padding-left: 11.5rem;
+}
+/* Abstand unterhalb des Add-Contact-Button-Containers */
+#contact-list-actions {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
 .input input + .input__icon--right ~ input {
   padding-right: 40px;
 }
-
+body {
+  background-color: var(--background-color);
+}
 .input input.input-with-icon {
   padding-right: 40px;
 }
@@ -102,9 +113,7 @@
     font-size: 1.1rem;
     margin-bottom: 1rem;
   }
-  margin: 2rem 0 1rem;
-
-  /* max-width: 569px; */
+  margin: 4rem 0 1rem;
   min-height: 73px;
   opacity: 1;
   width: 100%;
@@ -201,22 +210,13 @@
   z-index: 1;
 }
 
-/*
-.main__container {
-    height: 100vh;
-    padding-bottom: 0px;
-    padding-left: 232px;
-}
-Diese Regel wurde auskommentiert, um Konflikte mit anderen Seiten zu vermeiden.
-Nutze stattdessen die spezifische Klasse .contact-page für das Kontaktseiten-Layout.
-*/
-
 /* Layout für die Kontaktseite analog zu Board/Add-Task */
 .contacts__container {
   background: var(--background-color);
   display: flex;
   flex-direction: column;
   height: 100vh;
+  overflow: hidden; /* Verhindert Scrollen des gesamten Containers */
 }
 
 .contacts-grid {
@@ -224,7 +224,8 @@ Nutze stattdessen die spezifische Klasse .contact-page für das Kontaktseiten-La
   gap: 2rem;
   grid-template-columns: 1fr 2fr;
   height: 100%;
-  padding: 2rem 2rem 2rem 0;
+
+  overflow: hidden; /* Verhindert Scrollen des Grid */
 }
 
 .contacts-list-section {
@@ -232,15 +233,10 @@ Nutze stattdessen die spezifische Klasse .contact-page für das Kontaktseiten-La
   display: flex;
   flex-direction: column;
   height: 100%;
-  max-width: 400px;
+  max-width: 456px;
   min-width: auto;
-
-  /* background: var(--white); */
-
-  /* border-radius: var(--border-radius-lg); */
-
-  /* box-shadow: 5px 0 0 0 var(--box-shadow-light); */
-  padding: 2rem 1rem;
+  background-color: var(--white);
+  padding-bottom: 4rem; /* Verhindert Scrollen der Section */
 }
 
 /* Korrigierte .contacts-separator Definition */
@@ -256,24 +252,47 @@ Nutze stattdessen die spezifische Klasse .contact-page für das Kontaktseiten-La
   background: var(--secondary-color);
 }
 
+/* NEUE SCROLLBAR STYLES FÜR KONTAKTLISTE */
 .contacts-list {
   flex: 1;
   list-style: none;
   margin: 0;
   padding: 0;
   width: 100%;
+  overflow-y: auto; /* Vertikales Scrollen aktivieren */
+  overflow-x: hidden; /* Horizontales Scrollen verhindern */
+  max-height: calc(
+    100vh - 280px
+  ); /* Höhe anpassen: 100vh minus Header + Padding */
+  padding-right: 8px; /* Platz für Scrollbar schaffen */
 }
 
-/* .contact-detail-section {
-  background: var(--white);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--box-shadow-light);
-  padding: 2rem;
-  height: 100%;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-} */
+/* Scrollbar Styling für Webkit Browser (Chrome, Safari, Edge) */
+.contacts-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.contacts-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 5px;
+  margin: 4px 0;
+}
+
+.contacts-list::-webkit-scrollbar-thumb {
+  background: var(--grey-medium);
+  border-radius: 5px;
+  transition: background 0.3s ease;
+}
+
+.contacts-list::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}
+
+/* Scrollbar für Firefox */
+.contacts-list {
+  scrollbar-width: thin;
+  scrollbar-color: var(--grey-medium) #f1f1f1;
+}
 
 .contact-detail-placeholder {
   align-items: center;
@@ -318,6 +337,10 @@ Nutze stattdessen die spezifische Klasse .contact-page für das Kontaktseiten-La
   .contact-detail-section {
     margin-top: 2rem;
   }
+
+  .contacts-list {
+    max-height: 50vh; /* Auf Tablets/Mobile angepasste Höhe */
+  }
 }
 
 @media (width <= 600px) {
@@ -331,6 +354,10 @@ Nutze stattdessen die spezifische Klasse .contact-page für das Kontaktseiten-La
     max-width: unset;
     min-width: unset;
     padding: 1rem;
+  }
+
+  .contacts-list {
+    max-height: 60vh; /* Mehr Platz auf kleinen Screens */
   }
 }
 
@@ -369,6 +396,7 @@ Nutze stattdessen die spezifische Klasse .contact-page für das Kontaktseiten-La
   padding: 12px 16px;
   text-align: center;
   width: 352px;
+  flex-shrink: 0; /* Verhindert, dass der Button beim Scrollen schrumpft */
 }
 
 .contact-btn img {
@@ -391,12 +419,14 @@ Nutze stattdessen die spezifische Klasse .contact-page für das Kontaktseiten-La
   letter-spacing: 0%;
   line-height: 120%;
   position: relative;
+  flex-shrink: 0; /* Verhindert, dass die Buchstaben beim Scrollen schrumpfen */
 }
 
 .contact-seperator {
   border: 1px solid #d1d1d1;
   border-radius: 3px;
   width: 352px;
+  flex-shrink: 0; /* Verhindert, dass der Separator beim Scrollen schrumpft */
 }
 
 .contact-person {
@@ -407,6 +437,7 @@ Nutze stattdessen die spezifische Klasse .contact-page für das Kontaktseiten-La
   gap: 35px;
   height: 78px;
   padding: 15px 24px;
+  transition: background-color 0.2s ease; /* Smooth Hover-Effekt */
 }
 
 .contact-person:hover {
@@ -424,6 +455,7 @@ Nutze stattdessen die spezifische Klasse .contact-page für das Kontaktseiten-La
   height: 42px;
   justify-content: center;
   width: 42px;
+  flex-shrink: 0; /* Verhindert, dass Initialen schrumpfen */
 }
 
 .initals-big {
@@ -554,5 +586,3 @@ Nutze stattdessen die spezifische Klasse .contact-page für das Kontaktseiten-La
 .contact-mail a {
   color: #007cee;
 }
-
-/* Modal Styles aus modal.html */
