@@ -9,6 +9,7 @@ export function initBoardSearch() {
   const run = () => runSearch(input.value.trim());
   button.addEventListener("click", run);
   input.addEventListener("keydown", (e) => { if (e.key === "Enter") run(); });
+  input.addEventListener("keydown", run);
 
   toggleSearchMessage(false);
 }
