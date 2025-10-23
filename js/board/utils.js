@@ -1,14 +1,6 @@
 import { db, auth } from "../common/firebase.js";
 import { ref, update, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-export function initialsFrom(str = "") {
-  const s = String(str).trim();
-  if (!s) return "?";
-  const parts = s.split(/\s+/);
-  const ini = (parts[0]?.[0] || "") + (parts[1]?.[0] || "");
-  return (ini || s[0]).toUpperCase();
-}
-
 export async function loadTask(id) {
   const root = ref(db);
   const snap = await get(child(root, `tasks/${id}`));
@@ -72,20 +64,7 @@ export const ScrollLock = (() => {
  */
 
 export function getColorForInitials(initials) {
-  const colors = [
-    "#FF6B6B",
-    "#00B8D4",
-    "#1DE9B6",
-    "#00CFAE",
-    "#00BCD4",
-    "#2196F3",
-    "#3D5AFE",
-    "#7C4DFF",
-    "#AB47BC",
-    "#E040FB",
-  ];
-  const charCode = initials.charCodeAt(0);
-  return colors[charCode % colors.length];
+  return colorFromString(initials);
 }
 
 /**
@@ -115,7 +94,9 @@ export function closeTaskOverlay() {
 
   overlay.classList.remove("active");
   overlay.cleanup?.();
-  clearModal()
+  delete overlay.cleanup; 
+  clearModal();
+  ScrollLock.release?.(); 
 }
 
 export function clearModal(delay = 300) {
