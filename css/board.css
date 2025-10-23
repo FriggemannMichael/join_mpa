@@ -357,15 +357,36 @@ h5 {
   border-radius: 20px;
   box-shadow: 0 0 4px 0 #0000001a;
   color: white;
-  display: none;
+  display: flex;
   height: 4.625rem;
   justify-content: center;
   left: 50%;
   position: fixed;
+  top: 20px;
+  transform: translateX(-50%);
+  width: fit-content;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, top 0.25s ease;
+  z-index: 2000;
+  font-size: 20px;
+  padding: 20px;
+}
+
+.task-added svg {
+  padding-left: 16px;
+  height: 40px;
+  width: 40px;
+}
+
+.task-added.visible {
+  opacity: 1;
+  top: 50px;
+}
+
+.task-added.center {
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 20.375rem;
-  z-index: 2000;
 }
 
 /* ===============================
@@ -885,7 +906,7 @@ body.loading button {
     font-size: var(--fs-h2-resp);
   }
 
-    .assignee_badge {
+  .assignee_badge {
     min-width: 42px;
   }
 }
@@ -911,4 +932,74 @@ body.loading button {
   to {
     background-image: url("../img/icon/add-task-click.svg");
   }
+}
+
+
+
+
+
+
+
+.modal_overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.modal_box {
+  background: #fff;
+  padding: 20px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  max-width: 320px;
+  width: 90%;
+  text-align: center;
+}
+
+.modal_message {
+  margin-bottom: 16px;
+  font-size: 15px;
+  color: #2a3647;
+}
+
+.modal_actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.modal_actions button {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn_cancel {
+  background: grey;
+  color: #fff;
+}
+
+.btn_confirm {
+  background: var(--color-danger);
+  color: #fff;
+}
+
+.update-task-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(42, 54, 71, 1);
+  border-radius: 10px;
+  padding: 16px;
+  gap: 4px;
+  color: white;
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
 }

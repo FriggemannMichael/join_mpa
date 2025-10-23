@@ -35,7 +35,7 @@ export async function openEditForm(taskId) {
   const updateBtn = document.createElement("button");
   updateBtn.type = "button";
   updateBtn.className = "update-task-btn";
-  updateBtn.textContent = "Update";
+  updateBtn.innerHTML = `OK ${icons.checkwhite} `;
   footer.append(updateBtn);
   section.replaceChildren(header, body, footer);
 
