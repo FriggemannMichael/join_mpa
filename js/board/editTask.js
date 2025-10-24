@@ -1,50 +1,65 @@
 import { boardTemplates } from "./board-templates.js";
-import { loadTask } from "../board/utils.js"
+import { loadTask } from "../board/utils.js";
 import {
   populateAssignees, updateAssigneeSelection,
-  bindPriorityButtons, renderSubtasks, initSubtaskInput, setSubtasksFrom, readTaskData
-} from '../pages/add-task.js';
+  bindPriorityButtons, renderSubtasks, initSubtaskInput, setSubtasksFrom,
+} from "../pages/add-task.js";
 
-import { icons } from "../common/svg-template.js"
-import { closeTaskOverlay,showAlert } from "../board/utils.js"
-import { updateTaskStatus } from "./dragdrop.js";
+import { icons } from "../common/svg-template.js";
+import { closeTaskOverlay, showAlert } from "../board/utils.js";
 import { db } from "../common/firebase.js";
 import { ref, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-
 export async function openEditForm(taskId) {
   const section = document.getElementById("taskModal");
-  section.classList.add("task-overlay")
+  section.classList.add("task-overlay");
 
-  const header = document.createElement("div");
-  header.className = "task-editor_header";
-  const closeBtn = document.createElement("button");
-  closeBtn.className = "close_button_taskModal";
-  closeBtn.dataset.overlayClose = "#taskOverlay";
-  closeBtn.setAttribute("aria-label", "Close");
-  closeBtn.innerHTML = icons.close;
-  closeBtn.addEventListener("click", closeTaskOverlay);
-  header.append(closeBtn);
-
-  const body = document.createElement("div");
-  body.classList.add("task-editor_body");
-  body.innerHTML = boardTemplates.editTask;
-
-  const footer = document.createElement("div");
-  footer.className = "task-editor_footer";
-  const updateBtn = document.createElement("button");
-  updateBtn.type = "button";
-  updateBtn.className = "update-task-btn";
-  updateBtn.innerHTML = `OK ${icons.checkwhite} `;
-  footer.append(updateBtn);
-  section.replaceChildren(header, body, footer);
-
-  updateBtn.addEventListener("click", () => handleUpdate(taskId, section));
+  section.replaceChildren(
+    createHeader(closeTaskOverlay),
+    createBody(),
+    createFooter(() => handleUpdate(taskId, section))
+  );
 
   await populateAssignees();
   bindPriorityButtons();
   await fillEdit(taskId);
+}
 
+function createHeader(onClose) {
+  const header = document.createElement("div");
+  header.classList.add("task-editor_header");
+
+  const btn = document.createElement("button");
+  btn.className = "close_button_taskModal";
+  btn.type = "button";
+  btn.innerHTML = icons.close;
+  btn.setAttribute("aria-label", "Close"); 
+  btn.dataset.overlayClose = "#taskOverlay";
+  btn.addEventListener("click", onClose);
+
+  header.append(btn);
+  return header;
+}
+
+function createBody() {
+  const body = document.createElement("div");
+  body.classList.add("task-editor_body");
+  body.innerHTML = boardTemplates.editTask;
+  return body;
+}
+
+function createFooter(onUpdate) {
+  const footer = document.createElement("div");
+  footer.classList.add("task-editor_footer");
+
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "update-task-btn";
+  btn.innerHTML = `OK ${icons.checkwhite}`;
+  btn.addEventListener("click", onUpdate);
+
+  footer.append(btn);
+  return footer;
 }
 
 function setField(scope, selector, value) {
@@ -61,10 +76,9 @@ export async function fillEdit(taskId) {
   setField(scope, "#taskDescription", task.description);
   setField(scope, "#taskDueDate", task.dueDate);
 
-  const prio = task.priority.toLowerCase();
+  const prio = (task.priority || "").toLowerCase();
   scope.querySelectorAll(".priority-btn").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.priority === prio);
-  });
+    btn.classList.toggle("active", btn.dataset.priority === prio);});
 
   preselectAssignees(task.assignees || []);
   setSubtasksFrom(task.subtasks || []);
@@ -80,35 +94,39 @@ function preselectAssignees(selected) {
   updateAssigneeSelection();
 }
 
+function readTaskFromForm(root = document) {
+  const select  = sel => root.querySelector(sel);
+  const selectAll = sel => [...root.querySelectorAll(sel)];
 
-export async function handleUpdate(taskId, root = document) {
-  const get = sel => root.querySelector(sel);
-  const all = sel => [...root.querySelectorAll(sel)];
+  const title = select("#taskTitle")?.value.trim();
+  const description = select("#taskDescription")?.value.trim();
+  const dueDate = select("#taskDueDate")?.value;
+  const priority = select(".priority-btn.active")?.dataset.priority;
 
-  const titleEl = get('#taskTitle');
-  const title = titleEl.value.trim();
-  if (!title) return alert('Please enter a title');
+  const assignees = selectAll('#selected-assignee-avatars [data-uid]').map(a => ({
+    uid: a.dataset.uid,
+    name: a.dataset.name,
+    email: a.dataset.email
+  }));
 
-  const task = {
-    title,
-    description: get('#taskDescription')?.value.trim() || '',
-    dueDate: get('#taskDueDate')?.value || null,
-    priority: get('.priority-btn.active')?.dataset.priority || null,
-    assignee: all('#selected-assignee-avatars [data-id]')
-      .map(a => ({ id: a.dataset.id, name: a.dataset.name, email: a.dataset.email })),
-    subtasks: all('#subtasksList .subtask-item')
-      .map(s => ({ text: s.dataset.text || '', done: s.querySelector('input')?.checked || false })),
-    updatedAt: Date.now()
-  };
+  const subtasks = selectAll("#subtasksList .subtask-item").map(s => ({
+    text: s.dataset.text || "",
+    done: !!s.querySelector("input")?.checked
+  }));
 
-  await updateTask(taskId, task);
-  closeTaskOverlay()
+  return { title, description, dueDate, priority, assignees, subtasks, updatedAt: Date.now() };
 }
 
+export async function handleUpdate(taskId, root = document) {
+  const task = readTaskFromForm(root);
+    await updateTask(taskId, task);
+    closeTaskOverlay();
+  
+}
 
 export async function updateTask(taskId, task) {
   const taskRef = ref(db, `tasks/${taskId}`);
   await update(taskRef, task);
-  showAlert('updated');
+  showAlert("updated");
   return true;
 }
