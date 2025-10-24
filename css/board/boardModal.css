@@ -287,3 +287,17 @@
     top: 50%;
     transform: translate(-50%, -50%);
 }
+
+.update-task-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(42, 54, 71, 1);
+    color: white;
+    font-size: 20px;
+    font-weight: 700;
+    gap: 16px;
+    padding: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+}
