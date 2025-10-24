@@ -1,5 +1,5 @@
 import { db, auth } from "../common/firebase.js";
-import { ref, update, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { ref, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { icons } from "../common/svg-template.js";
 
 export async function loadTask(id) {
@@ -57,9 +57,6 @@ export const ScrollLock = (() => {
 })();
 
 
-// später ersetzen 
-
-
 /**
  * Generiert eine Farbe basierend auf Initialen
  */
@@ -95,9 +92,9 @@ export function closeTaskOverlay() {
 
   overlay.classList.remove("active");
   overlay.cleanup?.();
-  delete overlay.cleanup; 
+  delete overlay.cleanup;
   clearModal();
-  ScrollLock.release?.(); 
+  ScrollLock.release?.();
 }
 
 export function clearModal(delay = 300) {

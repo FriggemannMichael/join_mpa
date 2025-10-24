@@ -74,7 +74,7 @@
 }
 
 .subtask_item label::before {
-    background: url("../img/icon/check-button.svg") no-repeat center/contain;
+    background: url("/img/icon/check-button.svg") no-repeat center/contain;
     content: "";
     height: 24px;
     left: 0;
@@ -86,5 +86,5 @@
 }
 
 .subtask_item input[type="checkbox"]:checked+label::before {
-    background-image: url("../img/icon/checked-button.svg");
+    background-image: url("/img/icon/checked-button.svg");
 }

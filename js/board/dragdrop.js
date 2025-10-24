@@ -128,7 +128,7 @@ function startDrag(card, e, s) {
 
 
 function resetPointerState(card, e, s) {
-  try { card.releasePointerCapture?.(e.pointerId); } catch { }
+  card.releasePointerCapture?.(e.pointerId); 
   s.dragging = false;
   s.moved = false;
   s.isPointerDown = false;
