@@ -1,0 +1,49 @@
+.assigned_to_task_overlay {
+    display: flex;
+    flex-direction: column;
+    font-size: var(--fs-input);
+    gap: var(--space-xs);
+}
+
+.assignees_task_overlay {
+    font-size: var(--fs-input);
+    padding: 7px 16px;
+}
+
+.assignees {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.assignee_row {
+    align-items: center;
+    display: flex;
+    font-size: var(--fs-input);
+    gap: 10px;
+    height: 56px;
+    padding: 7px 16px;
+}
+
+.assignee_badge {
+    border-radius: 50%;
+    color: rgb(255 255 255 / 100%);
+    display: grid;
+    font-size: 12px;
+    font-weight: 400;
+    height: 42px;
+    place-items: center;
+    width: 42px;
+
+}
+
+.assignee_label {
+    color: rgb(0 0 0 / 100%);
+    font-size: 16px;
+}
+
+@media (width <=30rem) {
+  .assignee_badge {
+    min-width: 42px;
+  }
+}
