@@ -92,34 +92,30 @@ function preselectAssignees(selected) {
   updateAssigneeSelection();
 }
 
-function readTaskFromForm(root = document) {
-  const select = sel => root.querySelector(sel);
-  const selectAll = sel => [...root.querySelectorAll(sel)];
-
-  const title = select("#taskTitle")?.value.trim();
-  const description = select("#taskDescription")?.value.trim();
-  const dueDate = select("#taskDueDate")?.value;
-  const priority = select(".priority-btn.active")?.dataset.priority;
-
-  const assignees = selectAll('#selected-assignee-avatars [data-uid]').map(a => ({
-    uid: a.dataset.uid,
-    name: a.dataset.name,
-    email: a.dataset.email
-  }));
-
-  const subtasks = selectAll("#subtasksList .subtask-item").map(s => ({
-    text: s.dataset.text || "",
-    done: !!s.querySelector("input")?.checked
-  }));
-
-  return { title, description, dueDate, priority, assignees, subtasks, updatedAt: Date.now() };
-}
 
 export async function handleUpdate(taskId, root = document) {
-  const task = readTaskFromForm(root);
-  await updateTask(taskId, task);
-  closeTaskOverlay();
+  const get = sel => root.querySelector(sel);
+  const all = sel => [...root.querySelectorAll(sel)];
 
+  const titleEl = get('#taskTitle');
+  const title = titleEl.value.trim();
+  // if (!title) return alert('Please enter a title');
+
+  const task = {
+    title,
+    description: get('#taskDescription')?.value.trim() || '',
+    dueDate: get('#taskDueDate')?.value || null,
+    priority: get('.priority-btn.active')?.dataset.priority || null,
+    assignee: all('#selected-assignee-avatars [data-id]')
+      .map(a => ({ id: a.dataset.id, name: a.dataset.name, email: a.dataset.email })),
+    subtasks: all('#subtasksList .subtask-item')
+      .map(s => ({ text: s.dataset.text || '', done: s.querySelector('input')?.checked || false })),
+    updatedAt: Date.now()
+  };
+
+  console.log(task)
+
+  await updateTask(taskId, task);
 }
 
 
