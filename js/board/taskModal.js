@@ -14,7 +14,7 @@ import {
 } from "./utils.js";
 import { openEditForm } from "../board/editTask.js";
 import { handleOutsideDropdownClick } from "../pages/add-task.js";
-import { closeTaskOverlay,showAlert } from "./utils.js";
+import { closeTaskOverlay, showAlert } from "./utils.js";
 
 export async function renderTaskModal(id, task = {}) {
   ScrollLock.set();
@@ -99,8 +99,7 @@ function taskModalpriority(priority) {
   priorityP.classList.add("taskModal-label");
   priorityP.textContent = "Priority:";
   const prioritySpan = document.createElement("span");
-  const formatted =
-    priority.charAt(0).toUpperCase() + priority.slice(1).toLowerCase();
+  const formatted = priority.charAt(0).toUpperCase() + priority.slice(1).toLowerCase();
   prioritySpan.textContent = formatted;
   const icon = document.createElement("img");
   icon.classList.add("priority-icon");
@@ -127,59 +126,60 @@ async function taskModalAssignees(task) {
   return assigned;
 }
 
-async function taskModalSubtask(task, id) {
-  const normalized = normalizeSubtasks(task);
+async function taskModalSubtask(task, taskId) {
+  const subtasks = normalizeSubtasks(task);
+  if (!subtasks.length) return document.createDocumentFragment();
 
-  if (normalized.length > 0) {
-    const subtaskWrap = document.createElement("div");
-    subtaskWrap.classList.add("subtask_task_overlay");
+  const wrap = document.createElement("div");
+  wrap.classList.add("subtask_task_overlay");
 
-    const subtaskList = document.createElement("ul");
-    subtaskList.className = "subtask_list";
+  const list = document.createElement("ul");
+  list.className = "subtask_list";
 
-    const headRow = document.createElement("div");
-    headRow.className = "subtask_header_task_overlay";
-    headRow.innerHTML = `
-        <span class="taskModal-label">Subtasks</span>
-    `;
+  const head = document.createElement("div");
+  head.className = "subtask_header_task_overlay";
+  head.innerHTML = `<span class="taskModal-label">Subtasks</span>`;
 
-    // Items
-    normalized.forEach((s, idx) => {
-      const li = document.createElement("li");
-      li.className = "subtask_item";
+  subtasks.forEach((subtask, index) => {
+    list.append(createSubtaskItem(subtask, taskId, index));
+  });
 
-      const cb = document.createElement("input");
-      cb.type = "checkbox";
-      cb.id = `sub-${id}-${idx}`;
-      cb.checked = !!s.done;
+  wrap.append(head, list);
+  return wrap;
+}
 
-      const label = document.createElement("label");
-      label.textContent = s?.text || String(s);
-      label.setAttribute("for", cb.id);
+function createSubtaskItem(subtask, taskId, index) {
+  const item = document.createElement("li");
+  item.className = "subtask_item";
 
-      cb.addEventListener("change", async () => {
-        const prev = !cb.checked;
-        li.classList.toggle("done", cb.checked);
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.id = `sub-${taskId}-${index}`;
+  checkbox.checked = !!subtask.done;
 
-        try {
-          await updateSubtaskDone(id, idx, cb.checked);
-        } catch (err) {
-          console.error("updateSubtaskDone failed:", err);
-          cb.checked = prev;
-          li.classList.toggle("done", cb.checked);
-        }
-      });
+  const label = document.createElement("label");
+  label.textContent = subtask?.text || "";
+  label.htmlFor = checkbox.id;
 
-      li.append(cb, label);
-      if (cb.checked) li.classList.add("done");
-      subtaskList.appendChild(li);
-    });
+  handleSubtaskToggle(checkbox, item, taskId, index);
 
-    subtaskWrap.append(headRow, subtaskList);
-    return subtaskWrap;
-  }
+  if (checkbox.checked) item.classList.add("done");
+  item.append(checkbox, label);
 
-  return document.createDocumentFragment();
+  return item;
+}
+
+function handleSubtaskToggle(checkbox, item, taskId, index) {
+  checkbox.addEventListener("change", async () => {
+    const prev = !checkbox.checked;
+    item.classList.toggle("done", checkbox.checked);
+    try {
+      await updateSubtaskDone(taskId, index, checkbox.checked);
+    } catch {
+      checkbox.checked = prev;
+      item.classList.toggle("done", checkbox.checked);
+    }
+  });
 }
 
 function taskModalEditDelete(task, id) {
@@ -346,6 +346,6 @@ export function confirmModal(message = "Are you sure?", onConfirm) {
   modal.querySelector(".btn_cancel").addEventListener("click", () => overlay.remove());
   modal.querySelector(".btn_confirm").addEventListener("click", () => {
     overlay.remove();
-    onConfirm?.(); 
+    onConfirm?.();
   });
 }
