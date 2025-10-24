@@ -99,23 +99,32 @@ export async function handleUpdate(taskId, root = document) {
 
   const titleEl = get('#taskTitle');
   const title = titleEl.value.trim();
-  // if (!title) return alert('Please enter a title');
+
+  const checkboxes = document.querySelectorAll(
+    '#assignee-dropdown input[type="checkbox"]:checked'
+  );
+
+  const assignees = Array.from(checkboxes).map(cb => ({
+    uid: cb.value,
+    name: cb.dataset.name?.replace(/\s*\(Du\)$/i, '').trim() || '',
+    email: cb.dataset.email,
+  }));
 
   const task = {
     title,
     description: get('#taskDescription')?.value.trim() || '',
     dueDate: get('#taskDueDate')?.value || null,
     priority: get('.priority-btn.active')?.dataset.priority || null,
-    assignee: all('#selected-assignee-avatars [data-id]')
-      .map(a => ({ id: a.dataset.id, name: a.dataset.name, email: a.dataset.email })),
-    subtasks: all('#subtasksList .subtask-item')
-      .map(s => ({ text: s.dataset.text || '', done: s.querySelector('input')?.checked || false })),
-    updatedAt: Date.now()
+    assignees, // hier direkt einsetzen
+    subtasks: all('#subtasksList .subtask-item').map(s => ({
+      text: s.dataset.text || '',
+      done: s.querySelector('input')?.checked || false,
+    })),
+    updatedAt: Date.now(),
   };
 
-  console.log(task)
-
+  console.log(task);
   await updateTask(taskId, task);
+  closeTaskOverlay()
 }
-
 
