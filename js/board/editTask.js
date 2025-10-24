@@ -1,14 +1,11 @@
 import { boardTemplates } from "./board-templates.js";
-import { loadTask } from "../board/utils.js";
 import {
   populateAssignees, updateAssigneeSelection,
   bindPriorityButtons, renderSubtasks, initSubtaskInput, setSubtasksFrom,
 } from "../pages/add-task.js";
-
 import { icons } from "../common/svg-template.js";
-import { closeTaskOverlay, showAlert } from "../board/utils.js";
-import { db } from "../common/firebase.js";
-import { ref, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { closeTaskOverlay } from "../board/utils.js";
+import { updateTask, loadTask } from "./tasks.repo.js"
 
 export async function openEditForm(taskId) {
   const section = document.getElementById("taskModal");
@@ -33,7 +30,7 @@ function createHeader(onClose) {
   btn.className = "close_button_taskModal";
   btn.type = "button";
   btn.innerHTML = icons.close;
-  btn.setAttribute("aria-label", "Close"); 
+  btn.setAttribute("aria-label", "Close");
   btn.dataset.overlayClose = "#taskOverlay";
   btn.addEventListener("click", onClose);
 
@@ -78,7 +75,8 @@ export async function fillEdit(taskId) {
 
   const prio = (task.priority || "").toLowerCase();
   scope.querySelectorAll(".priority-btn").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.priority === prio);});
+    btn.classList.toggle("active", btn.dataset.priority === prio);
+  });
 
   preselectAssignees(task.assignees || []);
   setSubtasksFrom(task.subtasks || []);
@@ -95,7 +93,7 @@ function preselectAssignees(selected) {
 }
 
 function readTaskFromForm(root = document) {
-  const select  = sel => root.querySelector(sel);
+  const select = sel => root.querySelector(sel);
   const selectAll = sel => [...root.querySelectorAll(sel)];
 
   const title = select("#taskTitle")?.value.trim();
@@ -119,14 +117,9 @@ function readTaskFromForm(root = document) {
 
 export async function handleUpdate(taskId, root = document) {
   const task = readTaskFromForm(root);
-    await updateTask(taskId, task);
-    closeTaskOverlay();
-  
+  await updateTask(taskId, task);
+  closeTaskOverlay();
+
 }
 
-export async function updateTask(taskId, task) {
-  const taskRef = ref(db, `tasks/${taskId}`);
-  await update(taskRef, task);
-  showAlert("updated");
-  return true;
-}
+

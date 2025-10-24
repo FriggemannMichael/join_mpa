@@ -4,7 +4,7 @@
  */
 export function initBoardSearch() {
   const button = document.getElementById("searchButton");
-  const input  = document.getElementById("searchInput");
+  const input = document.getElementById("searchInput");
 
   const run = () => runSearch(input.value.trim());
   button.addEventListener("click", run);

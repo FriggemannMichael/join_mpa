@@ -1,7 +1,7 @@
-import { renderTaskModal } from "./taskModal.js"
+import { renderTaskModal } from "./taskModal.view.js"
 import { db } from "../common/firebase.js";
 import { ref, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-import { loadTask } from "./utils.js"
+import { loadTask } from "./tasks.repo.js"
 
 
 let currentDrag = null;

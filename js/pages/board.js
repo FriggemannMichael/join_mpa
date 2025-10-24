@@ -44,21 +44,6 @@ async function observeTasks() {
 }
 
 
-
-/**
- * Prüft ob eine Task-Karte dem Suchbegriff entspricht
- * @param {HTMLElement} card Das Task-Karten-Element
- * @param {string} term Der Suchbegriff
- * @returns {boolean} True wenn der Task dem Suchbegriff entspricht
- */
-function matchTask(card, term) {
-  const title = card.querySelector(".task_header")?.textContent || "";
-  const description =
-    card.querySelector(".task_description")?.textContent || "";
-  const text = `${title} ${description}`.toLowerCase();
-  return text.includes(term.toLowerCase());
-}
-
 /**
  * Zeigt oder versteckt die "Keine Ergebnisse"-Nachricht
  * @param {boolean} show True um die Nachricht anzuzeigen
@@ -246,19 +231,16 @@ export function bindColumnShortcuts() {
   const onClick = async (e) => {
     const openBtn = e.target.closest("[data-overlay-open]");
     if (openBtn) {
-      const selector = openBtn.dataset.overlayOpen; // z. B. "#addTaskOverlay"
-      const overlay = document.querySelector("#taskOverlay"); // zentrales Overlay
-      const modal = document.querySelector("#taskModal");   // zentraler Inhaltsbereich
+      const selector = openBtn.dataset.overlayOpen; 
+      const overlay = document.querySelector("#taskOverlay"); 
+      const modal = document.querySelector("#taskModal");   
 
-      // Inhalte gezielt je nach Typ rendern
       if (selector === "#addTaskOverlay") {
         await initAddTask();
       }
 
       if (!overlay || !modal) return;
-
       overlay.classList.add("active");
-
       return;
     }
 

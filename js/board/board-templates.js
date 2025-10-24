@@ -14,13 +14,12 @@ export const boardTemplates = {
                 ></textarea>
         </div>
 
-        <div class="form-group">
-            <label for="taskDueDate"
-                  >Due date<sup class="required" aria-hidden="true"
-                    >*</sup
-            ></label
-            <input type="date" id="taskDueDate" placeholder="dd/mm/yyyy" />
-        </div>
+       <div class="form-group">
+  <label for="taskDueDate">
+    Due date<sup class="required" aria-hidden="true">*</sup>
+  </label>
+  <input type="date" id="taskDueDate" placeholder="dd/mm/yyyy" />
+</div>
 
 
         <div class="form-group">

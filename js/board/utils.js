@@ -1,12 +1,7 @@
-import { db, auth } from "../common/firebase.js";
-import { ref, get, child } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { auth } from "../common/firebase.js";
 import { icons } from "../common/svg-template.js";
 
-export async function loadTask(id) {
-  const root = ref(db);
-  const snap = await get(child(root, `tasks/${id}`));
-  return snap.exists() ? { id, ...snap.val() } : null;
-}
+
 
 export function getCurrentUser() {
   const user = auth.currentUser;
@@ -136,4 +131,16 @@ export function showAlert(type, ms = 1800) {
     alert.remove();
     if (type === 'created') closeTaskOverlay?.();
   }, ms);
+}
+
+
+export function formatDate(dueDate) {
+  if (!dueDate) return "—";                      
+  const d = new Date(dueDate);
+  if (isNaN(d)) return "—";                      
+  return d.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric"
+  });
 }
