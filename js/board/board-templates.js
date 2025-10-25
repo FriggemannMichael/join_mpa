@@ -1,3 +1,12 @@
+
+/**
+ * Contains HTML templates for board modals.
+ * Provides reusable markup for adding and editing tasks.
+ * @constant
+ * @type {Object}
+ * @property {string} editTask - Template for the edit task modal form.
+ * @property {string} addTask - Template for the add task modal form.
+ */
 export const boardTemplates = {
 
   editTask: `

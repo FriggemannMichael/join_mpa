@@ -15,7 +15,10 @@ import { initAddTask } from "../board/addTaskModal.js"
 initBoardPage();
 
 /**
- * Initialisiert die Board-Seite mit Authentication-Check und Layout-Loading
+ * Initializes the main board page and its core features.
+ * Handles authentication, layout setup, search, shortcuts, and task observation.
+ * @async
+ * @returns {Promise<void>}
  */
 async function initBoardPage() {
   setGlobalButtonsDisabled(true);
@@ -28,10 +31,15 @@ async function initBoardPage() {
   setGlobalButtonsDisabled(false);
 }
 
+
 let unsubscribeTasks = null;
 
+
 /**
- * Abonniert Task-Änderungen und rendert das Board bei Updates
+ * Subscribes to live task updates and re-renders the board on changes.
+ * Automatically unsubscribes when the window is closed or reloaded.
+ * @async
+ * @returns {Promise<void>}
  */
 async function observeTasks() {
   unsubscribeTasks = await subscribeToTasks((tasks) => {
@@ -45,8 +53,9 @@ async function observeTasks() {
 
 
 /**
- * Zeigt oder versteckt die "Keine Ergebnisse"-Nachricht
- * @param {boolean} show True um die Nachricht anzuzeigen
+ * Toggles visibility of the search error message on the board.
+ * @param {boolean} show - Whether to show or hide the message element.
+ * @returns {void}
  */
 function toggleSearchMessage(show) {
   const message = document.getElementById("search_error");
@@ -54,13 +63,16 @@ function toggleSearchMessage(show) {
   message.style.display = show ? "block" : "none";
 }
 
+
 /**
- * Rendert alle Tasks auf dem Board in die entsprechenden Spalten
- * @param {Array<Object>} tasks Array von Task-Objekten
+ * Renders all tasks onto the board in their respective columns.
+ * Groups tasks by status and populates each column with task cards or placeholders.
+ * @param {Array<Object>} tasks - Array of task objects to render on the board.
+ * @returns {void}
  */
 function renderBoard(tasks) {
   const columns = {
-    toDo : {
+    toDo: {
       id: "toDo",
       emptyText: "No task To do",
       withPlaceholder: false,
@@ -102,10 +114,12 @@ function renderBoard(tasks) {
   });
 }
 
+
 /**
- * Gruppiert Tasks nach ihrem Status
- * @param {Array<Object>} tasks Array von Task-Objekten
- * @returns {Object} Gruppierte Tasks nach Status
+ * Groups all tasks by their status property.
+ * Returns an object where each key is a status and its value is an array of tasks.
+ * @param {Array<Object>} tasks - Array of task objects to group.
+ * @returns {Object<string, Array<Object>>} An object mapping each status to its task list.
  */
 function groupTasksByStatus(tasks) {
   return tasks.reduce((acc, task) => {
@@ -116,10 +130,12 @@ function groupTasksByStatus(tasks) {
   }, {});
 }
 
+
 /**
- * Erstellt ein Element für leere Board-Spalten
- * @param {string} text Der anzuzeigende Text
- * @returns {HTMLElement} Das Empty-State-Element
+ * Creates and returns an element representing an empty board state.
+ * Displays a placeholder message when no tasks are available.
+ * @param {string} text - The message text to display inside the element.
+ * @returns {HTMLDivElement} The created empty state element.
  */
 function buildEmptyState(text) {
   const node = document.createElement("div");
@@ -128,16 +144,27 @@ function buildEmptyState(text) {
   return node;
 }
 
+
+/**
+ * Creates and returns a drop placeholder element for drag-and-drop areas.
+ * Used to visually indicate valid drop zones on the board.
+ * @returns {HTMLDivElement} The created placeholder element.
+ */
 function buildDropPlaceholder() {
   const node = document.createElement("div");
   node.className = "drop_placeholder";
   return node;
 }
 
+
 /**
- * Erstellt eine HTML-Karte für einen Task
- * @param {Object} task Das Task-Objekt
- * @returns {HTMLElement} Das Task-Karten-Element
+ * Builds and returns a task card element for the board.
+ * Includes category, description, and footer sections.
+ * @param {Object} task - The task object containing task details.
+ * @param {string} task.id - Unique task ID.
+ * @param {string} [task.category] - Task category key or class.
+ * @param {string} [task.categoryLabel] - Human-readable category label.
+ * @returns {HTMLElement} The fully constructed task card element.
  */
 function buildTaskCard(task) {
   const card = document.createElement("article");
@@ -150,14 +177,31 @@ function buildTaskCard(task) {
   type.textContent = task.categoryLabel || task.category || "Task";
   card.append(type);
 
+  buildTaskCardDescription(card, task)
+
+  buildTaskCardFooter(card, task)
+
+  return card;
+}
+
+
+/**
+ * Builds and appends the description section of a task card.
+ * Includes the title, description text, and optional subtask progress.
+ * @param {HTMLElement} card - The parent task card element to append to.
+ * @param {Object} task - The task object containing description data.
+ * @param {string} task.title - Task title displayed in the header.
+ * @param {string} [task.description] - Optional task description text.
+ * @param {Array<Object>} [task.subtasks] - Optional list of subtasks for progress display.
+ * @returns {void}
+ */
+function buildTaskCardDescription(card, task) {
   const descriptionSection = document.createElement("section");
   descriptionSection.className = "task_card_description";
   const title = document.createElement("h5");
-  title.id = "taskHeader";
   title.className = "task_header";
-  title.textContent = task.title || "Ohne Titel";
+  title.textContent = task.title;
   const description = document.createElement("span");
-  description.id = "taskDescription";
   description.className = "task_description";
   description.textContent = task.description || "";
   descriptionSection.append(title, description);
@@ -165,16 +209,34 @@ function buildTaskCard(task) {
 
   const progress = buildSubtaskProgress(task.subtasks);
   if (progress) card.append(progress);
+}
 
-  const footer = document.createElement("div");
+
+/**
+ * Builds and appends the footer section of a task card.
+ * Displays assignees, priority, and enables card interactions.
+ * @param {HTMLElement} card - The parent task card element to append the footer to.
+ * @param {Object} task - The task object containing footer details.
+ * @param {Array<Object>} [task.assignees] - Optional list of assigned users.
+ * @param {string} [task.priority] - Priority level of the task (e.g., "urgent", "medium", "low").
+ * @returns {void}
+ */
+function buildTaskCardFooter (card, task) {
+   const footer = document.createElement("div");
   footer.className = "footer_task_card";
   footer.append(buildAssigneeGroup(task), buildPriority(task.priority));
   card.append(footer);
   enableCardInteractions(card);
-
-  return card;
 }
 
+
+/**
+ * Builds and returns an assignee group element for a task card.
+ * Displays up to three avatars and a "+N" indicator for remaining assignees.
+ * @param {Object} [task={}] - The task object containing assignee data.
+ * @param {Array<Object>} [task.assignees] - List of assigned users for the task.
+ * @returns {HTMLDivElement} The created assignee group container element.
+ */
 export function buildAssigneeGroup(task = {}) {
   const wrap = document.createElement("div"); wrap.className = "assignees";
   wrap.setAttribute("aria-label", "assignees");
@@ -192,6 +254,15 @@ export function buildAssigneeGroup(task = {}) {
   wrap.append(ul); return wrap;
 }
 
+
+/**
+ * Normalizes and returns the assignee list from a task object.
+ * Supports multiple data formats for backward compatibility.
+ * @param {Object} [task={}] - The task object that may contain assignee data.
+ * @param {Array<Object>|Object} [task.assignees|task.assignee] - Possible assignee fields in the task.
+ * @returns {Array<Object>} A normalized array of assignee objects.
+ */
+
 function getAssignees(task = {}) {
   if (Array.isArray(task.assignees)) return task.assignees;
   if (Array.isArray(task.assignee)) return task.assignee;
@@ -199,6 +270,13 @@ function getAssignees(task = {}) {
   return [];
 }
 
+
+/**
+ * Builds and returns a visual priority indicator element.
+ * Displays a corresponding icon for the given priority level.
+ * @param {string} [priority="medium"] - The task priority ("urgent", "medium", or "low").
+ * @returns {HTMLDivElement} The created priority indicator element.
+ */
 function buildPriority(priority) {
   const wrapper = document.createElement("div");
   wrapper.className = "prio";
@@ -216,6 +294,13 @@ function buildPriority(priority) {
   return wrapper;
 }
 
+
+/**
+ * Generates a two-letter uppercase initials string from a given name.
+ * Pads with an asterisk if the name is too short.
+ * @param {string} name - The full name to generate initials from.
+ * @returns {string} The generated two-character initials string.
+ */
 function buildInitials(name) {
   return name
     .split(/\s+/)
@@ -227,13 +312,21 @@ function buildInitials(name) {
     .slice(0, 2);
 }
 
+
+/**
+ * Binds global click and keyboard shortcuts for board overlays.
+ * Handles opening of modals (e.g., Add Task), closing via backdrop or Escape key,
+ * and keyboard accessibility for interactive overlay elements.
+ * @async
+ * @returns {Promise<void>}
+ */
 export function bindColumnShortcuts() {
   const onClick = async (e) => {
     const openBtn = e.target.closest("[data-overlay-open]");
     if (openBtn) {
-      const selector = openBtn.dataset.overlayOpen; 
-      const overlay = document.querySelector("#taskOverlay"); 
-      const modal = document.querySelector("#taskModal");   
+      const selector = openBtn.dataset.overlayOpen;
+      const overlay = document.querySelector("#taskOverlay");
+      const modal = document.querySelector("#taskModal");
 
       if (selector === "#addTaskOverlay") {
         await initAddTask();
@@ -283,8 +376,13 @@ export function bindColumnShortcuts() {
   document.addEventListener("keydown", onKeydown);
 }
 
-// zu testzwecken
 
+/**
+ * Builds and returns a visual progress bar for task subtasks.
+ * Displays the ratio of completed subtasks and sets ARIA progress attributes.
+ * @param {Array<Object>} [subtasks=[]] - List of subtask objects with a `done` property.
+ * @returns {HTMLDivElement|null} The created progress bar element, or null if no subtasks exist.
+ */
 export function buildSubtaskProgress(subtasks = []) {
   if (!Array.isArray(subtasks) || !subtasks.length) return null;
   const done = subtasks.filter((st) => st.done).length;
@@ -310,6 +408,14 @@ export function buildSubtaskProgress(subtasks = []) {
   return box;
 }
 
+
+/**
+ * Enables or disables all buttons inside the given root element.
+ * Also toggles a "loading" class on the body to indicate a busy state.
+ * @param {boolean} state - Whether buttons should be disabled (true) or enabled (false).
+ * @param {HTMLElement} [root=document.body] - The root element containing the buttons.
+ * @returns {void}
+ */
 function setGlobalButtonsDisabled(state, root = document.body) {
   root.querySelectorAll("button").forEach((btn) => {
     btn.disabled = state;
