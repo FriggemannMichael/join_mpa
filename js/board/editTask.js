@@ -7,6 +7,14 @@ import { icons } from "../common/svg-template.js";
 import { closeTaskOverlay } from "../board/utils.js";
 import { updateTask, loadTask } from "./tasks.repo.js"
 
+
+/**
+ * Opens and renders the edit form inside the task modal.
+ * Populates form fields, assignees, and priority buttons for the selected task.
+ * @async
+ * @param {string} taskId - ID of the task to edit.
+ * @returns {Promise<void>}
+ */
 export async function openEditForm(taskId) {
   const section = document.getElementById("taskModal");
   section.classList.add("task-overlay");
@@ -22,6 +30,13 @@ export async function openEditForm(taskId) {
   await fillEdit(taskId);
 }
 
+
+/**
+ * Creates the header section for the edit task modal.
+ * Includes a close button bound to the provided handler.
+ * @param {Function} onClose - Callback function to close the modal.
+ * @returns {HTMLDivElement} The created header element.
+ */
 function createHeader(onClose) {
   const header = document.createElement("div");
   header.classList.add("task-editor_header");
@@ -38,6 +53,12 @@ function createHeader(onClose) {
   return header;
 }
 
+
+/**
+ * Creates the body section for the edit task modal.
+ * Inserts the edit task template into the modal body.
+ * @returns {HTMLDivElement} The created body element.
+ */
 function createBody() {
   const body = document.createElement("div");
   body.classList.add("task-editor_body");
@@ -45,6 +66,13 @@ function createBody() {
   return body;
 }
 
+
+/**
+ * Creates the footer section for the edit task modal.
+ * Includes an update button that triggers the given callback.
+ * @param {Function} onUpdate - Callback function to handle task updates.
+ * @returns {HTMLDivElement} The created footer element.
+ */
 function createFooter(onUpdate) {
   const footer = document.createElement("div");
   footer.classList.add("task-editor_footer");
@@ -59,12 +87,29 @@ function createFooter(onUpdate) {
   return footer;
 }
 
+
+/**
+ * Sets the value or text content of a field inside the given scope.
+ * Automatically detects whether the element supports a value property.
+ * @param {HTMLElement} scope - The parent element to search within.
+ * @param {string} selector - The selector used to find the target element.
+ * @param {string} [value=""] - The value or text to set.
+ * @returns {void}
+ */
 function setField(scope, selector, value) {
   const el = scope.querySelector(selector);
   if (!el) return;
   el["value" in el ? "value" : "textContent"] = value ?? "";
 }
 
+
+/**
+ * Fills the edit task form with existing task data.
+ * Loads the task, preselects assignees, and renders subtasks.
+ * @async
+ * @param {string} taskId - ID of the task to load and edit.
+ * @returns {Promise<void>}
+ */
 export async function fillEdit(taskId) {
   const task = await loadTask(taskId);
   const scope = document.getElementById("taskModal");
@@ -84,6 +129,13 @@ export async function fillEdit(taskId) {
   renderSubtasks();
 }
 
+
+/**
+ * Preselects assignee checkboxes based on the given list of users.
+ * Updates the visual selection state in the dropdown.
+ * @param {Array<Object>} selected - Array of selected assignee objects.
+ * @returns {void}
+ */
 function preselectAssignees(selected) {
   const selectedIds = new Set(selected.map(a => a.uid));
   document
@@ -93,6 +145,14 @@ function preselectAssignees(selected) {
 }
 
 
+/**
+ * Handles task updates from the edit modal and saves changes to the database.
+ * Collects all form data, assignees, and subtasks before updating.
+ * @async
+ * @param {string} taskId - ID of the task being updated.
+ * @param {Document|HTMLElement} [root=document] - The root element to query form fields from.
+ * @returns {Promise<void>}
+ */
 export async function handleUpdate(taskId, root = document) {
   const get = sel => root.querySelector(sel);
   const all = sel => [...root.querySelectorAll(sel)];
