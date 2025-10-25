@@ -5,6 +5,14 @@ import { icons } from "../common/svg-template.js";
 import { closeTaskOverlay, ScrollLock, formatDate } from "./utils.js";
 
 
+/**
+ * Renders the task modal view for a given task.
+ * Sets up scroll lock, header, content, and action buttons.
+ * @async
+ * @param {string} id - ID of the task to display.
+ * @param {Object} [task={}] - Task data used to populate the modal.
+ * @returns {Promise<void>}
+ */
 export async function renderTaskModal(id, task = {}) {
   ScrollLock.set();
   const overlay = document.getElementById("taskOverlay");
@@ -41,6 +49,15 @@ const scrollableSection = document.createElement("div");
 }
 
 
+/**
+ * Creates the scrollable content section inside the task modal.
+ * Builds all task details including description, due date, priority, assignees, and subtasks.
+ * @async
+ * @param {Object} task - Task data to render.
+ * @param {HTMLElement} h2 - The task title element.
+ * @param {string} id - ID of the task.
+ * @returns {Promise<HTMLElement>} The created scrollable section element.
+ */
 function taskModalHeader(categoryLabel, category) {
   const head = document.createElement("div");
   head.className = "header-task-overlay";
@@ -56,6 +73,11 @@ function taskModalHeader(categoryLabel, category) {
 }
 
 
+/**
+ * Creates and returns a close button for the task modal.
+ * Includes a close icon and event listener to close the overlay.
+ * @returns {HTMLButtonElement} The created close button element.
+ */
 function createCloseBtn() {
   const btn = document.createElement("button");
   btn.type = "button";
@@ -73,6 +95,11 @@ function createCloseBtn() {
 }
 
 
+/**
+ * Creates a description element for the task modal.
+ * @param {string} description - The task description text.
+ * @returns {HTMLDivElement} The created description element.
+ */
 function taskModalDescription(description) {
   const descriptionDiv = document.createElement("div");
   descriptionDiv.textContent = description;
@@ -80,6 +107,13 @@ function taskModalDescription(description) {
   return descriptionDiv;
 }
 
+
+/**
+ * Creates a due date element for the task modal.
+ * Displays a formatted date label and value.
+ * @param {string|Date} dueDate - The task due date to display.
+ * @returns {HTMLDivElement} The created due date element.
+ */
 function taskModalDueDate(dueDate) {
   const div = document.createElement("div");
   div.className = "due_date_task_overlay";
@@ -97,6 +131,13 @@ function taskModalDueDate(dueDate) {
   return div;
 }
 
+
+/**
+ * Creates a priority element for the task modal.
+ * Displays the task's priority label and color indicator.
+ * @param {string} priority - The task priority (e.g. 'urgent', 'medium', 'low').
+ * @returns {HTMLDivElement} The created priority element.
+ */
 function taskModalPriority(priority) {
   const priorityDiv = document.createElement("div");
   priorityDiv.classList.add("priority");
@@ -112,6 +153,12 @@ function taskModalPriority(priority) {
   return priorityDiv;
 }
 
+
+/**
+ * Creates a formatted priority span with text and icon.
+ * @param {string} priority - The priority level (e.g. 'urgent', 'medium', 'low').
+ * @returns {HTMLSpanElement} The created span element containing the priority text and icon.
+ */
 function createPrioritySpan(priority) {
 
   const prioritySpan = document.createElement("span");
@@ -128,20 +175,30 @@ function createPrioritySpan(priority) {
 }
 
 
+/**
+ * Creates the footer section for the task modal with edit and delete buttons.
+ * @param {Object} task - The current task data.
+ * @param {string} id - ID of the task.
+ * @returns {HTMLDivElement} The created footer element containing action buttons.
+ */
 function taskModalEditDelete(task, id) {
   const footer = document.createElement("div");
   footer.classList.add("footer_taskModal");
 
   const editBtn = createEditBtn(id)
-
   const deleteBtn = createDeleteBtn(id)
-
   const separator = createSeparator()
 
   footer.append(deleteBtn, separator, editBtn);
   return footer;
 }
 
+
+/**
+ * Creates an edit button element for the task modal footer.
+ * @param {string} id - ID of the task to edit.
+ * @returns {HTMLButtonElement} The created edit button element.
+ */
 function createEditBtn(id) {
   const editBtn = document.createElement("button");
   editBtn.classList.add("edit-task-btn");
@@ -152,6 +209,12 @@ function createEditBtn(id) {
   return editBtn;
 }
 
+
+/**
+ * Creates a delete button element for the task modal footer.
+ * @param {string} id - ID of the task to delete.
+ * @returns {HTMLButtonElement} The created delete button element.
+ */
 function createDeleteBtn(id) {
   const deleteBtn = document.createElement("button");
   deleteBtn.classList.add("delete-task-btn");
@@ -162,6 +225,11 @@ function createDeleteBtn(id) {
   return deleteBtn;
 }
 
+
+/**
+ * Creates a visual separator element for the task modal toolbar.
+ * @returns {HTMLSpanElement} The created separator element.
+ */
 function createSeparator() {
   const separator = document.createElement("span");
   separator.className = "separator-task-toolbar";
