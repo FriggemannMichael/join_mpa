@@ -1,6 +1,7 @@
-
 /**
- * Initialisiert die Suche auf dem Board
+ * Initializes the board search input and button.
+ * Attaches event listeners and prepares the search UI.
+ * @returns {void}
  */
 export function initBoardSearch() {
   const button = document.getElementById("searchButton");
@@ -14,8 +15,12 @@ export function initBoardSearch() {
   toggleSearchMessage(false);
 }
 
+
 /**
- * Führt die Suche aus und blendet Karten ein/aus
+ * Runs the board search and filters visible task cards.
+ * Shows or hides cards based on whether they match the search term.
+ * @param {string} term - The search term to filter task cards by.
+ * @returns {void}
  */
 function runSearch(term) {
   const cards = Array.from(document.querySelectorAll(".task_card"));
@@ -31,8 +36,13 @@ function runSearch(term) {
   toggleSearchMessage(hasTerm && !foundAny);
 }
 
+
 /**
- * Prüft Titel, Beschreibung, Kategorie
+ * Checks if a task card matches the given search term.
+ * Compares the title, description, and category text.
+ * @param {HTMLElement} card - The task card element to check.
+ * @param {string} term - The search term to match against.
+ * @returns {boolean} True if the card text includes the term, otherwise false.
  */
 function matchTask(card, term) {
   const title = card.querySelector(".task_header")?.textContent || "";
@@ -42,8 +52,11 @@ function matchTask(card, term) {
   return text.includes(term.toLowerCase());
 }
 
+
 /**
- * Zeigt oder versteckt „Keine Ergebnisse“-Nachricht
+ * Toggles the visibility of the search message element.
+ * @param {boolean} show - Whether to show or hide the message.
+ * @returns {void}
  */
 function toggleSearchMessage(show) {
   const msg = document.getElementById("search_error");
