@@ -1,3 +1,11 @@
+
+/**
+ * Displays a confirmation modal with customizable message and callback.
+ * Executes the provided callback when the user confirms.
+ * @param {string} [message="Are you sure?"] - The confirmation message to display.
+ * @param {Function} [onConfirm] - Callback executed when the confirm button is clicked.
+ * @returns {void}
+ */
 export function confirmModal(message = "Are you sure?", onConfirm) {
   const overlay = document.createElement("div");
   overlay.className = "modal_overlay";
