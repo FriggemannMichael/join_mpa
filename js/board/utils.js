@@ -2,12 +2,21 @@ import { auth } from "../common/firebase.js";
 import { icons } from "../common/svg-template.js";
 
 
-
+/**
+ * Returns the currently authenticated user.
+ * @returns {{id: string, name: string, email: string} | null} User object if logged in, otherwise null.
+ */
 export function getCurrentUser() {
   const user = auth.currentUser;
   return user ? { id: user.uid, name: user.displayName, email: user.email } : null;
 }
 
+
+/**
+ * Generates a consistent HSL color based on a given string.
+ * @param {string} str - The input string (e.g. a user name or ID).
+ * @returns {string} HSL color value (e.g. "hsl(210, 65%, 55%)"), or "#999" if input is empty.
+ */
 export function colorFromString(str) {
   if (!str) return "#999";
 
@@ -21,6 +30,13 @@ export function colorFromString(str) {
 }
 
 
+/**
+ * Utility for locking and restoring page scroll.
+ * Used to prevent background scrolling when modals are open.
+ * @namespace ScrollLock
+ * @property {Function} set - Locks the current scroll position.
+ * @property {Function} release - Restores the previous scroll position.
+ */
 export const ScrollLock = (() => {
   let y = 0;
 
@@ -55,13 +71,15 @@ export const ScrollLock = (() => {
 /**
  * Generiert eine Farbe basierend auf Initialen
  */
-
 export function getColorForInitials(initials) {
   return colorFromString(initials);
 }
 
 /**
- * Extrahiert Initialen aus einem Namen
+ * Returns uppercase initials from a given name string.
+ * Falls back to "??" if the name is missing.
+ * @param {string} name - The full name to extract initials from.
+ * @returns {string} Two-letter initials, or "??" if invalid.
  */
 export function getInitials(name) {
   if (!name) return "??";
@@ -71,8 +89,12 @@ export function getInitials(name) {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
+
 /**
- * Setzt den Task-Status
+ * Updates the task status message in the UI.
+ * @param {string} message - Text to display in the status element.
+ * @param {boolean} [isError=false] - If true, applies error styling.
+ * @returns {void}
  */
 export function setTaskStatus(message, isError) {
   const status = document.getElementById("taskStatus");
@@ -81,6 +103,12 @@ export function setTaskStatus(message, isError) {
   status.classList.toggle("error", !!isError);
 }
 
+
+/**
+ * Closes the task overlay and resets the UI.
+ * Runs cleanup if defined and unlocks page scroll.
+ * @returns {void}
+ */
 export function closeTaskOverlay() {
   const overlay = document.getElementById("taskOverlay");
   if (!overlay) return;
@@ -92,6 +120,13 @@ export function closeTaskOverlay() {
   ScrollLock.release?.();
 }
 
+
+/**
+ * Clears the task modal after a short delay.
+ * Removes all content and attributes except the ID.
+ * @param {number} [delay=300] - Delay before clearing in milliseconds.
+ * @returns {void}
+ */
 export function clearModal(delay = 300) {
   const section = document.getElementById("taskModal");
   if (!section) return;
@@ -107,6 +142,13 @@ export function clearModal(delay = 300) {
 }
 
 
+/**
+ * Shows a temporary alert message in the UI.
+ * Automatically fades out after a short delay.
+ * @param {string} type - Alert type (e.g. 'created', 'updated', 'deleted', 'signUp', 'createContact').
+ * @param {number} [ms=1800] - Duration before the alert disappears in milliseconds.
+ * @returns {void}
+ */
 export function showAlert(type, ms = 1800) {
   const alert = document.createElement('div');
   alert.className = 'alert task-added';
@@ -134,6 +176,12 @@ export function showAlert(type, ms = 1800) {
 }
 
 
+/**
+ * Formats a given date string into DD/MM/YYYY (en-GB) format.
+ * Returns "—" if the date is missing or invalid.
+ * @param {string|Date} dueDate - The date to format.
+ * @returns {string} Formatted date or "—" if invalid.
+ */
 export function formatDate(dueDate) {
   if (!dueDate) return "—";                      
   const d = new Date(dueDate);
