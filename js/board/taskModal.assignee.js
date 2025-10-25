@@ -1,6 +1,14 @@
 import { getContactsMap } from "./tasks.repo.js";
 import { getCurrentUser, colorFromString, getInitials } from "./utils.js";
 
+
+/**
+ * Renders the assignee section in the task modal.
+ * Fetches contacts and displays all assigned users.
+ * @async
+ * @param {Object} task - The task containing assignee data.
+ * @returns {Promise<HTMLDivElement>} The created assignee section element.
+ */
 export async function taskModalAssignees(task) {
   const assigned = document.createElement("div");
   assigned.classList.add("assigned_to_task_overlay");
@@ -19,6 +27,16 @@ export async function taskModalAssignees(task) {
   return assigned;
 }
 
+
+/**
+ * Renders the list of assignees inside the given container.
+ * Displays a dash if no assignees are assigned.
+ * @param {HTMLElement} container - The container element to render into.
+ * @param {Array<Object>} [assigneesArr=[]] - Array of assigned user objects.
+ * @param {Object} [contactsMap={}] - Map of all contacts, keyed by user ID.
+ * @param {Object} currentUser - The currently logged-in user.
+ * @returns {void}
+ */
 export function renderAssignees(
   container,
   assigneesArr = [],
@@ -34,6 +52,15 @@ export function renderAssignees(
 }
 
 
+/**
+ * Renders all assignee rows inside the given container.
+ * Creates badges and labels for each assigned user.
+ * @param {HTMLElement} container - The container element to render into.
+ * @param {Array<Object>} assigneesArr - Array of assignee objects.
+ * @param {Object} contactsMap - Map of contacts, keyed by user ID.
+ * @param {Object} currentUser - The currently logged-in user.
+ * @returns {void}
+ */
 function renderAssigneeList(container, assigneesArr, contactsMap, currentUser) {
   assigneesArr.forEach((a) => {
     const uid = a?.uid;
@@ -54,6 +81,14 @@ function renderAssigneeList(container, assigneesArr, contactsMap, currentUser) {
 }
 
 
+/**
+ * Creates a colored badge element for an assignee.
+ * Displays user initials and name tooltip.
+ * @param {string} initials - The user's initials to display.
+ * @param {string} name - The full name of the assignee.
+ * @param {string} color - The background color for the badge.
+ * @returns {HTMLSpanElement} The created badge element.
+ */
 function createBadge(initials, name, color) {
   const badge = document.createElement("span");
   badge.className = "assignee_badge";
@@ -65,6 +100,13 @@ function createBadge(initials, name, color) {
 }
 
 
+/**
+ * Creates a label element for an assignee.
+ * Marks the current user with "(You)" if applicable.
+ * @param {boolean} isYou - Whether the assignee is the current user.
+ * @param {string} name - The assignee's display name.
+ * @returns {HTMLSpanElement} The created label element.
+ */
 function createLabel(isYou, name) {
   const label = document.createElement("span");
   label.className = "assignee_label";
