@@ -1,4 +1,4 @@
-import { updateSubtaskDone } from "./tasks.repo.js";
+import { updateSubtaskDone } from "../services/tasks.repo.js";
 
 
 /**

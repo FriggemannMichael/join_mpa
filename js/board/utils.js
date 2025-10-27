@@ -192,3 +192,19 @@ export function formatDate(dueDate) {
     year: "numeric"
   });
 }
+
+
+/**
+ * Enables or disables all buttons inside the given root element.
+ * Also toggles a "loading" class on the body to indicate a busy state.
+ * @param {boolean} state - Whether buttons should be disabled (true) or enabled (false).
+ * @param {HTMLElement} [root=document.body] - The root element containing the buttons.
+ * @returns {void}
+ */
+export function setGlobalButtonsDisabled(state, root = document.body) {
+  root.querySelectorAll("button").forEach((btn) => {
+    btn.disabled = state;
+  });
+
+  document.body.classList.toggle("loading", state);
+}

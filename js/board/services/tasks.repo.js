@@ -1,6 +1,6 @@
-import { db } from "../common/firebase.js";
+import { db } from "../../common/firebase.js";
 import { ref, get, child, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-import { closeTaskOverlay, showAlert } from "../board/utils.js";
+import { closeTaskOverlay, showAlert }  from "../utils.js";
 
 
 /**

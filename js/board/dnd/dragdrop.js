@@ -1,7 +1,8 @@
-import { renderTaskModal } from "./taskModal.view.js"
-import { db } from "../common/firebase.js";
+
+import { renderTaskModal } from "../modals/taskModal.view.js"
+import { db } from "../../common/firebase.js";
 import { ref, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-import { loadTask } from "./tasks.repo.js"
+import { loadTask } from "../services/tasks.repo.js"
 
 
 let currentDrag = null;
@@ -97,11 +98,14 @@ function onMove(card, e, s, THRESHOLD) {
     if (s.isTouch && exceededThreshold(e, s, THRESHOLD)) {
       s.moved = true;
       clearHoldTimer(s);
-      return; }
+      return;
+    }
     if (!s.isTouch && exceededThreshold(e, s, THRESHOLD)) {
       startDrag(card, e, s);
-      return;}
-    return;}
+      return;
+    }
+    return;
+  }
   if (e.cancelable) e.preventDefault();
   moveDragging(card, e);
 }
@@ -216,7 +220,7 @@ function startDrag(card, e, s) {
  * @returns {void}
  */
 function resetPointerState(card, e, s) {
-  card.releasePointerCapture?.(e.pointerId); 
+  card.releasePointerCapture?.(e.pointerId);
   s.dragging = false;
   s.moved = false;
   s.isPointerDown = false;

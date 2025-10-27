@@ -1,5 +1,5 @@
-import { getContactsMap } from "./tasks.repo.js";
-import { getCurrentUser, colorFromString, getInitials } from "./utils.js";
+import { getContactsMap } from "../services/tasks.repo.js";
+import { getCurrentUser, colorFromString, getInitials } from "../utils.js";
 
 
 /**

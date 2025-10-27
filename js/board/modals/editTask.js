@@ -1,12 +1,9 @@
-import { boardTemplates } from "./board-templates.js";
-import {
-  populateAssignees, updateAssigneeSelection,
-  bindPriorityButtons, renderSubtasks, initSubtaskInput, setSubtasksFrom,
-} from "../pages/add-task.js";
-import { icons } from "../common/svg-template.js";
-import { closeTaskOverlay } from "../board/utils.js";
-import { updateTask, loadTask } from "./tasks.repo.js"
 
+import { boardTemplates } from "../templates/board-templates.js"
+import { populateAssignees, bindPriorityButtons, updateAssigneeSelection, setSubtasksFrom, initSubtaskInput, renderSubtasks } from "../../pages/add-task.js";
+import { icons } from "../../common/svg-template.js";
+import { closeTaskOverlay } from "../utils.js";
+import { updateTask, loadTask } from "../services/tasks.repo.js"
 
 /**
  * Opens and renders the edit form inside the task modal.

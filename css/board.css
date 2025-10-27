@@ -407,3 +407,30 @@ body.loading button {
   from { transform: scale(0.9); opacity: 0; }
   to { transform: scale(1); opacity: 1; }
 }
+
+
+.has_tooltip {
+  position: relative;
+}
+.has_tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  transform: translateX(-50%) translateY(-8px);
+  white-space: nowrap;
+  padding: .35rem .5rem;
+  border-radius: .5rem;
+  font-size: .75rem;
+  background: rgba(0,0,0,.85);
+  color: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms, transform 120ms;
+  background-color: var(--color-btn);
+}
+.has_tooltip:hover::after,
+.has_tooltip:focus-within::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-4px);
+}

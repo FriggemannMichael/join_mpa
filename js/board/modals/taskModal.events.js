@@ -1,8 +1,8 @@
-import { closeTaskOverlay, ScrollLock } from "./utils.js";
-import { handleOutsideDropdownClick } from "../pages/add-task.js";
-import { openEditForm } from "./editTask.js";           
-import { deleteTask } from "./tasks.repo.js";           
-import { confirmModal } from "./confirmModal.js";
+import { closeTaskOverlay, ScrollLock } from "../utils.js";
+import { handleOutsideDropdownClick } from "../../pages/add-task.js";
+import { openEditForm } from "./editTask.js";            
+import { deleteTask } from "../services/tasks.repo.js";
+import { confirmModal } from "../modals/confirmModal.js"
 
 
 /**

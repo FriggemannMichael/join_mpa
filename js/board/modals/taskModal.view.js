@@ -1,8 +1,8 @@
 import { taskModalEventlistener } from "./taskModal.events.js";
 import { taskModalAssignees } from "./taskModal.assignee.js";
 import { taskModalSubtask } from "./taskModal.subtasks.js";
-import { icons } from "../common/svg-template.js";
-import { closeTaskOverlay, ScrollLock, formatDate } from "./utils.js";
+import { icons } from "../../common/svg-template.js";
+import { closeTaskOverlay, ScrollLock, formatDate } from "../utils.js";
 
 
 /**
