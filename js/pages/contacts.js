@@ -14,28 +14,8 @@ import {
   remove,
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { person, mail, call, check, close } from "../common/svg-template.js";
+import {colorFromString} from "../board/utils.js"
 
-/**
- * Generiert eine Farbe basierend auf den Initialen
- * @param {string} initials - Die Initialen des Kontakts
- * @returns {string} Hex-Farbcode
- */
-function getColorForInitials(initials) {
-  const colors = [
-    "#FF6B6B",
-    "#00B8D4",
-    "#1DE9B6",
-    "#00CFAE",
-    "#00BCD4",
-    "#2196F3",
-    "#3D5AFE",
-    "#7C4DFF",
-    "#AB47BC",
-    "#E040FB",
-  ];
-  const charCode = initials.charCodeAt(0);
-  return colors[charCode % colors.length];
-}
 
 initContactsPage();
 
@@ -173,7 +153,7 @@ function showContactDetail(entry, key) {
   const contact = contactsCache.find((c) => c.key === key);
   if (!contact) return;
   const initials = buildInitials(contact.name);
-  const color = getColorForInitials(initials);
+  const color = colorFromString(contact.name);
   renderContactDetail({
     name: contact.name,
     email: contact.email,
@@ -239,7 +219,7 @@ function openEditModal(contact) {
 
   // Avatar im Edit-Modal aktualisieren
   const initials = buildInitials(contact.name);
-  const color = getColorForInitials(initials);
+  const color = colorFromString(contact.name);
   const initialsElem = document.getElementById("contactInitials");
   if (initialsElem) {
     initialsElem.textContent = initials;
@@ -444,7 +424,7 @@ function bindModalControls() {
   function updateAddContactAvatar() {
     const name = document.getElementById("addContactName")?.value || "";
     const initials = buildInitials(name);
-    const color = getColorForInitials(initials || "?");
+    const color = colorFromString(name || "?");
     const avatar = document.getElementById("addContactAvatar");
     const initialsElem = document.getElementById("addContactInitials");
     const placeholderImg = document.getElementById(
@@ -568,7 +548,7 @@ async function saveContactToFirebase(data) {
  */
 function buildContactMarkup({ name, email }) {
   const initials = buildInitials(name);
-  const color = getColorForInitials(initials);
+  const color = colorFromString(name);
   return `<div class="initals" style="background-color: ${color};">${initials}</div>
     <div class="small-info"><h3>${name}</h3><span>${email}</span></div>`;
 }

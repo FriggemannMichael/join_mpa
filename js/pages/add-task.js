@@ -9,6 +9,7 @@ import { auth } from "../common/firebase.js";
 import { loadFirebaseDatabase } from "../common/database.js";
 import { createTask } from "../common/tasks.js";
 import { icons } from "../common/svg-template.js";
+import {colorFromString} from "../board/utils.js"
 initAddTaskPage();
 
 /**
@@ -196,7 +197,7 @@ export function renderAssigneeDropdown(dropdown, options) {
 
   options.forEach((option, index) => {
     const initials = getInitials(option.label);
-    const color = getColorForInitials(initials);
+    const color = colorFromString(option.label);
     const checkboxId = `assignee_${index}`;
     const displayName = option.isCurrentUser
       ? `${option.label} (Du)`
@@ -321,7 +322,7 @@ export function updateAssigneeSelection() {
 
   selected.slice(0, maxVisible).forEach((contact) => {
     const initials = getInitials(contact.name);
-    const color = getColorForInitials(initials);
+    const color = colorFromString(contact.name);
 
     const avatar = document.createElement("div");
     avatar.className = "avatar";
@@ -363,25 +364,6 @@ export function getInitials(name) {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
-/**
- * Generiert eine Farbe basierend auf Initialen
- */
-export function getColorForInitials(initials) {
-  const colors = [
-    "#FF6B6B",
-    "#00B8D4",
-    "#1DE9B6",
-    "#00CFAE",
-    "#00BCD4",
-    "#2196F3",
-    "#3D5AFE",
-    "#7C4DFF",
-    "#AB47BC",
-    "#E040FB",
-  ];
-  const charCode = initials.charCodeAt(0);
-  return colors[charCode % colors.length];
-}
 
 /**
  * Liest die Task-Daten aus dem Formular
@@ -542,17 +524,6 @@ export function selectCategory(value) {
 window.toggleCategoryDropdown = toggleCategoryDropdown;
 window.selectCategory = selectCategory;
 
-export function colorFromString(str) {
-  if (!str) return "#999";
-
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  const hue = Math.abs(hash) % 360;
-  return `hsl(${hue}, 65%, 55%)`;
-}
 
 /**
  * Initialisiert das Subtask-Eingabefeld mit Icons und Event-Handlers
