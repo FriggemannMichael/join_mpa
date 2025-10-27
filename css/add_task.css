@@ -388,7 +388,7 @@ sup.required {
 }
 
 label {
-  font-size: 20px;
+  font-size: var(--fs-input);
 }
 
 @media screen and (width <= 1369px) {

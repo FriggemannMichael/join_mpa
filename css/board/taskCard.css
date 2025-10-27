@@ -155,3 +155,14 @@ h5 {
 .technical-task {
   background-color: var(--color-technical-task);
 }
+
+@media (width <=30rem) {
+  .task_card {
+    gap: 24px;
+    height: fit-content;
+  }
+
+    .task_category {
+        padding: 0.25rem 1rem;
+    }
+}

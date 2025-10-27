@@ -20,7 +20,7 @@
     align-items: center;
     display: flex;
     font-size: var(--fs-input);
-    gap: 10px;
+    gap: 16px;
     height: 56px;
     padding: 7px 16px;
 }

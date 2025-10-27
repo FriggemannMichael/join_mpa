@@ -228,7 +228,7 @@
     align-items: center;
     color: rgb(66 82 110 / 100%);
     display: flex;
-    font-size: 20px;
+    font-size: var(--fs-input);
 
 }
 
@@ -300,4 +300,25 @@
     padding: 16px;
     border-radius: 10px;
     cursor: pointer;
+}
+
+@media (width <=30rem) {
+    .task-overlay {
+        padding: 32px 24px;
+        gap: 16px;
+    }
+
+    .task-overlay h2 {
+        font-size: 2.25rem;
+    }
+  
+    .taskModal-main {
+        gap: 1rem;
+    }
+
+
+    .update-task-btn{
+        padding: 18px 10px;
+        gap:4px
+    }
 }
