@@ -13,20 +13,31 @@ export function getCurrentUser() {
 
 
 /**
- * Generates a consistent HSL color based on a given string.
- * @param {string} str - The input string (e.g. a user name or ID).
- * @returns {string} HSL color value (e.g. "hsl(210, 65%, 55%)"), or "#999" if input is empty.
+ * Generates a visually distinct and stable HSL color from a given string.
+ * Useful for assigning consistent avatar or label colors based on names.
+ * The algorithm multiplies character codes by small primes to spread hues evenly.
+ * @param {string} str - The input string used to derive the color (e.g. a name).
+ * @returns {string} An HSL color string (e.g. "hsl(210, 68%, 50%)").
  */
 export function colorFromString(str) {
   if (!str) return "#999";
+  const clean = str.trim().toLowerCase();
+  const primes = [2, 3, 5, 7, 11, 13, 17];
 
   let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = str.charCodeAt(i) + ((hash << 5) - hash);
+  for (let i = 0; i < clean.length; i++) {
+    hash += clean.charCodeAt(i) * primes[i % primes.length];
   }
 
   const hue = Math.abs(hash) % 360;
-  return `hsl(${hue}, 65%, 55%)`;
+
+  const sat = 60 + (hash % 20);
+
+  let light = 35 + ((hash >> 3) % 25);
+
+  light = Math.max(35, Math.min(60, light));
+
+  return `hsl(${hue}, ${sat}%, ${light}%)`;
 }
 
 
