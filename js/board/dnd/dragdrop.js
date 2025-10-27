@@ -207,7 +207,12 @@ function isTap(s, HOLD_MS) {
 function startDrag(card, e, s) {
   startDragging(card, e);
   clearHoldTimer(s);
+
   s.dragging = true;
+
+  document.querySelectorAll(".no_task_to_do").forEach(el => {
+    el.style.display = "none";
+  });
 }
 
 
@@ -257,12 +262,15 @@ async function openModal(card) {
 function startDragging(card, e) {
   const rect = card.getBoundingClientRect();
   const originColumn = card.closest(".task_column");
+
   card.setPointerCapture(e.pointerId);
   card.style.touchAction = "none";
   document.body.classList.add('no-select');
+
   const ghost = buildGhost(card, rect);
   const offsetX = e.clientX - rect.left;
   const offsetY = e.clientY - rect.top;
+
   currentDrag = { card, ghost, originColumn, offsetX, offsetY };
   document.body.appendChild(ghost);
   buildPlaceholders(originColumn, rect.height);
@@ -304,6 +312,7 @@ function moveDragging(card, e) {
 function endDragging(card, e) {
   document.body.classList.remove('no-select');
   document.querySelectorAll(".task_column.active").forEach(col => { col.classList.remove("active"); });
+  document.querySelectorAll(".no_task_to_do").forEach(el => { el.style.display = ""; });
   const { originColumn } = currentDrag;
   card.releasePointerCapture(e.pointerId);
 
@@ -374,6 +383,7 @@ function buildPlaceholders(originColumn, height) {
 function deleteDragSettings(card) {
   document.querySelectorAll(".drag-ghost").forEach(n => n.remove());
   document.querySelectorAll(".drop_placeholder").forEach(n => n.remove());
+
   card.classList.remove("dragging");
 
   if (window.innerWidth >= 900) {
@@ -382,6 +392,7 @@ function deleteDragSettings(card) {
   document.body.style.cursor = "";
   currentDrag = null;
 }
+
 
 
 /**

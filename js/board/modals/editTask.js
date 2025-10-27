@@ -1,6 +1,6 @@
 
 import { boardTemplates } from "../templates/board-templates.js"
-import { populateAssignees, bindPriorityButtons, updateAssigneeSelection, setSubtasksFrom, initSubtaskInput, renderSubtasks } from "../../pages/add-task.js";
+import { populateAssignees, bindPriorityButtons, updateAssigneeSelection, setSubtasksFrom, initSubtaskInput, renderSubtasks, subtasks as subtasksState } from "../../pages/add-task.js";
 import { icons } from "../../common/svg-template.js";
 import { closeTaskOverlay } from "../utils.js";
 import { updateTask, loadTask } from "../services/tasks.repo.js"
@@ -143,45 +143,72 @@ function preselectAssignees(selected) {
 
 
 /**
- * Handles task updates from the edit modal and saves changes to the database.
- * Collects all form data, assignees, and subtasks before updating.
+ * Handles updating an existing task with new form data.
+ * Collects updated task fields, assignees, and subtasks, then saves changes to the database.
  * @async
- * @param {string} taskId - ID of the task being updated.
- * @param {Document|HTMLElement} [root=document] - The root element to query form fields from.
+ * @param {string} taskId - The unique ID of the task to update.
+ * @param {Document|HTMLElement} [root=document] - The root element containing the task form.
  * @returns {Promise<void>}
  */
 export async function handleUpdate(taskId, root = document) {
-  const get = sel => root.querySelector(sel);
-  const all = sel => [...root.querySelectorAll(sel)];
-
-  const titleEl = get('#taskTitle');
-  const title = titleEl.value.trim();
-
-  const checkboxes = document.querySelectorAll(
-    '#assignee-dropdown input[type="checkbox"]:checked'
-  );
-
-  const assignees = Array.from(checkboxes).map(cb => ({
-    uid: cb.value,
-    name: cb.dataset.name?.replace(/\s*\(Du\)$/i, '').trim() || '',
-    email: cb.dataset.email,
-  }));
+  const base = collectTaskData(root);
+  const assignees = readAssignees(root);
+  const subtasks = normalizeSubtasks();
 
   const task = {
-    title,
-    description: get('#taskDescription')?.value.trim() || '',
-    dueDate: get('#taskDueDate')?.value || null,
-    priority: get('.priority-btn.active')?.dataset.priority || null,
-    assignees, // hier direkt einsetzen
-    subtasks: all('#subtasksList .subtask-item').map(s => ({
-      text: s.dataset.text || '',
-      done: s.querySelector('input')?.checked || false,
-    })),
+    ...base,
+    assignees,
+    subtasks,
     updatedAt: Date.now(),
   };
 
-  console.log(task);
   await updateTask(taskId, task);
-  closeTaskOverlay()
+  closeTaskOverlay();
 }
 
+
+/**
+ * Collects and returns task data from the given root element.
+ * Extracts title, description, due date, and priority from form fields.
+ * @param {Document|HTMLElement} [root=document] - The root element containing the task form inputs.
+ * @returns {{title: string, description: string, dueDate: string|null, priority: string|null}} The collected task data.
+ */
+function collectTaskData(root = document) {
+  const get = sel => root.querySelector(sel);
+
+  const title = get('#taskTitle')?.value.trim() || '';
+  const description = get('#taskDescription')?.value.trim() || '';
+  const dueDate = get('#taskDueDate')?.value || null;
+  const priority = get('.priority-btn.active')?.dataset.priority || null;
+
+  return { title, description, dueDate, priority };
+}
+
+
+/**
+ * Reads and returns the list of selected assignees from the assignee dropdown.
+ * Extracts UID, cleaned name, and email from checked checkbox elements.
+ * @param {Document|HTMLElement} [root=document] - The root element containing the assignee dropdown.
+ * @returns {Array<{uid: string, name: string, email: string}>} A list of selected assignee objects.
+ */
+function readAssignees(root = document) {
+  return [...root.querySelectorAll('#assignee-dropdown input[type="checkbox"]:checked')]
+    .map(cb => ({
+      uid: cb.value,
+      name: cb.dataset.name?.replace(/\s*\(Du\)$/i, '').trim() || '',
+      email: cb.dataset.email || ''
+    }));
+}
+
+
+/**
+ * Normalizes the current subtask state into a consistent array format.
+ * Trims text values and ensures a boolean `done` property for each subtask.
+ * @returns {Array<{text: string, done: boolean}>} The normalized list of subtasks.
+ */
+function normalizeSubtasks() {
+  return (subtasksState || []).map(s => ({
+    text: (s?.text || '').trim(),
+    done: !!(s?.completed)
+  }));
+}
