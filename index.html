@@ -10,17 +10,32 @@
     <link rel="stylesheet" href="./css/board.css" />
     <link rel="stylesheet" href="./css/contact.css" />
     <link rel="stylesheet" href="./css/add_task.css" />
+
+    <link rel="stylesheet" href="./css/login-mobile.css" />
   </head>
   <body>
     <div class="brand-splash" id="brandSplash">
       <img src="./img/header_logo.svg" alt="Join Logo" />
     </div>
-    <div class="login-header-signup">
-      <div class="signup-text">Not a Join user?</div>
-      <button class="btn btn-signup" type="button" id="signupBtn">
-        Sign up
-      </button>
+    <!-- Splash Screen Start -->
+    <div id="splash-screen" class="splash-bg">
+      <img
+        id="splash-logo"
+        src="img/logowhite.svg"
+        alt="JOIN Logo Weiß"
+        class="splash-logo"
+      />
     </div>
+    <!-- Splash Screen End -->
+
+    <!-- Login-Logo nach Animation (initial hidden) -->
+    <img
+      id="login-logo"
+      src="img/header_logo.svg"
+      alt="JOIN Logo"
+      style="display: none; position: absolute"
+    />
+
     <div class="login-view-wrapper">
       <div
         class="login-card login-card-hidden"
@@ -29,6 +44,12 @@
       >
         <div class="login-logo-fixed">
           <img src="./img/icon/logo.svg" alt="Join Logo" />
+        </div>
+        <div class="login-header-signup">
+          <div class="signup-text">Not a Join user?</div>
+          <button class="btn btn-signup" type="button" id="signupBtn">
+            Sign up
+          </button>
         </div>
         <div class="login-header"><h1 id="loginTitle">Login</h1></div>
         <div>
@@ -85,6 +106,8 @@
         >
       </footer>
     </div>
+
+    <script src="js/common/splashScreen.js"></script>
     <script type="module" src="./js/pages/login.js"></script>
   </body>
 </html>

@@ -64,16 +64,18 @@ async function loadAndRenderContacts() {
 }
 
 /**
- * Rendert den "Add new Contact"-Button
- * @param {HTMLElement} list - Das Listen-Element
+ * Rendert den "Add new Contact"-Button oberhalb der Kontaktliste
  */
-function renderAddButton(list) {
+function renderAddButton() {
+  const actions = document.getElementById("contact-list-actions");
+  if (!actions) return;
+  actions.innerHTML = "";
   const btn = document.createElement("button");
   btn.className = "contact-btn";
   btn.type = "button";
   btn.id = "addNewContactBtn";
   btn.innerHTML = `Add new Contact<img src="./img/icon/person_add.png" alt="add Person" />`;
-  list.appendChild(btn);
+  actions.appendChild(btn);
   btn.addEventListener("click", () => toggleAddContactOverlay(true));
 }
 
@@ -114,7 +116,7 @@ function renderContactList(contacts) {
   const list = document.getElementById("contact-list");
   if (!list) return;
   list.innerHTML = "";
-  renderAddButton(list);
+  renderAddButton();
   if (!contacts.length) return;
   const grouped = groupContactsByLetter(contacts);
   renderGroupedContacts(list, grouped);

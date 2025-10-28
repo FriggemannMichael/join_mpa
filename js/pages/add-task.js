@@ -242,7 +242,7 @@ export function renderAssigneeDropdown(dropdown, options) {
 //   // Schließen bei Klick außerhalb
 // document.addEventListener("click", handleOutsideDropdownClick);
 // }
-// 
+//
 // Funktionaler für andere seiten ->
 
 export function bindAssigneeEvents() {
@@ -250,7 +250,10 @@ export function bindAssigneeEvents() {
   const dropdown = document.getElementById("assignee-dropdown");
   if (!header.dataset.bound) {
     header.dataset.bound = "1";
-    header.addEventListener("click", (e) => { e.stopPropagation(); toggleAssigneeDropdown(); });
+    header.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleAssigneeDropdown();
+    });
   }
   if (!dropdown.dataset.bound) {
     dropdown.dataset.bound = "1";
@@ -263,11 +266,9 @@ export function bindAssigneeEvents() {
   dropdown.closeCtrl = ctrl;
   document.addEventListener("click", handleOutsideDropdownClick, {
     capture: true,
-    signal: ctrl.signal
+    signal: ctrl.signal,
   });
 }
-
-
 
 /**
  * Togglet die Sichtbarkeit des Assignee-Dropdowns
@@ -529,8 +530,8 @@ export function selectCategory(value) {
       value === "technical-task"
         ? "Technical Task"
         : value === "user-story"
-          ? "User Story"
-          : value;
+        ? "User Story"
+        : value;
     placeholder.textContent = text;
   }
 
@@ -576,14 +577,14 @@ export function initSubtaskInput(list = subtasks) {
     subtaskIcons.classList.add("active");
   });
 
-  subtaskInput.addEventListener("blur", (e) => {
-    // Verzögerung hinzufügen, damit Icon-Klicks funktionieren
-    setTimeout(() => {
-      if (!subtaskInput.value.trim()) {
-        subtaskIcons.classList.remove("active");
-      }
-    }, 150);
-  });
+  // subtaskInput.addEventListener("blur", (e) => {
+  // Verzögerung hinzufügen, damit Icon-Klicks funktionieren
+  setTimeout(() => {
+    if (!subtaskInput.value.trim()) {
+      subtaskIcons.classList.remove("active");
+    }
+  }, 150);
+  // });
 
   subtaskInput.addEventListener("input", () => {
     if (subtaskInput.value.trim()) {
@@ -768,69 +769,67 @@ export function editSubtask(id) {
   cancelBtn.addEventListener("click", () => cancelSubtaskEdit(id));
 
   // Enter und Escape Handler
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      saveSubtaskEdit(id);
-    } else if (e.key === "Escape") {
-      cancelSubtaskEdit(id);
+  // input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    saveSubtaskEdit(id);
+  } else if (e.key === "Escape") {
+    cancelSubtaskEdit(id);
+  }
+  // });
+  // }
+
+  /**
+   * Speichert die bearbeitete Subtask
+   */
+  export function saveSubtaskEdit(id) {
+    const subtaskElement = document.querySelector(`[data-id="${id}"]`);
+    const input = subtaskElement.querySelector(".subtask-edit-input");
+    const newText = input.value.trim();
+
+    if (!newText) {
+      deleteSubtask(id);
+      return;
     }
-  });
-}
 
-/**
- * Speichert die bearbeitete Subtask
- */
-export function saveSubtaskEdit(id) {
-  const subtaskElement = document.querySelector(`[data-id="${id}"]`);
-  const input = subtaskElement.querySelector(".subtask-edit-input");
-  const newText = input.value.trim();
-
-  if (!newText) {
-    deleteSubtask(id);
-    return;
+    // Subtask aktualisieren
+    const subtask = subtasks.find((s) => s.id === id);
+    if (subtask) {
+      subtask.text = newText;
+      renderSubtasks();
+      setTaskStatus("Subtask aktualisiert", false);
+    }
   }
 
-  // Subtask aktualisieren
-  const subtask = subtasks.find((s) => s.id === id);
-  if (subtask) {
-    subtask.text = newText;
-    renderSubtasks();
-    setTaskStatus("Subtask aktualisiert", false);
-  }
-}
+  /**
+   * Bricht die Bearbeitung ab
+   */
+  // export function cancelSubtaskEdit(id) {
+  //   renderSubtasks();
+  // }
 
-/**
- * Bricht die Bearbeitung ab
- */
-export function cancelSubtaskEdit(id) {
-  renderSubtasks();
-}
-
-
-export function setSubtasksFrom(list) {
-  const arr = Array.isArray(list) ? list : [];
-  subtasks.length = 0;
-  arr.forEach((s, i) => {
-    subtasks.push({
-      id: s?.id ?? (Date.now() + i),
-      text: (s?.text ?? "").trim(),
-      completed: !!(s?.completed ?? s?.done),
+  export function setSubtasksFrom(list) {
+    const arr = Array.isArray(list) ? list : [];
+    subtasks.length = 0;
+    arr.forEach((s, i) => {
+      subtasks.push({
+        id: s?.id ?? Date.now() + i,
+        text: (s?.text ?? "").trim(),
+        completed: !!(s?.completed ?? s?.done),
+      });
     });
-  });
-}
+  }
 
+  export function handleOutsideDropdownClick(e) {
+    if (e.cancelBubble) return;
 
+    const header = document.getElementById("assigneeHeader");
+    const dropdown = document.getElementById("assignee-dropdown");
+    if (!header || !dropdown) return;
 
-export function handleOutsideDropdownClick(e) {
-  if (e.cancelBubble) return;
-
-  const header = document.getElementById("assigneeHeader");
-  const dropdown = document.getElementById("assignee-dropdown");
-  if (!header || !dropdown) return;
-
-  if (!header.contains(e.target) && !dropdown.contains(e.target)) {
-    dropdown.classList.add("d-none");
-    header.classList.remove("open");
-    // Der AbortController entfernt den Listener automatisch
+    if (!header.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.classList.add("d-none");
+      header.classList.remove("open");
+      // Der AbortController entfernt den Listener automatisch
+    }
   }
 }

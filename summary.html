@@ -13,8 +13,72 @@
   </head>
   <body>
     <div class="layout">
-      <div id="layout-header" data-template="header"></div>
-      <aside id="layout-sidebar" data-template="sidebar"></aside>
+      <nav aria-label="Primäre Navigation" class="app-sidebar">
+        <img class="nav-logo" src="./img/icon/logo.svg" alt="Join Logo" />
+        <div class="nav-menu" role="list">
+          <a
+            href="./summary.html"
+            class="nav-link link-1"
+            data-nav
+            aria-current="page"
+          >
+            <div class="link-icon">
+              <img src="./img/icon/summary_icon.svg" alt="Summary Icon" />
+            </div>
+            <div class="link-name"><p>Summary</p></div>
+          </a>
+          <a href="./board.html" class="nav-link link-2" data-nav>
+            <div class="link-icon">
+              <img src="./img/icon/board_icon.svg" alt="Board Icon" />
+            </div>
+            <div class="link-name"><p>Board</p></div>
+          </a>
+          <a href="./add-task.html" class="nav-link link-3" data-nav>
+            <div class="link-icon">
+              <img src="./img/icon/add_task_icon.svg" alt="Add Task Icon" />
+            </div>
+            <div class="link-name"><p>Add Task</p></div>
+          </a>
+          <a href="./contacts.html" class="nav-link link-4" data-nav>
+            <div class="link-icon">
+              <img src="./img/icon/contacts_icon.svg" alt="Contacts Icon" />
+            </div>
+            <div class="link-name"><p>Contacts</p></div>
+          </a>
+        </div>
+        <div class="privacy-and-legal">
+          <a href="./privacy.html"><p>Privacy Policy</p></a>
+          <a href="./legal.html"><p>Legal Notice</p></a>
+        </div>
+      </nav>
+      <header>
+        <h2 class="header-slogan">Kanban Project Management Tool</h2>
+        <img class="header-logo" src="./img/header_logo.svg" alt="Join Logo" />
+        <div class="header-icons">
+          <div class="help-icon">
+            <a href="#help" aria-label="Hilfe öffnen">
+              <img src="./img/help_icon.svg" alt="Help" />
+            </a>
+          </div>
+          <div
+            class="profile-icon"
+            id="profileIcon"
+            aria-haspopup="true"
+            aria-expanded="false"
+            tabindex="0"
+          >
+            <div class="profile-name guest-font-size" id="profileInitials">
+              GU
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="sub-menu-bg d-none" id="profileMenuBackdrop"></div>
+      <div class="sub-menu sub-menu-close" id="profileMenu" aria-hidden="true">
+        <a href="#profile"><div>Profil</div></a>
+        <a href="#settings"><div>Einstellungen</div></a>
+        <a href="#logout" id="logoutLink"><div>Logout</div></a>
+      </div>
       <main id="pageContent" class="main__container" tabindex="-1">
         <section class="summary-layout-wrapper">
           <div class="summary-layout-left">
