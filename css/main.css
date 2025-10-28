@@ -1,3 +1,50 @@
+@media (width <= 600px) {
+  .login-footer {
+    align-items: center;
+    background: none;
+    border: none;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 32px;
+    position: static;
+    width: 100%;
+  }
+}
+
+/* Splash-Screen Ergänzungen */
+.splash-bg {
+  align-items: center;
+  background: #2A3647;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  left: 0;
+  position: fixed;
+  top: 0;
+  transition: background 200ms ease-in-out;
+  width: 100vw;
+  z-index: 9999;
+}
+
+.splash-logo {
+  position: absolute;
+  transition: all 100ms ease-in-out;
+  will-change: top, left, width, height;
+}
+
+@media (width <= 600px) {
+  .splash-bg {
+    background: #2A3647;
+  }
+}
+
+@media (width >= 601px) {
+  .splash-bg {
+    background: #F6F7F8;
+  }
+}
+
 /* Main CSS - Hauptlayout-Komponenten (Header, Navigation, Main Container) */
 
 /* ===== HEADER ===== */
