@@ -9,7 +9,7 @@ import { auth } from "../common/firebase.js";
 import { loadFirebaseDatabase } from "../common/database.js";
 import { createTask } from "../common/tasks.js";
 import { icons } from "../common/svg-template.js";
-import {colorFromString} from "../board/utils.js"
+import { colorFromString } from "../board/utils.js"
 initAddTaskPage();
 
 /**
@@ -512,8 +512,8 @@ export function selectCategory(value) {
       value === "technical-task"
         ? "Technical Task"
         : value === "user-story"
-        ? "User Story"
-        : value;
+          ? "User Story"
+          : value;
     placeholder.textContent = text;
   }
 
@@ -747,60 +747,60 @@ export function editSubtask(id) {
     cancelSubtaskEdit(id);
   }
   // });
-  // }
+};
 
-  /**
-   * Speichert die bearbeitete Subtask
-   */
-  export function saveSubtaskEdit(id) {
-    const subtaskElement = document.querySelector(`[data-id="${id}"]`);
-    const input = subtaskElement.querySelector(".subtask-edit-input");
-    const newText = input.value.trim();
+/**
+ * Speichert die bearbeitete Subtask
+ */
+export function saveSubtaskEdit(id) {
+  const subtaskElement = document.querySelector(`[data-id="${id}"]`);
+  const input = subtaskElement.querySelector(".subtask-edit-input");
+  const newText = input.value.trim();
 
-    if (!newText) {
-      deleteSubtask(id);
-      return;
-    }
-
-    // Subtask aktualisieren
-    const subtask = subtasks.find((s) => s.id === id);
-    if (subtask) {
-      subtask.text = newText;
-      renderSubtasks();
-      setTaskStatus("Subtask aktualisiert", false);
-    }
+  if (!newText) {
+    deleteSubtask(id);
+    return;
   }
 
-  /**
-   * Bricht die Bearbeitung ab
-   */
-  // export function cancelSubtaskEdit(id) {
-  //   renderSubtasks();
-  // }
-
-  export function setSubtasksFrom(list) {
-    const arr = Array.isArray(list) ? list : [];
-    subtasks.length = 0;
-    arr.forEach((s, i) => {
-      subtasks.push({
-        id: s?.id ?? Date.now() + i,
-        text: (s?.text ?? "").trim(),
-        completed: !!(s?.completed ?? s?.done),
-      });
-    });
-  }
-
-  export function handleOutsideDropdownClick(e) {
-    if (e.cancelBubble) return;
-
-    const header = document.getElementById("assigneeHeader");
-    const dropdown = document.getElementById("assignee-dropdown");
-    if (!header || !dropdown) return;
-
-    if (!header.contains(e.target) && !dropdown.contains(e.target)) {
-      dropdown.classList.add("d-none");
-      header.classList.remove("open");
-      // Der AbortController entfernt den Listener automatisch
-    }
+  // Subtask aktualisieren
+  const subtask = subtasks.find((s) => s.id === id);
+  if (subtask) {
+    subtask.text = newText;
+    renderSubtasks();
+    setTaskStatus("Subtask aktualisiert", false);
   }
 }
+
+/**
+ * Bricht die Bearbeitung ab
+ */
+// export function cancelSubtaskEdit(id) {
+//   renderSubtasks();
+// }
+
+export function setSubtasksFrom(list) {
+  const arr = Array.isArray(list) ? list : [];
+  subtasks.length = 0;
+  arr.forEach((s, i) => {
+    subtasks.push({
+      id: s?.id ?? Date.now() + i,
+      text: (s?.text ?? "").trim(),
+      completed: !!(s?.completed ?? s?.done),
+    });
+  });
+}
+
+export function handleOutsideDropdownClick(e) {
+  if (e.cancelBubble) return;
+
+  const header = document.getElementById("assigneeHeader");
+  const dropdown = document.getElementById("assignee-dropdown");
+  if (!header || !dropdown) return;
+
+  if (!header.contains(e.target) && !dropdown.contains(e.target)) {
+    dropdown.classList.add("d-none");
+    header.classList.remove("open");
+    // Der AbortController entfernt den Listener automatisch
+  }
+}
+
