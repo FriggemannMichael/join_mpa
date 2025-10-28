@@ -1,8 +1,6 @@
-﻿h1 {
-  font-size: 61px;
-  font-weight: 700;
-}
+/* ===== ADD TASK SPECIFIC STYLES (NON-REDUNDANT) ===== */
 
+/* Legacy classes - kept for backward compatibility but unused in current markup */
 .heading {
   background-color: #f6f7f8;
   padding-bottom: 48px;
@@ -44,12 +42,6 @@
   height: 424px;
 }
 
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
 .form-input {
   border: 1px solid #d1d1d1;
   border-radius: 10px;
@@ -71,6 +63,7 @@
   outline: none;
 }
 
+/* Dropdown styles */
 .dropdown-container {
   cursor: pointer;
   position: relative;
@@ -274,23 +267,7 @@
   background-color: #d1d1d1;
 }
 
-textarea {
-  border: 1px solid #d1d1d1;
-  border-radius: 10px;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 20px;
-  height: 120px;
-  padding: 16px;
-  resize: none;
-  width: min(440px, 100%);
-}
-
-textarea:focus {
-  border-color: #29abe2;
-  outline: none;
-}
-
+/* Legacy button styles */
 .prio-buttons {
   display: flex;
   gap: 16px;
@@ -346,15 +323,6 @@ textarea:focus {
   margin-left: auto;
 }
 
-.required,
-sup.required {
-  color: #f00;
-  font-size: 0.65em;
-  line-height: 1;
-  margin-left: 2px;
-  vertical-align: super !important;
-}
-
 .clear-btn,
 .create-btn {
   align-items: center;
@@ -387,10 +355,7 @@ sup.required {
   box-shadow: 0 4px 4px 0 rgb(0 0 0 / 25%);
 }
 
-label {
-  font-size: 20px;
-}
-
+/* Legacy responsive styles */
 @media screen and (width <= 1369px) {
   .form-col-container {
     gap: 0;
@@ -433,17 +398,12 @@ label {
     margin: 0 32px 32px;
   }
 
-  h1 {
-    font-size: 48px;
-  }
-
   .heading {
     padding-bottom: 32px;
     padding-left: 32px;
   }
 
   .form-input,
-  textarea,
   .select-btn-input,
   .prio-btn,
   .prio-btn.active,
