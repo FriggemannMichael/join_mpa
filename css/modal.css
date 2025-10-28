@@ -243,9 +243,9 @@ h1 {
 }
 
 @media (width <= 1000px) {
-  body {
+  /* body {
     padding: 10px;
-  }
+  } */
 
   .addcontact {
     flex-direction: column;

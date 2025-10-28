@@ -1,22 +1,20 @@
-/* Spezifischer linker Abstand nur für die Kontakte-Seite */
-.contacts__container {
-  padding-left: 11.5rem;
-}
 /* Abstand unterhalb des Add-Contact-Button-Containers */
 #contact-list-actions {
   margin-top: 1rem;
   margin-bottom: 2rem;
 }
-.input input + .input__icon--right ~ input {
-  padding-right: 40px;
-}
-body {
-  background-color: var(--background-color);
-}
+
+/* Input mit rechtem Icon → mehr Padding rechts */
+.input input+.input__icon--right~input,
 .input input.input-with-icon {
   padding-right: 40px;
 }
 
+body {
+  background-color: var(--background-color);
+}
+
+/* Button-Icon rechts (SVG) – Farben */
 .btn__icon--right svg {
   color: #fff !important;
   fill: #fff !important;
@@ -57,6 +55,7 @@ body {
 .avatar-modal {
   align-items: center;
   background-color: #659fef;
+  /* TODO: var(--brand-400) */
   border: 3px solid #fff;
   border-radius: 50%;
   box-shadow: 0 4px 10px rgb(0 0 0 / 10%);
@@ -69,9 +68,11 @@ body {
   width: 120px;
 }
 
+/* creatbtn → evtl. createbtn umbenennen (HTML anpassen!) */
 .creatbtn {
   align-items: center;
   background-color: #2a3647;
+  /* TODO: var(--primary-color) */
   border: none;
   border-radius: 8px;
   color: #fff;
@@ -86,11 +87,7 @@ body {
   padding: 15px 24px;
 }
 
-.creatbtn .btn__icon--left svg {
-  color: #fff;
-  fill: #fff;
-}
-
+.creatbtn .btn__icon--left svg,
 .creatbtn .btn__icon--right svg {
   color: #fff;
   fill: #fff;
@@ -108,11 +105,6 @@ body {
   display: flex;
   flex-direction: row;
   gap: 16px;
-  .contacts-slogan {
-    color: var(--grey-medium);
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-  }
   margin: 4rem 0 1rem;
   min-height: 73px;
   opacity: 1;
@@ -127,19 +119,24 @@ body {
   text-align: left;
 }
 
+/* Einmalige, zentrale Definition */
 .contacts-slogan {
   color: var(--grey-medium);
   font-size: 1.1rem;
   margin-bottom: 1rem;
   text-align: center;
+  /* falls Header-Variante linksbündig sein soll, dort überschreiben */
 }
 
 .contacts-separator {
   background: var(--secondary-color);
-  border-radius: 2px;
-  height: 3.68rem;
-  margin: 0 12px;
+  border-radius: 9999px;
+  /* volle Rundung */
   width: 3px;
+  /* Dicke = 3px */
+  height: 3.68em;
+  /* etwa Höhe des Texts */
+  pointer-events: none;
 }
 
 .contacts-list-header p {
@@ -149,16 +146,7 @@ body {
   text-align: left;
 }
 
-.contacts-slogan {
-  color: var(--grey-medium);
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
-}
-
-.add-contact-btn:hover {
-  background: var(--secondary-color);
-}
-
+/* Add Contact Button */
 .add-contact-btn {
   align-items: center;
   background: var(--primary-color);
@@ -175,17 +163,16 @@ body {
   transition: background 0.2s;
 }
 
+.add-contact-btn:hover {
+  background: var(--secondary-color);
+}
+
 .add-contact-btn img {
   height: 24px;
   width: 24px;
 }
 
-.add-contact-btn:hover {
-  background: var(--secondary-color);
-}
-
 /* Overlay styling for contacts modal */
-
 .overlay {
   align-items: center;
   display: flex;
@@ -210,13 +197,15 @@ body {
   z-index: 1;
 }
 
-/* Layout für die Kontaktseite analog zu Board/Add-Task */
+/* Layout analog zu Board/Add-Task */
 .contacts__container {
   background: var(--background-color);
   display: flex;
   flex-direction: column;
+  align-items: start;
   height: 100vh;
-  overflow: hidden; /* Verhindert Scrollen des gesamten Containers */
+  overflow: hidden;
+  /* verhindert Scrollen des gesamten Containers */
 }
 
 .contacts-grid {
@@ -224,8 +213,9 @@ body {
   gap: 2rem;
   grid-template-columns: 1fr 2fr;
   height: 100%;
-
-  overflow: hidden; /* Verhindert Scrollen des Grid */
+  overflow: hidden;
+  /* verhindert Scrollen des Grid */
+  min-height: 0;
 }
 
 .contacts-list-section {
@@ -236,38 +226,23 @@ body {
   max-width: 456px;
   min-width: auto;
   background-color: var(--white);
-  padding-bottom: 4rem; /* Verhindert Scrollen der Section */
+  padding-left: 52px;
+  min-height: 0;
 }
 
-/* Korrigierte .contacts-separator Definition */
-.contacts-separator {
-  background: var(--secondary-color);
-  border-radius: 2px;
-  height: 40px;
-  margin: 0.5rem 0;
-  width: 3px;
-}
-
-.add-contact-btn:hover {
-  background: var(--secondary-color);
-}
-
-/* NEUE SCROLLBAR STYLES FÜR KONTAKTLISTE */
+/* Scrollbare Kontaktliste */
 .contacts-list {
-  flex: 1;
+  flex: 1 1 auto;
   list-style: none;
   margin: 0;
-  padding: 0;
+  padding: 0 8px 0 0;
   width: 100%;
-  overflow-y: auto; /* Vertikales Scrollen aktivieren */
-  overflow-x: hidden; /* Horizontales Scrollen verhindern */
-  max-height: calc(
-    100vh - 280px
-  ); /* Höhe anpassen: 100vh minus Header + Padding */
-  padding-right: 8px; /* Platz für Scrollbar schaffen */
+  overflow-y: auto;
+  overflow-x: hidden;
+  /* Entfernt harte max-height, stattdessen Flex steuert Höhe */
 }
 
-/* Scrollbar Styling für Webkit Browser (Chrome, Safari, Edge) */
+/* Scrollbar Styling (WebKit) */
 .contacts-list::-webkit-scrollbar {
   width: 10px;
 }
@@ -328,39 +303,38 @@ body {
   font-size: 1.1rem;
 }
 
-@media (width <= 1024px) {
+/* Detailbereich */
+.contact-detail-section {
+  min-height: 0;
+  overflow: auto;
+}
+
+/* Responsive Ranges */
+@media (width <=1024px) {
   .contacts-grid {
     gap: 1rem;
     grid-template-columns: 1fr;
   }
 
-  .contact-detail-section {
-    margin-top: 2rem;
-  }
-
   .contacts-list {
-    max-height: 50vh; /* Auf Tablets/Mobile angepasste Höhe */
+    max-height: 50vh;
+    /* Tablets/Mobile */
   }
 }
 
-@media (width <= 600px) {
+@media (width <=600px) {
   .contacts__container {
     padding-left: 0;
-    padding-top: 4rem;
-  }
-
-  .contacts-list-section,
-  .contact-detail-section {
-    max-width: unset;
-    min-width: unset;
-    padding: 1rem;
+    padding-top: 5rem;
   }
 
   .contacts-list {
-    max-height: 60vh; /* Mehr Platz auf kleinen Screens */
+    max-height: 60vh;
+    /* mehr Platz auf kleinen Screens */
   }
 }
 
+/* Kontaktseite/Listenbereich */
 .contact-page {
   display: flex;
   flex: 1;
@@ -378,10 +352,12 @@ body {
   z-index: 1;
 }
 
+/* Buttons/Interaktionen */
 .contact-btn {
   background-color: #2a3647;
+  /* TODO: var(--primary-color) */
   border-radius: 10px;
-  color: white;
+  color: #fff;
   cursor: pointer;
   display: flex;
   font-family: var(--font-family);
@@ -390,13 +366,12 @@ body {
   gap: 16px;
   height: 56px;
   justify-content: center;
-  letter-spacing: 0%;
   line-height: 120%;
   margin-top: 22.5px;
   padding: 12px 16px;
   text-align: center;
   width: 352px;
-  flex-shrink: 0; /* Verhindert, dass der Button beim Scrollen schrumpft */
+  flex-shrink: 0;
 }
 
 .contact-btn img {
@@ -406,9 +381,11 @@ body {
 
 .contact-btn:hover {
   background-color: #29abe2;
+  /* TODO: var(--secondary-color) */
   border: 0;
 }
 
+/* Sortierbuchstabe/Trenner */
 .beginning-letter {
   align-items: center;
   display: flex;
@@ -416,19 +393,20 @@ body {
   height: 58px;
   justify-content: left;
   left: 38px;
-  letter-spacing: 0%;
   line-height: 120%;
   position: relative;
-  flex-shrink: 0; /* Verhindert, dass die Buchstaben beim Scrollen schrumpfen */
+  flex-shrink: 0;
 }
 
+/* Tippfehler vorhanden: contact-seperator → contact-separator (HTML anpassen) */
 .contact-seperator {
   border: 1px solid #d1d1d1;
   border-radius: 3px;
   width: 352px;
-  flex-shrink: 0; /* Verhindert, dass der Separator beim Scrollen schrumpft */
+  flex-shrink: 0;
 }
 
+/* Kontaktkarte */
 .contact-person {
   border-radius: 10px;
   cursor: pointer;
@@ -437,33 +415,35 @@ body {
   gap: 35px;
   height: 78px;
   padding: 15px 24px;
-  transition: background-color 0.2s ease; /* Smooth Hover-Effekt */
+  transition: background-color 0.2s ease;
 }
 
 .contact-person:hover {
   background-color: #2a3647;
-  color: white;
+  color: #fff;
 }
 
+/* Tippfehler: initals → initials (HTML anpassen) */
 .initals {
   align-items: center;
   background-color: orange;
-  border: 2px solid white;
+  /* TODO: var(--accent-500) oder dynamisch */
+  border: 2px solid #fff;
   border-radius: 45px;
-  color: white;
+  color: #fff;
   display: flex;
   height: 42px;
   justify-content: center;
   width: 42px;
-  flex-shrink: 0; /* Verhindert, dass Initialen schrumpfen */
+  flex-shrink: 0;
 }
 
 .initals-big {
   align-items: center;
   background-color: orange;
-  border: 3px solid white;
+  border: 3px solid #fff;
   border-radius: 70px;
-  color: white;
+  color: #fff;
   display: flex;
   font-size: 47px;
   height: 120px;
@@ -499,6 +479,7 @@ body {
   font-size: 27px;
 }
 
+/* Tippfehler: headline-seperator → headline-separator (HTML anpassen) */
 .headline-seperator {
   border: 3px solid #29abe2;
   height: 59px;
@@ -585,4 +566,101 @@ body {
 
 .contact-mail a {
   color: #007cee;
+  /* TODO: var(--link-color) */
+}
+
+/* Scroll-Fallen lösen: Button oben fix, Liste füllt Rest */
+#addContactButton,
+.add-contact-btn,
+.contact-btn {
+  flex: 0 0 auto;
+}
+
+/* Mobile Overlay-Detail */
+@media (max-width: 768px) {
+
+  .contacts-list-header {
+    flex-direction: column;
+    align-items: start;
+    gap: 16px;
+    padding-left: 16px;
+    margin: 16px 0;
+  }
+
+  .contacts-list-header h1 {
+    font-size: 47px;
+  }
+
+  .contacts-list-header p {
+    font-size: 20px;
+    color: rgba(42, 54, 71, 1);
+  }
+
+  .contacts-separator {
+    width: 90px;
+    height: 3px;
+    order: 3;
+  }
+
+  .contact-big {
+    gap: 20px;
+    padding-top: 16px;
+  }
+
+  .initals-big {
+    height: 80px;
+    width: 80px;
+    font-size: 27px;
+  }
+
+  .name-big span {
+    font-size: 36px;
+  }
+
+  .changebtns {
+    display: none;
+  }
+
+  .contact-info {
+    padding: 1rem;
+  }
+
+  .contacts-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .contact-detail-section {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background: var(--white, #fff);
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 100ms ease, visibility 0s linear 150ms;
+    overflow: auto;
+    padding: 5rem 0;
+  }
+
+  .contact-detail-section.is-open {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 100ms ease;
+  }
+
+  .contact-detail-section .close-detail {
+    position: absolute;
+    top: 6rem;
+    right: 1rem;
+    display: inline-flex;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  .contact-detail-section[aria-hidden="false"] .close-detail {
+    display: inline-flex;
+  }
 }

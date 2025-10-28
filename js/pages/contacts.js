@@ -13,7 +13,7 @@ import {
   set,
   remove,
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-import { person, mail, call, check, close } from "../common/svg-template.js";
+import { person, mail, call, check, close, icons } from "../common/svg-template.js";
 
 /**
  * Generiert eine Farbe basierend auf den Initialen
@@ -48,6 +48,8 @@ async function initContactsPage() {
   await bootLayout();
   await loadAndRenderContacts();
   bindModalControls();
+  document.querySelector('.contact-detail-section .close-detail')
+  ?.addEventListener('click', closeContactDetailOverlay);
 }
 
 /**
@@ -158,6 +160,8 @@ function renderGroupedContacts(list, grouped) {
         item.className = "contact-person";
         item.dataset.phone = `tel:${c.phone || ""}`;
         item.dataset.key = c.key;
+        item.dataset.contactId = c.key;
+        item.tabIndex = 0;
         item.innerHTML = buildContactMarkup(c);
         item.addEventListener("click", () => showContactDetail(item, c.key));
         list.appendChild(item);
@@ -184,6 +188,14 @@ function showContactDetail(entry, key) {
     color,
   });
   setTimeout(bindEditDeleteButtons, 0);
+
+  // NEU: mobil Overlay öffnen
+  if (window.matchMedia('(max-width: 900px)').matches) {
+    openContactDetailOverlay();
+  } else {
+    // Desktop: sicherstellen, dass a11y-Attr korrekt sind
+    detail.setAttribute('aria-hidden', 'false');
+  }
 }
 
 /**
@@ -608,3 +620,42 @@ function buildInitials(name) {
     .slice(0, 2)
     .join("");
 }
+
+
+// Marc Responsiv 
+
+const listSection = document.querySelector('.contacts-list-section');
+const detail = document.querySelector('.contact-detail-section');
+
+
+function openContactDetailOverlay() {
+  detail.classList.add('is-open');
+  detail.setAttribute('aria-hidden', 'false');
+  const modal = document.getElementById("closeDetails")
+  modal.innerHTML = `${icons.arowback }`
+  if ('inert' in HTMLElement.prototype && listSection) listSection.inert = true;
+  detail.querySelector('h1, h2, button, a, [tabindex="0"]')?.focus();
+}
+
+function closeContactDetailOverlay() {
+  detail.classList.remove('is-open');
+  detail.setAttribute('aria-hidden', 'true');
+  if ('inert' in HTMLElement.prototype && listSection) listSection.inert = false;
+  document.getElementById('contact-list')?.focus();
+}
+
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && window.matchMedia('(max-width: 900px)').matches) {
+    closeContactDetailOverlay();
+  }
+});
+
+// Breakpoint-Wechsel: Desktop => Overlay-Zustand zurücksetzen
+window.addEventListener('resize', () => {
+  if (!window.matchMedia('(max-width: 900px)').matches) {
+    detail.classList.remove('is-open');
+    detail.setAttribute('aria-hidden', 'false');
+    if ('inert' in HTMLElement.prototype && listSection) listSection.inert = false;
+  }
+});
