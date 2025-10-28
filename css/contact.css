@@ -2,17 +2,21 @@
 .contacts__container {
   padding-left: 11.5rem;
 }
+
 /* Abstand unterhalb des Add-Contact-Button-Containers */
 #contact-list-actions {
-  margin-top: 1rem;
   margin-bottom: 2rem;
+  margin-top: 1rem;
 }
+
 .input input + .input__icon--right ~ input {
   padding-right: 40px;
 }
+
 body {
   background-color: var(--background-color);
 }
+
 .input input.input-with-icon {
   padding-right: 40px;
 }
@@ -108,15 +112,16 @@ body {
   display: flex;
   flex-direction: row;
   gap: 16px;
+  margin: 4rem 0 1rem;
+  min-height: 73px;
+  opacity: 1;
+  width: 100%;
+
   .contacts-slogan {
     color: var(--grey-medium);
     font-size: 1.1rem;
     margin-bottom: 1rem;
   }
-  margin: 4rem 0 1rem;
-  min-height: 73px;
-  opacity: 1;
-  width: 100%;
 }
 
 .contacts-list-header h1 {
@@ -149,12 +154,6 @@ body {
   text-align: left;
 }
 
-.contacts-slogan {
-  color: var(--grey-medium);
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
-}
-
 .add-contact-btn:hover {
   background: var(--secondary-color);
 }
@@ -178,10 +177,6 @@ body {
 .add-contact-btn img {
   height: 24px;
   width: 24px;
-}
-
-.add-contact-btn:hover {
-  background: var(--secondary-color);
 }
 
 /* Overlay styling for contacts modal */
@@ -224,18 +219,17 @@ body {
   gap: 2rem;
   grid-template-columns: 1fr 2fr;
   height: 100%;
-
   overflow: hidden; /* Verhindert Scrollen des Grid */
 }
 
 .contacts-list-section {
   align-items: flex-start;
+  background-color: var(--white);
   display: flex;
   flex-direction: column;
   height: 100%;
   max-width: 456px;
   min-width: auto;
-  background-color: var(--white);
   padding-bottom: 4rem; /* Verhindert Scrollen der Section */
 }
 
@@ -257,14 +251,14 @@ body {
   flex: 1;
   list-style: none;
   margin: 0;
-  padding: 0;
-  width: 100%;
-  overflow-y: auto; /* Vertikales Scrollen aktivieren */
-  overflow-x: hidden; /* Horizontales Scrollen verhindern */
   max-height: calc(
     100vh - 280px
   ); /* Höhe anpassen: 100vh minus Header + Padding */
+
+  overflow: hidden auto; /* Horizontales Scrollen verhindern */ /* Vertikales Scrollen aktivieren */
+  padding: 0;
   padding-right: 8px; /* Platz für Scrollbar schaffen */
+  width: 100%;
 }
 
 /* Scrollbar Styling für Webkit Browser (Chrome, Safari, Edge) */
@@ -290,8 +284,8 @@ body {
 
 /* Scrollbar für Firefox */
 .contacts-list {
-  scrollbar-width: thin;
   scrollbar-color: var(--grey-medium) #f1f1f1;
+  scrollbar-width: thin;
 }
 
 .contact-detail-placeholder {
@@ -384,6 +378,7 @@ body {
   color: white;
   cursor: pointer;
   display: flex;
+  flex-shrink: 0; /* Verhindert, dass der Button beim Scrollen schrumpft */
   font-family: var(--font-family);
   font-size: 21px;
   font-weight: 700;
@@ -396,7 +391,6 @@ body {
   padding: 12px 16px;
   text-align: center;
   width: 352px;
-  flex-shrink: 0; /* Verhindert, dass der Button beim Scrollen schrumpft */
 }
 
 .contact-btn img {
@@ -412,6 +406,7 @@ body {
 .beginning-letter {
   align-items: center;
   display: flex;
+  flex-shrink: 0; /* Verhindert, dass die Buchstaben beim Scrollen schrumpfen */
   font-size: 20px;
   height: 58px;
   justify-content: left;
@@ -419,14 +414,13 @@ body {
   letter-spacing: 0%;
   line-height: 120%;
   position: relative;
-  flex-shrink: 0; /* Verhindert, dass die Buchstaben beim Scrollen schrumpfen */
 }
 
 .contact-seperator {
   border: 1px solid #d1d1d1;
   border-radius: 3px;
-  width: 352px;
   flex-shrink: 0; /* Verhindert, dass der Separator beim Scrollen schrumpft */
+  width: 352px;
 }
 
 .contact-person {
@@ -452,14 +446,15 @@ body {
   border-radius: 45px;
   color: white;
   display: flex;
+  flex-shrink: 0; /* Verhindert, dass Initialen schrumpfen */
   height: 42px;
   justify-content: center;
   width: 42px;
-  flex-shrink: 0; /* Verhindert, dass Initialen schrumpfen */
 }
 
 .initals-big {
   align-items: center;
+  aspect-ratio: 1;
   background-color: orange;
   border: 3px solid white;
   border-radius: 70px;
@@ -469,7 +464,6 @@ body {
   height: 120px;
   justify-content: center;
   width: 120px;
-  aspect-ratio: 1;
 }
 
 .small-info h3 {

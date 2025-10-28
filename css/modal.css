@@ -146,16 +146,17 @@ h1 {
   flex-direction: column;
   gap: 16px;
 }
+
 .input {
   position: relative; /* nötig, damit das Icon relativ zum Input positioniert werden kann */
 }
 
 .input__icon--right {
+  pointer-events: none; /* verhindert, dass das Icon klicks blockiert */
   position: absolute;
   right: 16px; /* Abstand vom rechten Rand */
   top: 50%;
   transform: translateY(-50%);
-  pointer-events: none; /* verhindert, dass das Icon klicks blockiert */
 }
 
 .input-with-icon {

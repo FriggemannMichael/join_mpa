@@ -619,9 +619,9 @@ h5 {
 
 .subtask_item input[type="checkbox"] {
   height: 16px;
-  width: 16px;
   opacity: 0;
-  position: absolute
+  position: absolute;
+  width: 16px
 }
 
 .subtask_item:hover {
