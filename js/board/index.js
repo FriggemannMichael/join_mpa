@@ -21,7 +21,6 @@ async function initBoardPage() {
   setGlobalButtonsDisabled(true);
   const allowed = await guardPage("./index.html");
   if (!allowed) return;
-  await bootLayout();
   initBoardSearch();
   bindColumnShortcuts();
   await observeTasks();
