@@ -11,7 +11,7 @@ export const boardTemplates = {
 
   editTask: `
         <div class="form-group">
-            <label for="taskTitle">Title</label>
+            <label for="taskTitle">Title<sup class="required" aria-hidden="true">*</sup></label>
             <input type="text" id="taskTitle" placeholder="Enter a title" />
         </div>
 
@@ -157,27 +157,52 @@ export const boardTemplates = {
             <textarea id="taskDescription" placeholder="Enter a Description"></textarea>
           </div>
           <div class="form-group">
-            <label for="taskDueDate">Due date<sup class="required" aria-hidden="true">*</sup></label>
-            <input type="date" id="taskDueDate" placeholder="dd/mm/yyyy" />
+            <label for="taskDueDate">Due date<sup class="required" aria-hidden="true"
+                    >*</sup></label>
+            <input type="date" id="taskDueDate" placeholder="dd/mm/yyyy" lang="en-GB"/>
           </div>
         </div>
-        <div class="divider" aria-hidden="true"></div>
+        <div class="divider addTask" aria-hidden="true"></div>
         <div class="right-section modal-space">
           <div class="form-group">
             <label>Priority</label>
             <div class="priority-buttons" role="group" aria-label="Priority selection">
-              <button class="priority-btn" data-priority="urgent" type="button">
-                Urgent
-                <img class="prio-icon" src="./img/icon/prio-urgent.svg" alt="Urgent priority" />
-              </button>
-              <button class="priority-btn" data-priority="medium" type="button">
-                Medium
-                <img class="prio-icon" src="./img/icon/prio-medium.svg" alt="Medium priority" />
-              </button>
-              <button class="priority-btn" data-priority="low" type="button">
-                Low
-                <img class="prio-icon" src="./img/icon/prio-low.svg" alt="Low priority" />
-              </button>
+              <button
+                    class="priority-btn"
+                    data-priority="urgent"
+                    type="button"
+                  >
+                    Urgent
+                    <img
+                      class="prio-icon"
+                      src="./img/icon/prio-urgent.svg"
+                      alt="Urgent priority"
+                    />
+                  </button>
+                  <button
+                    class="priority-btn"
+                    data-priority="medium"
+                    type="button"
+                  >
+                    Medium
+                    <img
+                      class="prio-icon"
+                      src="./img/icon/prio-medium.svg"
+                      alt="Medium priority"
+                    />
+                  </button>
+                  <button
+                    class="priority-btn"
+                    data-priority="low"
+                    type="button"
+                  >
+                    Low
+                    <img
+                      class="prio-icon"
+                      src="./img/icon/prio-low.svg"
+                      alt="Low priority"
+                    />
+                  </button>
             </div>
           </div>
           <div class="form-group">
@@ -194,49 +219,70 @@ export const boardTemplates = {
             <div class="selected-assignee-avatars" id="selected-assignee-avatars"></div>
           </div>
           <div class="form-group">
-            <label>Category <span class="required-marker">*</span></label>
-            <div class="custom-category-select">
-              <div class="category-select-header" onclick="toggleCategoryDropdown()">
-                <span id="selected-category-placeholder">Select category</span>
-                <img src="./img/icon/arrow_drop_down.svg" class="dropdown-icon" />
-              </div>
-              <div class="category-dropdown d-none" id="category-dropdown">
-                <div class="category-option" onclick="selectCategory('technical-task')">
-                  Technical Task
-                </div>
-                <div class="category-option" onclick="selectCategory('user-story')">
-                  User Story
-                </div>
-              </div>
-            </div>
-            <input type="hidden" id="category" name="category" required />
-            <div class="field-error-message" id="error-category"></div>
-          </div>
-          <div class="form-group">
-            <label for="taskSubtasks">Subtasks</label>
-            <div class="subtask-input-container">
-              <input type="text" id="taskSubtasks" class="form-input subtask-input" placeholder="Add new subtask" />
-              <div class="subtask-btn">
-                <div class="check-cancel-div" id="subtaskIcons">
-                  <div class="subtask-cancel" id="subtaskClose">
-                    <!-- Close icon wird hier eingefügt -->
+             <label>Category <sup class="required" aria-hidden="true">*</sup></label>
+                <div class="custom-category-select">
+                  <div
+                    class="category-select-header"
+                    onclick="toggleCategoryDropdown()"
+                  >
+                    <span id="selected-category-placeholder"
+                      >Select category</span
+                    >
+                    <img
+                      src="./img/icon/arrow_drop_down.svg"
+                      class="dropdown-icon"
+                    />
                   </div>
-                  <div class="subtask-divider"></div>
-                  <div class="subtask-check" id="subtaskCheck">
-                    <!-- Check icon wird hier eingefügt -->
+                  <div class="category-dropdown d-none" id="category-dropdown">
+                    <div
+                      class="category-option"
+                      onclick="selectCategory('technical-task')"
+                    >
+                      Technical Task
+                    </div>
+                    <div
+                      class="category-option"
+                      onclick="selectCategory('user-story')"
+                    >
+                      User Story
+                    </div>
                   </div>
                 </div>
-                <img src="./img/icon/add.svg" alt="Add subtask" id="subtaskAddIcon" />
+                <input type="hidden" id="category" name="category" required />
+                <div class="field-error-message" id="error-category"></div>
+              </div>
+         <label for="taskSubtasks">Subtasks</label>
+                <div class="subtask-input-container">
+                  <input
+                    type="text"
+                    id="taskSubtasks"
+                    class="form-input subtask-input"
+                    placeholder="Add new subtask"
+                  />
+                  <div class="subtask-btn">
+                    <div class="check-cancel-div" id="subtaskIcons">
+                      <div class="subtask-cancel" id="subtaskClose">
+                        <!-- Close icon wird hier eingefügt -->
+                      </div>
+                      <div class="subtask-divider"></div>
+                      <div class="subtask-check" id="subtaskCheck">
+                        <!-- Check icon wird hier eingefügt -->
+                      </div>
+                    </div>
+                    <img
+                      src="./img/icon/add.svg"
+                      alt="Add subtask"
+                      id="subtaskAddIcon"
+                    />
+                  </div>
+                </div>
+                <div class="subtasks-list" id="subtasksList">
+                  <!-- Subtasks werden hier dynamisch hinzugefügt -->
+                </div>
               </div>
             </div>
-            <div class="subtasks-list" id="subtasksList">
-              <!-- Subtasks werden hier dynamisch hinzugefügt -->
-            </div>
           </div>
-        </div>
-     
-    </div>
-    <div class="button-group">
+    <div class="button-group addTask-modal">
       <label class="required-text">
         <sup class="required" aria-hidden="true">*</sup> This field is
         required
@@ -250,7 +296,6 @@ export const boardTemplates = {
         </button>
       </div>
     </div>
-    <p class="login-status" id="taskStatus" aria-live="polite"></p>
     `
 
 }
