@@ -50,6 +50,7 @@ async function initContactsPage() {
   bindModalControls();
   document.querySelector('.contact-detail-section .close-detail')
   ?.addEventListener('click', closeContactDetailOverlay);
+  initEditDeleteRespMenu()
 }
 
 /**
@@ -624,24 +625,28 @@ function buildInitials(name) {
 
 // Marc Responsiv 
 
-const listSection = document.querySelector('.contacts-list-section');
-const detail = document.querySelector('.contact-detail-section');
-
-
 function openContactDetailOverlay() {
+  const listSection = document.querySelector('.contacts-list-section');
+  const detail = document.querySelector('.contact-detail-section');
+  const menuBtn = document.getElementById("contactsEditDelete")
   detail.classList.add('is-open');
   detail.setAttribute('aria-hidden', 'false');
   const modal = document.getElementById("closeDetails")
   modal.innerHTML = `${icons.arowback }`
   if ('inert' in HTMLElement.prototype && listSection) listSection.inert = true;
   detail.querySelector('h1, h2, button, a, [tabindex="0"]')?.focus();
+  menuBtn.classList.remove("menu-hidden")
 }
 
 function closeContactDetailOverlay() {
+  const menuBtn = document.getElementById("contactsEditDelete")
+  const listSection = document.querySelector('.contacts-list-section');
+  const detail = document.querySelector('.contact-detail-section');
   detail.classList.remove('is-open');
   detail.setAttribute('aria-hidden', 'true');
   if ('inert' in HTMLElement.prototype && listSection) listSection.inert = false;
   document.getElementById('contact-list')?.focus();
+  menuBtn.classList.add("menu-hidden")
 }
 
 
@@ -653,9 +658,38 @@ document.addEventListener('keydown', (e) => {
 
 // Breakpoint-Wechsel: Desktop => Overlay-Zustand zurücksetzen
 window.addEventListener('resize', () => {
+  const listSection = document.querySelector('.contacts-list-section');
+  const detail = document.querySelector('.contact-detail-section');
   if (!window.matchMedia('(max-width: 58rem)').matches) {
     detail.classList.remove('is-open');
     detail.setAttribute('aria-hidden', 'false');
     if ('inert' in HTMLElement.prototype && listSection) listSection.inert = false;
   }
 });
+
+function initEditDeleteRespMenu() {
+  const btn = document.getElementById("contactsEditDelete")
+  const menu = document.getElementById("editDeleteModal")
+  if (!btn || !menu) return
+
+  btn.innerHTML = icons.menuDots
+  btn.addEventListener("click", (e) => {
+      e.stopPropagation()
+    menu.classList.toggle("menu-hidden")
+    bindEditDeleteButtons()
+  })
+
+  document.addEventListener("click", e => {
+    if (!menu.classList.contains("menu-hidden") && !menu.contains(e.target) && e.target !== btn) {
+      menu.classList.add("menu-hidden")
+      bindEditDeleteButtons()
+    }
+  })
+
+  document.addEventListener("keydown", e => {
+    if (!menu.classList.contains("menu-hidden") && e.key === "Escape") {
+      menu.classList.add("menu-hidden")
+      bindEditDeleteButtons()
+    }
+  })
+}
