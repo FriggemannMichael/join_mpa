@@ -1,0 +1,936 @@
+/* ==========================================
+   SUMMARY.CSS - Desktop First (1440px base)
+   Grid/Subgrid Approach
+   ========================================== */
+
+/* ==========================================================================
+   1. LAYOUT CONTAINER - DESKTOP (1440px base)
+   ========================================================================== */
+
+.summary-layout-wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+  padding-left: 62px; /* Basierend auf clamp aus altem CSS */
+  box-sizing: border-box;
+}
+
+.summary-layout-left {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  padding: 0 1rem;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.summary__container {
+  margin-top: 3.125rem; /* 50px */
+  position: relative;
+}
+
+/* ==========================================================================
+   2. HEADER-BEREICH - DESKTOP
+   SVG: 625x73 (width x height) - Horizontales Layout >768px
+   ========================================================================== */
+
+.summary__header-wrapper {
+  height: 4.5625rem; /* 73px aus SVG */
+  width: 100%;
+}
+
+.summary__header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: row; /* DESKTOP: horizontal */
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  gap: 1.5rem; /* 24px zwischen Elementen */
+}
+
+/* Title: "Join 360" */
+.summary__title {
+  font-size: 3.8125rem; /* 61px aus SVG path */
+  font-weight: 700;
+  line-height: 1.2;
+  color: #000000;
+  margin: 0;
+  padding: 0;
+}
+
+/* Vertikaler Separator - DESKTOP SICHTBAR (>768px) */
+.seperator {
+  display: block;
+  height: 3.6875rem; /* 59px aus SVG */
+  width: 0.1875rem; /* 3px stroke-width */
+  object-fit: contain;
+}
+
+/* Subtitle: "Key Metrics at a Glance" */
+.summary__header-text {
+  font-size: 1.625rem; /* ~26px aus SVG */
+  font-weight: 400;
+  line-height: 1.2;
+  color: #2a3647;
+  margin: 0;
+  padding: 0;
+}
+
+/* Horizontaler Separator - DESKTOP VERSTECKT */
+.seperator__horizental {
+  display: none;
+}
+
+/* ==========================================================================
+   3. TILES CONTAINER - DESKTOP GRID
+   ========================================================================== */
+
+.summary__title_container {
+  display: grid;
+  width: 100%;
+  margin-top: 3.5rem; /* 56px geschätzt */
+}
+
+.summary__tiles__container {
+  display: grid;
+  grid-template-columns: 1fr auto; /* Tiles links, Greeting rechts */
+  gap: 2rem; /* 32px zwischen Tiles und Greeting */
+  align-items: center; /* Vertikale Zentrierung */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.summary__tiles {
+  display: grid;
+  grid-template-rows: auto auto auto;
+  gap: 1.75rem; /* 28px */
+  max-width: 35rem; /* 560px */
+  width: 100%;
+}
+
+/* ==========================================================================
+   4. FIRST SECTION - To-do & Done Tiles (Desktop)
+   SVG: 264x168 per Tile, rx="30"
+   ========================================================================== */
+
+.summary__first__section {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem; /* 32px - aus SVG spacing */
+  width: 50%;
+}
+
+.summary__two_tiles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.125rem; /* 18px */
+  height: 10.5rem; /* 168px aus SVG */
+  width: 16.5rem; /* 264px aus SVG */
+
+  background-color: var(--white, #ffffff);
+  border-radius: 1.875rem; /* 30px aus SVG rx */
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
+
+  padding: 2.375rem 1.1875rem; /* 38px 19px */
+  box-sizing: border-box;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.summary__two_tiles:hover {
+  background-color: #2a3647;
+  color: #ffffff;
+  transform: translateY(-4px);
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.16);
+}
+
+.summary__icons {
+  width: 4.3125rem; /* 69px - Circle Durchmesser aus SVG (radius 34.5) */
+  height: 4.3125rem;
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+/* Hover effect for done icon: swap to white background with blue checkmark */
+.summary__two_tiles:hover #summary__done_icon {
+  content: url('../img/icon/done_blue.svg');
+}
+
+/* Hover effect for to-do icon: swap to white background with blue pen */
+.summary__two_tiles:hover #summary__toDo {
+  content: url('../img/icon/edit_blue.svg');
+}
+
+.summary__tiles__text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* 8px */
+  align-items: center;
+  text-align: center;
+}
+
+.summary__tiles__number {
+  font-size: 3.8125rem; /* 61px - große Zahlen */
+  font-weight: 600;
+  line-height: 1;
+  color: inherit;
+}
+
+.summary__text__top-and-bottom {
+  font-size: 1.25rem; /* 20px */
+  font-weight: 400;
+  line-height: 1.5;
+  color: inherit;
+}
+
+/* ==========================================================================
+   5. SECOND SECTION - Urgent & Deadline Tile (Desktop)
+   SVG: 560x168, rx="30"
+   ========================================================================== */
+
+.summary__second__section {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 3.8125rem; /* 61px - aus SVG spacing */
+  height: 10.5rem; /* 168px aus SVG */
+  width: 100%; /* 560px max, aber responsive */
+  max-width: 35rem; /* 560px */
+
+  background-color: var(--white, #ffffff);
+  border-radius: 1.875rem; /* 30px aus SVG rx */
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
+
+  padding: 1.75rem 1.5rem; /* 28px 24px */
+  box-sizing: border-box;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.summary__second__section:hover {
+  background-color: #2a3647;
+  color: #ffffff;
+  transform: translateY(-4px);
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.16);
+}
+
+.second__section__first__tile {
+  display: flex;
+  align-items: center;
+  gap: 1.125rem; /* 18px */
+}
+
+.summary__second__section .summary__icons {
+  width: 3.75rem; /* 60px - Circle Durchmesser aus SVG (radius 30) */
+  height: 3.75rem;
+}
+
+.summary__text__middle {
+  font-size: 1rem; /* 16px */
+  font-weight: 400;
+  line-height: 1.2;
+  color: inherit;
+}
+
+.summary__tiles__seperator {
+  height: 6.375rem; /* 102px aus SVG */
+  width: 0.125rem; /* 2px aus SVG stroke-width */
+  object-fit: contain;
+}
+
+.summary__deadline__date {
+  font-size: 1.3125rem; /* 21px */
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 0.75rem; /* 12px */
+  color: inherit;
+}
+
+.summary__deadline__text {
+  font-size: 1rem; /* 16px */
+  font-weight: 400;
+  line-height: 1.2;
+  color: inherit;
+}
+
+/* ==========================================================================
+   6. THIRD SECTION - 3 Status Tiles (Desktop)
+   SVG: 168x168 (quadratisch), rx="30"
+   ========================================================================== */
+
+.summary__third__section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem; /* 32px - aus SVG spacing */
+  width: 50%;
+  padding-bottom: 2rem;
+}
+
+.summary__third__section-tiles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8125rem; /* 13px */
+  height: 10.5rem; /* 168px aus SVG - quadratisch */
+  width: 10.5rem; /* 168px aus SVG */
+
+  background-color: var(--white, #ffffff);
+  border-radius: 1.875rem; /* 30px aus SVG rx */
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
+
+  padding: 1.5625rem 0.5rem; /* 25px 8px */
+  box-sizing: border-box;
+  text-align: center;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.summary__third__section-tiles:hover {
+  background-color: #2a3647;
+  color: #ffffff;
+  transform: translateY(-4px);
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.16);
+}
+
+.summary__text__top-and-bottom-text_align {
+  text-align: center;
+}
+
+/* ==========================================================================
+   7. GREETING-BEREICH - DESKTOP (rechts neben Tiles)
+   SVG: 385x136
+   ========================================================================== */
+
+.summary__greeting__wrapper {
+  display: flex;
+  flex-direction: column;
+
+  padding-top: 0;
+  min-width: 24.0625rem; /* 385px aus SVG width */
+
+  flex-shrink: 1;
+}
+
+.summary__greeting__formula {
+  font-size: 2.9375rem; /* 47px - "Good morning," aus SVG */
+  font-weight: 500;
+  line-height: 1.2;
+  color: #2a3647;
+  margin: 0;
+  margin-bottom: 0.5rem;
+}
+
+.summary__greeting__name {
+  font-size: 4rem; /* 64px - "Sofia Müller" aus SVG größer */
+  font-weight: 700;
+  line-height: 1.05;
+  color: #29abe2;
+  margin: 0;
+}
+
+/* ==========================================================================
+   8. INTERACTIVE STATES
+   ========================================================================== */
+
+/* Link-Wrapper reset */
+.summary__first__section a,
+.summary__third__section a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.summary__tiles > div > a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  width: 100%;
+}
+
+/* Hover-States bereits in Tiles integriert */
+
+/* Focus States für Accessibility */
+.summary__two_tiles:focus-visible,
+.summary__second__section:focus-visible,
+.summary__third__section-tiles:focus-visible {
+  outline: 2px solid #29abe2;
+  outline-offset: 4px;
+}
+
+/* ==========================================================================
+   9. GREETING ANIMATION (Mobile Only)
+   ========================================================================== */
+
+/* Initial state: Greeting page is hidden by default on desktop */
+.summary__greeting__animation {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #f6f7f8;
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.summary__greeting__animation.active {
+  display: flex;
+  opacity: 1;
+}
+
+.summary__greeting__animation.fade-out {
+  opacity: 0;
+}
+
+.greeting-animation-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* ==========================================================================
+   10. RESPONSIVE MEDIA QUERIES - Desktop First (1440px → 320px)
+   ========================================================================== */
+
+/* Tablet Landscape - 1024px */
+@media (max-width: 1024px) {
+  .summary-layout-wrapper {
+    padding-left: 2rem; /* 32px */
+  }
+
+  .summary__tiles__container {
+    grid-template-columns: 1fr; /* Stack tiles and greeting */
+    gap: 3rem;
+  }
+
+  .summary__greeting__wrapper {
+    padding-left: 1rem;
+    padding-top: 0;
+    width: 100%;
+    max-width: 35rem;
+    justify-content: flex-start;
+  }
+
+  .summary__tiles {
+    max-width: 100%;
+  }
+}
+
+/* Tablet Portrait - 768px (SEPARATOR SWITCH POINT) */
+@media (max-width: 768px) {
+  .summary-layout-wrapper {
+    padding-left: 1.5rem;
+  }
+
+  /* Header: Switch zu vertikalem Layout (Mobile SVG 225x106) */
+  .summary__header-wrapper {
+    height: auto;
+  }
+
+  .header-content {
+    flex-direction: column; /* Vertikal statt horizontal */
+    align-items: flex-start;
+    gap: 0;
+  }
+
+  .summary__title {
+    font-size: 3rem; /* 48px - smaller on tablet */
+  }
+
+  .summary__header-text {
+    font-size: 1.25rem; /* 20px */
+    margin-top: 0.25rem;
+  }
+
+  /* Hide vertical separator on mobile */
+  .seperator {
+    display: none !important;
+  }
+
+  /* Show horizontal separator on mobile */
+  .seperator__horizental {
+    display: block !important;
+    width: 5.625rem; /* 90px aus Mobile SVG */
+    height: 0.1875rem; /* 3px */
+    background-color: #29abe2;
+    margin-top: 0.75rem; /* 12px */
+    border: none;
+  }
+
+  /* Hide greeting wrapper in mobile view (<768px) */
+  .summary__greeting__wrapper {
+    display: none;
+  }
+
+  /* Tiles: Adjust sizing */
+  .summary__first__section {
+    gap: 1.5rem; /* 24px */
+  }
+
+  .summary__third__section {
+    gap: 1.5rem;
+  }
+}
+
+/* Fix uneven spacing for screens between 610px and 768px */
+@media (min-width: 610px) and (max-width: 768px) {
+  .summary__second__section {
+    gap: 1.5rem; /* Match first and third section gap */
+  }
+}
+
+/* Mobile Large - 600px */
+@media (max-width: 600px) {
+  .summary-layout-wrapper {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  .summary__title {
+    font-size: 2.5rem; /* 40px */
+  }
+
+  /* First Section: Keep 2 tiles in a row */
+  .summary__first__section {
+    grid-template-columns: repeat(2, 1fr); /* Keep 2 columns */
+    gap: 0.75rem; /* Reduced gap */
+    width: 100%; /* Match second section width */
+  }
+
+  .summary__two_tiles {
+    width: 100%; /* Takes full width of grid cell */
+    min-height: 7.25rem; /* 116px - prevent collapse */
+    padding: 1.5rem 0.75rem; /* Reduced horizontal padding */
+    gap: 0.75rem; /* Reduced gap between icon and text */
+  }
+
+  .summary__two_tiles .summary__icons {
+    width: 3.5rem; /* 56px - smaller icon */
+    height: 3.5rem;
+  }
+
+  .summary__two_tiles .summary__tiles__number {
+    font-size: 2.5rem; /* 40px - smaller */
+  }
+
+  .summary__two_tiles .summary__text__top-and-bottom {
+    font-size: 0.875rem; /* 14px - smaller */
+  }
+
+  /* Second Section: Ensure proper layout without wrapping */
+  .summary__second__section {
+    width: 100%; /* Match first section width */
+    max-width: none; /* Remove max-width override */
+    flex-wrap: nowrap; /* Prevent wrapping */
+    gap: 0.5rem; /* Reduced gap */
+    padding: 1.5rem 0.75rem; /* Reduced horizontal padding */
+    height: 10.5rem; /* Keep same height as other tiles */
+  }
+
+  .second__section__first__tile {
+    gap: 0.5rem; /* Reduced gap */
+    flex-shrink: 0;
+  }
+
+  .summary__second__section .summary__icons {
+    width: 3rem; /* 48px - smaller icon */
+    height: 3rem;
+  }
+
+  .summary__second__section .summary__tiles__number {
+    font-size: 2rem; /* 32px - Smaller to prevent wrapping */
+  }
+
+  .summary__text__middle {
+    font-size: 0.875rem; /* 14px - smaller */
+  }
+
+  .summary__tiles__seperator {
+    height: 4.5rem; /* 72px - smaller separator */
+    flex-shrink: 0;
+  }
+
+  .summary__deadline__date {
+    font-size: 0.875rem; /* 14px - Smaller on mobile */
+    margin-bottom: 0.25rem;
+    white-space: nowrap; /* Prevent line break in date */
+  }
+
+  .summary__deadline__text {
+    font-size: 0.75rem; /* 12px - Smaller on mobile */
+    white-space: nowrap; /* Prevent line break */
+  }
+
+  /* Third Section: Keep 3 columns but smaller */
+  .summary__third__section {
+    grid-template-columns: repeat(3, 1fr); /* Keep 3 columns in a row */
+    gap: 0.75rem; /* Reduced gap to fit 3 tiles */
+    width: 100%; /* Match other sections width */
+  }
+
+  .summary__third__section-tiles {
+    width: 100%;
+    min-height: 7.25rem; /* 116px - prevent collapse */
+    padding: 1rem 0.25rem; /* Reduced horizontal padding */
+  }
+
+  .summary__third__section .summary__tiles__number {
+    font-size: 2.5rem; /* Smaller numbers */
+  }
+
+  .summary__third__section .summary__text__top-and-bottom {
+    font-size: 0.75rem; /* 12px - smaller text to fit */
+  }
+
+  /* Greeting on mobile */
+  .summary__greeting__wrapper {
+    padding-top: 2rem;
+  }
+
+  .summary__greeting__formula {
+    font-size: 2.5rem; /* 40px */
+  }
+
+  .summary__greeting__name {
+    font-size: 3rem; /* 48px */
+  }
+}
+
+/* Mobile - 480px */
+@media (max-width: 480px) {
+  .summary__title {
+    font-size: 2rem; /* 32px */
+  }
+
+  .summary__header-text {
+    font-size: 1.125rem; /* 18px */
+  }
+
+  /* Enable Greeting Animation on Mobile */
+  .summary__greeting__animation {
+    display: flex;
+  }
+
+  /* Hide greeting wrapper in main layout on mobile */
+  .summary__greeting__wrapper {
+    display: none;
+  }
+
+  .summary__tiles {
+    gap: 1.5rem;
+  }
+
+  /* First Section: Keep 2 tiles in a row */
+  .summary__first__section {
+    grid-template-columns: repeat(2, 1fr); /* Force 2 columns */
+    gap: 0.5rem; /* Minimal gap */
+  }
+
+  .summary__two_tiles {
+    padding: 1rem 0.5rem; /* Reduced padding */
+    gap: 0.5rem;
+    flex-direction: row; /* Keep icon next to text */
+    justify-content: center;
+  }
+
+  .summary__two_tiles .summary__icons {
+    width: 3rem; /* 48px */
+    height: 3rem;
+    flex-shrink: 0;
+  }
+
+  .summary__two_tiles .summary__tiles__number {
+    font-size: 2rem; /* 32px */
+  }
+
+  .summary__two_tiles .summary__text__top-and-bottom {
+    font-size: 0.75rem; /* 12px */
+  }
+
+  /* Third Section: Keep 3 tiles in row */
+  .summary__third__section {
+    grid-template-columns: repeat(3, 1fr); /* Force 3 columns */
+    gap: 0.5rem; /* Minimal gap */
+  }
+
+  .summary__third__section-tiles {
+    padding: 0.75rem 0.25rem; /* Minimal padding */
+    min-height: 6rem; /* Smaller height */
+  }
+
+  .summary__third__section .summary__tiles__number {
+    font-size: 2rem; /* 32px - smaller */
+  }
+
+  .summary__third__section .summary__text__top-and-bottom {
+    font-size: 0.625rem; /* 10px - very small to prevent wrapping */
+    line-height: 1.3;
+  }
+
+  .summary__greeting__formula {
+    font-size: 2rem; /* 32px */
+  }
+
+  .summary__greeting__name {
+    font-size: 2.5rem; /* 40px */
+  }
+}
+
+/* Mobile Small - 429px (SVG Mobile Design Breakpoint) */
+@media (max-width: 429px) {
+  .summary-layout-wrapper {
+    padding-left: 1.25rem; /* 20px - from SVG x="20" */
+    padding-right: 1.25rem;
+  }
+
+  /* First Section: Keep 2 tiles in row */
+  .summary__first__section {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  /* Mobile SVG: 116x116px tiles, rx="20" */
+  .summary__two_tiles {
+    height: auto;
+    min-height: 6.5rem; /* 104px - smaller */
+    width: 100%;
+    border-radius: 1.25rem; /* 20px */
+    padding: 0.75rem 0.375rem; /* Ultra-reduced padding */
+    gap: 0.375rem;
+    flex-direction: row; /* Keep icon next to text */
+    justify-content: center;
+  }
+
+  .summary__two_tiles .summary__icons {
+    width: 2.5rem; /* 40px - smaller icon */
+    height: 2.5rem;
+    flex-shrink: 0;
+  }
+
+  .summary__two_tiles .summary__tiles__number {
+    font-size: 1.75rem; /* 28px - smaller */
+  }
+
+  .summary__two_tiles .summary__text__top-and-bottom {
+    font-size: 0.625rem; /* 10px */
+  }
+
+  .summary__third__section-tiles {
+    height: auto;
+    min-height: 6rem;
+    width: 100%;
+    border-radius: 1.25rem;
+    padding: 0.75rem 0.25rem;
+  }
+
+  .summary__second__section {
+    height: auto;
+    min-height: 6.5rem; /* 104px - smaller */
+    border-radius: 1.25rem;
+    padding: 1rem 0.5rem; /* Reduced padding */
+    flex-direction: row; /* Keep horizontal */
+    gap: 0.5rem; /* Minimal gap */
+    flex-wrap: nowrap;
+  }
+
+  .second__section__first__tile {
+    flex-direction: row; /* Keep icon next to text */
+    align-items: center;
+    gap: 0.375rem;
+    flex-shrink: 0;
+  }
+
+  .summary__second__section .summary__icons {
+    width: 2.5rem; /* 40px - smaller */
+    height: 2.5rem;
+  }
+
+  .summary__second__section .summary__tiles__text {
+    gap: 0.25rem;
+  }
+
+  .summary__second__section .summary__tiles__number {
+    font-size: 1.5rem; /* 24px - smaller */
+  }
+
+  .summary__text__middle {
+    font-size: 0.625rem; /* 10px */
+  }
+
+  .summary__tiles__seperator {
+    height: 4rem; /* 64px - smaller separator */
+    width: 0.125rem;
+    flex-shrink: 0;
+  }
+
+  .summary__deadline__date {
+    font-size: 0.75rem; /* 12px */
+    margin-bottom: 0.25rem;
+    white-space: nowrap;
+  }
+
+  .summary__deadline__text {
+    font-size: 0.625rem; /* 10px */
+    white-space: nowrap;
+    line-height: 1.2;
+  }
+
+  /* Third section: Keep 3 columns in a row */
+  .summary__third__section {
+    grid-template-columns: repeat(3, 1fr); /* Force 3 columns */
+    gap: 0.5rem;
+  }
+
+  /* Font sizes from mobile SVG */
+  .summary__tiles__number {
+    font-size: 2rem; /* Smaller on mobile */
+  }
+
+  .summary__text__top-and-bottom {
+    font-size: 0.625rem; /* 10px */
+  }
+
+  .summary__text__middle {
+    font-size: 0.875rem;
+  }
+}
+
+/* Mobile Extra Small - 320px */
+@media (max-width: 320px) {
+  .summary-layout-wrapper {
+    padding-left: 0.5rem; /* 8px - minimal padding */
+    padding-right: 0.5rem;
+  }
+
+  .summary__title {
+    font-size: 1.75rem; /* 28px */
+  }
+
+  .summary__header-text {
+    font-size: 1rem;
+  }
+
+  .summary__tiles {
+    gap: 1rem; /* Reduced gap between tiles */
+  }
+
+  /* First Section: Keep 2 tiles in row, ultra-compact */
+  .summary__first__section {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.375rem; /* 6px - minimal gap */
+  }
+
+  .summary__two_tiles {
+    padding: 0.625rem 0.25rem; /* Ultra-minimal padding */
+    gap: 0.25rem;
+    min-height: 5.5rem; /* 88px - smaller */
+    flex-direction: row; /* Keep icon next to text */
+    justify-content: center;
+  }
+
+  .summary__two_tiles .summary__icons {
+    width: 2rem; /* 32px - ultra-small icon */
+    height: 2rem;
+    flex-shrink: 0;
+  }
+
+  .summary__two_tiles .summary__tiles__number {
+    font-size: 1.5rem; /* 24px - smaller */
+  }
+
+  .summary__two_tiles .summary__text__top-and-bottom {
+    font-size: 0.5625rem; /* 9px - ultra small */
+  }
+
+  .summary__second__section {
+    padding: 0.75rem 0.375rem; /* Ultra-minimal padding */
+    gap: 0.375rem; /* 6px - minimal gap */
+    min-height: 5.5rem; /* 88px - smaller */
+    flex-wrap: nowrap;
+  }
+
+  .second__section__first__tile {
+    flex-direction: row; /* Keep icon next to text */
+    gap: 0.25rem;
+  }
+
+  .summary__second__section .summary__icons {
+    width: 2rem; /* 32px - even smaller icon */
+    height: 2rem;
+  }
+
+  .summary__second__section .summary__tiles__text {
+    gap: 0.125rem;
+  }
+
+  .summary__tiles__number {
+    font-size: 2.5rem; /* 40px */
+  }
+
+  .summary__second__section .summary__tiles__number {
+    font-size: 1.25rem; /* 20px - smaller in urgent tile */
+  }
+
+  .summary__text__middle {
+    font-size: 0.5rem; /* 8px */
+  }
+
+  .summary__tiles__seperator {
+    height: 3.5rem; /* 56px - smaller */
+  }
+
+  .summary__deadline__date {
+    font-size: 0.625rem; /* 10px */
+    margin-bottom: 0.125rem;
+  }
+
+  .summary__deadline__text {
+    font-size: 0.5rem; /* 8px */
+    line-height: 1.1;
+  }
+
+  /* Third section: Keep 3 columns, ultra-compact */
+  .summary__third__section {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.375rem; /* 6px - minimal gap */
+  }
+
+  .summary__third__section-tiles {
+    padding: 0.5rem 0.125rem; /* Ultra-minimal padding */
+    min-height: 5.5rem; /* 88px - smaller */
+  }
+
+  .summary__third__section .summary__tiles__number {
+    font-size: 1.75rem; /* 28px - smaller */
+  }
+
+  .summary__third__section .summary__text__top-and-bottom {
+    font-size: 0.5625rem; /* 9px - ultra small */
+    line-height: 1.2;
+  }
+
+  .summary__greeting__formula {
+    font-size: 1.75rem;
+  }
+
+  .summary__greeting__name {
+    font-size: 2rem;
+  }
+}

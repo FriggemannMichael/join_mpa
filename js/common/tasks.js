@@ -67,7 +67,7 @@ function buildTaskPayload(task) {
     priority: task.priority || "medium",
     status:
       !task.status || typeof task.status !== "string" || !task.status.trim()
-        ? "todo"
+        ? "toDo"
         : task.status,
     assignees: Array.isArray(task.assignees) ? task.assignees : [],
     subtasks: Array.isArray(task.subtasks) ? task.subtasks : [],

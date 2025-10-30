@@ -1,0 +1,84 @@
+/* Animations CSS - Splash, Overlays, @keyframes */
+
+/* ===== SPLASH / LOGO ANIMATION (Brand Move) ===== */
+.brand-splash {
+  left: 50%;
+  pointer-events: none;
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  transition: top 700ms ease, left 700ms ease, transform 700ms ease,
+    opacity 400ms ease;
+  will-change: top, left, transform, opacity;
+  z-index: calc(var(--z-overlay) + 20);
+}
+
+.brand-splash img {
+  display: block;
+  height: auto;
+  width: 12rem;
+}
+
+.brand-fixed {
+  left: var(--spacing-xl);
+  top: var(--spacing-xl);
+  transform: translate(0, 0) scale(0.45);
+}
+
+@media (width <= 30rem) {
+  .brand-splash img {
+    width: 9rem;
+  }
+
+  .brand-fixed {
+    transform: translate(0, 0) scale(0.4);
+  }
+}
+
+.login-card {
+  /* ...bestehende Styles... */
+  transition: opacity 400ms ease, transform 400ms ease;
+}
+
+.login-card-hidden {
+  opacity: 0;
+  transform: translateY(1.25rem);
+}
+
+.login-card-shown {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== OVERLAY & ANIMATIONEN ===== */
+.summary__overlay__container {
+  align-items: center;
+  animation: fadeOut 600ms ease-in 1200ms;
+  background: var(--background-color);
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  opacity: 1;
+  overflow-y: auto;
+  position: absolute;
+  z-index: var(--z-overlay);
+}
+
+.summary__greeting__container-mobile {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  width: 100%;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}

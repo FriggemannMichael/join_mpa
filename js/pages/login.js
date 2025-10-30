@@ -14,6 +14,7 @@ initLoginPage();
 async function initLoginPage() {
   await redirectIfAuthenticated("./summary.html");
   bindLoginForm();
+  bindLoginButton();
   bindGuestButton();
   bindSignupButton();
   runIntroAnimation();
@@ -26,6 +27,21 @@ function bindLoginForm() {
   const form = document.getElementById("loginForm");
   if (!form) return;
   form.addEventListener("submit", handleLoginSubmit);
+}
+
+/**
+ * Bindet Event-Listener für den Login-Link
+ */
+function bindLoginButton() {
+  const loginBtn = document.getElementById("loginBtn");
+  if (!loginBtn) return;
+  loginBtn.addEventListener("click", (event) => {
+    event.preventDefault();
+    const form = document.getElementById("loginForm");
+    if (form) {
+      form.requestSubmit();
+    }
+  });
 }
 
 /**
@@ -54,7 +70,8 @@ async function handleLoginSubmit(event) {
 function bindGuestButton() {
   const guestBtn = document.getElementById("guestBtn");
   if (!guestBtn) return;
-  guestBtn.addEventListener("click", () => {
+  guestBtn.addEventListener("click", (event) => {
+    event.preventDefault();
     startGuest();
     window.location.href = "./summary.html";
   });

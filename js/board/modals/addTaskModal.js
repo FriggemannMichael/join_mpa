@@ -1,4 +1,6 @@
-import { populateAssignees, bindPriorityButtons, initSubtaskInput, bindActionButtons } from '../../pages/add-task.js';
+import { populateAssignees } from '../../pages/add-task-assignees.js';
+import { bindPriorityButtons, bindActionButtons } from '../../pages/add-task-form.js';
+import { initSubtaskInput } from '../../pages/add-task-subtasks.js';
 import { boardTemplates } from "../templates/board-templates.js";
 import { closeTaskOverlay, ScrollLock } from "../utils.js";
 

@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(start add-task.html)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git checkout:*)",
+      "Bash(git restore:*)",
+      "Bash(git stash:*)",
+      "Bash(git pull:*)",
+      "Bash(git merge:*)",
+      "Bash(git push:*)",
+      "Bash(git fetch:*)",
+      "Bash(start summary.html)",
+      "Bash(start board.html)",
+      "Bash(dir:*)",
+      "Bash(findstr:*)",
+      "Bash(start index.html)",
+      "Bash(python -m http.server:*)",
+      "Bash(start http://localhost:8000/add-task.html)",
+      "Bash(start:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
