@@ -686,6 +686,40 @@ body {
   .contact-seperator {
     width: 100%;
   }
+
+  .contact-detail-section {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background: var(--white, #fff);
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 100ms ease, visibility 0s linear 150ms;
+    overflow: auto;
+    padding: 6rem 0;
+  }
+
+  .contact-detail-section.is-open {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 100ms ease;
+  }
+
+  .contact-detail-section .close-detail {
+    position: absolute;
+    top: 7rem;
+    right: 1rem;
+    display: inline-flex;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+
+  .contact-detail-section[aria-hidden="false"] .close-detail {
+    display: inline-flex;
+  }
 }
 
 /* <= 48rem */
@@ -745,37 +779,5 @@ body {
     gap: 1rem;
   }
 
-  .contact-detail-section {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-    background: var(--white, #fff);
-    visibility: hidden;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 100ms ease, visibility 0s linear 150ms;
-    overflow: auto;
-    padding: 5rem 0;
-  }
-
-  .contact-detail-section.is-open {
-    visibility: visible;
-    opacity: 1;
-    pointer-events: auto;
-    transition: opacity 100ms ease;
-  }
-
-  .contact-detail-section .close-detail {
-    position: absolute;
-    top: 6rem;
-    right: 1rem;
-    display: inline-flex;
-    border: none;
-    background: none;
-    cursor: pointer;
-  }
-
-  .contact-detail-section[aria-hidden="false"] .close-detail {
-    display: inline-flex;
-  }
+  
 }

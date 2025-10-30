@@ -190,7 +190,7 @@ function showContactDetail(entry, key) {
   setTimeout(bindEditDeleteButtons, 0);
 
   // NEU: mobil Overlay öffnen
-  if (window.matchMedia('(max-width: 900px)').matches) {
+  if (window.matchMedia('(max-width: 928px)').matches) {
     openContactDetailOverlay();
   } else {
     // Desktop: sicherstellen, dass a11y-Attr korrekt sind
@@ -646,14 +646,14 @@ function closeContactDetailOverlay() {
 
 
 document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && window.matchMedia('(max-width: 900px)').matches) {
+  if (e.key === 'Escape' && window.matchMedia('(max-width: 58rem)').matches) {
     closeContactDetailOverlay();
   }
 });
 
 // Breakpoint-Wechsel: Desktop => Overlay-Zustand zurücksetzen
 window.addEventListener('resize', () => {
-  if (!window.matchMedia('(max-width: 900px)').matches) {
+  if (!window.matchMedia('(max-width: 58rem)').matches) {
     detail.classList.remove('is-open');
     detail.setAttribute('aria-hidden', 'false');
     if ('inert' in HTMLElement.prototype && listSection) listSection.inert = false;
