@@ -4,7 +4,7 @@
    - Layout
    - Components
    - Utilities
-   - Media Queries (at the end)
+   - Media Queries
 ========================================= */
 
 /* ===== Base ===== */
@@ -101,10 +101,12 @@ body {
   background: var(--primary-color);
 }
 
-/* Detailbereich */
+/* Detailbereich (Parent als Anker für den FAB) */
 .contact-detail-section {
   min-height: 0;
   overflow: auto;
+  position: relative;
+  /* wichtig: Anker für .contacts-Edit-Delete-Resp */
 }
 
 /* Kontaktseite/Listenbereich Wrapper */
@@ -126,8 +128,6 @@ body {
 }
 
 /* ===== Components ===== */
-
-/* Buttons / Icons */
 .btn__icon--right {
   display: inline-flex;
   align-items: center;
@@ -217,7 +217,6 @@ body {
   width: 352px;
   flex-shrink: 0;
 }
-
 
 .contact-btn img {
   height: 32px;
@@ -536,16 +535,53 @@ body {
   flex: 0 0 auto;
 }
 
+/* FAB – Basis (sichtbar), Sichtbarkeit nur über .menu-hidden steuern */
+.contacts-Edit-Delete-Resp {
+  position: relative;
+  display: none;
+  bottom: 6rem;
+  right: 2rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  z-index: 11;
 
-.menu-hidden {
+  font-family: var(--font-family);
+  font-size: 21px;
+  color: #fff;
+  background-color: #2a3647;
+  cursor: pointer;
+
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.contacts-Edit-Delete-Resp:hover {
+  background-color: #29abe2;
+  border: 0;
+}
+
+/* Gemeinsame Hidden-Utilities (ohne display:none für Transition) */
+.contacts-Edit-Delete-Resp.menu-hidden {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.2s ease;
 }
 
+.edit-Delete-Modal.menu-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+
+
 /* =========================================
-   Media Queries (all consolidated here)
+   Media Queries
 ========================================= */
 
 /* <= 1024px */
@@ -659,17 +695,22 @@ body {
 
 /* <= 58rem */
 @media (max-width: 58rem) {
+
+  /* Mobile Detail-Panel ohne Fade-In: nur sichtbar/nicht sichtbar */
   .contact-detail-section {
     position: fixed;
     inset: 0;
     z-index: 1;
     background: var(--white, #fff);
     visibility: hidden;
-    opacity: 0;
     pointer-events: none;
-    transition: opacity 100ms ease, visibility 0s linear 150ms;
     overflow: auto;
-    padding: 5rem 0;
+    padding: 6rem 0;
+  }
+
+  .contact-detail-section.is-open {
+    visibility: visible;
+    pointer-events: auto;
   }
 
   .contacts__container {
@@ -697,26 +738,6 @@ body {
     width: 100%;
   }
 
-  .contact-detail-section {
-    position: fixed;
-    inset: 0;
-    z-index: 1;
-    background: var(--white, #fff);
-    visibility: hidden;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 100ms ease, visibility 0s linear 150ms;
-    overflow: auto;
-    padding: 6rem 0;
-  }
-
-  .contact-detail-section.is-open {
-    visibility: visible;
-    opacity: 1;
-    pointer-events: auto;
-    transition: opacity 100ms ease;
-  }
-
   .contact-detail-section .close-detail {
     position: absolute;
     top: 7rem;
@@ -730,90 +751,48 @@ body {
   .contact-detail-section[aria-hidden="false"] .close-detail {
     display: inline-flex;
   }
-
-
-  @media (max-width: 48rem) {
-    .contact-btn {
-      position: fixed;
-      bottom: 6rem;
-      /* 32px vom unteren Rand */
-      right: 2rem;
-      /* 32px vom rechten Rand */
-      width: 3.5rem;
-      /* 56px */
-      height: 3.5rem;
-      /* 56px */
-      border-radius: 50%;
-      /* rund */
-      padding: 0;
-      justify-content: center;
-      align-items: center;
-      gap: 0;
-      font-size: 0;
-      /* Text vollständig ausblenden */
-      z-index: 1;
-      /* über Inhalt */
-    }
-
-    .contact-btn span {
-      display: none;
-      /* Text im Button ausblenden */
-    }
-
-    .contact-btn img {
-      width: 2rem;
-      /* 32px */
-      height: 2rem;
-      /* 32px */
-    }
-  }
 }
 
-.contacts-Edit-Delete-Resp {
-  position: fixed;
-  bottom: 6rem;
-  /* 32px vom unteren Rand */
-  right: 2rem;
-  /* 32px vom rechten Rand */
-  width: 3.5rem;
-  /* 56px */
-  height: 3.5rem;
-  /* 56px */
-  border-radius: 50%;
-  /* rund */
-  padding: 0;
-  justify-content: center;
-  align-items: center;
-  gap: 0;
-  font-size: 0;
-  /* Text vollständig ausblenden */
-  z-index: 11;
-  /* über Inhalt */
-
-  cursor: pointer;
-  display: flex;
-  font-family: var(--font-family);
-  font-size: 21px;
-  color: #fff;
-  background-color: #2a3647;
-}
-
-.contacts-Edit-Delete-Resp:hover {
-  background-color: #29abe2;
-  border: 0;
-}
-
-
-.contact-btn svg {
-  width: 2rem;
-  /* 32px */
-  height: 2rem;
-  /* 32px */
-}
-
-
-/* <= 48rem */
+/* <= 48rem – Mobile FAB + Layout */
 @media (max-width: 48rem) {
+  .contact-btn {
+    position: fixed;
+    bottom: 6rem;
+    right: 2rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    font-size: 0;
+    z-index: 1;
+  }
+
+  .contact-btn span {
+    display: none;
+  }
+
+  .contact-btn img,
+  .contact-btn svg {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  /* FAB (nur Layout/Position hier – keine Sichtbarkeits-Props!) */
+  .contacts-Edit-Delete-Resp {
+    position: absolute;
+    display: flex;
+    bottom: 6rem;
+    right: 2rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    font-size: 0;
+    /* nur Icon */
+  }
+
   .contacts-list {
     max-height: max-content;
   }
@@ -874,7 +853,7 @@ body {
   }
 
   .edit-Delete-Modal {
-    background-color: white;
+    background-color: #fff;
     box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.25);
     width: 116px;
     height: 100px;
@@ -882,19 +861,14 @@ body {
     display: flex;
     flex-direction: column;
 
-
-
-
     position: fixed;
     bottom: 6rem;
-    /* 32px vom unteren Rand */
     right: 1rem;
-    /* 32px vom rechten Rand */
     padding: 10px;
     justify-content: center;
     align-items: start;
-    /* gap: 8px;   */
-    z-index: 11;
+    z-index: 12;
+    /* über FAB */
   }
 
   .edit-Delete-Modal button {
@@ -909,6 +883,7 @@ body {
   }
 }
 
+/* <= 425px */
 @media (max-width: 425px) {
   .contacts-list-section {
     padding-left: 8px;
@@ -918,4 +893,9 @@ body {
     padding: 1rem;
     gap: 1rem;
   }
+
+  .name-big span {
+    font-size: 28px;
+  }
 }
+

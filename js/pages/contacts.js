@@ -48,9 +48,9 @@ async function initContactsPage() {
   await bootLayout();
   await loadAndRenderContacts();
   bindModalControls();
-  document.querySelector('.contact-detail-section .close-detail')
-  ?.addEventListener('click', closeContactDetailOverlay);
-  initEditDeleteRespMenu()
+  document.querySelector(".contact-detail-section .close-detail")
+    ?.addEventListener("click", closeContactDetailOverlay);
+  initEditDeleteRespMenu();
 }
 
 /**
@@ -79,24 +79,11 @@ function renderAddButton() {
   btn.id = "addNewContactBtn";
   btn.innerHTML = `Add new Contact<img src="./img/icon/person_add.png" alt="add Person" />`;
   actions.appendChild(btn);
-  btn.addEventListener("click", () => toggleAddContactOverlay(true));
-}
-
-/**
- * Zeigt oder verbirgt das Add-Contact-Modal
- * @param {boolean} show - true zum Anzeigen, false zum Verbergen
- */
-function toggleAddContactOverlay(show) {
-  const overlay = document.getElementById("addContactOverlay");
-  if (!overlay) return;
-  if (show) overlay.removeAttribute("hidden");
-  else overlay.setAttribute("hidden", "hidden");
+  btn.addEventListener("click", openAddContactModal);
 }
 
 /**
  * Extrahiert Kontakte aus Firebase Snapshot
- * @param {Object} snapshot - Firebase Snapshot
- * @returns {Array} Array von Kontakten
  */
 function extractContactsFromSnapshot(snapshot) {
   const contacts = [];
@@ -111,7 +98,6 @@ let selectedContactKey = null;
 
 /**
  * Rendert die Kontaktliste gruppiert nach Anfangsbuchstaben
- * @param {Array} contacts - Array von Kontakten
  */
 function renderContactList(contacts) {
   contacts = contacts.filter((c) => c.name && c.email);
@@ -127,8 +113,6 @@ function renderContactList(contacts) {
 
 /**
  * Gruppiert Kontakte nach Anfangsbuchstaben
- * @param {Array} contacts - Array von Kontakten
- * @returns {Object} Gruppierte Kontakte
  */
 function groupContactsByLetter(contacts) {
   const grouped = {};
@@ -141,9 +125,7 @@ function groupContactsByLetter(contacts) {
 }
 
 /**
- * Rendert gruppierte Kontakte in die Liste
- * @param {HTMLElement} list - Das Listen-Element
- * @param {Object} grouped - Gruppierte Kontakte
+ * Rendert gruppierte Kontakte
  */
 function renderGroupedContacts(list, grouped) {
   Object.keys(grouped)
@@ -171,9 +153,7 @@ function renderGroupedContacts(list, grouped) {
 }
 
 /**
- * Zeigt die Details eines ausgewählten Kontakts an
- * @param {HTMLElement} entry - Das Kontakt-Element
- * @param {string} key - Der Firebase-Key des Kontakts
+ * Zeigt Details eines Kontakts
  */
 function showContactDetail(entry, key) {
   selectedContactKey = key;
@@ -190,27 +170,33 @@ function showContactDetail(entry, key) {
   });
   setTimeout(bindEditDeleteButtons, 0);
 
-  // NEU: mobil Overlay öffnen
-  if (window.matchMedia('(max-width: 928px)').matches) {
+  if (window.matchMedia("(max-width: 928px)").matches) {
     openContactDetailOverlay();
   } else {
-    // Desktop: sicherstellen, dass a11y-Attr korrekt sind
-    detail.setAttribute('aria-hidden', 'false');
+    const detail = document.querySelector(".contact-detail-section");
+    detail.setAttribute("aria-hidden", "false");
   }
 }
 
 /**
- * Bindet Event-Listener für Edit und Delete Buttons
+ * Bindet Buttons für Edit & Delete
  */
 function bindEditDeleteButtons() {
-  const editBtn = document.getElementById("editContactBtn");
-  const deleteBtn = document.getElementById("deleteContactBtn");
+  ["editContactBtn", "editContactBtnResp"].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) btn.addEventListener("click", handleEditContact);
+  });
+
+  ["deleteContactBtn", "deleteContactBtnResp"].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) btn.addEventListener("click", handleDeleteContact);
+  });
   if (editBtn) editBtn.addEventListener("click", handleEditContact);
   if (deleteBtn) deleteBtn.addEventListener("click", handleDeleteContact);
 }
 
 /**
- * Behandelt das Löschen eines Kontakts
+ * Kontakt löschen
  */
 async function handleDeleteContact() {
   if (!selectedContactKey) return;
@@ -232,7 +218,7 @@ async function handleDeleteContact() {
 }
 
 /**
- * Behandelt das Bearbeiten eines Kontakts
+ * Kontakt bearbeiten
  */
 function handleEditContact() {
   if (!selectedContactKey) return;
@@ -243,16 +229,15 @@ function handleEditContact() {
 }
 
 /**
- * Öffnet das Modal mit Kontaktdaten
- * @param {Object} contact - Das Kontakt-Objekt
+ * Edit-Modal öffnen
  */
 function openEditModal(contact) {
-  toggleOverlay(true);
+  openEditOverlay();
+
   document.getElementById("contactName").value = contact.name;
   document.getElementById("contactEmail").value = contact.email;
   document.getElementById("contactPhone").value = contact.phone || "";
 
-  // Avatar im Edit-Modal aktualisieren
   const initials = buildInitials(contact.name);
   const color = getColorForInitials(initials);
   const initialsElem = document.getElementById("contactInitials");
@@ -260,10 +245,12 @@ function openEditModal(contact) {
     initialsElem.textContent = initials;
     initialsElem.parentElement.style.backgroundColor = color;
   }
+
+  document.getElementById("editDeleteModal").classList.remove("menu-hidden")
 }
 
 /**
- * Richtet den Submit-Handler für Bearbeitung ein
+ * Submit für Edit-Form
  */
 function setupEditFormHandler() {
   const form = document.getElementById("contactForm");
@@ -281,26 +268,20 @@ function setupEditFormHandler() {
     );
     await update(dbRef(db, `/contacts/${selectedContactKey}`), data);
     resetContactForm();
-    toggleOverlay(false);
-    showContactDetail(
-      { dataset: { key: selectedContactKey } },
-      selectedContactKey
-    );
+    closeEditOverlay();
+    showContactDetail({ dataset: { key: selectedContactKey } }, selectedContactKey);
     form.onsubmit = handleContactCreate;
   };
 }
 
 /**
- * Rendert die Detailansicht eines Kontakts
- * @param {Object} contact - Kontakt-Objekt mit name, email, phone, initials, color
+ * Detailbereich eines Kontakts rendern
  */
 function renderContactDetail({ name, email, phone, initials, color }) {
   const placeholder = document.querySelector(".contact-detail-placeholder");
   const info = document.querySelector(".contact-info");
   if (!info) return;
-
   if (placeholder) placeholder.style.display = "none";
-
   info.innerHTML = `
     <div class="contact-big">
       <div class="initals-big" style="background-color: ${color};">${initials}</div>
@@ -334,214 +315,162 @@ function renderContactDetail({ name, email, phone, initials, color }) {
 }
 
 /**
- * Bindet Event-Listener für Modal-Steuerung
+ * MODAL-STEUERUNG
  */
 function bindModalControls() {
-  // Avatar live aktualisieren beim Tippen
-  const nameInput = document.getElementById("addContactName");
-  if (nameInput) {
-    nameInput.addEventListener("input", () => updateAddContactAvatar());
-  }
+  renderEditContactModalIcons();
+  renderAddContactModalIcons();
+  bindAddContactAvatarInput();
+  bindAddContactControls();
+  bindEditContactControls();
+}
 
-  // --- ICONS RENDERN: Edit Contact Modal ---
-  const contactModalCloseIcon = document.getElementById(
-    "contactModalCloseIcon"
-  );
-  if (contactModalCloseIcon) {
-    contactModalCloseIcon.innerHTML = close({
-      class: "icon icon--btn",
-      width: 24,
-      height: 24,
-      "aria-hidden": "true",
-    });
-  }
+// ==========================================
+// ADD CONTACT – MODAL OPEN/CLOSE + LISTENERS
+// ==========================================
+function openAddContactModal() {
+  const overlayElement = document.getElementById("addContactOverlay");
+  if (!overlayElement) return;
+  overlayElement.removeAttribute("hidden");
+  updateAddContactAvatar();
+  addModalCloseListeners(overlayElement, closeAddContactModal);
+  document.getElementById("addContactName")?.focus();
+}
 
-  const contactNameIcon = document.getElementById("contactNameIcon");
-  if (contactNameIcon) {
-    contactNameIcon.innerHTML = person({
-      width: 24,
-      height: 24,
-      "aria-hidden": "true",
-    });
-  }
+function closeAddContactModal() {
+  const overlayElement = document.getElementById("addContactOverlay");
+  if (!overlayElement) return;
+  overlayElement.setAttribute("hidden", "hidden");
+  resetAddContactForm();
+  updateAddContactAvatar();
+  document.getElementById("editDeleteModal").classList.add("menu-hidden")
+}
 
-  const contactEmailIcon = document.getElementById("contactEmailIcon");
-  if (contactEmailIcon) {
-    contactEmailIcon.innerHTML = mail({
-      width: 24,
-      height: 24,
-      "aria-hidden": "true",
-    });
-  }
+/**
+ * Outside-Click + ESC für Modals
+ */
+function addModalCloseListeners(overlayElement, onCloseHandler) {
+  if (!overlayElement || typeof onCloseHandler !== "function") return;
 
-  const contactPhoneIcon = document.getElementById("contactPhoneIcon");
-  if (contactPhoneIcon) {
-    contactPhoneIcon.innerHTML = call({
-      width: 24,
-      height: 24,
-      "aria-hidden": "true",
-    });
-  }
+  const contentElement = overlayElement.querySelector(".overlay__content");
+  const backdropElement = overlayElement.querySelector(".overlay__backdrop");
 
-  const contactSaveIcon = document.getElementById("contactSaveIcon");
-  if (contactSaveIcon) {
-    contactSaveIcon.innerHTML = check({
-      class: "icon icon--btn btn__icon--right",
-      width: 24,
-      height: 24,
-      "aria-hidden": "true",
-    });
-  }
-
-  // --- ICONS RENDERN: Add Contact Modal ---
-  const addContactModalCloseIcon = document.getElementById(
-    "addContactModalCloseIcon"
-  );
-  if (addContactModalCloseIcon) {
-    addContactModalCloseIcon.innerHTML = close({
-      class: "icon icon--btn",
-      width: 24,
-      height: 24,
-      "aria-hidden": "true",
-    });
-  }
-
-  const addContactNameIcon = document.getElementById("addContactNameIcon");
-  if (addContactNameIcon) {
-    addContactNameIcon.innerHTML = person({
-      width: 24,
-      height: 24,
-      "aria-hidden": "true",
-    });
-  }
-
-  const addContactEmailIcon = document.getElementById("addContactEmailIcon");
-  if (addContactEmailIcon) {
-    addContactEmailIcon.innerHTML = mail({
-      width: 24,
-      height: 24,
-      "aria-hidden": "true",
-    });
-  }
-
-  const addContactPhoneIcon = document.getElementById("addContactPhoneIcon");
-  if (addContactPhoneIcon) {
-    addContactPhoneIcon.innerHTML = call({
-      width: 24,
-      height: 24,
-      "aria-hidden": "true",
-    });
-  }
-
-  const addContactCancelIcon = document.getElementById("addContactCancelIcon");
-  if (addContactCancelIcon) {
-    addContactCancelIcon.innerHTML = close({
-      class: "icon icon--btn btn__icon--right",
-      width: 24,
-      height: 24,
-      "aria-hidden": "true",
-    });
-  }
-
-  const addContactCreateIcon = document.getElementById("addContactCreateIcon");
-  if (addContactCreateIcon) {
-    addContactCreateIcon.innerHTML = check({
-      class: "icon icon--btn btn__icon--right",
-      width: 24,
-      height: 24,
-      "aria-hidden": "true",
-    });
-  }
-
-  /**
-   * Aktualisiert den Avatar im Add-Contact-Modal live
-   */
-  function updateAddContactAvatar() {
-    const name = document.getElementById("addContactName")?.value || "";
-    const initials = buildInitials(name);
-    const color = getColorForInitials(initials || "?");
-    const avatar = document.getElementById("addContactAvatar");
-    const initialsElem = document.getElementById("addContactInitials");
-    const placeholderImg = document.getElementById(
-      "addContactAvatarPlaceholder"
-    );
-
-    if (avatar) avatar.style.backgroundColor = initials ? color : "";
-    if (initialsElem) {
-      initialsElem.textContent = initials || "?";
-      initialsElem.style.display = initials ? "block" : "none";
-    }
-    if (placeholderImg) {
-      placeholderImg.style.display = initials ? "none" : "block";
+  function handleModalEvent(event) {
+    const isEscape = event.type === "keydown" && event.key === "Escape";
+    const clickedBackdrop = event.type === "click" && event.target === backdropElement;
+    if (isEscape || clickedBackdrop) {
+      onCloseHandler();
+      removeListeners();
     }
   }
 
-  // Add-Contact-Modal Controls
-  const addCloseBtn = document.getElementById("addContactModalClose");
-  const addCancelBtn = document.getElementById("addContactCancelBtn");
-  const addForm = document.getElementById("addContactForm");
+  document.addEventListener("keydown", handleModalEvent);
+  if (backdropElement) backdropElement.addEventListener("click", handleModalEvent);
 
-  if (addCloseBtn) {
-    addCloseBtn.addEventListener("click", () => {
-      resetAddContactForm();
-      updateAddContactAvatar();
-      toggleAddContactOverlay(false);
-    });
+  function removeListeners() {
+    document.removeEventListener("keydown", handleModalEvent);
+    if (backdropElement) backdropElement.removeEventListener("click", handleModalEvent);
   }
+}
 
-  if (addCancelBtn) {
-    addCancelBtn.addEventListener("click", () => {
-      resetAddContactForm();
-      updateAddContactAvatar();
-      toggleAddContactOverlay(false);
-    });
+// ==========================================
+// ADD CONTACT – ICONS, AVATAR & FORM
+// ==========================================
+function renderEditContactModalIcons() {
+  const closeIconContainer = document.getElementById("contactModalCloseIcon");
+  if (closeIconContainer) {
+    closeIconContainer.innerHTML = close({ class: "icon icon--btn", width: 24, height: 24 });
   }
+}
 
-  if (addForm) {
-    addForm.addEventListener("submit", handleAddContactCreate);
+function renderAddContactModalIcons() {
+  const closeIconContainer = document.getElementById("addContactModalCloseIcon");
+  if (closeIconContainer) {
+    closeIconContainer.innerHTML = close({ class: "icon icon--btn", width: 24, height: 24 });
   }
+}
 
-  /**
-   * Behandelt das Erstellen eines neuen Kontakts aus dem Add-Contact-Modal
-   * @param {Event} event - Das Submit-Event
-   */
-  async function handleAddContactCreate(event) {
-    event.preventDefault();
-    const data = {
-      name: readValue("addContactName"),
-      email: readValue("addContactEmail"),
-      phone: readValue("addContactPhone"),
-    };
-    if (!data.name || !data.email) return;
-    await saveContactToFirebase(data);
-    resetAddContactForm();
-    updateAddContactAvatar();
-    toggleAddContactOverlay(false);
+function bindAddContactAvatarInput() {
+  const nameInputField = document.getElementById("addContactName");
+  if (nameInputField) nameInputField.addEventListener("input", updateAddContactAvatar);
+}
+
+function updateAddContactAvatar() {
+  const nameInputField = document.getElementById("addContactName");
+  const avatarContainer = document.getElementById("addContactAvatar");
+  const initialsContainer = document.getElementById("addContactInitials");
+  const placeholderImage = document.getElementById("addContactAvatarPlaceholder");
+
+  const nameValue = nameInputField?.value?.trim() || "";
+  const initials = buildInitials(nameValue) || "?";
+  const color = getColorForInitials(initials);
+
+  if (avatarContainer) avatarContainer.style.backgroundColor = nameValue ? color : "";
+  if (initialsContainer) {
+    initialsContainer.textContent = initials;
+    initialsContainer.style.display = nameValue ? "block" : "none";
   }
+  if (placeholderImage) placeholderImage.style.display = nameValue ? "none" : "block";
+}
 
-  /**
-   * Setzt das Add-Contact-Formular zurück
-   */
-  function resetAddContactForm() {
-    ["addContactName", "addContactEmail", "addContactPhone"].forEach((id) => {
-      const field = document.getElementById(id);
-      if (field) field.value = "";
-    });
-  }
+function bindAddContactControls() {
+  const closeButton = document.getElementById("addContactModalClose");
+  const cancelButton = document.getElementById("addContactCancelBtn");
+  const formElement = document.getElementById("addContactForm");
 
-  // Edit-Contact-Modal Controls
-  const closeBtn = document.getElementById("contactModalClose");
-  if (closeBtn) {
-    closeBtn.addEventListener("click", () => {
+  if (closeButton) closeButton.addEventListener("click", closeAddContactModal);
+  if (cancelButton) cancelButton.addEventListener("click", closeAddContactModal);
+  if (formElement) formElement.addEventListener("submit", handleAddContactSubmit);
+}
+
+async function handleAddContactSubmit(event) {
+  event.preventDefault();
+  const data = {
+    name: readValue("addContactName"),
+    email: readValue("addContactEmail"),
+    phone: readValue("addContactPhone"),
+  };
+  if (!data.name || !data.email) return;
+  await saveContactToFirebase(data);
+  closeAddContactModal();
+}
+
+function resetAddContactForm() {
+  ["addContactName", "addContactEmail", "addContactPhone"].forEach((id) => {
+    const field = document.getElementById(id);
+    if (field) field.value = "";
+  });
+}
+
+// ==========================================
+// EDIT CONTACT – FORM
+// ==========================================
+function bindEditContactControls() {
+  const closeButton = document.getElementById("contactModalClose");
+  if (closeButton) {
+    closeButton.addEventListener("click", () => {
       resetContactForm();
-      toggleOverlay(false);
+      closeEditOverlay();
     });
   }
 }
 
+
+
+function openEditOverlay() {
+  const overlayElement = document.getElementById("contactOverlay");
+  if (!overlayElement) return;
+  overlayElement.removeAttribute("hidden");
+  addModalCloseListeners(overlayElement, closeEditOverlay);
+}
+
+function closeEditOverlay() {
+  const overlayElement = document.getElementById("contactOverlay");
+  if (!overlayElement) return;
+  overlayElement.setAttribute("hidden", "hidden");
+}
 /**
  * Zeigt oder verbirgt das Modal-Overlay
- * @param {boolean} show - true zum Anzeigen, false zum Verbergen
  */
 function toggleOverlay(show) {
   const overlay = document.getElementById("contactOverlay");
@@ -552,7 +481,6 @@ function toggleOverlay(show) {
 
 /**
  * Behandelt das Erstellen eines neuen Kontakts
- * @param {Event} event - Das Submit-Event
  */
 async function handleContactCreate(event) {
   event.preventDefault();
@@ -568,8 +496,7 @@ async function handleContactCreate(event) {
 }
 
 /**
- * Speichert einen neuen Kontakt in Firebase
- * @param {Object} data - Die Kontaktdaten
+ * Speichert neuen Kontakt in Firebase
  */
 async function saveContactToFirebase(data) {
   const contactsRef = ref(db, "/contacts");
@@ -577,9 +504,7 @@ async function saveContactToFirebase(data) {
 }
 
 /**
- * Erstellt das HTML-Markup für einen Kontakt
- * @param {Object} contact - Das Kontakt-Objekt
- * @returns {string} HTML-String
+ * Erstellt HTML für Kontaktkarte
  */
 function buildContactMarkup({ name, email }) {
   const initials = buildInitials(name);
@@ -589,7 +514,7 @@ function buildContactMarkup({ name, email }) {
 }
 
 /**
- * Setzt das Kontaktformular zurück
+ * Reset Formulare
  */
 function resetContactForm() {
   ["contactName", "contactEmail", "contactPhone"].forEach((id) => {
@@ -599,9 +524,7 @@ function resetContactForm() {
 }
 
 /**
- * Liest den Wert aus einem Input-Feld
- * @param {string} id - Die ID des Input-Feldes
- * @returns {string} Der getrimmte Wert
+ * Liest Wert aus Input
  */
 function readValue(id) {
   const field = document.getElementById(id);
@@ -609,9 +532,7 @@ function readValue(id) {
 }
 
 /**
- * Erstellt Initialen aus einem Namen
- * @param {string} name - Der vollständige Name
- * @returns {string} Die Initialen (max. 2 Buchstaben)
+ * Erstellt Initialen aus Name
  */
 function buildInitials(name) {
   return name
@@ -622,7 +543,6 @@ function buildInitials(name) {
     .join("");
 }
 
-
 // Marc Responsiv 
 
 function openContactDetailOverlay() {
@@ -632,7 +552,7 @@ function openContactDetailOverlay() {
   detail.classList.add('is-open');
   detail.setAttribute('aria-hidden', 'false');
   const modal = document.getElementById("closeDetails")
-  modal.innerHTML = `${icons.arowback }`
+  modal.innerHTML = `${icons.arowback}`
   if ('inert' in HTMLElement.prototype && listSection) listSection.inert = true;
   detail.querySelector('h1, h2, button, a, [tabindex="0"]')?.focus();
   menuBtn.classList.remove("menu-hidden")
@@ -674,7 +594,7 @@ function initEditDeleteRespMenu() {
 
   btn.innerHTML = icons.menuDots
   btn.addEventListener("click", (e) => {
-      e.stopPropagation()
+    e.stopPropagation()
     menu.classList.toggle("menu-hidden")
     bindEditDeleteButtons()
   })
@@ -693,3 +613,12 @@ function initEditDeleteRespMenu() {
     }
   })
 }
+
+
+window.addEventListener('resize', () => {
+  const btn = document.getElementById('contactsEditDelete');
+  if (!btn) return;
+  if (window.innerWidth > 768) {
+    btn.classList.add('menu-hidden');
+  } 
+});
