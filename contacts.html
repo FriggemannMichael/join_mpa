@@ -93,7 +93,7 @@
       <section class="contacts-grid">
         <div class="contacts-list-section">
           <div id="contact-list-actions">
-            <button id="addContactButton">Add Contact</button>
+            <button id="addContactButton"><span>Add Contact</span></button>
           </div>
           <ul class="contacts-list" id="contact-list">
             <!-- Kontaktliste wird hier dynamisch eingefügt -->
@@ -245,6 +245,17 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <button id="contactsEditDelete" class="contacts-Edit-Delete-Resp menu-hidden"></button>
+
+  <div id="editDeleteModal" class="edit-Delete-Modal menu-hidden">
+      <button type="button" id="editContactBtnResp">
+        <img src="./img/icon/edit.svg" alt="Edit">Edit
+      </button>
+      <button type="button" id="deleteContactBtnResp" >
+        <img src="./img/icon/delete.svg" alt="Delete">Delete
+      </button>
   </div>
 
   <script type="module" src="./js/pages/contacts.js"></script>
