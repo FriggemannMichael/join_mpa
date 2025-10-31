@@ -15,7 +15,7 @@
 /* Splash-Screen Ergänzungen */
 .splash-bg {
   align-items: center;
-  background: #2A3647;
+  background: #2a3647;
   display: flex;
   height: 100vh;
   justify-content: center;
@@ -35,13 +35,13 @@
 
 @media (width <= 600px) {
   .splash-bg {
-    background: #2A3647;
+    background: #2a3647;
   }
 }
 
 @media (width >= 601px) {
   .splash-bg {
-    background: #F6F7F8;
+    background: #f6f7f8;
   }
 }
 
@@ -628,9 +628,6 @@ main {
 
 @media (width <= 26.5625rem) {
   /* 425px */
-  header {
-    padding: var(--spacing-lg) var(--spacing-md);
-  }
 }
 
 /* ===== RESPONSIVE DESIGN - NAVIGATION ===== */
@@ -854,9 +851,8 @@ main {
   width: var(--summary-icon-size);
 }
 
-
 @media (max-width: 768px) {
-  .main__container{
+  .main__container {
     padding-top: 5rem;
     padding-bottom: 4rem;
   }

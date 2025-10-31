@@ -18,7 +18,8 @@
       "Bash(start index.html)",
       "Bash(python -m http.server:*)",
       "Bash(start http://localhost:8000/add-task.html)",
-      "Bash(start:*)"
+      "Bash(start:*)",
+      "Bash(nul)"
     ],
     "deny": [],
     "ask": []

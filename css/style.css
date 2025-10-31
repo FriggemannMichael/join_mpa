@@ -166,13 +166,23 @@ select {
 
 .btn-clear,
 .btn-create {
+  align-items: center;
   border-radius: 10px;
   cursor: pointer;
+  display: flex;
   font-size: 16px;
   font-weight: 400;
+  gap: 4px;
   height: 56px;
+  justify-content: center;
   padding: 16px;
   transition: all 0.3s ease;
+}
+
+.btn-clear img,
+.btn-create img {
+  height: 16px;
+  width: 16px;
 }
 
 .btn-clear {
@@ -233,6 +243,17 @@ select {
   }
 }
 
+/* Tablet/Mobile Breakpoint (1024px) */
+@media (width <= 1024px) {
+  textarea {
+    width: 100%;
+  }
+
+  .subtask-input-container {
+    width: 100%;
+  }
+}
+
 /* Tablet (600px - 768px) */
 @media (width <= 768px) {
   .container {
@@ -264,14 +285,29 @@ select {
   }
 
   .buttons {
-    justify-content: space-between;
+    justify-content: space-around;
   }
 
-  .btn-clear,
-  .btn-create {
-    flex: 1;
-    min-width: 120px;
+  textarea {
+    width: 100%;
   }
+
+  .subtask-input-container {
+    width: 100%;
+  }
+
+  /* Auskommentiert - wird in add_task.css definiert */
+  /*
+  .btn-clear {
+    width: clamp(82px, 26vw, 110px);
+    height: clamp(42px, 13vw, 56px);
+  }
+
+  .btn-create {
+    width: clamp(136px, 43vw, 183px);
+    height: clamp(42px, 13vw, 56px);
+  }
+  */
 }
 
 /* Mobile (425px - 600px) */
@@ -337,16 +373,28 @@ select {
     font-size: 28px;
   }
 
-  .btn-clear {
-    display: none;
+  /* s.buttons {
+    justify-content: center;
+  } */
+
+  textarea {
+    width: 100%;
   }
 
-  .buttons {
-    justify-content: center;
+  .subtask-input-container {
+    width: 100%;
+  }
+
+  /* Auskommentiert - wird in add_task.css definiert */
+  /*
+  .btn-clear {
+    width: clamp(82px, 26vw, 110px);
+    height: clamp(42px, 13vw, 56px);
   }
 
   .btn-create {
-    max-width: 300px;
-    width: 100%;
+    width: clamp(136px, 43vw, 183px);
+    height: clamp(42px, 13vw, 56px);
   }
+  */
 }
