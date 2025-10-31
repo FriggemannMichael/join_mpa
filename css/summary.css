@@ -162,12 +162,12 @@
 
 /* Hover effect for done icon: swap to white background with blue checkmark */
 .summary__two_tiles:hover #summary__done_icon {
-  content: url('../img/icon/done_blue.svg');
+  content: url('../assets/icons/done_blue.svg');
 }
 
 /* Hover effect for to-do icon: swap to white background with blue pen */
 .summary__two_tiles:hover #summary__toDo {
-  content: url('../img/icon/edit_blue.svg');
+  content: url('../assets/icons/edit_blue.svg');
 }
 
 .summary__tiles__text {

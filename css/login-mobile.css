@@ -27,19 +27,21 @@
     left: auto !important;
   }
 
-  /* Show and position mobile sign-up header below card */
+  /* Show and position mobile sign-up header below card (based on SVG: 292x49) */
   .login-header-signup-mobile {
     align-items: center;
     display: flex !important;
     flex-direction: row;
-    gap: 2.1875rem;
+    gap: 1rem;
     height: 49px;
     justify-content: center;
     margin: 2rem auto;
-    max-width: 292px;
+    max-width: 100%;
+    padding: 0 1rem;
     position: relative;
     width: auto;
     z-index: 10;
+    box-sizing: border-box;
   }
 
   .signup-text {
@@ -47,6 +49,8 @@
     font-size: 1rem;
     font-weight: 400;
     white-space: nowrap;
+    flex: 0 0 auto;
+    display: block;
   }
 
   .btn-signup {
@@ -58,34 +62,25 @@
     font-weight: 700;
     height: 49px;
     letter-spacing: 0.3px;
+    width: 104px;
     min-width: 104px;
-    padding: 0 1.5rem;
+    padding: 0;
     text-decoration: none;
     white-space: nowrap;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
   }
 
   .btn-signup:hover {
     background: #1a2634;
   }
 
-  /* Brand splash logo positioning */
+  /* Brand splash logo positioning - hide on mobile since logo is in card */
   .brand-splash {
-    align-items: center;
-    display: flex;
-    height: auto;
-    justify-content: center;
-    left: 50%;
-    position: absolute;
-    top: 2.5rem;
-    transform: translateX(-50%);
-    width: 120px;
-    z-index: 20;
-  }
-
-  .brand-splash img {
-    height: auto;
-    object-fit: contain;
-    width: 100%;
+    display: none !important;
   }
 
   /* Login card mobile styling - exact Figma dimensions */
@@ -97,6 +92,18 @@
     min-height: 475px;
     padding: 2.5rem 2rem 2rem;
     width: calc(100% - 2rem);
+    box-sizing: border-box;
+    overflow: visible;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+
+  /* Hidden state for animation */
+  .login-card-hidden {
+    opacity: 0;
+    transform: translateY(20px);
   }
 
   /* Show fixed logo inside card on mobile */
@@ -139,6 +146,8 @@
   /* Input fields - Figma spacing */
   .inputField__container {
     margin-bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .inputField__container-margin24 {
@@ -151,6 +160,8 @@
     font-size: 1rem;
     height: 47px;
     padding: 0 3rem 0 1rem;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .inputField__username__icon,
@@ -158,12 +169,15 @@
     right: 1rem;
   }
 
-  /* Login actions buttons - stacked vertically */
+  /* Login actions buttons - side by side on mobile (based on SVG design) */
   .login-actions {
     display: flex;
-    flex-direction: column;
-    gap: 1.34375rem;
-    margin-top: 3.53125rem;
+    flex-direction: row;
+    gap: 1rem;
+    margin-top: 2rem;
+    width: 100%;
+    justify-content: center;
+    padding: 0;
   }
 
   button.btn,
@@ -173,17 +187,23 @@
     font-weight: 700;
     height: 51px;
     letter-spacing: 0.3px;
-    padding: 0 1.5rem;
+    padding: 0 1rem;
     text-decoration: none;
-    width: 100%;
+    width: 180px;
+    max-width: 180px;
+    min-width: 140px;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
   }
 
   /* Ensure links have proper box model at 428px */
   a.btn {
-    box-sizing: border-box;
-    line-height: 51px;
-    padding-top: 0;
-    padding-bottom: 0;
+    line-height: 1;
+    padding: 0 1rem;
   }
 
   button.btn-primary,
@@ -241,6 +261,7 @@
     max-width: 343px;
     padding: 2rem 1.5rem 1.75rem;
     width: calc(100% - 2rem);
+    box-sizing: border-box;
   }
 
   /* Adjust card content */
@@ -266,26 +287,37 @@
     padding: 0 2.75rem 0 0.875rem;
   }
 
-  /* Buttons */
+  /* Buttons - slightly smaller for 375px screens */
   button.btn,
   a.btn {
     font-size: 0.9375rem;
     height: 48px;
-    padding: 0 1.25rem;
+    padding: 0 0.75rem;
+    width: 160px;
+    max-width: 160px;
+    min-width: 120px;
   }
 
   /* Ensure links have proper box model */
   a.btn {
     box-sizing: border-box;
-    line-height: 48px;
-    padding-top: 0;
-    padding-bottom: 0;
+    line-height: 1;
+    padding: 0 0.75rem;
   }
 
-  /* Mobile sign-up section */
+  /* Login actions container - side by side */
+  .login-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Mobile sign-up section - slightly smaller for 375px */
   .login-header-signup-mobile {
-    gap: 1.75rem;
-    max-width: 260px;
+    gap: 0.875rem;
   }
 
   .signup-text {
@@ -295,8 +327,8 @@
   .btn-signup {
     font-size: 0.9375rem;
     height: 46px;
+    width: 96px;
     min-width: 96px;
-    padding: 0 1.25rem;
   }
 
   /* Footer links */
@@ -326,6 +358,7 @@
     min-height: auto;
     padding: 1.75rem 1rem 1.5rem;
     width: calc(100% - 1.5rem);
+    box-sizing: border-box;
   }
 
   /* Smaller logo in card */
@@ -364,27 +397,31 @@
     width: 1.25rem;
   }
 
-  /* Smaller buttons */
+  /* Smaller buttons - very compact for 320px screens */
   button.btn,
   a.btn {
     border-radius: 7px;
     font-size: 0.8125rem;
-    height: 40px;
-    letter-spacing: 0.2px;
-    padding: 0 0.75rem;
+    height: 42px;
+    letter-spacing: 0;
+    padding: 0 0.5rem;
+    width: 140px;
+    max-width: 140px;
+    min-width: 100px;
   }
 
   /* Ensure links have proper box model at 320px */
   a.btn {
     box-sizing: border-box;
-    line-height: 40px;
-    padding-top: 0;
-    padding-bottom: 0;
+    line-height: 1;
+    padding: 0 0.5rem;
   }
 
   .login-actions {
-    gap: 0.75rem;
+    gap: 0.5rem;
     margin-top: 1.25rem;
+    flex-direction: row;
+    justify-content: center;
   }
 
   /* Specific button adjustments */
@@ -392,16 +429,15 @@
   button.btn-outline,
   a.btn-primary,
   a.btn-outline {
-    min-height: 40px;
+    min-height: 42px;
     white-space: nowrap;
   }
 
-  /* Mobile sign-up section */
+  /* Mobile sign-up section - compact for 320px */
   .login-header-signup-mobile {
-    gap: 1.5rem;
     height: 44px;
     margin: 1.5rem auto;
-    max-width: 240px;
+    gap: 0.75rem;
   }
 
   .signup-text {
@@ -413,8 +449,8 @@
     font-size: 0.875rem;
     height: 44px;
     letter-spacing: 0.25px;
+    width: 88px;
     min-width: 88px;
-    padding: 0 1rem;
   }
 
   /* Compact footer */

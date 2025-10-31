@@ -60,33 +60,10 @@ function initSplashScreen() {
         splashLogo.addEventListener('transitionend', () => {
             splashScreen.style.backgroundColor = '#F6F7F8';
 
-            // Login-Logo einblenden und positionieren (direkt nach Animation)
-            const loginLogo = document.getElementById('login-logo');
-            if (loginLogo) {
-                loginLogo.style.display = 'block';
-                loginLogo.style.position = 'absolute';
-                loginLogo.style.top = (37 * h / baseH) + 'px';
-                loginLogo.style.left = (38 * w / baseW) + 'px';
-                loginLogo.style.width = (64 * w / baseW) + 'px';
-                loginLogo.style.height = (78 * h / baseH) + 'px';
-            }
-
-            // Login-Bereich direkt anpassen
+            // Login-Card sichtbar machen (CSS übernimmt die Positionierung)
             const loginCard = document.querySelector('.login-card');
             if (loginCard) {
-                loginCard.style.display = 'flex';
-                loginCard.style.position = 'absolute';
-                loginCard.style.top = (225 * h / baseH) + 'px';
-                loginCard.style.left = (16 * w / baseW) + 'px';
-                loginCard.style.width = (396 * w / baseW) + 'px';
-                loginCard.style.height = (475 * h / baseH) + 'px';
-                loginCard.style.borderRadius = (30 * w / baseW) + 'px';
-                loginCard.style.background = '#fff';
-                loginCard.style.boxShadow = '0 0 14px 3px rgba(0,0,0,0.04)';
-                loginCard.style.flexDirection = 'column';
-                loginCard.style.paddingTop = (32 * h / baseH) + 'px';
-                loginCard.style.paddingBottom = (32 * h / baseH) + 'px';
-                loginCard.style.gap = (32 * h / baseH) + 'px';
+                loginCard.classList.remove('login-card-hidden');
             }
 
             // Splash-Logo erst nach kurzem Delay ausblenden
@@ -98,15 +75,17 @@ function initSplashScreen() {
             }, 100);
         }, { once: true });
     } else {
-        // Desktop: Splash und Login-Logo ausblenden, Standard-Layout bleibt
+        // Desktop: Splash ausblenden, Standard-Layout bleibt
         const splashScreen = document.getElementById('splash-screen');
         const splashLogo = document.getElementById('splash-logo');
-        const loginLogo = document.getElementById('login-logo');
         if (splashScreen) splashScreen.style.display = 'none';
         if (splashLogo) splashLogo.style.display = 'none';
-        if (loginLogo) loginLogo.style.display = 'none';
-        const loginContainer = document.getElementById('login-container');
-        if (loginContainer) loginContainer.style.display = '';
+
+        // Login-Card sichtbar machen
+        const loginCard = document.querySelector('.login-card');
+        if (loginCard) {
+            loginCard.classList.remove('login-card-hidden');
+        }
     }
 }
 

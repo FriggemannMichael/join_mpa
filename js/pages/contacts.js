@@ -54,7 +54,7 @@ function renderAddButton() {
   btn.className = "contact-btn";
   btn.type = "button";
   btn.id = "addNewContactBtn";
-  btn.innerHTML = `Add new Contact<img src="./img/icon/person_add.png" alt="add Person" />`;
+  btn.innerHTML = `Add new Contact<img src="./assets/icons/person_add.png" alt="add Person" />`;
   actions.appendChild(btn);
   btn.addEventListener("click", () => toggleAddContactOverlay(true));
 }
@@ -275,10 +275,10 @@ function renderContactDetail({ name, email, phone, initials, color }) {
         <span id="contactDetailName">${name}</span>
         <div class="changebtns">
           <button type="button" id="editContactBtn">
-            <img src="./img/icon/edit.svg" alt="Edit">Edit
+            <img src="./assets/icons/edit.svg" alt="Edit">Edit
           </button>
           <button type="button" id="deleteContactBtn">
-            <img src="./img/icon/delete.svg" alt="Delete">Delete
+            <img src="./assets/icons/delete.svg" alt="Delete">Delete
           </button>
         </div>
       </div>

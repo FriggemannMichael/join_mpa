@@ -86,7 +86,7 @@ function createCloseBtn() {
   btn.addEventListener("click", closeTaskOverlay);
 
   const icon = document.createElement("img");
-  icon.src = "../img/icon/close-btn.svg";
+  icon.src = "../assets/icons/close-btn.svg";
   icon.alt = "Close";
   icon.className = "icon-close";
 
@@ -168,7 +168,7 @@ function createPrioritySpan(priority) {
   const icon = document.createElement("img");
   icon.classList.add("priority-icon");
   icon.alt = `${priority}`;
-  icon.src = `../img/icon/prio-${priority.toLowerCase()}.svg`;
+  icon.src = `../assets/icons/prio-${priority.toLowerCase()}.svg`;
 
   prioritySpan.append(icon);
   return prioritySpan;

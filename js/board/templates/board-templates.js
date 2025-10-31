@@ -46,7 +46,7 @@ export const boardTemplates = {
                     Urgent
                     <img
                       class="prio-icon"
-                      src="./img/icon/prio-urgent.svg"
+                      src="./assets/icons/prio-urgent.svg"
                       alt="Urgent priority"
                     />
                   </button>
@@ -58,7 +58,7 @@ export const boardTemplates = {
                     Medium
                     <img
                       class="prio-icon"
-                      src="./img/icon/prio-medium.svg"
+                      src="./assets/icons/prio-medium.svg"
                       alt="Medium priority"
                     />
                   </button>
@@ -70,7 +70,7 @@ export const boardTemplates = {
                     Low
                     <img
                       class="prio-icon"
-                      src="./img/icon/prio-low.svg"
+                      src="./assets/icons/prio-low.svg"
                       alt="Low priority"
                     />
                   </button>
@@ -86,7 +86,7 @@ export const boardTemplates = {
                       >Select contacts to assign</span
                     >
                     <img
-                      src="./img/icon/arrow_drop_down.svg"
+                      src="./assets/icons/arrow_drop_down.svg"
                       class="dropdown-icon"
                       alt="dropdown"
                     />
@@ -95,7 +95,18 @@ export const boardTemplates = {
                     class="multiselect-dropdown d-none"
                     id="assignee-dropdown"
                   >
-                    <!-- Dynamically filled -->
+                    <div class="assignee-search-container">
+                      <input
+                        type="text"
+                        id="assignee-search"
+                        class="assignee-search-input"
+                        placeholder="Search contacts..."
+                        autocomplete="off"
+                      />
+                    </div>
+                    <div id="assignee-list" class="assignee-list">
+                      <!-- Dynamically filled -->
+                    </div>
                   </div>
                 </div>
                 <div
@@ -125,7 +136,7 @@ export const boardTemplates = {
                       </div>
                     </div>
                     <img
-                      src="./img/icon/add.svg"
+                      src="./assets/icons/add.svg"
                       alt="Add subtask"
                       id="subtaskAddIcon"
                     />
@@ -140,7 +151,7 @@ export const boardTemplates = {
   addTask:
     `
    <div class="add-task-main modal-add-task-main ">
-  <button class="cloase-button-add-task" id="closeAddTask" data-overlay-close="#addTaskOverlay"><img src="../img/icon/close-btn.svg" alt="close-btn" class="icon-close"></button>
+  <button class="cloase-button-add-task" id="closeAddTask" data-overlay-close="#addTaskOverlay"><img src="../assets/icons/close-btn.svg" alt="close-btn" class="icon-close"></button>
   <div class="container-add-task-board"> 
 
 
@@ -175,7 +186,7 @@ export const boardTemplates = {
                     Urgent
                     <img
                       class="prio-icon"
-                      src="./img/icon/prio-urgent.svg"
+                      src="./assets/icons/prio-urgent.svg"
                       alt="Urgent priority"
                     />
                   </button>
@@ -187,7 +198,7 @@ export const boardTemplates = {
                     Medium
                     <img
                       class="prio-icon"
-                      src="./img/icon/prio-medium.svg"
+                      src="./assets/icons/prio-medium.svg"
                       alt="Medium priority"
                     />
                   </button>
@@ -199,7 +210,7 @@ export const boardTemplates = {
                     Low
                     <img
                       class="prio-icon"
-                      src="./img/icon/prio-low.svg"
+                      src="./assets/icons/prio-low.svg"
                       alt="Low priority"
                     />
                   </button>
@@ -210,10 +221,21 @@ export const boardTemplates = {
             <div class="custom-multiselect">
               <div class="multiselect-header" id="assigneeHeader">
                 <span id="selected-assignees-placeholder">Select contacts to assign</span>
-                <img src="./img/icon/arrow_drop_down.svg" class="dropdown-icon" alt="dropdown" />
+                <img src="./assets/icons/arrow_drop_down.svg" class="dropdown-icon" alt="dropdown" />
               </div>
               <div class="multiselect-dropdown d-none" id="assignee-dropdown">
-                <!-- Dynamically filled -->
+                <div class="assignee-search-container">
+                  <input
+                    type="text"
+                    id="assignee-search"
+                    class="assignee-search-input"
+                    placeholder="Search contacts..."
+                    autocomplete="off"
+                  />
+                </div>
+                <div id="assignee-list" class="assignee-list">
+                  <!-- Dynamically filled -->
+                </div>
               </div>
             </div>
             <div class="selected-assignee-avatars" id="selected-assignee-avatars"></div>
@@ -229,7 +251,7 @@ export const boardTemplates = {
                       >Select category</span
                     >
                     <img
-                      src="./img/icon/arrow_drop_down.svg"
+                      src="./assets/icons/arrow_drop_down.svg"
                       class="dropdown-icon"
                     />
                   </div>
@@ -270,7 +292,7 @@ export const boardTemplates = {
                       </div>
                     </div>
                     <img
-                      src="./img/icon/add.svg"
+                      src="./assets/icons/add.svg"
                       alt="Add subtask"
                       id="subtaskAddIcon"
                     />

@@ -86,9 +86,9 @@ function getActivePriorityIcon(priority) {
  */
 function getInactivePriorityIcon(priority) {
   const iconMap = {
-    urgent: './img/icon/prio-urgent.svg',
-    medium: './img/icon/prio-medium.svg',
-    low: './img/icon/prio-low.svg',
+    urgent: './assets/icons/prio-urgent.svg',
+    medium: './assets/icons/prio-medium.svg',
+    low: './assets/icons/prio-low.svg',
   };
 
   const src = iconMap[priority] || "";
@@ -105,6 +105,11 @@ export function bindActionButtons() {
   const createBtn = document.getElementById("taskCreateBtn");
   if (clearBtn) clearBtn.addEventListener("click", clearTaskForm);
   if (createBtn) createBtn.addEventListener("click", handleTaskCreate);
+
+  // Initiale Validierung
+  validateFormAndUpdateButton();
+  // Event-Listener für Formularfelder
+  bindFormValidation();
 }
 
 
@@ -191,6 +196,8 @@ export function clearTaskForm() {
   subtasks.length = 0;
   renderSubtasks();
   setTaskStatus("Formular zurückgesetzt", false);
+  // Button-Status nach Clear aktualisieren
+  validateFormAndUpdateButton();
 }
 
 
@@ -271,6 +278,44 @@ function validateTaskData(data) {
 
 
 /**
+ * Bindet Event-Listener für Formularfeld-Änderungen zur Validierung
+ */
+function bindFormValidation() {
+  const titleField = document.getElementById("taskTitle");
+  const dueDateField = document.getElementById("taskDueDate");
+  const categoryField = document.getElementById("category");
+  const priorityButtons = document.querySelectorAll(".priority-btn");
+
+  // Title und Due Date bei Eingabe validieren
+  if (titleField) titleField.addEventListener("input", validateFormAndUpdateButton);
+  if (dueDateField) dueDateField.addEventListener("change", validateFormAndUpdateButton);
+  if (categoryField) categoryField.addEventListener("change", validateFormAndUpdateButton);
+
+  // Priorität bei Klick validieren
+  priorityButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      setTimeout(validateFormAndUpdateButton, 0);
+    });
+  });
+}
+
+
+/**
+ * Validiert das Formular und aktiviert/deaktiviert den Create-Button
+ */
+export function validateFormAndUpdateButton() {
+  const data = readTaskData();
+  const createBtn = document.getElementById("taskCreateBtn");
+
+  if (!createBtn) return;
+
+  const isValid = validateTaskData(data);
+  createBtn.disabled = !isValid;
+  createBtn.classList.toggle("disabled", !isValid);
+}
+
+
+/**
  * Setzt den Task-Status
  * @param {string} message Status-Nachricht
  * @param {boolean} isError Fehler-Flag
@@ -300,10 +345,14 @@ export function toggleCategoryDropdown() {
  */
 export function selectCategory(value) {
   const input = document.getElementById("category");
-  const placeholder = document.getElementById("selected-catrgory-placeholder");
+  const placeholder = document.getElementById("selected-category-placeholder");
   const dropdown = document.getElementById("category-dropdown");
 
-  if (input) input.value = value;
+  if (input) {
+    input.value = value;
+    // Trigger change event für Validierung
+    input.dispatchEvent(new Event('change'));
+  }
   if (placeholder) placeholder.textContent = getCategoryLabel(value);
 
   dropdown?.classList.add("d-none");

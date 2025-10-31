@@ -6,7 +6,7 @@
   font-family: Inter;
   font-style: normal;
   font-weight: 100 900;
-  src: url("../img/fonts/Inter/Inter-VariableFont_opsz,wght.ttf") format("truetype-variations");
+  src: url("../assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf") format("truetype-variations");
 }
 
 @font-face {
@@ -14,7 +14,7 @@
   font-family: Inter;
   font-style: italic;
   font-weight: 100 900;
-  src: url("../img/fonts/Inter/Inter-Italic-VariableFont_opsz,wght.ttf") format("truetype-variations");
+  src: url("../assets/fonts/Inter/Inter-Italic-VariableFont_opsz,wght.ttf") format("truetype-variations");
 }
 
 /* Fallback für statische Schriftarten */
@@ -23,7 +23,7 @@
   font-family: Inter;
   font-style: normal;
   font-weight: 400;
-  src: url("../img/fonts/Inter/static/Inter_18pt-Regular.ttf") format("truetype");
+  src: url("../assets/fonts/Inter/static/Inter_18pt-Regular.ttf") format("truetype");
 }
 
 @font-face {
@@ -31,7 +31,7 @@
   font-family: Inter;
   font-style: normal;
   font-weight: 500;
-  src: url("../img/fonts/Inter/static/Inter_18pt-Medium.ttf") format("truetype");
+  src: url("../assets/fonts/Inter/static/Inter_18pt-Medium.ttf") format("truetype");
 }
 
 @font-face {
@@ -39,7 +39,7 @@
   font-family: Inter;
   font-style: normal;
   font-weight: 600;
-  src: url("../img/fonts/Inter/static/Inter_18pt-SemiBold.ttf") format("truetype");
+  src: url("../assets/fonts/Inter/static/Inter_18pt-SemiBold.ttf") format("truetype");
 }
 
 @font-face {
@@ -47,7 +47,7 @@
   font-family: Inter;
   font-style: normal;
   font-weight: 700;
-  src: url("../img/fonts/Inter/static/Inter_18pt-Bold.ttf") format("truetype");
+  src: url("../assets/fonts/Inter/static/Inter_18pt-Bold.ttf") format("truetype");
 }
 
 :root {

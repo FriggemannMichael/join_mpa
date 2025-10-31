@@ -13,11 +13,34 @@ import { getInitials } from "./add-task-assignees.js";
  * @param {Array} options Assignee-Optionen
  */
 export function renderAssigneeDropdown(dropdown, options) {
-  dropdown.innerHTML = "";
+  const listContainer = dropdown.querySelector('#assignee-list') || dropdown;
+  listContainer.innerHTML = "";
 
   options.forEach((option, index) => {
     const labelEl = createAssigneeLabel(option, index);
-    dropdown.appendChild(labelEl);
+    listContainer.appendChild(labelEl);
+  });
+}
+
+
+/**
+ * Filtert die Assignee-Liste basierend auf Suchtext
+ * @param {string} searchText Suchtext
+ */
+export function filterAssignees(searchText) {
+  const listContainer = document.getElementById('assignee-list');
+  if (!listContainer) return;
+
+  const labels = listContainer.querySelectorAll('.checkbox-label');
+  const searchLower = searchText.toLowerCase().trim();
+
+  labels.forEach((label) => {
+    const nameSpan = label.querySelector('.assignee-info span');
+    if (!nameSpan) return;
+
+    const name = nameSpan.textContent.toLowerCase();
+    const matches = name.includes(searchLower);
+    label.style.display = matches ? '' : 'none';
   });
 }
 
@@ -130,6 +153,11 @@ function updatePlaceholderText(placeholder, selected) {
 function renderAvatars(avatarsContainer, selected) {
   avatarsContainer.innerHTML = "";
   const maxVisible = 5;
+
+  // Leeren Container rendern (CSS :not(:empty) versteckt ihn automatisch)
+  if (selected.length === 0) {
+    return;
+  }
 
   renderVisibleAvatars(avatarsContainer, selected, maxVisible);
   renderMoreAvatar(avatarsContainer, selected, maxVisible);

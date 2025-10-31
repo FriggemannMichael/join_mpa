@@ -19,7 +19,17 @@
       "Bash(python -m http.server:*)",
       "Bash(start http://localhost:8000/add-task.html)",
       "Bash(start:*)",
-      "Bash(nul)"
+      "Bash(nul)",
+      "Bash(mkdir:*)",
+      "Bash(xcopy:*)",
+      "Bash(robocopy:*)",
+      "Bash(cp:*)",
+      "Bash(rm:*)",
+      "Bash(mv:*)",
+      "Bash(rmdir:*)",
+      "Bash(find:*)",
+      "Bash(grep -r img/icon|img/ 'd:\\DEV AKADEMIE\\PROJEKTE\\join_mpa\\js\\pages\\contacts.js' 'd:\\DEV AKADEMIE\\PROJEKTE\\join_mpa\\js\\pages\\add-task-form.js' 'd:\\DEV AKADEMIE\\PROJEKTE\\join_mpa\\js\\board\\components\\priority.js' 'd:\\DEV AKADEMIE\\PROJEKTE\\join_mpa\\js\\board\\modals\\taskModal.view.js' 'd:\\DEV AKADEMIE\\PROJEKTE\\join_mpa\\js\\board\\templates\\board-templates.js' 2)",
+      "Bash(timeout 2 bash:*)"
     ],
     "deny": [],
     "ask": []

@@ -39,6 +39,7 @@ body {
 
 .divider {
   background-color: #d1d1d1;
+  display: block; /* In Desktop sichtbar */
   min-height: 424px;
   width: 1px;
 }
@@ -207,6 +208,19 @@ select {
   background-color: #1a2533;
 }
 
+.btn-create:disabled,
+.btn-create.disabled {
+  background-color: #2a3647;
+  color: #fff;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn-create:disabled:hover,
+.btn-create.disabled:hover {
+  background-color: #2a3647;
+}
+
 /* ===== RESPONSIVE DESIGN - ADD TASK ===== */
 
 /* Desktop Large (1200px - 1400px) */
@@ -234,7 +248,7 @@ select {
   }
 
   .divider {
-    display: none;
+    display: none; /* In mobiler Ansicht ausblenden */
   }
 
   .left-section,

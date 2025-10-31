@@ -10,9 +10,9 @@ export function buildPriority(priority) {
 
   const icon = document.createElement("img");
   const map = {
-    urgent: "./img/icon/prio-urgent.svg",
-    medium: "./img/icon/prio-medium.svg",
-    low: "./img/icon/prio-low.svg",
+    urgent: "./assets/icons/prio-urgent.svg",
+    medium: "./assets/icons/prio-medium.svg",
+    low: "./assets/icons/prio-low.svg",
   };
   const source = map[priority] || map.medium;
   icon.src = source;

@@ -86,7 +86,7 @@ h2 {
 
 .search_button {
   all: unset;
-  background-image: url("../img/icon/search-default.svg");
+  background-image: url("../assets/icons/search-default.svg");
   background-position: center;
   background-size: contain;
   cursor: pointer;
@@ -95,11 +95,11 @@ h2 {
 }
 
 .search_button:hover {
-  background-image: url("../img/icon/search-hover.svg");
+  background-image: url("../assets/icons/search-hover.svg");
 }
 
 .search_button:active {
-  background-image: url("../img/icon/search-click.svg");
+  background-image: url("../assets/icons/search-click.svg");
 }
 
 .search_error {
@@ -175,7 +175,7 @@ h2 {
 
 .add_task_button_kanban {
   align-items: center;
-  background-image: url("../img/icon/add-task-Default.svg");
+  background-image: url("../assets/icons/add-task-Default.svg");
   background-position: center;
   background-repeat: contain;
   border: none;
@@ -187,12 +187,12 @@ h2 {
 }
 
 .add_task_button_kanban:hover {
-  background-image: url("../img/icon/add-task-Hover.svg");
+  background-image: url("../assets/icons/add-task-Hover.svg");
   cursor: pointer;
 }
 
 .add_task_button_kanban:active {
-  background-image: url("../img/icon/add-task-click.svg");
+  background-image: url("../assets/icons/add-task-click.svg");
   cursor: pointer;
 }
 
@@ -313,12 +313,12 @@ body.loading button {
 @media (width <=500px),
 (hover: none) {
   .add_task_button_kanban:hover {
-    background-image: url("../img/icon/add-task-Default.svg");
+    background-image: url("../assets/icons/add-task-Default.svg");
   }
 
   .add_task_button_kanban:active {
     animation: toDark 0.01s forwards;
-    background-image: url("../img/icon/add-task-Hover.svg");
+    background-image: url("../assets/icons/add-task-Hover.svg");
 
     /* 10 ms */
   }
@@ -328,7 +328,7 @@ body.loading button {
 
 @keyframes toDark {
   to {
-    background-image: url("../img/icon/add-task-click.svg");
+    background-image: url("../assets/icons/add-task-click.svg");
   }
 }
 

@@ -241,6 +241,7 @@
   padding: 2.5rem 2.25rem 2rem;
   position: relative;
   width: min(32rem, 100%);
+  box-sizing: border-box;
 }
 
 .headline__container {
@@ -342,6 +343,8 @@ body.dark-theme .goback:hover {
   align-items: center;
   display: flex;
   position: relative;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .inputField__container input {
@@ -352,6 +355,7 @@ body.dark-theme .goback:hover {
   font: inherit;
   padding: 0.9rem 3.1rem 0.9rem 1rem;
   width: 100%;
+  box-sizing: border-box;
 }
 
 .inputField__container input:focus {
@@ -451,6 +455,8 @@ body.dark-theme .goback:hover {
   padding: 0.95rem 1.25rem;
   transition: background 0.2s, transform 0.2s;
   width: var(--spacing-126);
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .btn__signUp:hover:not(.btn__disabled) {
@@ -604,8 +610,12 @@ body.dark-theme .goback:hover {
   padding: var(--spacing-xxl) var(--spacing-xl);
   position: relative;
   width: clamp(18rem, 90vw, 28rem);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
 
-  /* Animation wird nur noch über JS-Klassen gesteuert */
+.login-card-hidden {
+  opacity: 0;
+  transform: translateY(20px);
 }
 
 .login-card h1 {

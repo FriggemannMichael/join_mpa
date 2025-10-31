@@ -5,7 +5,7 @@
 
 import { auth } from "../common/firebase.js";
 import { loadFirebaseDatabase } from "../common/database.js";
-import { renderAssigneeDropdown, updateAssigneeSelection } from "./add-task-assignees-ui.js";
+import { renderAssigneeDropdown, updateAssigneeSelection, filterAssignees } from "./add-task-assignees-ui.js";
 
 
 /**
@@ -166,10 +166,12 @@ function sortUsersByLabel(users) {
 function bindAssigneeEvents() {
   const header = document.getElementById("assigneeHeader");
   const dropdown = document.getElementById("assignee-dropdown");
+  const searchInput = document.getElementById("assignee-search");
 
   bindHeaderClickEvent(header);
   bindDropdownChangeEvent(dropdown);
   bindOutsideClickEvent(dropdown);
+  bindSearchInputEvent(searchInput);
 }
 
 
@@ -196,8 +198,12 @@ function bindDropdownChangeEvent(dropdown) {
   if (!dropdown || dropdown.dataset.bound) return;
 
   dropdown.dataset.bound = "1";
+
+  // Event Delegation für Checkboxen (funktioniert auch nach Filtern)
   dropdown.addEventListener("change", (e) => {
-    if (e.target.type === "checkbox") updateAssigneeSelection();
+    if (e.target.type === "checkbox") {
+      updateAssigneeSelection();
+    }
   });
 }
 
@@ -225,9 +231,44 @@ function bindOutsideClickEvent(dropdown) {
 function toggleAssigneeDropdown() {
   const header = document.getElementById("assigneeHeader");
   const dropdown = document.getElementById("assignee-dropdown");
+  const searchInput = document.getElementById("assignee-search");
+
+  const isOpening = dropdown?.classList.contains("d-none");
 
   dropdown?.classList.toggle("d-none");
   header?.classList.toggle("open");
+
+  // Fokus auf Suchfeld setzen beim Öffnen
+  if (isOpening && searchInput) {
+    setTimeout(() => searchInput.focus(), 100);
+  }
+
+  // Suchfeld leeren beim Schließen
+  if (!isOpening && searchInput) {
+    searchInput.value = '';
+    filterAssignees('');
+  }
+}
+
+
+/**
+ * Bindet Event-Listener für das Suchfeld
+ * @param {HTMLElement} searchInput Suchfeld-Element
+ */
+function bindSearchInputEvent(searchInput) {
+  if (!searchInput || searchInput.dataset.bound) return;
+
+  searchInput.dataset.bound = "1";
+
+  // Input-Event für Live-Suche
+  searchInput.addEventListener("input", (e) => {
+    filterAssignees(e.target.value);
+  });
+
+  // Verhindere, dass Klick auf Suchfeld das Dropdown schließt
+  searchInput.addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
 }
 
 
