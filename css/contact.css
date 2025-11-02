@@ -755,6 +755,7 @@ body {
 
 /* <= 48rem – Mobile FAB + Layout */
 @media (max-width: 48rem) {
+
   .contact-btn {
     position: fixed;
     bottom: 6rem;
@@ -898,4 +899,3 @@ body {
     font-size: 28px;
   }
 }
-

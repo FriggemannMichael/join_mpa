@@ -684,9 +684,9 @@ body.dark-theme .goback:hover {
     flex-direction: column;
   }
 
-  .separator {
+  /* .separator {
     margin: 0 1rem;
-  }
+  } */
 
   .summary_card[data-summary-block="urgent-deadline"] {
     align-items: flex-start;

@@ -298,6 +298,53 @@ h1 {
     flex: 1;
     min-width: 120px;
   }
+
+      .addcontact {
+    height: 660px;
+    width: 396px;
+  }
+
+  .leftside {
+    flex: 1;
+  }
+
+  .rightside {
+    padding: 80px 20px 40px 20px;
+  }
+
+  .avatar-modal {
+    position: absolute;
+    top: -15%;
+  }
+
+  .imglogo {
+    display: none;
+    visibility: hidden;
+  }
+
+  .btnclosemodal {
+    position: absolute;
+    top: -75%;
+  }
+
+  .delbtn{
+    width: 82px;
+    min-width: 82px;
+     height: 51px;
+     flex: none;
+     padding: 0;
+  }
+
+  .savebtn {
+    min-width: 99px;
+    height: 51px;
+    gap: 4px;
+      padding: 8px;
+  } 
+
+  .btnclosemodal {
+    color: white;
+  }
 }
 
 @media (width <= 500px) {
@@ -309,12 +356,12 @@ h1 {
     font-size: 18px;
   }
 
-  .btneditcontact {
-    flex-direction: column;
+   .addcontact{
+    height: 580px;
+    width: 310px;
   }
 
-  .delbtn,
-  .creatbtn {
-    width: 100%;
+    .btnclosemodal {
+    top: -55%;
   }
 }

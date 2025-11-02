@@ -51,6 +51,7 @@ async function initContactsPage() {
   document.querySelector(".contact-detail-section .close-detail")
     ?.addEventListener("click", closeContactDetailOverlay);
   initEditDeleteRespMenu();
+  insertCloseBtn();
 }
 
 /**
@@ -614,11 +615,17 @@ function initEditDeleteRespMenu() {
   })
 }
 
+function insertCloseBtn() {
+  document.getElementById("contactModalClose").innerHTML = icons.close;
+  document.getElementById("addContactModalClose").innerHTML = icons.close;
+}
+
 
 window.addEventListener('resize', () => {
   const btn = document.getElementById('contactsEditDelete');
   if (!btn) return;
   if (window.innerWidth > 768) {
     btn.classList.add('menu-hidden');
-  } 
+  }
 });
+
