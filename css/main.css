@@ -530,7 +530,7 @@ main {
 @media (width <= 64rem) {
   /* 1024px */
   .main__container {
-    padding-bottom: 5rem;
+    padding-bottom: 6rem;
   }
 
   .help-link {
@@ -623,6 +623,11 @@ main {
     font-size: 1.125rem;
 
     /* 18px */
+  }
+
+  .main__container {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
   }
 }
 
