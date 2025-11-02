@@ -348,4 +348,8 @@
         font-size: 16px;
         padding: 16px;
     }
+
+    .priority {
+        gap: 38px;
+    }
 }
