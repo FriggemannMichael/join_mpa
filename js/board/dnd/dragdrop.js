@@ -15,24 +15,14 @@ let currentDrag = null;
  * @returns {void}
  */
 export function enableCardInteractions(card) {
-  const MOBILE_BREAKPOINT = 900;
-  const updateTouchAction = () => {
-    const isMobileView = window.innerWidth < MOBILE_BREAKPOINT;
-    card.style.touchAction = isMobileView ? "none" : "auto";
-    card.style.webkitUserSelect = isMobileView ? "none" : "auto";
-  };
-  updateTouchAction();
-  window.addEventListener("resize", updateTouchAction);
-
   const HOLD_MS = 300;
   const MOVE_THRESHOLD = 5;
-
   const s = initDragState();
 
   card.addEventListener("pointerdown", (e) => onDown(card, e, s, HOLD_MS));
-  card.addEventListener("pointermove", (e) => onMove(card, e, s, MOVE_THRESHOLD));
-  card.addEventListener("pointerup", (e) => onUp(card, e, s, HOLD_MS));
-  card.addEventListener("pointercancel", (e) => onUp(card, e, s, HOLD_MS));
+  card.addEventListener("pointermove", (e) => onMove(card, e, s, MOVE_THRESHOLD), { passive: false });
+  card.addEventListener("pointerup",    (e) => onUp(card, e, s, HOLD_MS));
+  card.addEventListener("pointercancel",(e) => onUp(card, e, s, HOLD_MS));
 }
 
 
@@ -73,10 +63,7 @@ function onDown(card, e, s, HOLD_MS) {
   s.isPointerDown = true;
   s.pointerId = e.pointerId;
 
-  if (s.isTouch || window.innerWidth < 900) {
-    card.setPointerCapture(e.pointerId);
-    card.style.touchAction = "none";
-  }
+  // Kein globales Touch-Blocking hier – Scrollen bleibt möglich
   if (s.isTouch) startHoldTimer(card, e, s, HOLD_MS);
 }
 
@@ -93,19 +80,26 @@ function onDown(card, e, s, HOLD_MS) {
 function onMove(card, e, s, THRESHOLD) {
   if (!samePointer(e, s)) return;
   if (!s.isTouch && e.buttons === 0) return;
-  if (s.isTouch && e.cancelable) e.preventDefault();
+
+  const moved = exceededThreshold(e, s, THRESHOLD);
+
   if (!s.dragging) {
-    if (s.isTouch && exceededThreshold(e, s, THRESHOLD)) {
+    // Touch: Scroll erlauben, kein preventDefault
+    if (s.isTouch && moved) {
       s.moved = true;
       clearHoldTimer(s);
       return;
     }
-    if (!s.isTouch && exceededThreshold(e, s, THRESHOLD)) {
+    // Maus: direktes Draggen nach Schwellwert
+    if (!s.isTouch && moved) {
       startDrag(card, e, s);
+      if (e.cancelable) e.preventDefault();
       return;
     }
     return;
   }
+
+  // Nur während Drag native Gesten blockieren
   if (e.cancelable) e.preventDefault();
   moveDragging(card, e);
 }
@@ -207,8 +201,10 @@ function isTap(s, HOLD_MS) {
 function startDrag(card, e, s) {
   startDragging(card, e);
   clearHoldTimer(s);
-
   s.dragging = true;
+
+  card.style.touchAction = "none";
+  card.style.webkitUserSelect = "none";
 
   document.querySelectorAll(".no_task_to_do").forEach(el => {
     el.style.display = "none";
@@ -231,10 +227,8 @@ function resetPointerState(card, e, s) {
   s.isPointerDown = false;
   s.pointerId = null;
 
-  if (window.innerWidth >= 900) {
-    card.style.touchAction = "auto";
-    card.style.webkitUserSelect = "auto";
-  }
+  card.style.removeProperty("touch-action");
+  card.style.removeProperty("webkit-user-select");
 }
 
 

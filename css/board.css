@@ -7,6 +7,13 @@
   transition: all 100ms;
 }
 
+
+body.no-select,
+body.no-select * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
 /* ===============================
    Headings
 ================================ */

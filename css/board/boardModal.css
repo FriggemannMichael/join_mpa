@@ -35,12 +35,14 @@
     max-height: 95vh;
     width: fit-content;
     z-index: 1;
+    overflow: hidden;
 }
 
 .container-add-task-board {
     height: 100%;
     padding: 2rem 4rem 0;
     width: 100%;
+    max-height: fit-content;
 }
 
 .task-overlay {
@@ -214,10 +216,12 @@
     gap: 36px;
     height: 600px;
     overflow: auto;
+    max-height: calc(95vh - 240px);
 }
 
 .button-group.addTask-modal {
     padding: 0 4rem 2rem 4rem;
+    border: none
 }
 
 .buttons-add-task-modal {
@@ -324,6 +328,24 @@
 
 }
 
+@media (width<=35rem) {
+    .modal-space {
+        width: 100%;
+    }
+
+    .container-add-task-board {
+        padding: 2rem 2rem 0;
+    }
+
+    .button-group.addTask-modal {
+        padding: 2rem 2rem 0;
+    }
+
+    .form-wrapper.scrollable {
+        margin: 0;
+    }
+}
+
 @media (width <=30rem) {
     .task-overlay {
         padding: 32px 24px;
@@ -344,8 +366,34 @@
         gap: 4px
     }
 
-    .task-added{
+    .task-added {
         font-size: 16px;
         padding: 16px;
+    }
+
+    .btn-create.addTaskModal {
+        width: 136px;
+    }
+
+    .button-group.addTask-modal {
+        align-items: space-between !important;
+    }
+
+    /* .container-add-task-board {
+        padding: 2rem 1rem 0;
+    }
+
+    .button-group.addTask-modal {
+        padding: 2rem 1rem 0;
+    } */
+}
+
+@media (width<=22.5rem) {
+    .container-add-task-board {
+        padding: 2rem 1rem 0;
+    }
+
+    .button-group.addTask-modal {
+        padding: 2rem 1rem 0;
     }
 }

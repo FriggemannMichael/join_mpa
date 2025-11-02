@@ -241,7 +241,7 @@ export const boardTemplates = {
             <div class="selected-assignee-avatars" id="selected-assignee-avatars"></div>
           </div>
           <div class="form-group">
-             <label>Category <sup class="required" aria-hidden="true">*</sup></label>
+                <label>Category <span class="required-marker">*</span></label>
                 <div class="custom-category-select">
                   <div
                     class="category-select-header"
@@ -313,7 +313,7 @@ export const boardTemplates = {
         <button class="btn-clear" type="button" id="taskClearBtn">
           Clear ✕
         </button>
-        <button class="btn-create" type="button" id="taskCreateBtn">
+        <button class="btn-create addTaskModal" type="button" id="taskCreateBtn">
           Create Task ✓
         </button>
       </div>
