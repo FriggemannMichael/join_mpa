@@ -7,6 +7,134 @@
   display: block;
 }
 
+@media (width >= 429px) and (width <= 767px) {
+  /* Back button positioning for tablet range */
+  .goback {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  .goback img {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+
+  /* Signup view wrapper */
+  .signUp__view {
+    padding: 2.5rem 2rem;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Signup container */
+  .signUp__container {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem;
+    border-radius: 30px;
+    box-shadow: 0 0 14px rgb(0 0 0 / 4%);
+    box-sizing: border-box;
+  }
+
+  /* Headline container */
+  .headline__container {
+    padding: 0;
+    margin-bottom: 2rem;
+    position: relative;
+  }
+
+  /* Title */
+  .headline__titleWrap h1 {
+    font-size: 3rem;
+    font-weight: 700;
+  }
+
+  /* Separator */
+  .signUp__separator {
+    width: 100px;
+    height: 3px;
+  }
+
+  /* Form inputs */
+  .signUp__form {
+    gap: 1.25rem;
+  }
+
+  .inputField__container {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .inputField__container input {
+    width: 100%;
+    height: 50px;
+    font-size: 1.0625rem;
+    padding: 0 3rem 0 1.25rem;
+    border: 1px solid #d1d1d1;
+    border-radius: 10px;
+    box-sizing: border-box;
+  }
+
+  .inputField__container-margin24 {
+    margin-bottom: 1.5rem;
+  }
+
+  /* Icons */
+  .inputField__username__icon,
+  .inputField__password__icon {
+    right: 1.25rem;
+  }
+
+  /* Checkbox */
+  .check-box {
+    font-size: 1rem;
+    gap: 0.625rem;
+  }
+
+  /* Button container */
+  .signUp__btn__container {
+    margin-top: 1.5rem;
+    width: 100%;
+  }
+
+  /* Signup button */
+  .btn__signUp {
+    width: 100%;
+    max-width: 100%;
+    height: 54px;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    padding: 0 2rem;
+    border-radius: 8px;
+    box-sizing: border-box;
+  }
+
+  /* Footer */
+  .login-footer {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    padding: 1rem 0 2rem;
+    position: relative;
+    width: 100%;
+  }
+
+  .login-footer__link {
+    color: var(--black);
+    font-size: 16px;
+    height: auto;
+    padding: 0.5rem;
+    text-decoration: none;
+    width: auto;
+  }
+}
+
 @media (width <= 428px) {
   /* Brand splash - use central rules from animations.css */
 

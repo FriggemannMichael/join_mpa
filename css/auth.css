@@ -516,6 +516,7 @@ body.dark-theme .goback:hover {
   font-size: 1.3125rem;
   font-weight: 400;
   line-height: 1.2;
+  white-space: nowrap;
 }
 
 .btn-signup {
