@@ -1,11 +1,11 @@
 /* Avatar für Edit-Modal wie Add-Modal */
 .avatar-modal {
   align-items: center;
-  background-color: #d0d7e2;
-  border: 3px solid #fff;
+  background-color: var(--color-separator);
+  border: 3px solid var(--white);
   border-radius: 50%;
-  box-shadow: 0 4px 10px rgb(0 0 0 / 10%);
-  color: #fff;
+  box-shadow: 0 4px 10px var(--shadow-color);
+  color: var(--white);
   display: flex;
   flex-shrink: 0;
   font-size: 48px;
@@ -21,10 +21,10 @@
 /* Edit-Button für Modal (z.B. Speichern) wie Add-Button */
 .savebtn {
   align-items: center;
-  background-color: #2a3647;
+  background-color: var(--primary-color);
   border: none;
   border-radius: 8px;
-  color: #fff;
+  color: var(--white);
   cursor: pointer;
   display: flex;
   font-size: 21px;
@@ -34,12 +34,12 @@
   justify-content: center;
   min-width: 160px;
   padding: 15px 24px;
-  transition: all 0.3s ease;
+  transition: background-color 300ms ease, transform 300ms ease;
 }
 
 .addcontact {
-  background-color: #fff;
-  border: 1px solid #d0d7e2;
+  background-color: var(--white);
+  border: 1px solid var(--color-separator);
   border-radius: 30px;
   display: flex;
   height: auto;
@@ -51,7 +51,7 @@
 
 .leftside {
   align-items: flex-start;
-  background-color: #2a3647;
+  background-color: var(--primary-color);
   border-radius: 20px 0 0 20px;
   display: flex;
   flex-direction: column;
@@ -82,14 +82,14 @@
 }
 
 h1 {
-  color: #fff;
+  color: var(--white);
   font-size: 61px;
   font-weight: 600;
   line-height: 120%;
 }
 
 .taskbetter {
-  color: #fff;
+  color: var(--white);
   font-size: 27px;
   font-weight: 400;
   line-height: 120%;
@@ -102,7 +102,7 @@ h1 {
 
 .rightside {
   align-items: center;
-  background-color: #fff;
+  background-color: var(--white);
   display: flex;
   flex: 1;
   flex-direction: row;
@@ -114,11 +114,11 @@ h1 {
 
 .avatar {
   align-items: center;
-  background-color: #d0d7e2;
-  border: 3px solid #fff;
+  background-color: var(--color-separator);
+  border: 3px solid var(--white);
   border-radius: 50%;
-  box-shadow: 0 4px 10px rgb(0 0 0 / 10%);
-  color: #fff;
+  box-shadow: 0 4px 10px var(--shadow-color);
+  color: var(--white);
   display: flex;
   flex-shrink: 0;
   font-size: 48px;
@@ -164,7 +164,7 @@ h1 {
 }
 
 .input input {
-  border: 1px solid #d0d7e2;
+  border: 1px solid var(--color-separator);
   border-radius: 8px;
   font-family: Poppins, sans-serif;
   font-size: 16px;
@@ -173,7 +173,7 @@ h1 {
 }
 
 .input input:focus {
-  border-color: #2a3647;
+  border-color: var(--primary-color);
   outline: none;
 }
 
@@ -184,8 +184,8 @@ h1 {
 }
 
 .delbtn {
-  background-color: #fff;
-  border: 1px solid #d0d7e2;
+  background-color: var(--white);
+  border: 1px solid var(--color-separator);
   border-radius: 8px;
   cursor: pointer;
   font-size: 21px;
@@ -193,19 +193,19 @@ h1 {
   height: 55px;
   min-width: 113px;
   padding: 15px 24px;
-  transition: all 0.3s ease;
+  transition: background-color 300ms ease;
 }
 
 .delbtn:hover {
-  background-color: #f5f5f5;
+  background-color: var(--grey-lightest);
 }
 
 .creatbtn {
   align-items: center;
-  background-color: #2a3647;
+  background-color: var(--primary-color);
   border: none;
   border-radius: 8px;
-  color: #fff;
+  color: var(--white);
   cursor: pointer;
   display: flex;
   font-size: 21px;
@@ -215,18 +215,18 @@ h1 {
   justify-content: center;
   min-width: 160px;
   padding: 15px 24px;
-  transition: all 0.3s ease;
+  transition: background-color 300ms ease, transform 300ms ease;
 }
 
 .creatbtn:hover {
-  background-color: #1a2637;
+  background-color: var(--grey-darkest);
 }
 
 .btnclosemodal {
   align-items: center;
   background-color: transparent;
   border: none;
-  color: #2a3647;
+  color: var(--primary-color);
   cursor: pointer;
   display: flex;
   font-size: 30px;
@@ -235,7 +235,7 @@ h1 {
   position: absolute;
   right: 20px;
   top: 20px;
-  transition: all 0.3s ease;
+  transition: transform 300ms ease;
   width: 40px;
 }
 

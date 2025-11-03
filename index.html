@@ -7,6 +7,9 @@
     <link rel="stylesheet" href="./css/root.css" />
     <link rel="stylesheet" href="./css/main.css" />
     <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/auth.css" />
+    <link rel="stylesheet" href="./css/animations.css" />
+    <link rel="stylesheet" href="./css/responsive-global.css" />
     <link rel="stylesheet" href="./css/board.css" />
     <link rel="stylesheet" href="./css/contact.css" />
     <link rel="stylesheet" href="./css/add_task.css" />
@@ -15,41 +18,37 @@
   </head>
   <body>
     <div class="brand-splash" id="brandSplash">
-      <img src="./img/header_logo.svg" alt="Join Logo" />
+      <img src="./assets/images/header_logo.svg" alt="Join Logo" />
     </div>
     <!-- Splash Screen Start -->
     <div id="splash-screen" class="splash-bg">
       <img
         id="splash-logo"
-        src="img/logowhite.svg"
+        src="assets/images/logowhite.svg"
         alt="JOIN Logo Weiß"
         class="splash-logo"
       />
     </div>
     <!-- Splash Screen End -->
 
-    <!-- Login-Logo nach Animation (initial hidden) -->
-    <img
-      id="login-logo"
-      src="img/header_logo.svg"
-      alt="JOIN Logo"
-      style="display: none; position: absolute"
-    />
 
     <div class="login-view-wrapper">
+      <!-- Desktop Sign-up Header (top right) -->
+      <div class="login-header-signup login-header-signup-desktop">
+        <div class="signup-text">Not a Join user?</div>
+        <a href="signup.html" class="btn btn-signup" id="signupBtn"
+          >Sign up</a
+        >
+      </div>
+
+      <!-- Login Card -->
       <div
         class="login-card login-card-hidden"
         role="main"
         aria-labelledby="loginTitle"
       >
         <div class="login-logo-fixed">
-          <img src="./img/icon/logo.svg" alt="Join Logo" />
-        </div>
-        <div class="login-header-signup">
-          <div class="signup-text">Not a Join user?</div>
-          <button class="btn btn-signup" type="button" id="signupBtn">
-            Sign up
-          </button>
+          <img src="./assets/icons/logo.svg" alt="Join Logo" />
         </div>
         <div class="login-header"><h1 id="loginTitle">Login</h1></div>
         <div>
@@ -67,7 +66,7 @@
             />
             <img
               class="inputField__username__icon"
-              src="./img/icon/mail.svg"
+              src="./assets/icons/mail.svg"
               alt="Email"
             />
           </div>
@@ -82,21 +81,31 @@
             />
             <img
               class="inputField__password__icon"
-              src="./img/icon/lock.svg"
+              src="./assets/icons/lock.svg"
               alt="Passwort"
             />
           </div>
           <div class="login-status" id="loginStatus" aria-live="polite"></div>
           <div class="login-actions">
-            <button type="submit" class="btn btn-primary" id="loginBtn">
+            <a href="#" class="btn btn-primary" id="loginBtn" role="button">
               Login
-            </button>
-            <button type="button" class="btn btn-outline" id="guestBtn">
+            </a>
+            <a href="#" class="btn btn-outline" id="guestBtn" role="button">
               Gastzugang
-            </button>
+            </a>
           </div>
         </form>
       </div>
+
+      <!-- Mobile Sign-up Section (below card) -->
+      <div class="login-header-signup login-header-signup-mobile">
+        <div class="signup-text">Not a Join user?</div>
+        <a href="signup.html" class="btn btn-signup" id="signupBtnMobile"
+          >Sign up</a
+        >
+      </div>
+
+      <!-- Footer -->
       <footer class="login-footer" role="contentinfo">
         <a href="./privacy.html" class="login-footer__link" rel="nofollow"
           >Privacy Policy</a

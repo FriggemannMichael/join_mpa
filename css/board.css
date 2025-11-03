@@ -7,6 +7,13 @@
   transition: all 100ms;
 }
 
+
+body.no-select,
+body.no-select * {
+  user-select: none !important;
+  -webkit-user-select: none !important;
+}
+
 /* ===============================
    Headings
 ================================ */
@@ -86,7 +93,7 @@ h2 {
 
 .search_button {
   all: unset;
-  background-image: url("../img/icon/search-default.svg");
+  background-image: url("../assets/icons/search-default.svg");
   background-position: center;
   background-size: contain;
   cursor: pointer;
@@ -95,11 +102,11 @@ h2 {
 }
 
 .search_button:hover {
-  background-image: url("../img/icon/search-hover.svg");
+  background-image: url("../assets/icons/search-hover.svg");
 }
 
 .search_button:active {
-  background-image: url("../img/icon/search-click.svg");
+  background-image: url("../assets/icons/search-click.svg");
 }
 
 .search_error {
@@ -150,7 +157,8 @@ h2 {
   flex-direction: row;
   gap: var(--space-lg);
   justify-content: space-between;
-  padding: var(--space-4xl) var(--pad-page-x) var(--pad-page-x) var(--pad-page-x);
+  padding: var(--space-4xl) var(--pad-page-x) var(--pad-page-x)
+    var(--pad-page-x);
   text-decoration: none;
 }
 
@@ -175,7 +183,7 @@ h2 {
 
 .add_task_button_kanban {
   align-items: center;
-  background-image: url("../img/icon/add-task-Default.svg");
+  background-image: url("../assets/icons/add-task-Default.svg");
   background-position: center;
   background-repeat: contain;
   border: none;
@@ -187,12 +195,12 @@ h2 {
 }
 
 .add_task_button_kanban:hover {
-  background-image: url("../img/icon/add-task-Hover.svg");
+  background-image: url("../assets/icons/add-task-Hover.svg");
   cursor: pointer;
 }
 
 .add_task_button_kanban:active {
-  background-image: url("../img/icon/add-task-click.svg");
+  background-image: url("../assets/icons/add-task-click.svg");
   cursor: pointer;
 }
 
@@ -263,7 +271,8 @@ body.loading button {
 
   .kanban-board {
     flex-direction: column;
-    padding: var(--space-lg) var(--pad-page-x-mobile) 1rem var(--pad-page-x-mobile);
+    padding: var(--space-lg) var(--pad-page-x-mobile) 1rem
+      var(--pad-page-x-mobile);
   }
 
   .task_space {
@@ -284,7 +293,7 @@ body.loading button {
 @media (width <=30rem) {
   .task_column_header h3 {
     font-size: var(--fs-h3-resp);
-    color: rgba(42, 54, 71, 1);
+    color: var(--primary-color);
   }
 
   .task_column {
@@ -309,29 +318,24 @@ body.loading button {
   }
 }
 
-
-@media (width <=500px),
-(hover: none) {
+@media (width <=500px), (hover: none) {
   .add_task_button_kanban:hover {
-    background-image: url("../img/icon/add-task-Default.svg");
+    background-image: url("../assets/icons/add-task-Default.svg");
   }
 
   .add_task_button_kanban:active {
     animation: toDark 0.01s forwards;
-    background-image: url("../img/icon/add-task-Hover.svg");
+    background-image: url("../assets/icons/add-task-Hover.svg");
 
     /* 10 ms */
   }
 }
 
-
-
 @keyframes toDark {
   to {
-    background-image: url("../img/icon/add-task-click.svg");
+    background-image: url("../assets/icons/add-task-click.svg");
   }
 }
-
 
 /* ===============================
    Confirm Modal Overlay
@@ -361,7 +365,7 @@ body.loading button {
 
 .modal_message {
   font-size: 16px;
-  color: #2a3647;
+  color: var(--primary-color);
   margin-bottom: 24px;
   line-height: 1.4;
 }
@@ -385,7 +389,7 @@ body.loading button {
 
 .btn_cancel {
   background: #f1f1f1;
-  color: #2a3647;
+  color: var(--primary-color);
 }
 
 .btn_cancel:hover {
@@ -394,14 +398,13 @@ body.loading button {
 
 .btn_confirm {
   background: #ff3b3b;
-  color: #fff;
+  color: var(--white);
   font-weight: 600;
 }
 
 .btn_confirm:hover {
   background: #e13232;
 }
-
 
 @keyframes fadeIn {
   from {
@@ -425,7 +428,6 @@ body.loading button {
   }
 }
 
-
 .has_tooltip {
   position: relative;
 }
@@ -437,11 +439,11 @@ body.loading button {
   bottom: 100%;
   transform: translateX(-50%) translateY(-8px);
   white-space: nowrap;
-  padding: .35rem .5rem;
-  border-radius: .5rem;
-  font-size: .75rem;
-  background: rgba(0, 0, 0, .85);
-  color: #fff;
+  padding: 0.35rem 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  background: rgba(0, 0, 0, 0.85);
+  color: var(--white);
   opacity: 0;
   pointer-events: none;
   transition: opacity 120ms, transform 120ms;

@@ -1,6 +1,8 @@
-
 import { boardTemplates } from "../templates/board-templates.js"
-import { populateAssignees, bindPriorityButtons, updateAssigneeSelection, setSubtasksFrom, initSubtaskInput, renderSubtasks, subtasks as subtasksState } from "../../pages/add-task.js";
+import { populateAssignees } from "../../pages/add-task-assignees.js";
+import { updateAssigneeSelection } from "../../pages/add-task-assignees-ui.js";
+import { bindPriorityButtons } from "../../pages/add-task-form.js";
+import { setSubtasksFrom, initSubtaskInput, renderSubtasks, subtasks as subtasksState } from "../../pages/add-task-subtasks.js";
 import { icons } from "../../common/svg-template.js";
 import { closeTaskOverlay } from "../utils.js";
 import { updateTask, loadTask } from "../services/tasks.repo.js"

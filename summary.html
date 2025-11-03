@@ -7,14 +7,14 @@
     <link rel="stylesheet" href="./css/root.css" />
     <link rel="stylesheet" href="./css/main.css" />
     <link rel="stylesheet" href="./css/style.css" />
-    <link rel="stylesheet" href="./css/board.css" />
-    <link rel="stylesheet" href="./css/contact.css" />
-    <link rel="stylesheet" href="./css/add_task.css" />
+    <link rel="stylesheet" href="./css/summary.css" />
+    <link rel="stylesheet" href="./css/animations.css" />
+    <link rel="stylesheet" href="./css/responsive-global.css" />
   </head>
   <body>
     <div class="layout">
       <nav aria-label="Primäre Navigation" class="app-sidebar">
-        <img class="nav-logo" src="./img/icon/logo.svg" alt="Join Logo" />
+        <img class="nav-logo" src="./assets/icons/logo.svg" alt="Join Logo" />
         <div class="nav-menu" role="list">
           <a
             href="./summary.html"
@@ -23,25 +23,25 @@
             aria-current="page"
           >
             <div class="link-icon">
-              <img src="./img/icon/summary_icon.svg" alt="Summary Icon" />
+              <img src="./assets/icons/summary_icon.svg" alt="Summary Icon" />
             </div>
             <div class="link-name"><p>Summary</p></div>
           </a>
           <a href="./board.html" class="nav-link link-2" data-nav>
             <div class="link-icon">
-              <img src="./img/icon/board_icon.svg" alt="Board Icon" />
+              <img src="./assets/icons/board_icon.svg" alt="Board Icon" />
             </div>
             <div class="link-name"><p>Board</p></div>
           </a>
           <a href="./add-task.html" class="nav-link link-3" data-nav>
             <div class="link-icon">
-              <img src="./img/icon/add_task_icon.svg" alt="Add Task Icon" />
+              <img src="./assets/icons/add_task_icon.svg" alt="Add Task Icon" />
             </div>
             <div class="link-name"><p>Add Task</p></div>
           </a>
           <a href="./contacts.html" class="nav-link link-4" data-nav>
             <div class="link-icon">
-              <img src="./img/icon/contacts_icon.svg" alt="Contacts Icon" />
+              <img src="./assets/icons/contacts_icon.svg" alt="Contacts Icon" />
             </div>
             <div class="link-name"><p>Contacts</p></div>
           </a>
@@ -53,11 +53,11 @@
       </nav>
       <header>
         <h2 class="header-slogan">Kanban Project Management Tool</h2>
-        <img class="header-logo" src="./img/header_logo.svg" alt="Join Logo" />
+        <img class="header-logo" src="./assets/images/header_logo.svg" alt="Join Logo" />
         <div class="header-icons">
           <div class="help-icon">
             <a href="#help" aria-label="Hilfe öffnen">
-              <img src="./img/help_icon.svg" alt="Help" />
+              <img src="./assets/images/help_icon.svg" alt="Help" />
             </a>
           </div>
           <div
@@ -83,19 +83,23 @@
         <section class="summary-layout-wrapper">
           <div class="summary-layout-left">
             <div class="summary__container">
-              <div class="summary__header">
-                <h2 class="summary__title">Join 360</h2>
-                <img
-                  class="seperator"
-                  src="./img/icon/seperator_blue.png"
-                  alt=""
-                  aria-hidden="true"
-                />
-                <p class="summary__header-text">Key Metrics at a Glance</p>
+              <div class="summary__header-wrapper">
+                <div class="summary__header">
+                  <div class="header-content">
+                    <h2 class="summary__title">Join 360</h2>
+                    <img
+                      class="seperator"
+                      src="./assets/icons/seperator_blue.png"
+                      alt=""
+                      aria-hidden="true"
+                    />
+                    <p class="summary__header-text">Key Metrics at a Glance</p>
+                    <div class="seperator__horizental" aria-hidden="true"></div>
+                  </div>
+                </div>
               </div>
-              <div class="seperator__horizental" aria-hidden="true"></div>
             </div>
-            <div class="summary_title_contaeiner">
+            <div class="summary__title_container">
               <div class="summary__tiles__container">
                 <div class="summary__tiles">
                   <!-- two tiles  -->
@@ -105,7 +109,7 @@
                         <img
                           class="summary__icons"
                           id="summary__toDo"
-                          src="./img/icon/edit_dark.png"
+                          src="./assets/icons/edit_dark.png"
                           alt="edit"
                         />
                         <div class="summary__tiles__text">
@@ -122,7 +126,7 @@
                         <img
                           class="summary__icons"
                           id="summary__done_icon"
-                          src="./img/icon/done_dark.png"
+                          src="./assets/icons/done_dark.png"
                           alt="check"
                         />
                         <div class="summary__tiles__text">
@@ -143,7 +147,7 @@
                           <div>
                             <img
                               class="summary__icons"
-                              src="./img/icon/urgent.png"
+                              src="./assets/icons/urgent.png"
                               alt="urgent"
                             />
                           </div>
@@ -160,7 +164,7 @@
 
                         <img
                           class="summary__tiles__seperator"
-                          src="./img/icon/seperator_grey.png"
+                          src="./assets/icons/seperator_grey.png"
                           alt="seperator"
                         />
 
@@ -185,7 +189,7 @@
                           0
                         </div>
                         <div class="summary__text__top-and-bottom">
-                          Tasks in<br />Board
+                          Tasks in Board
                         </div>
                       </div>
                     </a>
@@ -199,7 +203,7 @@
                           0
                         </div>
                         <div class="summary__text__top-and-bottom">
-                          Tasks in<br />Progress
+                          Tasks in Progress
                         </div>
                       </div>
                     </a>
@@ -215,7 +219,7 @@
                         <div
                           class="summary__text__top-and-bottom summary__text__top-and-bottom-text_align"
                         >
-                          Awaiting<br />Feedback
+                          Awaiting Feedback
                         </div>
                       </div>
                     </a>

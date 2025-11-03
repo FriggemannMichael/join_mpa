@@ -112,11 +112,11 @@ function updateSummaryMetrics(tasks) {
  * @returns {Object} Berechnete Metriken
  */
 function calculateTaskMetrics(tasks) {
-  const todoTasks = tasks.filter((t) => t.status === "todo");
+  const todoTasks = tasks.filter((t) => t.status === "toDo");
   const doneTasks = tasks.filter((t) => t.status === "done");
-  const inProgressTasks = tasks.filter((t) => t.status === "in-progress");
+  const inProgressTasks = tasks.filter((t) => t.status === "inProgress");
   const awaitingFeedbackTasks = tasks.filter(
-    (t) => t.status === "awaiting-feedback"
+    (t) => t.status === "awaitFeedback"
   );
   const urgentTasks = tasks.filter((t) => t.priority === "urgent");
 

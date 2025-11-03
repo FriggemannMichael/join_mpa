@@ -49,7 +49,14 @@ function bindProfileMenu() {
   const icon = document.getElementById("profileIcon");
   const menu = document.getElementById("profileMenu");
   const overlay = document.getElementById("profileMenuBackdrop");
+
+  // Debug-Logging für Troubleshooting
+  if (!icon) console.warn("Layout: profileIcon nicht gefunden");
+  if (!menu) console.warn("Layout: profileMenu nicht gefunden");
+  if (!overlay) console.warn("Layout: profileMenuBackdrop nicht gefunden");
+
   if (!icon || !menu || !overlay) return;
+
   icon.addEventListener("click", () => toggleMenu(menu, overlay, icon));
   icon.addEventListener("keydown", (event) =>
     handleProfileKey(event, menu, overlay, icon)

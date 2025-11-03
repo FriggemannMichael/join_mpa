@@ -6,7 +6,8 @@
   font-family: Inter;
   font-style: normal;
   font-weight: 100 900;
-  src: url("../img/fonts/Inter/Inter-VariableFont_opsz,wght.ttf") format("truetype-variations");
+  src: url("../assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf")
+    format("truetype-variations");
 }
 
 @font-face {
@@ -14,7 +15,8 @@
   font-family: Inter;
   font-style: italic;
   font-weight: 100 900;
-  src: url("../img/fonts/Inter/Inter-Italic-VariableFont_opsz,wght.ttf") format("truetype-variations");
+  src: url("../assets/fonts/Inter/Inter-Italic-VariableFont_opsz,wght.ttf")
+    format("truetype-variations");
 }
 
 /* Fallback für statische Schriftarten */
@@ -23,7 +25,8 @@
   font-family: Inter;
   font-style: normal;
   font-weight: 400;
-  src: url("../img/fonts/Inter/static/Inter_18pt-Regular.ttf") format("truetype");
+  src: url("../assets/fonts/Inter/static/Inter_18pt-Regular.ttf")
+    format("truetype");
 }
 
 @font-face {
@@ -31,7 +34,8 @@
   font-family: Inter;
   font-style: normal;
   font-weight: 500;
-  src: url("../img/fonts/Inter/static/Inter_18pt-Medium.ttf") format("truetype");
+  src: url("../assets/fonts/Inter/static/Inter_18pt-Medium.ttf")
+    format("truetype");
 }
 
 @font-face {
@@ -39,7 +43,8 @@
   font-family: Inter;
   font-style: normal;
   font-weight: 600;
-  src: url("../img/fonts/Inter/static/Inter_18pt-SemiBold.ttf") format("truetype");
+  src: url("../assets/fonts/Inter/static/Inter_18pt-SemiBold.ttf")
+    format("truetype");
 }
 
 @font-face {
@@ -47,10 +52,21 @@
   font-family: Inter;
   font-style: normal;
   font-weight: 700;
-  src: url("../img/fonts/Inter/static/Inter_18pt-Bold.ttf") format("truetype");
+  src: url("../assets/fonts/Inter/static/Inter_18pt-Bold.ttf")
+    format("truetype");
 }
 
 :root {
+  /* ===== BREAKPOINTS ===== */
+  --bp-mobile-xs: 20rem; /* 320px */
+  --bp-mobile-sm: 23.4375rem; /* 375px */
+  --bp-mobile: 26.75rem; /* 428px */
+  --bp-tablet-sm: 37.5rem; /* 600px */
+  --bp-tablet: 48rem; /* 768px */
+  --bp-desktop-sm: 64rem; /* 1024px */
+  --bp-desktop: 75rem; /* 1200px */
+  --bp-desktop-lg: 87.5rem; /* 1400px */
+
   /* Farben */
   --primary-color: #2a3647;
   --secondary-color: #29abe2;
@@ -62,38 +78,55 @@
   --grey-dark: rgb(42 54 71 / 100%);
   --shadow-color: rgb(0 0 0 / 10%);
   --color-bg-board: var(--background-color);
+
   /* board.css */
   --color-border: #a8a8a8;
+
   /* board.css */
   --color-separator: #d1d1d1;
+
   /* board.css */
   --color-btn: var(--primary-color);
+
   /* board.css */
   --color-btn-active: #091930;
+
   /* board.css */
   --color-btn-hover: var(--secondary-color);
+
   /* board.css */
   --color-danger: #e53935;
+
   /* board.css */
   --color-no-task: var(--grey-medium);
+
   /* board.css */
   --color-technical-task: #1fd7c1;
+
   /* board.css */
   --color-task-user-story: #0038ff;
+
   /* board.css */
   --color-task-default: #ff4800;
+
   /* board.css */
   --color-text: #333;
+
   /* board.css */
   --color-text-strong: #42526e;
+
   /* board.css */
   --color-white: var(--white);
+
   /* board.css */
   --progress-fill: #4589ff;
+
   /* board.css */
   --progress-track: #f4f4f4;
+
   /* board.css */
   --bg-no-task: #e7e7e7;
+
   /* board.css */
 
   /* Schriftarten */
@@ -107,189 +140,204 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
-  /* Abstände in rem */
-  --spacing-xs: 0.25rem;
-  /* 4px */
-  --spacing-sm: 0.5rem;
-  /* 8px */
-  --spacing-md: 1rem;
-  /* 16px */
-  --spacing-lg: 1.25rem;
-  /* 20px */
-  --spacing-xl: 2rem;
-  /* 32px */
-  --spacing-xxl: 2.5rem;
-  /* 40px */
-  --spacing-62: 3.875rem;
-  /* 62px */
-  --spacing-67: 4.1875rem;
-  /* 67px */
-  --spacing-126: 7.875rem;
-  /* 126px */
-  --space-0: 0;
-  /* board.css */
-  --space-xxs: var(--spacing-xs);
-  /* board.css */
-  --space-xs: var(--spacing-sm);
-  /* board.css */
-  --space-sm: 0.75rem;
-  /* board.css */
-  --space-md: var(--spacing-md);
-  /* board.css */
-  --space-lg: 1.5rem;
-  /* board.css */
-  --space-xl: var(--spacing-xl);
-  /* board.css */
-  --space-2xl: 3rem;
-  /* board.css */
-  --space-3xl: 3.5rem;
-  /* board.css */
-  --space-4xl: 4rem;
-  /* board.css */
-  --space-5xl: 5rem;
-  /* board.css */
-  --gap-md: 0.625rem;
-  /* board.css */
+  /* Abstände in rem - Einheitliches System */
+  --space-xxs: 0.25rem; /* 4px */
+  --space-xs: 0.5rem; /* 8px */
+  --space-sm: 0.75rem; /* 12px */
+  --space-md: 1rem; /* 16px */
+  --space-lg: 1.5rem; /* 24px */
+  --space-xl: 2rem; /* 32px */
+  --space-xxl: 2.5rem; /* 40px */
+  --space-3xl: 3rem; /* 48px */
+  --space-4xl: 4rem; /* 64px */
+  --space-5xl: 5rem; /* 80px */
+
+  /* Spezielle Abstände (aus altem System übernommen für Kompatibilität) */
+  --spacing-62: 3.875rem; /* 62px */
+  --spacing-67: 4.1875rem; /* 67px */
+  --spacing-126: 7.875rem; /* 126px */
 
   /* Font Sizes in rem */
   --font-xs: 0.75rem;
+
   /* 12px */
   --font-sm: 0.875rem;
+
   /* 14px */
   --font-md: 1rem;
+
   /* 16px */
   --font-lg: 1.25rem;
+
   /* 20px */
   --font-xl: 1.3125rem;
+
   /* 21px */
   --font-xxl: 1.6875rem;
+
   /* 27px */
   --font-3xl: 2.9375rem;
+
   /* 47px */
   --font-4xl: 3.8125rem;
+
   /* 61px */
   --font-5xl: 4rem;
+
   /* 64px */
   --fs-body: 1rem;
+
   /* board.css */
   --fs-h2: 4rem;
+
   /* board.css */
   --fs-h2-resp: 2.9375rem;
+
   /* board.css */
   --fs-h3: 1.25rem;
+
   /* board.css */
   --fs-h3-resp: 1.6875rem;
+
   /* board.css */
   --fs-input: 1.25rem;
+
   /* board.css */
   --fs-small: 0.875rem;
+
   /* board.css */
 
-  /* Border Radius in rem */
-  --border-radius-sm: 0.5rem;
-  /* 8px */
-  --border-radius-md: 1rem;
-  /* 16px */
-  --border-radius-lg: 1.25rem;
-  /* 20px */
-  --border-radius-xl: 1.875rem;
-  /* 30px */
-  --border-radius-round: 6.25rem;
-  /* 100px */
-  --radius-sm: var(--border-radius-sm);
-  /* board.css */
-  --radius-md: 0.625rem;
-  /* board.css */
-  --radius-lg: 1.5rem;
-  /* board.css */
-  --radius-xl: var(--border-radius-xl);
-  /* board.css */
+  /* Border Radius in rem - Einheitliches System */
+  --radius-sm: 0.5rem; /* 8px */
+  --radius-md: 0.625rem; /* 10px */
+  --radius-lg: 1rem; /* 16px */
+  --radius-xl: 1.875rem; /* 30px */
+  --radius-round: 6.25rem; /* 100px - vollständig rund */
 
   /* Schatten in rem */
   --box-shadow-light: 0 0 0.25rem 0 var(--shadow-color);
   --box-shadow-medium: 0 0.25rem 0.25rem rgb(0 0 0 / 10%);
   --box-shadow-hover: 0 0.25rem 0.25rem 0 #00000040;
   --shadow-card: 0 0 0.625rem 0.1875rem rgb(0 0 0 / 8%);
+
   /* board.css */
   --shadow-thin: 0 0 0.25rem 0 rgb(0 0 0 / 16%);
+
   /* board.css */
 
-  /* Z-Index */
-  --z-header: 3;
+  /* Z-Index - Systematisches Layer-System */
+  --z-base: 1;
   --z-nav: 2;
+  --z-header: 3;
   --z-submenu-bg: 4;
   --z-submenu: 5;
-  --z-overlay: 1;
+  --z-dropdown: 10;
+  --z-modal-backdrop: 100;
+  --z-modal: 500;
+  --z-toast: 800;
+  --z-splash: 900;
 
   /* Übergänge */
   --transition-fast: 125ms ease-in-out;
   --transition-medium: 100ms ease-in-out;
 
   /* Komponenten-spezifische Abmessungen */
+  --layout-sidebar-width: 14.5rem; /* 232px - Sidebar Breite */
+  --layout-sidebar-offset: 11.5rem; /* 184px - Contacts padding */
   --pad-header-top-desktop: 5rem;
+
   /* board.css */
   --pad-page-x: var(--space-4xl);
+
   /* board.css */
   --pad-page-x-mobile: var(--space-md);
+
   /* board.css */
   --input-h: 3rem;
+
   /* board.css */
   --search-w: 19.5rem;
+
   /* board.css */
   --affix-gap: 1rem;
+
   /* board.css */
   --affix-right: 1rem;
+
   /* board.css */
   --separator-h: 2rem;
+
   /* board.css */
   --search-btn-w: 2rem;
+
   /* board.css */
   --add-task-button-width: 10rem;
+
   /* board.css */
   --task-width: 15.375rem;
+
   /* board.css */
   --add-task-button-kanban: 1.5rem;
+
   /* board.css */
   --height-no-task: 3rem;
+
   /* board.css */
   --height-footer-task-card: 2rem;
+
   /* board.css */
   --add-task-btn-kanban-resp: 1.875rem;
+
   /* board.css */
   --progress-width: 8rem;
+
   /* board.css */
   --progress-height: 0.5rem;
+
   /* board.css */
   --progress-radius: 0.5rem;
+
   /* board.css */
   --progress-gap: 0.625rem;
+
   /* board.css */
   --progress-top: 0.25rem;
+
   /* board.css */
   --kanban-padding: 5rem;
+
   /* board.css */
   --bg-board: var(--color-bg-board);
+
   /* board.css */
 
   /* ===== SUMMARY DESIGN TOKENS (anpassbar ohne Figma) ===== */
   --summary-max-width: 64rem;
+
   /* 1024px verfügbarer Content-Bereich */
   --summary-gap: 1.125rem;
+
   /* 18px Grundabstand zwischen Karten */
   --summary-gap-lg: 1.5rem;
+
   /* 24px für größere Breakpoints */
   --summary-card-min-height: 6.5rem;
+
   /* Mindesthöhe einer Karte */
   --summary-card-padding-y: 1.25rem;
+
   /* vertikales Padding */
   --summary-card-padding-x: 1.75rem;
+
   /* horizontales Padding */
-  --summary-card-radius: var(--border-radius-xl);
+  --summary-card-radius: var(--radius-xl);
   --summary-card-shadow: var(--box-shadow-light);
   --summary-card-shadow-hover: var(--box-shadow-hover);
   --summary-icon-size: 3.5rem;
+
   /* 56px Kreis */
   --summary-icon-size-sm: 3rem;
+
   /* mobile */
   --summary-number-font-size: var(--font-4xl);
   --summary-number-font-size-sm: var(--font-3xl);
@@ -314,7 +362,7 @@ a {
   text-decoration: none;
 }
 
-/* Utility Classes */
+/* Utility Classes - Verwende sparsam! */
 .d-none {
   display: none !important;
 }
@@ -324,7 +372,7 @@ a {
 }
 
 .d-flex {
-  display: flex;
+  display: flex !important;
 }
 
 .flex-column {
@@ -382,7 +430,6 @@ a {
     box-shadow 0.2s ease;
   width: 110px;
 }
-
 
 @media (width <=30rem) {
   :root {
