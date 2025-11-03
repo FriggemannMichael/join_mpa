@@ -20,8 +20,8 @@ export function enableCardInteractions(card) {
 
   card.addEventListener("pointerdown", (e) => onDown(card, e, s, HOLD_MS));
   card.addEventListener("pointermove", (e) => onMove(card, e, s, MOVE_THRESHOLD), { passive: false });
-  card.addEventListener("pointerup",    (e) => onUp(card, e, s, HOLD_MS));
-  card.addEventListener("pointercancel",(e) => onUp(card, e, s, HOLD_MS));
+  card.addEventListener("pointerup", (e) => onUp(card, e, s, HOLD_MS));
+  card.addEventListener("pointercancel", (e) => onUp(card, e, s, HOLD_MS));
 }
 
 
@@ -223,10 +223,10 @@ function resetPointerState(card, e, s) {
     s.isPointerDown = false;
     s.pointerId = null;
 
-  card.style.removeProperty("touch-action");
-  card.style.removeProperty("webkit-user-select");
+    card.style.removeProperty("touch-action");
+    card.style.removeProperty("webkit-user-select");
+  } catch { };
 }
-
 
 /**
  * Opens the task modal for the given card.
@@ -240,6 +240,7 @@ async function openModal(card) {
   const task = await loadTask(id);
   await renderTaskModal(id, task);
 }
+
 
 
 /**
