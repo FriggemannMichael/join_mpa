@@ -57,6 +57,7 @@ async function handleLoginSubmit(event) {
   disableButton("loginBtn", true);
   try {
     await login(email, password);
+    sessionStorage.setItem("justLoggedIn", "true");
     window.location.href = "./summary.html";
   } catch (err) {
     showLoginStatus(readAuthError(err), true);
@@ -73,6 +74,7 @@ function bindGuestButton() {
   guestBtn.addEventListener("click", (event) => {
     event.preventDefault();
     startGuest();
+    sessionStorage.setItem("justLoggedIn", "true");
     window.location.href = "./summary.html";
   });
 }

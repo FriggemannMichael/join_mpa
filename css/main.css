@@ -543,7 +543,6 @@ main {
   header {
     /* 36px */
     height: 5rem;
-    padding: var(--spacing-lg) 2.25rem;
 
     /* 80px */
   }

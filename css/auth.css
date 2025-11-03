@@ -641,7 +641,6 @@ body.dark-theme .goback:hover {
 form.login-form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
 }
 
 .form-field {

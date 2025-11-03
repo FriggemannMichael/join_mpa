@@ -40,6 +40,10 @@ async function initSummaryPage() {
   const allowed = await guardPage("./index.html");
   if (!allowed) return;
   await bootLayout();
+  
+  // Mobile Greeting NACH Auth-Initialisierung anzeigen
+  showMobileGreetingIfNeeded();
+  
   renderGreeting();
   await loadSummaryData();
 }
@@ -240,6 +244,58 @@ function buildGreetingPrefixForGuest() {
   if (hour < 12) return "Good morning";
   if (hour < 18) return "Good afternoon";
   return "Good evening";
+}
+
+/**
+ * Zeigt den mobilen Begrüßungs-Screen nach dem Login (nur mobil)
+ * Prüft ob User gerade von Login kommt (sessionStorage Flag)
+ * Desktop: Kein Greeting-Screen
+ * Mobile + Registered User: Begrüßung mit Namen
+ * Mobile + Guest User: Nur zeitabhängige Begrüßung ohne Namen
+ */
+function showMobileGreetingIfNeeded() {
+  // Nur mobil (max 767px)
+  if (window.innerWidth >= 768) return;
+
+  // Prüfe ob User gerade von Login kommt
+  const justLoggedIn = sessionStorage.getItem("justLoggedIn");
+  if (!justLoggedIn) return;
+
+  // Flag entfernen (nur einmal pro Login)
+  sessionStorage.removeItem("justLoggedIn");
+
+  const greetingScreen = document.getElementById("mobileGreeting");
+  const greetingText = document.getElementById("mobileGreetingText");
+  const greetingName = document.getElementById("mobileGreetingName");
+
+  if (!greetingScreen || !greetingText || !greetingName) return;
+
+  const user = getActiveUser();
+  const isGuest = isGuestUser(user);
+
+  // Zeitabhängige Begrüßung (mit oder ohne Komma)
+  const timeGreeting = isGuest ? buildGreetingPrefixForGuest() : buildGreetingPrefix();
+  greetingText.textContent = timeGreeting;
+
+  // Name nur bei registrierten Usern
+  if (!isGuest) {
+    greetingName.textContent = resolveUserName();
+  } else {
+    greetingName.textContent = ""; // Guest: Kein Name
+  }
+
+  // Greeting-Screen anzeigen
+  greetingScreen.classList.add("active");
+
+  // Nach 2 Sekunden ausblenden
+  setTimeout(() => {
+    greetingScreen.classList.add("fade-out");
+
+    // Nach Fade-Out komplett verstecken
+    setTimeout(() => {
+      greetingScreen.classList.remove("active", "fade-out");
+    }, 500); // Dauer der CSS-Transition
+  }, 2000);
 }
 
 /**
