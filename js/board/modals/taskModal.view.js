@@ -4,7 +4,6 @@ import { taskModalSubtask } from "./taskModal.subtasks.js";
 import { icons } from "../../common/svg-template.js";
 import { closeTaskOverlay, ScrollLock, formatDate } from "../utils.js";
 
-
 /**
  * Renders the task modal view for a given task.
  * Sets up scroll lock, header, content, and action buttons.
@@ -22,7 +21,7 @@ export async function renderTaskModal(id, task = {}) {
   const h2 = document.createElement("h2");
   h2.textContent = task.title;
 
-  const scrollableSection = await createScrollableSection (task, h2, id) 
+  const scrollableSection = await createScrollableSection(task, h2, id);
 
   section.replaceChildren(
     taskModalHeader(task.categoryLabel, task.category),
@@ -33,9 +32,17 @@ export async function renderTaskModal(id, task = {}) {
   taskModalEventlistener(overlay, section);
 }
 
-
-async function createScrollableSection (task, h2, id) {
-const scrollableSection = document.createElement("div");
+/**
+ * Creates the scrollable content section inside the task modal.
+ * Builds all task details including description, due date, priority, assignees, and subtasks.
+ * @async
+ * @param {Object} task - Task data to render.
+ * @param {HTMLElement} h2 - The task title element.
+ * @param {string} id - ID of the task.
+ * @returns {Promise<HTMLElement>} The created scrollable section element.
+ */
+async function createScrollableSection(task, h2, id) {
+  const scrollableSection = document.createElement("div");
   scrollableSection.classList.add("taskModal-main");
   scrollableSection.append(
     h2,
@@ -48,15 +55,12 @@ const scrollableSection = document.createElement("div");
   return scrollableSection;
 }
 
-
 /**
- * Creates the scrollable content section inside the task modal.
- * Builds all task details including description, due date, priority, assignees, and subtasks.
- * @async
- * @param {Object} task - Task data to render.
- * @param {HTMLElement} h2 - The task title element.
- * @param {string} id - ID of the task.
- * @returns {Promise<HTMLElement>} The created scrollable section element.
+ * Creates the header section for the task modal.
+ * Displays category badge and close button.
+ * @param {string} categoryLabel - Visible category label text.
+ * @param {string} category - Category key used for styling.
+ * @returns {HTMLDivElement} The created header element.
  */
 function taskModalHeader(categoryLabel, category) {
   const head = document.createElement("div");
@@ -66,12 +70,11 @@ function taskModalHeader(categoryLabel, category) {
   cat.className = `task_category ${category}`;
   cat.textContent = categoryLabel;
 
-  const btn = createCloseBtn()
+  const btn = createCloseBtn();
 
   head.append(cat, btn);
   return head;
 }
-
 
 /**
  * Creates and returns a close button for the task modal.
@@ -94,7 +97,6 @@ function createCloseBtn() {
   return btn;
 }
 
-
 /**
  * Creates a description element for the task modal.
  * @param {string} description - The task description text.
@@ -106,7 +108,6 @@ function taskModalDescription(description) {
   descriptionDiv.classList.add("task_description_overlay");
   return descriptionDiv;
 }
-
 
 /**
  * Creates a due date element for the task modal.
@@ -125,12 +126,11 @@ function taskModalDueDate(dueDate) {
   const value = document.createElement("span");
   value.textContent = formatDate(dueDate);
 
-  formatDate
+  formatDate;
 
   div.append(label, value);
   return div;
 }
-
 
 /**
  * Creates a priority element for the task modal.
@@ -146,13 +146,12 @@ function taskModalPriority(priority) {
   priorityP.classList.add("taskModal-label");
   priorityP.textContent = "Priority:";
 
-  const prioritySpan = createPrioritySpan(priority)
+  const prioritySpan = createPrioritySpan(priority);
 
   priorityDiv.append(priorityP, prioritySpan);
 
   return priorityDiv;
 }
-
 
 /**
  * Creates a formatted priority span with text and icon.
@@ -160,9 +159,9 @@ function taskModalPriority(priority) {
  * @returns {HTMLSpanElement} The created span element containing the priority text and icon.
  */
 function createPrioritySpan(priority) {
-
   const prioritySpan = document.createElement("span");
-  const formatted = priority.charAt(0).toUpperCase() + priority.slice(1).toLowerCase();
+  const formatted =
+    priority.charAt(0).toUpperCase() + priority.slice(1).toLowerCase();
   prioritySpan.textContent = formatted;
 
   const icon = document.createElement("img");
@@ -174,7 +173,6 @@ function createPrioritySpan(priority) {
   return prioritySpan;
 }
 
-
 /**
  * Creates the footer section for the task modal with edit and delete buttons.
  * @param {Object} task - The current task data.
@@ -185,14 +183,13 @@ function taskModalEditDelete(task, id) {
   const footer = document.createElement("div");
   footer.classList.add("footer_taskModal");
 
-  const editBtn = createEditBtn(id)
-  const deleteBtn = createDeleteBtn(id)
-  const separator = createSeparator()
+  const editBtn = createEditBtn(id);
+  const deleteBtn = createDeleteBtn(id);
+  const separator = createSeparator();
 
   footer.append(deleteBtn, separator, editBtn);
   return footer;
 }
-
 
 /**
  * Creates an edit button element for the task modal footer.
@@ -209,7 +206,6 @@ function createEditBtn(id) {
   return editBtn;
 }
 
-
 /**
  * Creates a delete button element for the task modal footer.
  * @param {string} id - ID of the task to delete.
@@ -224,7 +220,6 @@ function createDeleteBtn(id) {
   deleteBtn.dataset.taskId = id;
   return deleteBtn;
 }
-
 
 /**
  * Creates a visual separator element for the task modal toolbar.

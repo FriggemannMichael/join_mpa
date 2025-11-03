@@ -77,6 +77,9 @@ function bindGuestButton() {
   });
 }
 
+/**
+ * Bindet Event-Listener für den Signup-Button
+ */
 function bindSignupButton() {
   const signupBtn = document.getElementById("signupBtn");
   if (!signupBtn) return;
@@ -85,6 +88,9 @@ function bindSignupButton() {
   });
 }
 
+/**
+ * Führt die Intro-Animation für die Login-Seite aus
+ */
 function runIntroAnimation() {
   const card = document.querySelector(".login-card");
   const splash = document.getElementById("brandSplash");
@@ -97,16 +103,31 @@ function runIntroAnimation() {
   });
 }
 
+/**
+ * Liest den Wert eines Input-Feldes und gibt ihn getrimmt zurück
+ * @param {string} id Die ID des Input-Elements
+ * @returns {string} Der getrimmte Wert des Feldes oder leerer String
+ */
 function readInputValue(id) {
   const field = document.getElementById(id);
   return field ? field.value.trim() : "";
 }
 
+/**
+ * Aktiviert oder deaktiviert einen Button
+ * @param {string} id Die ID des Button-Elements
+ * @param {boolean} disabled True zum Deaktivieren, false zum Aktivieren
+ */
 function disableButton(id, disabled) {
   const button = document.getElementById(id);
   if (button) button.disabled = disabled;
 }
 
+/**
+ * Zeigt eine Login-Statusmeldung an
+ * @param {string} message Die anzuzeigende Nachricht
+ * @param {boolean} isError True für Fehlermeldung, false für normale Meldung
+ */
 function showLoginStatus(message, isError) {
   const status = document.getElementById("loginStatus");
   if (!status) return;

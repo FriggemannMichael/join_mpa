@@ -72,6 +72,10 @@ async function handleSignupSubmit(event) {
   disableSubmit(false);
 }
 
+/**
+ * Validiert alle Eingaben des Signup-Formulars
+ * @returns {boolean} True wenn alle Validierungen erfolgreich, sonst false
+ */
 function validateSignup() {
   const name = readValue("signupName");
   const email = readValue("signupEmail");
@@ -89,6 +93,9 @@ function validateSignup() {
   return true;
 }
 
+/**
+ * Aktualisiert den Status des Submit-Buttons basierend auf Formularvalidierung
+ */
 function updateSubmitState() {
   const password = readValue("signupPassword");
   const confirm = readValue("signupPasswordConfirm");
@@ -105,6 +112,11 @@ function updateSubmitState() {
   showPasswordMismatch(password, confirm);
 }
 
+/**
+ * Zeigt einen Hinweis an, wenn Passwörter nicht übereinstimmen
+ * @param {string} password Das Passwort
+ * @param {string} confirm Das Bestätigungspasswort
+ */
 function showPasswordMismatch(password, confirm) {
   const hint = document.getElementById("signupPasswordHint");
   if (!hint) return;
@@ -112,6 +124,10 @@ function showPasswordMismatch(password, confirm) {
   hint.textContent = mismatch ? "Passwörter stimmen nicht überein" : "";
 }
 
+/**
+ * Aktiviert oder deaktiviert den Submit-Button
+ * @param {boolean} disabled True zum Deaktivieren, false zum Aktivieren
+ */
 function disableSubmit(disabled) {
   const button = document.getElementById("signupSubmit");
   if (!button) return;
@@ -119,16 +135,30 @@ function disableSubmit(disabled) {
   button.classList.toggle("btn__disabled", disabled);
 }
 
+/**
+ * Schaltet die Sichtbarkeit eines Passwort-Feldes um
+ * @param {string} id Die ID des Passwort-Input-Feldes
+ */
 function togglePassword(id) {
   const field = document.getElementById(id);
   if (field) field.type = field.type === "password" ? "text" : "password";
 }
 
+/**
+ * Liest den Wert eines Input-Feldes und gibt ihn getrimmt zurück
+ * @param {string} id Die ID des Input-Elements
+ * @returns {string} Der getrimmte Wert des Feldes oder leerer String
+ */
 function readValue(id) {
   const field = document.getElementById(id);
   return field ? field.value.trim() : "";
 }
 
+/**
+ * Zeigt eine Statusmeldung auf der Signup-Seite an
+ * @param {string} message Die anzuzeigende Nachricht
+ * @param {boolean} isError True für Fehlermeldung, false für normale Meldung
+ */
 function setSignupStatus(message, isError) {
   const status = document.getElementById("signupStatus");
   if (!status) return;
@@ -136,6 +166,11 @@ function setSignupStatus(message, isError) {
   status.classList.toggle("error", !!isError);
 }
 
+/**
+ * Zeigt eine Fehlermeldung an und gibt false zurück
+ * @param {string} message Die Fehlermeldung
+ * @returns {boolean} Immer false
+ */
 function reportError(message) {
   setSignupStatus(message, true);
   return false;
