@@ -203,8 +203,8 @@ h2 {
 }
 
 .task_column.active {
-  background-color: rgb(10 224 63 / 10%);
-  /* border: 1px solid #e53935; */
+  background-color: rgba(8, 8, 8, 0.1);
+  border: 1px dashed #000000;
   border-radius: 30px;
   /* padding-top: 20px; */
 }
