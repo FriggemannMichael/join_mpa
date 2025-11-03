@@ -1,0 +1,24 @@
+{
+  "rules": {
+    "tasks": {
+      ".read": true,
+      ".write": "auth != null",
+      "$taskId": {
+        ".validate": "newData.hasChildren(['title', 'status', 'createdAt'])"
+      }
+    },
+    "contacts": {
+      ".read": true,
+      ".write": "auth != null",
+      "$contactId": {
+        ".validate": "newData.hasChildren(['name', 'email'])"
+      }
+    },
+    "users": {
+      "$uid": {
+        ".read": "$uid === auth.uid",
+        ".write": "$uid === auth.uid"
+      }
+    }
+  }
+}
