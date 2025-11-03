@@ -1,6 +1,6 @@
 /* Spezifischer linker Abstand nur für die Kontakte-Seite */
 .contacts__container {
-  padding-left: 11.5rem;
+  padding-left: var(--layout-sidebar-offset);
 }
 
 /* Abstand unterhalb des Add-Contact-Button-Containers */
@@ -22,8 +22,8 @@ body {
 }
 
 .btn__icon--right svg {
-  color: #fff !important;
-  fill: #fff !important;
+  color: var(--white) !important;
+  fill: var(--white) !important;
 }
 
 /* SVG-Icon-Integration für Inputs und Buttons */
@@ -61,10 +61,10 @@ body {
 .avatar-modal {
   align-items: center;
   background-color: #659fef;
-  border: 3px solid #fff;
+  border: 3px solid var(--white);
   border-radius: 50%;
   box-shadow: 0 4px 10px rgb(0 0 0 / 10%);
-  color: #fff;
+  color: var(--white);
   display: flex;
   flex-shrink: 0;
   font-size: 48px;
@@ -75,10 +75,10 @@ body {
 
 .creatbtn {
   align-items: center;
-  background-color: #2a3647;
+  background-color: var(--primary-color);
   border: none;
   border-radius: 8px;
-  color: #fff;
+  color: var(--white);
   cursor: pointer;
   display: flex;
   font-size: 21px;
@@ -91,17 +91,17 @@ body {
 }
 
 .creatbtn .btn__icon--left svg {
-  color: #fff;
-  fill: #fff;
+  color: var(--white);
+  fill: var(--white);
 }
 
 .creatbtn .btn__icon--right svg {
-  color: #fff;
-  fill: #fff;
+  color: var(--white);
+  fill: var(--white);
 }
 
 .taskbetter {
-  color: #fff;
+  color: var(--white);
   font-size: 27px;
   font-weight: 400;
   line-height: 120%;
@@ -162,7 +162,7 @@ body {
   align-items: center;
   background: var(--primary-color);
   border: none;
-  border-radius: var(--border-radius-md);
+  border-radius: var(--radius-md);
   color: var(--white);
   cursor: pointer;
   display: flex;
@@ -373,9 +373,9 @@ body {
 }
 
 .contact-btn {
-  background-color: #2a3647;
+  background-color: var(--primary-color);
   border-radius: 10px;
-  color: white;
+  color: var(--white);
   cursor: pointer;
   display: flex;
   flex-shrink: 0; /* Verhindert, dass der Button beim Scrollen schrumpft */
@@ -399,7 +399,7 @@ body {
 }
 
 .contact-btn:hover {
-  background-color: #29abe2;
+  background-color: var(--secondary-color);
   border: 0;
 }
 
@@ -435,16 +435,16 @@ body {
 }
 
 .contact-person:hover {
-  background-color: #2a3647;
-  color: white;
+  background-color: var(--primary-color);
+  color: var(--white);
 }
 
 .initals {
   align-items: center;
   background-color: orange;
-  border: 2px solid white;
+  border: 2px solid var(--white);
   border-radius: 45px;
-  color: white;
+  color: var(--white);
   display: flex;
   flex-shrink: 0; /* Verhindert, dass Initialen schrumpfen */
   height: 42px;
@@ -456,9 +456,9 @@ body {
   align-items: center;
   aspect-ratio: 1;
   background-color: orange;
-  border: 3px solid white;
+  border: 3px solid var(--white);
   border-radius: 70px;
-  color: white;
+  color: var(--white);
   display: flex;
   font-size: 47px;
   height: 120px;
@@ -472,7 +472,7 @@ body {
 }
 
 .small-info a {
-  color: #007cee;
+  color: var(--secondary-color);
 }
 
 .contact-headline {
@@ -578,5 +578,5 @@ body {
 }
 
 .contact-mail a {
-  color: #007cee;
+  color: var(--secondary-color);
 }

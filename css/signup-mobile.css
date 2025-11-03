@@ -2,11 +2,13 @@
    MOBILE SIGNUP-FIXES
    ========================================= */
 
+/* Ensure brand-splash is visible on signup page - position from animations.css */
+.brand-splash {
+  display: block;
+}
+
 @media (width <= 428px) {
-  /* Hide brand splash on mobile */
-  .brand-splash {
-    display: none !important;
-  }
+  /* Brand splash - use central rules from animations.css */
 
   /* Signup view wrapper */
   .signUp__view {
@@ -113,7 +115,7 @@
   }
 
   .login-footer__link {
-    color: #000;
+    color: var(--black);
     font-size: 16px;
     height: auto;
     padding: 0.5rem;

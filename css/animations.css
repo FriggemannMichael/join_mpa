@@ -19,19 +19,29 @@
   width: 12rem;
 }
 
+/* Desktop: Fixed position nach Animation - einheitlich für Login & Signup */
 .brand-fixed {
-  left: var(--spacing-xl);
-  top: var(--spacing-xl);
-  transform: translate(0, 0) scale(0.45);
+  left: 77px;
+  top: 80px;
+  transform: none;
 }
 
-@media (width <= 30rem) {
-  .brand-splash img {
-    width: 9rem;
+.brand-fixed img {
+  width: 100.03px;
+  height: 121.97px;
+}
+
+/* Mobile: Fixed position - einheitlich für Login & Signup */
+@media (width <= 428px) {
+  .brand-fixed {
+    left: 38px;
+    top: 37px;
+    transform: none;
   }
 
-  .brand-fixed {
-    transform: translate(0, 0) scale(0.4);
+  .brand-fixed img {
+    width: 64px;
+    height: 78px;
   }
 }
 

@@ -6,7 +6,8 @@
   font-family: Inter;
   font-style: normal;
   font-weight: 100 900;
-  src: url("../assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf") format("truetype-variations");
+  src: url("../assets/fonts/Inter/Inter-VariableFont_opsz,wght.ttf")
+    format("truetype-variations");
 }
 
 @font-face {
@@ -14,7 +15,8 @@
   font-family: Inter;
   font-style: italic;
   font-weight: 100 900;
-  src: url("../assets/fonts/Inter/Inter-Italic-VariableFont_opsz,wght.ttf") format("truetype-variations");
+  src: url("../assets/fonts/Inter/Inter-Italic-VariableFont_opsz,wght.ttf")
+    format("truetype-variations");
 }
 
 /* Fallback für statische Schriftarten */
@@ -23,7 +25,8 @@
   font-family: Inter;
   font-style: normal;
   font-weight: 400;
-  src: url("../assets/fonts/Inter/static/Inter_18pt-Regular.ttf") format("truetype");
+  src: url("../assets/fonts/Inter/static/Inter_18pt-Regular.ttf")
+    format("truetype");
 }
 
 @font-face {
@@ -31,7 +34,8 @@
   font-family: Inter;
   font-style: normal;
   font-weight: 500;
-  src: url("../assets/fonts/Inter/static/Inter_18pt-Medium.ttf") format("truetype");
+  src: url("../assets/fonts/Inter/static/Inter_18pt-Medium.ttf")
+    format("truetype");
 }
 
 @font-face {
@@ -39,7 +43,8 @@
   font-family: Inter;
   font-style: normal;
   font-weight: 600;
-  src: url("../assets/fonts/Inter/static/Inter_18pt-SemiBold.ttf") format("truetype");
+  src: url("../assets/fonts/Inter/static/Inter_18pt-SemiBold.ttf")
+    format("truetype");
 }
 
 @font-face {
@@ -47,10 +52,21 @@
   font-family: Inter;
   font-style: normal;
   font-weight: 700;
-  src: url("../assets/fonts/Inter/static/Inter_18pt-Bold.ttf") format("truetype");
+  src: url("../assets/fonts/Inter/static/Inter_18pt-Bold.ttf")
+    format("truetype");
 }
 
 :root {
+  /* ===== BREAKPOINTS ===== */
+  --bp-mobile-xs: 20rem; /* 320px */
+  --bp-mobile-sm: 23.4375rem; /* 375px */
+  --bp-mobile: 26.75rem; /* 428px */
+  --bp-tablet-sm: 37.5rem; /* 600px */
+  --bp-tablet: 48rem; /* 768px */
+  --bp-desktop-sm: 64rem; /* 1024px */
+  --bp-desktop: 75rem; /* 1200px */
+  --bp-desktop-lg: 87.5rem; /* 1400px */
+
   /* Farben */
   --primary-color: #2a3647;
   --secondary-color: #29abe2;
@@ -124,70 +140,22 @@
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
-  /* Abstände in rem */
-  --spacing-xs: 0.25rem;
+  /* Abstände in rem - Einheitliches System */
+  --space-xxs: 0.25rem; /* 4px */
+  --space-xs: 0.5rem; /* 8px */
+  --space-sm: 0.75rem; /* 12px */
+  --space-md: 1rem; /* 16px */
+  --space-lg: 1.5rem; /* 24px */
+  --space-xl: 2rem; /* 32px */
+  --space-xxl: 2.5rem; /* 40px */
+  --space-3xl: 3rem; /* 48px */
+  --space-4xl: 4rem; /* 64px */
+  --space-5xl: 5rem; /* 80px */
 
-  /* 4px */
-  --spacing-sm: 0.5rem;
-
-  /* 8px */
-  --spacing-md: 1rem;
-
-  /* 16px */
-  --spacing-lg: 1.25rem;
-
-  /* 20px */
-  --spacing-xl: 2rem;
-
-  /* 32px */
-  --spacing-xxl: 2.5rem;
-
-  /* 40px */
-  --spacing-62: 3.875rem;
-
-  /* 62px */
-  --spacing-67: 4.1875rem;
-
-  /* 67px */
-  --spacing-126: 7.875rem;
-
-  /* 126px */
-  --space-0: 0;
-
-  /* board.css */
-  --space-xxs: var(--spacing-xs);
-
-  /* board.css */
-  --space-xs: var(--spacing-sm);
-
-  /* board.css */
-  --space-sm: 0.75rem;
-
-  /* board.css */
-  --space-md: var(--spacing-md);
-
-  /* board.css */
-  --space-lg: 1.5rem;
-
-  /* board.css */
-  --space-xl: var(--spacing-xl);
-
-  /* board.css */
-  --space-2xl: 3rem;
-
-  /* board.css */
-  --space-3xl: 3.5rem;
-
-  /* board.css */
-  --space-4xl: 4rem;
-
-  /* board.css */
-  --space-5xl: 5rem;
-
-  /* board.css */
-  --gap-md: 0.625rem;
-
-  /* board.css */
+  /* Spezielle Abstände (aus altem System übernommen für Kompatibilität) */
+  --spacing-62: 3.875rem; /* 62px */
+  --spacing-67: 4.1875rem; /* 67px */
+  --spacing-126: 7.875rem; /* 126px */
 
   /* Font Sizes in rem */
   --font-xs: 0.75rem;
@@ -239,34 +207,12 @@
 
   /* board.css */
 
-  /* Border Radius in rem */
-  --border-radius-sm: 0.5rem;
-
-  /* 8px */
-  --border-radius-md: 1rem;
-
-  /* 16px */
-  --border-radius-lg: 1.25rem;
-
-  /* 20px */
-  --border-radius-xl: 1.875rem;
-
-  /* 30px */
-  --border-radius-round: 6.25rem;
-
-  /* 100px */
-  --radius-sm: var(--border-radius-sm);
-
-  /* board.css */
-  --radius-md: 0.625rem;
-
-  /* board.css */
-  --radius-lg: 1.5rem;
-
-  /* board.css */
-  --radius-xl: var(--border-radius-xl);
-
-  /* board.css */
+  /* Border Radius in rem - Einheitliches System */
+  --radius-sm: 0.5rem; /* 8px */
+  --radius-md: 0.625rem; /* 10px */
+  --radius-lg: 1rem; /* 16px */
+  --radius-xl: 1.875rem; /* 30px */
+  --radius-round: 6.25rem; /* 100px - vollständig rund */
 
   /* Schatten in rem */
   --box-shadow-light: 0 0 0.25rem 0 var(--shadow-color);
@@ -279,18 +225,25 @@
 
   /* board.css */
 
-  /* Z-Index */
-  --z-header: 3;
+  /* Z-Index - Systematisches Layer-System */
+  --z-base: 1;
   --z-nav: 2;
+  --z-header: 3;
   --z-submenu-bg: 4;
   --z-submenu: 5;
-  --z-overlay: 1;
+  --z-dropdown: 10;
+  --z-modal-backdrop: 100;
+  --z-modal: 500;
+  --z-toast: 800;
+  --z-splash: 900;
 
   /* Übergänge */
   --transition-fast: 125ms ease-in-out;
   --transition-medium: 100ms ease-in-out;
 
   /* Komponenten-spezifische Abmessungen */
+  --layout-sidebar-width: 14.5rem; /* 232px - Sidebar Breite */
+  --layout-sidebar-offset: 11.5rem; /* 184px - Contacts padding */
   --pad-header-top-desktop: 5rem;
 
   /* board.css */
@@ -377,7 +330,7 @@
   --summary-card-padding-x: 1.75rem;
 
   /* horizontales Padding */
-  --summary-card-radius: var(--border-radius-xl);
+  --summary-card-radius: var(--radius-xl);
   --summary-card-shadow: var(--box-shadow-light);
   --summary-card-shadow-hover: var(--box-shadow-hover);
   --summary-icon-size: 3.5rem;
@@ -409,7 +362,7 @@ a {
   text-decoration: none;
 }
 
-/* Utility Classes */
+/* Utility Classes - Verwende sparsam! */
 .d-none {
   display: none !important;
 }
@@ -419,7 +372,7 @@ a {
 }
 
 .d-flex {
-  display: flex;
+  display: flex !important;
 }
 
 .flex-column {
@@ -477,7 +430,6 @@ a {
     box-shadow 0.2s ease;
   width: 110px;
 }
-
 
 @media (width <=30rem) {
   :root {

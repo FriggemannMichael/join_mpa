@@ -4,13 +4,13 @@
 }
 
 .heading {
-  background-color: #f6f7f8;
+  background-color: var(--background-color);
   padding-bottom: 48px;
   padding-left: 96px;
 }
 
 .add-task-container {
-  background-color: #f6f7f8;
+  background-color: var(--background-color);
   display: flex;
   flex-direction: column;
   margin-left: 232px;
@@ -35,12 +35,12 @@
   display: flex;
   flex-direction: column;
   gap: 16px;
-  width: min(440px, 100%);
+  width: 100%;
 }
 
 .form-col-middle {
   align-self: center;
-  border-left: 1px solid #d1d1d1;
+  border-left: 1px solid var(--color-separator);
   height: 424px;
 }
 
@@ -51,14 +51,14 @@
 }
 
 .form-input {
-  border: 1px solid #d1d1d1;
+  border: 1px solid var(--color-separator);
   border-radius: 10px;
   cursor: pointer;
   font-family: inherit;
   font-size: 20px;
   height: 48px;
   padding: 12px 21px;
-  width: min(440px, 100%);
+  width: 100%;
 }
 
 .form-input::-webkit-inner-spin-button,
@@ -67,20 +67,20 @@
 }
 
 .form-input:focus {
-  border-color: #29abe2;
+  border-color: var(--secondary-color);
   outline: none;
 }
 
 .dropdown-container {
   cursor: pointer;
   position: relative;
-  width: min(440px, 100%);
+  width: 100%;
 }
 
 .select-btn {
   align-items: center;
-  background-color: #fff;
-  border: 1px solid #d1d1d1;
+  background-color: var(--white);
+  border: 1px solid var(--color-separator);
   border-radius: 10px;
   cursor: pointer;
   display: flex;
@@ -116,8 +116,8 @@
 }
 
 .list-items {
-  background-color: #fff;
-  border: 1px solid #d1d1d1;
+  background-color: var(--white);
+  border: 1px solid var(--color-separator);
   border-radius: 0 0 10px 10px;
   border-top: none;
   display: none;
@@ -151,7 +151,7 @@
 }
 
 .list-items .list-item:hover {
-  background-color: #eee;
+  background-color: var(--grey-lightest);
   border-radius: 10px;
 }
 
@@ -170,10 +170,10 @@
 
 .cicle {
   align-items: center;
-  background-color: #9747ff;
-  border: 2px solid #fff;
+  background-color: var(--color-priority-medium);
+  border: 2px solid var(--white);
   border-radius: 50%;
-  color: #fff;
+  color: var(--white);
   display: flex;
   font-size: 12px;
   height: 42px;
@@ -182,13 +182,13 @@
 }
 
 .list-item.checked {
-  background-color: #2a3647;
+  background-color: var(--primary-color);
   border-radius: 10px;
-  color: white;
+  color: var(--white);
 }
 
 .list-item.checked:hover {
-  background-color: #091931;
+  background-color: var(--grey-darkest);
 }
 
 .list-items.category {
@@ -206,19 +206,19 @@
 }
 
 .list-item.category:hover {
-  background-color: #eee;
+  background-color: var(--grey-lightest);
   border-radius: 10px;
 }
 
 .subtask-divider-2 {
-  border-right: 1px solid #091931;
+  border-right: 1px solid var(--color-btn-active);
   height: 24px;
   margin: 0 8px;
   width: 1px;
 }
 
 .subtask-divider-2.subtask-divider-3 {
-  border-right: 1px solid #d1d1d1;
+  border-right: 1px solid var(--color-separator);
 }
 
 .li-text::before {
@@ -238,7 +238,7 @@
 
 .edit-subtask-input {
   border: none;
-  border-bottom: 1px solid #29abe2;
+  border-bottom: 1px solid var(--secondary-color);
   height: 32px;
   padding: 4px 16px;
   width: 100%;
@@ -250,8 +250,8 @@
 
 .edit-subtask-button-div {
   align-items: center;
-  background-color: #fff;
-  border-bottom: 1px solid #29abe2;
+  background-color: var(--white);
+  border-bottom: 1px solid var(--secondary-color);
   display: flex;
   gap: 4px;
   height: 32px;
@@ -271,11 +271,11 @@
 
 .delete-subtask-btn:hover,
 .confirm-subtask-edit-btn:hover {
-  background-color: #d1d1d1;
+  background-color: var(--color-separator);
 }
 
 textarea {
-  border: 1px solid #d1d1d1;
+  border: 1px solid var(--color-separator);
   border-radius: 10px;
   cursor: pointer;
   font-family: inherit;
@@ -283,24 +283,24 @@ textarea {
   height: 120px;
   padding: 16px;
   resize: none;
-  width: min(440px, 100%);
+  width: 100%;
 }
 
 textarea:focus {
-  border-color: #29abe2;
+  border-color: var(--secondary-color);
   outline: none;
 }
 
 .prio-buttons {
   display: flex;
   gap: 16px;
-  width: min(440px, 100%);
+  width: 100%;
 }
 
 .prio-btn {
   align-items: center;
-  background-color: white;
-  border: 1px solid #d1d1d1;
+  background-color: var(--white);
+  border: 1px solid var(--color-separator);
   border-radius: 10px;
   cursor: pointer;
   display: flex;
@@ -312,24 +312,24 @@ textarea:focus {
 }
 
 .prio-btn:hover {
-  box-shadow: 0 4px 4px 0 rgb(0 0 0 / 25%);
+  box-shadow: 0 4px 4px 0 var(--shadow-hover);
 }
 
 .prio-btn.active {
-  background-color: #ffa800;
+  background-color: var(--color-priority-medium);
   box-shadow: none;
-  color: white;
+  color: var(--white);
   font-size: 21px;
   font-weight: 700;
   outline: none;
 }
 
 .prio-btn.active.urgent {
-  background-color: #ff3d00;
+  background-color: var(--color-danger);
 }
 
 .prio-btn.active.low {
-  background-color: #7ae229;
+  background-color: var(--color-success);
 }
 
 .form-bottom {
@@ -353,7 +353,6 @@ textarea:focus {
   justify-content: space-between;
   margin-bottom: 32px;
   padding-bottom: 32px;
-  width: min(440px, 100%);
   width: 100%;
   max-width: 980px;
 }
@@ -364,13 +363,13 @@ textarea:focus {
 }
 
 .required-text {
-  color: #2a3647;
+  color: var(--primary-color);
   font-size: 16px;
 }
 
 .required,
 sup.required {
-  color: #f00;
+  color: var(--color-danger);
   font-size: 0.65em;
   line-height: 1;
   margin-left: 2px;
@@ -496,8 +495,8 @@ label {
 
 .multiselect-header {
   align-items: center;
-  background-color: #fff;
-  border: 1px solid #d1d1d1;
+  background-color: var(--white);
+  border: 1px solid var(--color-separator);
   border-radius: 10px;
   cursor: pointer;
   display: flex;
@@ -509,14 +508,14 @@ label {
 }
 
 .multiselect-header:hover {
-  border-color: #29abe2;
+  border-color: var(--accent-color);
 }
 
 .multiselect-header.open {
   border-bottom: none;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
-  border-color: #29abe2;
+  border-color: var(--accent-color);
 }
 
 .dropdown-icon {
@@ -531,12 +530,12 @@ label {
 }
 
 .multiselect-dropdown {
-  background-color: #fff;
-  border: 1px solid #29abe2;
+  background-color: var(--white);
+  border: 1px solid var(--accent-color);
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   border-top: none;
-  box-shadow: 0 4px 6px rgb(0 0 0 / 10%);
+  box-shadow: 0 4px 6px var(--shadow-color);
   display: flex;
   flex-direction: column;
   left: 0;
@@ -548,13 +547,13 @@ label {
 }
 
 .assignee-search-container {
-  border-bottom: 1px solid #d1d1d1;
+  border-bottom: 1px solid var(--color-separator);
   flex-shrink: 0;
   padding: 8px 12px;
 }
 
 .assignee-search-input {
-  border: 1px solid #d1d1d1;
+  border: 1px solid var(--color-separator);
   border-radius: 8px;
   font-family: inherit;
   font-size: 16px;
@@ -563,7 +562,7 @@ label {
 }
 
 .assignee-search-input:focus {
-  border-color: #29abe2;
+  border-color: var(--accent-color);
   outline: none;
 }
 
@@ -584,18 +583,18 @@ label {
 }
 
 .checkbox-label:hover {
-  background-color: #f5f5f5;
+  background-color: var(--grey-lightest);
   border-radius: 10px;
 }
 
 .checkbox-label.selected {
-  background-color: #2a3647;
+  background-color: var(--primary-color);
   border-radius: 10px;
-  color: white;
+  color: var(--white);
 }
 
 .checkbox-label.selected span {
-  color: white;
+  color: var(--white);
 }
 
 .assignee-info {
@@ -607,9 +606,9 @@ label {
 
 .user-initials {
   align-items: center;
-  border: 2px solid white;
+  border: 2px solid var(--white);
   border-radius: 50%;
-  color: white;
+  color: var(--white);
   display: flex;
   font-size: 14px;
   font-weight: 500;
@@ -619,7 +618,7 @@ label {
 }
 
 .checkbox-label input[type="checkbox"] {
-  accent-color: #29abe2;
+  accent-color: var(--accent-color);
   cursor: pointer;
   height: 18px;
   width: 18px;
@@ -638,9 +637,9 @@ label {
 
 .selected-assignee-avatars .avatar {
   align-items: center;
-  border: 2px solid white;
+  border: 2px solid var(--white);
   border-radius: 50%;
-  color: white;
+  color: var(--white);
   display: flex;
   font-size: 12px;
   font-weight: 600;
@@ -655,12 +654,12 @@ label {
 }
 
 .multiselect-dropdown::-webkit-scrollbar-thumb {
-  background: #29abe2;
+  background: var(--accent-color);
   border-radius: 10px;
 }
 
 .multiselect-dropdown::-webkit-scrollbar-thumb:hover {
-  background: #2a3647;
+  background: var(--primary-color);
 }
 
 /* Responsive adjustments */
@@ -701,8 +700,8 @@ label {
 
 .category-select-header {
   align-items: center;
-  background-color: #fff;
-  border: 1px solid #ccc;
+  background-color: var(--white);
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   cursor: pointer;
   display: flex;
@@ -711,10 +710,10 @@ label {
 }
 
 .category-dropdown {
-  background-color: #fff;
-  border: 1px solid #ccc;
+  background-color: var(--white);
+  border: 1px solid var(--border-color);
   border-radius: 6px;
-  box-shadow: 0 2px 6px rgb(0 0 0 / 10%);
+  box-shadow: 0 2px 6px var(--shadow-color);
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -741,13 +740,12 @@ label {
 .priority-buttons {
   display: flex;
   gap: 16px;
-  width: min(440px, 100%);
   width: 100%;
 }
 
 .priority-btn {
   align-items: center;
-  background-color: white;
+  background-color: var(--white);
   border: 1px solid #d1d1d1;
   border-radius: 10px;
   cursor: pointer;
@@ -770,7 +768,7 @@ label {
 .priority-btn.active {
   background-color: #ffa800;
   box-shadow: none;
-  color: white;
+  color: var(--white);
   font-family: var(--font-family);
   font-size: var(--font-xl);
   font-style: normal;
@@ -786,7 +784,7 @@ label {
 
 .priority-btn.active[data-priority="low"] {
   background-color: #7ae229;
-  color: #2a3647;
+  color: var(--primary-color);
 }
 
 /* Priority icon styling for both img and div containers */
@@ -832,11 +830,11 @@ label {
   box-sizing: border-box;
   display: flex;
   position: relative;
-  width: min(440px, 100%);
+  width: 100%;
 }
 
 .subtask-input-container .subtask-input {
-  background-color: #fff;
+  background-color: var(--white);
   border: 1px solid #d1d1d1;
   border-radius: 10px;
   box-sizing: border-box;
@@ -849,7 +847,7 @@ label {
 }
 
 .subtask-input-container .subtask-input:focus {
-  border-color: #29abe2;
+  border-color: var(--secondary-color);
   outline: none;
 }
 
@@ -952,14 +950,14 @@ label {
 }
 
 .subtask-bullet {
-  color: #2a3647;
+  color: var(--primary-color);
   flex-shrink: 0; /* Bullet soll nicht schrumpfen */
   font-size: 16px;
   font-weight: bold;
 }
 
 .subtask-text {
-  color: #2a3647;
+  color: var(--primary-color);
   cursor: pointer;
   flex: 1;
   font-family: var(--font-family);
@@ -1011,9 +1009,9 @@ label {
 /* entfernt: doppelt, modernere Version weiter unten */
 
 .subtask-list-item.editing {
-  background-color: white;
+  background-color: var(--white);
   border: none;
-  border-bottom: 1px solid #29abe2;
+  border-bottom: 1px solid var(--secondary-color);
   border-radius: 0;
   overflow: hidden; /* Verhindert horizontale Scrollbar */
   padding: 0;
@@ -1022,9 +1020,9 @@ label {
 /* Bearbeitungscontainer entsprechend dem Original-SVG-Design */
 .subtask-edit-container {
   align-items: center;
-  background-color: #fff;
+  background-color: var(--white);
   border: none;
-  border-bottom: 1px solid #29abe2;
+  border-bottom: 1px solid var(--secondary-color);
   border-radius: 0;
   box-sizing: border-box;
   display: flex;
@@ -1040,7 +1038,7 @@ label {
   background: transparent !important;
   border: none !important;
   border-radius: 0 !important;
-  color: #000;
+  color: var(--black);
   flex: 1;
   font-family: var(--font-family) !important;
   font-size: var(--font-md) !important;
@@ -1052,7 +1050,7 @@ label {
 }
 
 .subtask-edit-input::placeholder {
-  color: #2a3647;
+  color: var(--primary-color);
   font-weight: 400;
 }
 
