@@ -14,6 +14,7 @@ import {
   remove,
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { person, mail, call, check, close, icons } from "../common/svg-template.js";
+import {colorFromString} from "../board/utils.js"
 
 /**
  * Generiert eine Farbe basierend auf den Initialen
@@ -192,8 +193,6 @@ function bindEditDeleteButtons() {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener("click", handleDeleteContact);
   });
-  if (editBtn) editBtn.addEventListener("click", handleEditContact);
-  if (deleteBtn) deleteBtn.addEventListener("click", handleDeleteContact);
 }
 
 /**
@@ -278,13 +277,17 @@ function setupEditFormHandler() {
 /**
  * Detailbereich eines Kontakts rendern
  */
+
+
+
 function renderContactDetail({ name, email, phone, initials, color }) {
   const placeholder = document.querySelector(".contact-detail-placeholder");
   const info = document.querySelector(".contact-info");
   if (!info) return;
   if (placeholder) placeholder.style.display = "none";
+
   info.innerHTML = `
-    <div class="contact-big">
+     <div class="contact-big">
       <div class="initals-big" style="background-color: ${color};">${initials}</div>
       <div class="name-big">
         <span id="contactDetailName">${name}</span>
@@ -312,8 +315,13 @@ function renderContactDetail({ name, email, phone, initials, color }) {
       </div>
     </div>
   `;
+
+  info.classList.remove("fade-in"); // reset falls schon aktiv
+  void info.offsetWidth; // force reflow für wiederholtes Abspielen
+  info.classList.add("fade-in");
   info.style.display = "block";
 }
+
 
 /**
  * MODAL-STEUERUNG
