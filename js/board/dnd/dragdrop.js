@@ -225,16 +225,19 @@ function startDrag(card, e, s) {
  * @returns {void}
  */
 function resetPointerState(card, e, s) {
-  card.releasePointerCapture?.(e.pointerId);
-  s.dragging = false;
-  s.moved = false;
-  s.isPointerDown = false;
-  s.pointerId = null;
+  try {
+    card.releasePointerCapture?.(e.pointerId);
+    s.dragging = false;
+    s.moved = false;
+    s.isPointerDown = false;
+    s.pointerId = null;
 
-  if (window.innerWidth >= 900) {
-    card.style.touchAction = "auto";
-    card.style.webkitUserSelect = "auto";
+    if (window.innerWidth >= 900) {
+      card.style.touchAction = "auto";
+      card.style.webkitUserSelect = "auto";
+    }
   }
+  catch { }
 }
 
 
