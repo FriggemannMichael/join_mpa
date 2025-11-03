@@ -6,6 +6,7 @@ import { observeTasks } from "./state/liveTasks.js";
 import { buildColumnsConfig, groupTasksByStatus } from "./state/columns.js";
 import { renderColumn } from "./components/columns.js";
 import { setGlobalButtonsDisabled } from "./utils.js";
+import { selectCategory, toggleCategoryDropdown } from "../pages/add-task-form.js";
 
 
 initBoardPage();
@@ -45,3 +46,6 @@ export function renderBoard(tasks) {
     renderColumn(el, grouped[status] || [], config);
   });
 }
+
+window.toggleCategoryDropdown = toggleCategoryDropdown;
+window.selectCategory = selectCategory;
