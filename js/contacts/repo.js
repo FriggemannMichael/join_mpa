@@ -6,7 +6,7 @@ import {
   set,
   remove,
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-import { extractContactsFromSnapshot, renderContactList } from "./list.js";
+import { renderContactList } from "./list.js";
 
 /**
  * Loads all contacts from Firebase and renders the contact list.

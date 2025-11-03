@@ -15,6 +15,7 @@ export function bindModalControls() {
   bindAddContactAvatarInput();
   bindAddContactControls();
   bindEditContactControls();
+  bindAddContactButtonListener();
 }
 
 
@@ -163,6 +164,26 @@ export function bindAddContactControls() {
   if (cancelButton) cancelButton.addEventListener("click", closeAddContactModal);
   if (formElement) formElement.addEventListener("submit", handleAddContactSubmit);
 }
+
+
+/**
+ * Binds a click listener to the dynamically created "Add new Contact" button using event delegation.
+ * Opens the add contact modal when the button is clicked.
+ *
+ * @returns {void}
+ */
+export function bindAddContactButtonListener() {
+  const listActions = document.getElementById("contact-list-actions");
+  if (!listActions) return;
+  
+  listActions.addEventListener("click", (event) => {
+    const target = event.target.closest("#addNewContactBtn");
+    if (target) {
+      openAddContactModal();
+    }
+  });
+}
+
 
 
 /**

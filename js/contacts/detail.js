@@ -3,6 +3,13 @@ import { colorFromString, getInitials } from "../board/utils.js";
 import { db, ref, remove } from "./repo.js";
 import { contactsCache, selectedContactKey as selectedKeyFromList } from "./list.js";
 import { contactDetailTemplate } from "./templates.js";
+import { 
+  openEditOverlay, 
+  closeEditOverlay, 
+  resetContactForm, 
+  readValue, 
+  handleContactCreate 
+} from "./modals.js";
 
 
 /** Lokaler State (entspricht deinem Original) */
@@ -159,17 +166,16 @@ export function setupEditFormHandler() {
  * Renders the detailed view of a selected contact.
  * Replaces the placeholder with the contact detail template and applies a fade-in animation.
  *
- * @param {{ name: string, email: string, phone?: string, initials: string, color: string }} contact - The contact data used to populate the detail view.
+ * @param {{ name: string, email: string, phone?: string, initials: string, color: string }} contactData - The contact data used to populate the detail view.
  * @returns {void}
  */
-export function renderContactDetail({ name, email, phone, initials, color }) {
+export function renderContactDetail(contactData) {
   const placeholder = document.querySelector(".contact-detail-placeholder");
   const info = document.querySelector(".contact-info");
   if (!info) return;
   if (placeholder) placeholder.style.display = "none";
 
-  // WICHTIG: unverändert zu deinem letzten Stand
-  info.innerHTML = contactDetailTemplate(contact);
+  info.innerHTML = contactDetailTemplate(contactData);
 
   info.classList.remove("fade-in"); 
   void info.offsetWidth; 

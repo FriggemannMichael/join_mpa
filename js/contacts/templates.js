@@ -1,7 +1,7 @@
 export function contactDetailTemplate({ name, email, phone, initials, color }) {
   return `
     <div class="contact-big">
-      <div class="initials-big" style="background-color:${color};">${initials}</div>
+      <div class="initals-big" style="background-color:${color};">${initials}</div>
       <div class="name-big">
         <span id="contactDetailName">${name}</span>
         <div class="changebtns">

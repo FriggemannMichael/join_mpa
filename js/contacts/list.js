@@ -1,5 +1,5 @@
-import { renderGroupedContacts, buildContactMarkup } from "./list.js"; // self import hint removed by bundlers
 import { showContactDetail } from "./detail.js";
+import { colorFromString, getInitials } from "../board/utils.js";
 
 
 /**
@@ -105,8 +105,7 @@ export let selectedContactKey = null;
  * @param {{ name: string, email: string }} contact - The contact data used to build the markup.
  * @returns {string} The HTML string representing the contact list item.
  */
-export async function buildContactMarkup({ name, email }) {
-  const { colorFromString, getInitials } = await import("../board/utils.js");
+export function buildContactMarkup({ name, email }) {
   const initials = getInitials(name);
   const color = colorFromString(name);
   return `<div class="initals" style="background-color: ${color};">${initials}</div>
