@@ -40,10 +40,10 @@ async function initSummaryPage() {
   const allowed = await guardPage("./index.html");
   if (!allowed) return;
   await bootLayout();
-  
+
   // Mobile Greeting NACH Auth-Initialisierung anzeigen
   showMobileGreetingIfNeeded();
-  
+
   renderGreeting();
   await loadSummaryData();
 }
@@ -274,7 +274,9 @@ function showMobileGreetingIfNeeded() {
   const isGuest = isGuestUser(user);
 
   // Zeitabhängige Begrüßung (mit oder ohne Komma)
-  const timeGreeting = isGuest ? buildGreetingPrefixForGuest() : buildGreetingPrefix();
+  const timeGreeting = isGuest
+    ? buildGreetingPrefixForGuest()
+    : buildGreetingPrefix();
   greetingText.textContent = timeGreeting;
 
   // Name nur bei registrierten Usern
