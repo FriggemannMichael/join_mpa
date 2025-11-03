@@ -2,7 +2,6 @@ import { close } from "../common/svg-template.js";
 import { colorFromString, getInitials } from "../board/utils.js";
 import { saveContactToFirebase } from "./repo.js";
 
-
 /**
  * Binds all modal-related controls and initializes modal UI elements.
  * Sets up icons, avatar updates, and form event handlers for both add and edit contact modals.
@@ -17,7 +16,6 @@ export function bindModalControls() {
   bindEditContactControls();
   bindAddContactButtonListener();
 }
-
 
 /**
  * Opens the "Add Contact" modal overlay.
@@ -34,7 +32,6 @@ export function openAddContactModal() {
   document.getElementById("addContactName")?.focus();
 }
 
-
 /**
  * Closes the "Add Contact" modal overlay.
  * Hides the modal, resets the form fields, and updates the avatar display.
@@ -47,9 +44,10 @@ export function closeAddContactModal() {
   overlayElement.setAttribute("hidden", "hidden");
   resetAddContactForm();
   updateAddContactAvatar();
-  try { document.getElementById("editDeleteModal").classList.add("menu-hidden") } catch { };
+  try {
+    document.getElementById("editDeleteModal").classList.add("menu-hidden");
+  } catch {}
 }
-
 
 /**
  * Adds listeners to close a modal overlay when clicking the backdrop or pressing Escape.
@@ -67,7 +65,8 @@ export function addModalCloseListeners(overlayElement, onCloseHandler) {
 
   function handleModalEvent(event) {
     const isEscape = event.type === "keydown" && event.key === "Escape";
-    const clickedBackdrop = event.type === "click" && event.target === backdropElement;
+    const clickedBackdrop =
+      event.type === "click" && event.target === backdropElement;
     if (isEscape || clickedBackdrop) {
       onCloseHandler();
       removeListeners();
@@ -75,14 +74,15 @@ export function addModalCloseListeners(overlayElement, onCloseHandler) {
   }
 
   document.addEventListener("keydown", handleModalEvent);
-  if (backdropElement) backdropElement.addEventListener("click", handleModalEvent);
+  if (backdropElement)
+    backdropElement.addEventListener("click", handleModalEvent);
 
   function removeListeners() {
     document.removeEventListener("keydown", handleModalEvent);
-    if (backdropElement) backdropElement.removeEventListener("click", handleModalEvent);
+    if (backdropElement)
+      backdropElement.removeEventListener("click", handleModalEvent);
   }
 }
-
 
 /**
  * Renders the close icon inside the edit contact modal.
@@ -93,10 +93,13 @@ export function addModalCloseListeners(overlayElement, onCloseHandler) {
 export function renderEditContactModalIcons() {
   const closeIconContainer = document.getElementById("contactModalCloseIcon");
   if (closeIconContainer) {
-    closeIconContainer.innerHTML = close({ class: "icon icon--btn", width: 24, height: 24 });
+    closeIconContainer.innerHTML = close({
+      class: "icon icon--btn",
+      width: 24,
+      height: 24,
+    });
   }
 }
-
 
 /**
  * Renders the close icon inside the "Add Contact" modal.
@@ -105,12 +108,17 @@ export function renderEditContactModalIcons() {
  * @returns {void}
  */
 export function renderAddContactModalIcons() {
-  const closeIconContainer = document.getElementById("addContactModalCloseIcon");
+  const closeIconContainer = document.getElementById(
+    "addContactModalCloseIcon"
+  );
   if (closeIconContainer) {
-    closeIconContainer.innerHTML = close({ class: "icon icon--btn", width: 24, height: 24 });
+    closeIconContainer.innerHTML = close({
+      class: "icon icon--btn",
+      width: 24,
+      height: 24,
+    });
   }
 }
-
 
 /**
  * Binds the name input field in the "Add Contact" modal to update the avatar preview dynamically.
@@ -120,9 +128,9 @@ export function renderAddContactModalIcons() {
  */
 export function bindAddContactAvatarInput() {
   const nameInputField = document.getElementById("addContactName");
-  if (nameInputField) nameInputField.addEventListener("input", updateAddContactAvatar);
+  if (nameInputField)
+    nameInputField.addEventListener("input", updateAddContactAvatar);
 }
-
 
 /**
  * Updates the avatar preview in the "Add Contact" modal based on the entered name.
@@ -134,20 +142,23 @@ export function updateAddContactAvatar() {
   const nameInputField = document.getElementById("addContactName");
   const avatarContainer = document.getElementById("addContactAvatar");
   const initialsContainer = document.getElementById("addContactInitials");
-  const placeholderImage = document.getElementById("addContactAvatarPlaceholder");
+  const placeholderImage = document.getElementById(
+    "addContactAvatarPlaceholder"
+  );
 
   const nameValue = nameInputField?.value?.trim() || "";
   const initials = getInitials(nameValue) || "?";
   const color = colorFromString(nameValue);
 
-  if (avatarContainer) avatarContainer.style.backgroundColor = nameValue ? color : "";
+  if (avatarContainer)
+    avatarContainer.style.backgroundColor = nameValue ? color : "";
   if (initialsContainer) {
     initialsContainer.textContent = initials;
     initialsContainer.style.display = nameValue ? "block" : "none";
   }
-  if (placeholderImage) placeholderImage.style.display = nameValue ? "none" : "block";
+  if (placeholderImage)
+    placeholderImage.style.display = nameValue ? "none" : "block";
 }
-
 
 /**
  * Binds all control elements in the "Add Contact" modal.
@@ -161,10 +172,11 @@ export function bindAddContactControls() {
   const formElement = document.getElementById("addContactForm");
 
   if (closeButton) closeButton.addEventListener("click", closeAddContactModal);
-  if (cancelButton) cancelButton.addEventListener("click", closeAddContactModal);
-  if (formElement) formElement.addEventListener("submit", handleAddContactSubmit);
+  if (cancelButton)
+    cancelButton.addEventListener("click", closeAddContactModal);
+  if (formElement)
+    formElement.addEventListener("submit", handleAddContactSubmit);
 }
-
 
 /**
  * Binds a click listener to the dynamically created "Add new Contact" button using event delegation.
@@ -175,7 +187,7 @@ export function bindAddContactControls() {
 export function bindAddContactButtonListener() {
   const listActions = document.getElementById("contact-list-actions");
   if (!listActions) return;
-  
+
   listActions.addEventListener("click", (event) => {
     const target = event.target.closest("#addNewContactBtn");
     if (target) {
@@ -183,8 +195,6 @@ export function bindAddContactButtonListener() {
     }
   });
 }
-
-
 
 /**
  * Handles the submission of the "Add Contact" form.
@@ -206,7 +216,6 @@ export async function handleAddContactSubmit(event) {
   closeAddContactModal();
 }
 
-
 /**
  * Resets all input fields in the "Add Contact" form to empty values.
  * Clears name, email, and phone inputs to prepare the form for a new entry.
@@ -219,7 +228,6 @@ export function resetAddContactForm() {
     if (field) field.value = "";
   });
 }
-
 
 /**
  * Binds control elements for the edit contact modal.
@@ -237,7 +245,6 @@ export function bindEditContactControls() {
   }
 }
 
-
 /**
  * Opens the edit contact overlay and enables modal close listeners.
  * Makes the overlay visible and attaches event handlers for closing actions.
@@ -251,7 +258,6 @@ export function openEditOverlay() {
   addModalCloseListeners(overlayElement, closeEditOverlay);
 }
 
-
 /**
  * Closes the edit contact overlay.
  * Hides the modal and restores normal page interaction.
@@ -263,7 +269,6 @@ export function closeEditOverlay() {
   if (!overlayElement) return;
   overlayElement.setAttribute("hidden", "hidden");
 }
-
 
 /**
  * Toggles the visibility of the contact overlay.
@@ -278,7 +283,6 @@ export function toggleOverlay(show) {
   if (show) overlay.removeAttribute("hidden");
   else overlay.setAttribute("hidden", "hidden");
 }
-
 
 /**
  * Handles the submission of the edit contact form when creating a new contact.
@@ -301,7 +305,6 @@ export async function handleContactCreate(event) {
   toggleOverlay(false);
 }
 
-
 /**
  * Resets all input fields in the contact form to empty values.
  * Clears name, email, and phone fields after creating or editing a contact.
@@ -314,7 +317,6 @@ export function resetContactForm() {
     if (field) field.value = "";
   });
 }
-
 
 /**
  * Reads and returns the trimmed value of an input field by its ID.

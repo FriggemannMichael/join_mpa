@@ -40,7 +40,6 @@ export function extractContactsFromSnapshot(snapshot) {
   return contacts;
 }
 
-
 /**
  * Saves a new contact entry to Firebase Realtime Database.
  * Pushes the contact data to the "/contacts" collection as a new record.

@@ -1,7 +1,6 @@
 import { showContactDetail } from "./detail.js";
 import { colorFromString, getInitials } from "../board/utils.js";
 
-
 /**
  * Renders the "Add new Contact" button above the contact list.
  * Creates the button dynamically and binds the click event to open the add-contact modal.
@@ -20,7 +19,6 @@ export function renderAddButton() {
   actions.appendChild(btn);
   // openAddContactModal kommt aus modals.js; Listener wird dort gebunden
 }
-
 
 /**
  * Renders the full contact list grouped by the first letter of each contact's name.
@@ -41,7 +39,6 @@ export function renderContactList(contacts) {
   renderGroupedContacts(list, grouped);
 }
 
-
 /**
  * Groups contacts by the first letter of their name.
  * Creates an object where each key is an uppercase letter and the value is an array of contacts.
@@ -58,7 +55,6 @@ export function groupContactsByLetter(contacts) {
   });
   return grouped;
 }
-
 
 /**
  * Renders all contacts grouped by their initial letter into the given list element.
@@ -93,10 +89,8 @@ export function renderGroupedContacts(list, grouped) {
     });
 }
 
-
 export let contactsCache = [];
 export let selectedContactKey = null;
-
 
 /**
  * Builds the HTML markup for a single contact entry in the list.

@@ -1,20 +1,28 @@
-import { person, mail, call, check, close, icons } from "../common/svg-template.js";
+import {
+  person,
+  mail,
+  call,
+  check,
+  close,
+  icons,
+} from "../common/svg-template.js";
 import { colorFromString, getInitials } from "../board/utils.js";
 import { db, ref, remove } from "./repo.js";
-import { contactsCache, selectedContactKey as selectedKeyFromList } from "./list.js";
+import {
+  contactsCache,
+  selectedContactKey as selectedKeyFromList,
+} from "./list.js";
 import { contactDetailTemplate } from "./templates.js";
-import { 
-  openEditOverlay, 
-  closeEditOverlay, 
-  resetContactForm, 
-  readValue, 
-  handleContactCreate 
+import {
+  openEditOverlay,
+  closeEditOverlay,
+  resetContactForm,
+  readValue,
+  handleContactCreate,
 } from "./modals.js";
-
 
 /** Lokaler State (entspricht deinem Original) */
 export let selectedContactKey = null;
-
 
 /**
  * Displays the detail view for a selected contact.
@@ -47,7 +55,6 @@ export function showContactDetail(entry, key) {
   }
 }
 
-
 /**
  * Binds click event listeners for all edit and delete contact buttons.
  * Supports both desktop and responsive (mobile) button variants.
@@ -55,17 +62,16 @@ export function showContactDetail(entry, key) {
  * @returns {void}
  */
 export function bindEditDeleteButtons() {
-  ["editContactBtn", "editContactBtnResp"].forEach(id => {
+  ["editContactBtn", "editContactBtnResp"].forEach((id) => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener("click", handleEditContact);
   });
 
-  ["deleteContactBtn", "deleteContactBtnResp"].forEach(id => {
+  ["deleteContactBtn", "deleteContactBtnResp"].forEach((id) => {
     const btn = document.getElementById(id);
     if (btn) btn.addEventListener("click", handleDeleteContact);
   });
 }
-
 
 /**
  * Deletes the currently selected contact from Firebase.
@@ -91,7 +97,6 @@ export async function handleDeleteContact() {
   } catch (error) {}
 }
 
-
 /**
  * Opens the edit modal for the currently selected contact.
  * Loads the contact data into the form and initializes the edit form handler.
@@ -105,7 +110,6 @@ export function handleEditContact() {
   openEditModal(contact);
   setupEditFormHandler();
 }
-
 
 /**
  * Opens the edit modal and fills it with the selected contact's data.
@@ -129,9 +133,10 @@ export function openEditModal(contact) {
     initialsElem.parentElement.style.backgroundColor = color;
   }
 
-  try { document.getElementById("editDeleteModal").classList.remove("menu-hidden") } catch { };
+  try {
+    document.getElementById("editDeleteModal").classList.remove("menu-hidden");
+  } catch {}
 }
-
 
 /**
  * Sets up the submit handler for the contact edit form.
@@ -156,11 +161,13 @@ export function setupEditFormHandler() {
     await update(dbRef(db, `/contacts/${selectedContactKey}`), data);
     resetContactForm();
     closeEditOverlay();
-    showContactDetail({ dataset: { key: selectedContactKey } }, selectedContactKey);
+    showContactDetail(
+      { dataset: { key: selectedContactKey } },
+      selectedContactKey
+    );
     form.onsubmit = handleContactCreate;
   };
 }
-
 
 /**
  * Renders the detailed view of a selected contact.
@@ -177,8 +184,8 @@ export function renderContactDetail(contactData) {
 
   info.innerHTML = contactDetailTemplate(contactData);
 
-  info.classList.remove("fade-in"); 
-  void info.offsetWidth; 
+  info.classList.remove("fade-in");
+  void info.offsetWidth;
   info.classList.add("fade-in");
   info.style.display = "block";
 }

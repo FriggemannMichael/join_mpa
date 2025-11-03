@@ -47,6 +47,13 @@
 
 /* Main CSS - Hauptlayout-Komponenten (Header, Navigation, Main Container) */
 
+/* ===== LAYOUT CONTAINER ===== */
+.layout {
+  max-width: 1920px;
+  margin: 0 auto;
+  position: relative;
+}
+
 /* ===== HEADER ===== */
 header {
   align-items: center;
