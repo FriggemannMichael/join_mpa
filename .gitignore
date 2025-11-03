@@ -27,6 +27,9 @@ npm-debug.log*
 migration/serviceAccountKey.json
 migration/passwords_created.json
 
+# Scripts output
+scripts/output/
+
 # Build outputs
 dist/
 build/
