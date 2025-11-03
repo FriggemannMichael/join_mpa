@@ -219,3 +219,17 @@ export function setGlobalButtonsDisabled(state, root = document.body) {
 
   document.body.classList.toggle("loading", state);
 }
+
+
+/**
+ * Updates the status of a task in the database.
+ * Sets the new status and updates the timestamp.
+ * @async
+ * @param {string} taskId - The ID of the task to update.
+ * @param {string} newStatus - The new status value for the task.
+ * @returns {Promise<void>}
+ */
+export async function updateTaskStatus(taskId, newStatus) {
+  const taskRef = ref(db, `tasks/${taskId}`);
+  await update(taskRef, { status: newStatus, updatedAt: Date.now() });
+}

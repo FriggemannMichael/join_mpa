@@ -13,12 +13,17 @@ import {
   off,
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
+
 const TASKS_PATH = "tasks";
 
+
 /**
- * Speichert einen neuen Task in der Realtime Database.
- * @param {Object} task Raw Task Daten aus dem Formular
- * @returns {Promise<string>} Generierte Task-ID
+ * Creates and stores a new task entry in the Firebase Realtime Database.
+ * Builds the full task payload, pushes it under the tasks path, and returns the generated ID.
+ * 
+ * @async
+ * @param {Object} task - The raw task data to store (title, description, subtasks, etc.).
+ * @returns {Promise<string>} The unique key of the newly created task in the database.
  */
 export async function createTask(task) {
   const db = getDatabase();
@@ -29,10 +34,14 @@ export async function createTask(task) {
   return newTaskRef.key;
 }
 
+
 /**
- * Abonniert alle Tasks und ruft den Callback bei jeder Änderung auf.
- * @param {Function} listener Callback mit Task-Liste (Array)
- * @returns {Function} Cleanup-Funktion zum Entfernen des Abos
+ * Subscribes to all tasks in the Firebase Realtime Database and listens for changes in real time.
+ * Whenever the tasks update, the provided listener is called with the normalized task list.
+ * Returns a function that can be called to unsubscribe from the listener.
+ *
+ * @param {(tasks: Array<Object>) => void} listener - Callback function invoked with the updated list of tasks.
+ * @returns {() => void} Function to stop listening for changes (unsubscribe).
  */
 export function subscribeToTasks(listener) {
   const db = getDatabase();
@@ -51,8 +60,13 @@ export function subscribeToTasks(listener) {
   return () => off(tasksRef, "value", handler);
 }
 
+
 /**
- * Baut das Task-Objekt mit Metadaten.
+ * Builds a normalized and complete task payload ready to be stored in Firebase.
+ * Fills in default values for missing fields and adds metadata like timestamps and user info.
+ *
+ * @param {Partial<Task>} task - The raw task input (can contain only a subset of fields).
+ * @returns {Task} The fully normalized task object ready for database storage.
  */
 function buildTaskPayload(task) {
   const now = Date.now();
@@ -78,8 +92,14 @@ function buildTaskPayload(task) {
   };
 }
 
+
 /**
- * Normalisiert Firebase-Daten zu Array mit IDs.
+ * Converts a raw Firebase task object into a normalized and sorted task array.
+ * Each task receives its unique Firebase ID (`id`) and is guaranteed to be an object.
+ * Tasks are sorted by creation date in ascending order.
+ *
+ * @param {Record<string, Partial<Task>> | null} raw - The raw task object returned from Firebase (`snapshot.val()`).
+ * @returns {Task[]} An array of normalized task objects with attached IDs.
  */
 function normalizeTasks(raw) {
   if (!raw || typeof raw !== "object") return [];

@@ -1,8 +1,7 @@
 
 import { renderTaskModal } from "../modals/taskModal.view.js"
-import { db } from "../../common/firebase.js";
-import { ref, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { loadTask } from "../services/tasks.repo.js"
+import { updateTaskStatus } from "../utils.js";
 
 
 let currentDrag = null;
@@ -63,7 +62,6 @@ function onDown(card, e, s, HOLD_MS) {
   s.isPointerDown = true;
   s.pointerId = e.pointerId;
 
-  // Kein globales Touch-Blocking hier – Scrollen bleibt möglich
   if (s.isTouch) startHoldTimer(card, e, s, HOLD_MS);
 }
 
@@ -84,13 +82,11 @@ function onMove(card, e, s, THRESHOLD) {
   const moved = exceededThreshold(e, s, THRESHOLD);
 
   if (!s.dragging) {
-    // Touch: Scroll erlauben, kein preventDefault
     if (s.isTouch && moved) {
       s.moved = true;
       clearHoldTimer(s);
       return;
     }
-    // Maus: direktes Draggen nach Schwellwert
     if (!s.isTouch && moved) {
       startDrag(card, e, s);
       if (e.cancelable) e.preventDefault();
@@ -99,7 +95,6 @@ function onMove(card, e, s, THRESHOLD) {
     return;
   }
 
-  // Nur während Drag native Gesten blockieren
   if (e.cancelable) e.preventDefault();
   moveDragging(card, e);
 }
@@ -388,7 +383,6 @@ function deleteDragSettings(card) {
 }
 
 
-
 /**
  * Finds the nearest task space element to the given pointer position.
  * Calculates distances to all spaces and returns the closest one.
@@ -414,22 +408,7 @@ function findNearestSpace(clientX, clientY) {
       nearest = space;
     }
   });
-
   return nearest;
-}
-
-
-/**
- * Updates the status of a task in the database.
- * Sets the new status and updates the timestamp.
- * @async
- * @param {string} taskId - The ID of the task to update.
- * @param {string} newStatus - The new status value for the task.
- * @returns {Promise<void>}
- */
-export async function updateTaskStatus(taskId, newStatus) {
-  const taskRef = ref(db, `tasks/${taskId}`);
-  await update(taskRef, { status: newStatus, updatedAt: Date.now() });
 }
 
 
