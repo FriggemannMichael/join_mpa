@@ -1,18 +1,7 @@
-/* =========================================
-   Contacts – Cleaned (no visual changes)
-   - Base
-   - Layout
-   - Components
-   - Utilities
-   - Media Queries
-========================================= */
-
-/* ===== Base ===== */
 body {
   background-color: var(--background-color);
 }
 
-/* ===== Layout / Structure ===== */
 #contact-list-actions {
   margin: 1rem 0 2rem;
 }
@@ -80,7 +69,6 @@ body {
   scrollbar-color: var(--grey-medium) #f1f1f1;
 }
 
-/* WebKit scrollbar */
 .contacts-list::-webkit-scrollbar {
   width: 10px;
 }
@@ -101,15 +89,13 @@ body {
   background: var(--primary-color);
 }
 
-/* Detailbereich (Parent als Anker für den FAB) */
 .contact-detail-section {
   min-height: 0;
   overflow: hidden;
   position: relative;
-  /* wichtig: Anker für .contacts-Edit-Delete-Resp */
+
 }
 
-/* Kontaktseite/Listenbereich Wrapper */
 .contact-page {
   display: flex;
   flex: 1;
@@ -286,7 +272,6 @@ body {
   pointer-events: none;
 }
 
-/* Overlay (Contacts Modal) */
 .overlay {
   align-items: center;
   display: flex;
@@ -311,7 +296,6 @@ body {
   z-index: 1;
 }
 
-/* Platzhalter Detailbereich leer */
 .contact-detail-placeholder {
   align-items: center;
   display: flex;
@@ -346,11 +330,10 @@ body {
   font-size: 1.1rem;
 }
 
-/* Sortierbuchstabe/Trenner */
 .beginning-letter {
   align-items: center;
   display: flex;
-  flex-shrink: 0; /* Verhindert, dass die Buchstaben beim Scrollen schrumpfen */
+  flex-shrink: 0; 
   font-size: 20px;
   height: 58px;
   justify-content: left;
@@ -367,7 +350,6 @@ body {
   flex-shrink: 0;
 }
 
-/* Kontaktkarte */
 .contact-person {
   border-radius: 10px;
   cursor: pointer;
@@ -384,7 +366,6 @@ body {
   color: #fff;
 }
 
-/* Initials  */
 .initals {
   align-items: center;
   background-color: orange;
@@ -392,7 +373,7 @@ body {
   border-radius: 45px;
   color: #fff;
   display: flex;
-  flex-shrink: 0; /* Verhindert, dass Initialen schrumpfen */
+  flex-shrink: 0;
   height: 42px;
   justify-content: center;
   width: 42px;
@@ -413,7 +394,6 @@ body {
   width: 120px;
 }
 
-/* Info-Bits */
 .small-info h3 {
   font-size: 20px;
   font-weight: 400;
@@ -423,7 +403,6 @@ body {
   color: #007cee;
 }
 
-/* Detail-Header */
 .contact-headline {
   align-items: center;
   display: flex;
@@ -530,14 +509,12 @@ body {
   color: #007cee;
 }
 
-/* ===== Utilities ===== */
 #addContactButton,
 .add-contact-btn,
 .contact-btn {
   flex: 0 0 auto;
 }
 
-/* FAB – Basis (sichtbar), Sichtbarkeit nur über .menu-hidden steuern */
 .contacts-Edit-Delete-Resp {
   position: relative;
   display: none;
@@ -567,7 +544,6 @@ body {
   border: 0;
 }
 
-/* Gemeinsame Hidden-Utilities (ohne display:none für Transition) */
 .contacts-Edit-Delete-Resp.menu-hidden {
   opacity: 0;
   visibility: hidden;
@@ -597,18 +573,12 @@ body {
 }
 
 
-/* =========================================
-   Media Queries
-========================================= */
-
-/* <= 1024px */
 @media (width <=1024px) {
   .contacts-list {
     max-height: max-content;
   }
 }
 
-/* <= 600px */
 @media (width <=600px) {
   .contacts__container {
     padding-left: 0;
@@ -620,7 +590,6 @@ body {
   }
 }
 
-/* <= 85rem */
 @media (max-width: 85rem) {
   .contacts-grid {
     gap: 1rem;
@@ -654,7 +623,6 @@ body {
   }
 }
 
-/* <= 80rem */
 @media (max-width: 80rem) {
   .contacts-list-section {
     padding-left: 1rem;
@@ -703,17 +671,15 @@ body {
   }
 }
 
-/* <= 64rem (~1024px) */
 @media (max-width: 64rem) {
   .contacts-list {
     max-height: max-content;
   }
 }
 
-/* <= 58rem */
 @media (max-width: 58rem) {
 
-  /* Mobile Detail-Panel ohne Fade-In: nur sichtbar/nicht sichtbar */
+
   .contact-detail-section {
     position: fixed;
     inset: 0;
@@ -770,7 +736,6 @@ body {
   }
 }
 
-/* <= 48rem – Mobile FAB + Layout */
 @media (max-width: 48rem) {
 
   .contact-btn {
@@ -798,7 +763,6 @@ body {
     height: 2rem;
   }
 
-  /* FAB (nur Layout/Position hier – keine Sichtbarkeits-Props!) */
   .contacts-Edit-Delete-Resp {
     position: absolute;
     display: flex;
@@ -808,7 +772,6 @@ body {
     height: 3.5rem;
     border-radius: 50%;
     font-size: 0;
-    /* nur Icon */
   }
 
   .contacts-list {
@@ -886,7 +849,6 @@ body {
     justify-content: center;
     align-items: start;
     z-index: 12;
-    /* über FAB */
   }
 
   .edit-Delete-Modal button {
@@ -901,7 +863,6 @@ body {
   }
 }
 
-/* <= 425px */
 @media (max-width: 425px) {
   .contacts-list-section {
     padding-left: 8px;
