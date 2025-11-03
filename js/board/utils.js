@@ -1,5 +1,6 @@
-import { auth } from "../common/firebase.js";
+import { auth, db } from "../common/firebase.js";
 import { icons } from "../common/svg-template.js";
+import { ref, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 
 /**
