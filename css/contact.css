@@ -333,7 +333,7 @@ body {
 .beginning-letter {
   align-items: center;
   display: flex;
-  flex-shrink: 0; 
+  flex-shrink: 0;
   font-size: 20px;
   height: 58px;
   justify-content: left;
@@ -554,6 +554,7 @@ body {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  display: none;
 }
 
 
@@ -562,6 +563,7 @@ body {
     opacity: 0;
     transform: translateX(30px);
   }
+
   to {
     opacity: 1;
     transform: translateX(0);
@@ -572,6 +574,11 @@ body {
   animation: fadeInSide 100ms ease-out forwards;
 }
 
+@media(width >=1920px) {
+  .layout {
+    margin-left: 0;
+  }
+}
 
 @media (width <=1024px) {
   .contacts-list {
