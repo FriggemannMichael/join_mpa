@@ -8,36 +8,160 @@ import { redirectIfAuthenticated } from "../common/pageGuard.js";
 
 initSignupPage();
 
-/**
- * Initialisiert die Signup-Seite mit Redirect-Check und UI-Setup
- */
+/** ===== Regex ===== */
+const RX_EMAIL = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const RX_NAME  = /^[A-ZÄÖÜ][a-zäöüß]+(?:[ -][A-ZÄÖÜ][a-zäöüß]+)*$/;
+
+/** ===== DOM-Helper ===== */
+const el  = (id) => document.getElementById(id);
+const val = (id) => (el(id)?.value ?? "").trim();
+
+/** Fehlermeldungen pro Feld */
+const ERR = {
+  name: "Bitte einen gültigen Namen eingeben (z. B. „Max Mustermann“).",
+  email: "Bitte eine gültige E-Mail-Adresse eingeben.",
+  password: "Passwort benötigt mindestens 6 Zeichen.",
+  confirm: "Passwörter stimmen nicht überein.",
+};
+
+/** Eltern Container finden */
+function getContainer(id) {
+  const node = el(id);
+  return node ? (node.closest(".inputField__container") || node) : null;
+}
+
+/** roten Rand + aria-invalid toggeln */
+function setFieldState(id, ok) {
+  const node = el(id);
+  const container = getContainer(id);
+  if (!node || !container) return;
+  container.classList.toggle("input-fault", !ok);
+  node.setAttribute("aria-invalid", String(!ok));
+}
+
+/** Tooltip-Element am Container sicherstellen (absolut positioniert) */
+function ensureTooltip(container) {
+  let faultMessage = container.querySelector(".field-tooltip-error");
+  if (!tip) {
+    faultMessage = document.createElement("div");
+    faultMessage.className = "field-tooltip-error";
+    faultMessage.setAttribute("role", "status");
+    faultMessage.setAttribute("aria-live", "polite");
+    container.appendChild(faultMessage);
+  }
+  return faultMessage;
+}
+
+/** Tooltip setzen/entfernen (leerer Text = ausblenden) */
+function setFieldTooltip(id, message = "") {
+  const container = getContainer(id);
+  if (!container) return;
+  const tip = ensureTooltip(container);
+  if (message) {
+    tip.textContent = message;
+    tip.classList.add("visible");
+  } else {
+    tip.textContent = "";
+    tip.classList.remove("visible");
+  }
+}
+
+/** Feld als „touched“ markieren (nach blur) */
+function markTouched(id) {
+  const c = getContainer(id);
+  if (c) c.dataset.touched = "true";
+}
+
+/** ===== Init ===== */
 async function initSignupPage() {
   await redirectIfAuthenticated("./summary.html");
   bindSignupForm();
   bindBackButton();
   bindPasswordToggles();
+  updateSubmitState();
 }
 
 /**
  * Bindet Event-Listener für das Signup-Formular
  */
 function bindSignupForm() {
-  const form = document.getElementById("signupForm");
+  const form = el("signupForm");
   if (!form) return;
+
+  form.addEventListener("input", handleLiveInput);
+  form.addEventListener("change", handleLiveInput);
+
+  form.querySelectorAll("input").forEach((input) => {
+    input.addEventListener("blur", () =>
+      validateSingleField(input.id, { showErrors: true, markTouch: true })
+    );
+  });
+
   form.addEventListener("submit", handleSignupSubmit);
-  form.addEventListener("input", updateSubmitState);
-  form.addEventListener("change", updateSubmitState);
+}
+
+
+function handleLiveInput() {
+  ["signupName","signupEmail","signupPassword","signupPasswordConfirm"].forEach((id) => {
+    const c = getContainer(id);
+    if (c?.dataset.touched === "true") {
+      validateSingleField(id, { showErrors: true }); 
+    }
+  });
+  updateSubmitState();
 }
 
 /**
- * Bindet Event-Listener für den Zurück-Button
+ * Einzelnes Feld prüfen
+ * @param {string} id
+ * @param {{showErrors?: boolean, markTouch?: boolean}} opts
  */
+function validateSingleField(id, opts = {}) {
+  const { showErrors = false, markTouch = false } = opts;
+  const v = val(id);
+  let ok = true, msg = "";
+
+  switch (id) {
+    case "signupName":
+      ok = !!v && RX_NAME.test(v);
+      if (!ok) msg = ERR.name;
+      break;
+    case "signupEmail":
+      ok = !!v && RX_EMAIL.test(v);
+      if (!ok) msg = ERR.email;
+      break;
+    case "signupPassword":
+      ok = v.length >= 6;
+      if (!ok) msg = ERR.password;
+      break;
+    case "signupPasswordConfirm":
+      ok = v.length >= 6 && v === val("signupPassword");
+      if (!ok) msg = ERR.confirm;
+      break;
+    default:
+      ok = true;
+  }
+
+  if (markTouch) markTouched(id);
+
+  const touched = getContainer(id)?.dataset.touched === "true";
+  const shouldShow = showErrors || touched;
+
+  if (shouldShow) {
+    setFieldState(id, ok);
+    setFieldTooltip(id, ok ? "" : msg);
+  } else {
+    setFieldState(id, true);
+    setFieldTooltip(id, "");
+  }
+
+  return ok;
+}
+
+/** Navigation */
 function bindBackButton() {
-  const backBtn = document.getElementById("signupBackBtn");
-  if (!backBtn) return;
-  backBtn.addEventListener("click", () => {
-    window.location.href = "./index.html";
-  });
+  const backBtn = el("signupBackBtn");
+  if (backBtn) backBtn.addEventListener("click", () => (window.location.href = "./index.html"));
 }
 
 /**
@@ -45,26 +169,30 @@ function bindBackButton() {
  */
 function bindPasswordToggles() {
   document.querySelectorAll("[data-toggle]").forEach((button) => {
-    button.addEventListener("click", () =>
-      togglePassword(button.dataset.toggle)
-    );
+    button.addEventListener("click", () => togglePassword(button.dataset.toggle));
   });
 }
 
-/**
- * Verarbeitet das Signup-Formular-Submit
- * @param {Event} event Das Submit-Event
- */
+/** Submit-Handler */
 async function handleSignupSubmit(event) {
   event.preventDefault();
-  if (!validateSignup()) return;
+
+  const okAll =
+    validateSingleField("signupName", { showErrors: true, markTouch: true }) &&
+    validateSingleField("signupEmail", { showErrors: true, markTouch: true }) &&
+    validateSingleField("signupPassword", { showErrors: true, markTouch: true }) &&
+    validateSingleField("signupPasswordConfirm", { showErrors: true, markTouch: true });
+
+  const accepted = el("signupPrivacy")?.checked ?? false;
+  if (!accepted) {
+    setSignupStatus("Bitte Datenschutz akzeptieren.", true);
+    return;
+  }
+  if (!okAll) return;
+
   disableSubmit(true);
   try {
-    await registerUser(
-      readValue("signupName"),
-      readValue("signupEmail"),
-      readValue("signupPassword")
-    );
+    await registerUser(val("signupName"), val("signupEmail"), val("signupPassword"));
     window.location.href = "./summary.html";
   } catch (err) {
     setSignupStatus(readAuthError(err), true);
@@ -72,42 +200,20 @@ async function handleSignupSubmit(event) {
   disableSubmit(false);
 }
 
-/**
- * Validiert alle Eingaben des Signup-Formulars
- * @returns {boolean} True wenn alle Validierungen erfolgreich, sonst false
- */
-function validateSignup() {
-  const name = readValue("signupName");
-  const email = readValue("signupEmail");
-  const password = readValue("signupPassword");
-  const confirm = readValue("signupPasswordConfirm");
-  const accepted = document.getElementById("signupPrivacy")?.checked;
-  if (!name || !email || !password || !confirm)
-    return reportError("Bitte alle Felder ausfüllen");
-  if (password.length < 6)
-    return reportError("Passwort benötigt mindestens 6 Zeichen");
-  if (password !== confirm)
-    return reportError("Passwörter stimmen nicht überein");
-  if (!accepted) return reportError("Bitte Datenschutz akzeptieren");
-  setSignupStatus("", false);
-  return true;
-}
-
-/**
- * Aktualisiert den Status des Submit-Buttons basierend auf Formularvalidierung
- */
+/** Button-Zustand & Mismatch-Hinweis */
 function updateSubmitState() {
-  const password = readValue("signupPassword");
-  const confirm = readValue("signupPasswordConfirm");
-  const allFilled = [
-    "signupName",
-    "signupEmail",
-    "signupPassword",
-    "signupPasswordConfirm",
-  ].every((id) => !!readValue(id));
-  const accepted = document.getElementById("signupPrivacy")?.checked;
-  const enabled =
-    allFilled && accepted && password === confirm && password.length >= 6;
+  const name = val("signupName");
+  const email = val("signupEmail");
+  const password = val("signupPassword");
+  const confirm = val("signupPasswordConfirm");
+  const accepted = el("signupPrivacy")?.checked ?? false;
+
+  const okName = !!name && RX_NAME.test(name);
+  const okEmail = !!email && RX_EMAIL.test(email);
+  const okPwLen = password.length >= 6;
+  const okConfirm = confirm.length >= 6 && password === confirm;
+
+  const enabled = okName && okEmail && okPwLen && okConfirm && accepted;
   disableSubmit(!enabled);
   showPasswordMismatch(password, confirm);
 }
@@ -118,10 +224,9 @@ function updateSubmitState() {
  * @param {string} confirm Das Bestätigungspasswort
  */
 function showPasswordMismatch(password, confirm) {
-  const hint = document.getElementById("signupPasswordHint");
+  const hint = el("signupPasswordHint");
   if (!hint) return;
-  const mismatch = password && confirm && password !== confirm;
-  hint.textContent = mismatch ? "Passwörter stimmen nicht überein" : "";
+  hint.textContent = password && confirm && password !== confirm ? ERR.confirm : "";
 }
 
 /**
@@ -129,10 +234,11 @@ function showPasswordMismatch(password, confirm) {
  * @param {boolean} disabled True zum Deaktivieren, false zum Aktivieren
  */
 function disableSubmit(disabled) {
-  const button = document.getElementById("signupSubmit");
-  if (!button) return;
-  button.disabled = disabled;
-  button.classList.toggle("btn__disabled", disabled);
+  const button = el("signupSubmit");
+  if (button) {
+    button.disabled = disabled;
+    button.classList.toggle("btn__disabled", disabled);
+  }
 }
 
 /**
@@ -140,18 +246,8 @@ function disableSubmit(disabled) {
  * @param {string} id Die ID des Passwort-Input-Feldes
  */
 function togglePassword(id) {
-  const field = document.getElementById(id);
+  const field = el(id);
   if (field) field.type = field.type === "password" ? "text" : "password";
-}
-
-/**
- * Liest den Wert eines Input-Feldes und gibt ihn getrimmt zurück
- * @param {string} id Die ID des Input-Elements
- * @returns {string} Der getrimmte Wert des Feldes oder leerer String
- */
-function readValue(id) {
-  const field = document.getElementById(id);
-  return field ? field.value.trim() : "";
 }
 
 /**
@@ -160,18 +256,9 @@ function readValue(id) {
  * @param {boolean} isError True für Fehlermeldung, false für normale Meldung
  */
 function setSignupStatus(message, isError) {
-  const status = document.getElementById("signupStatus");
-  if (!status) return;
-  status.textContent = message;
-  status.classList.toggle("error", !!isError);
-}
-
-/**
- * Zeigt eine Fehlermeldung an und gibt false zurück
- * @param {string} message Die Fehlermeldung
- * @returns {boolean} Immer false
- */
-function reportError(message) {
-  setSignupStatus(message, true);
-  return false;
+  const status = el("signupStatus");
+  if (status) {
+    status.textContent = message;
+    status.classList.toggle("error", !!isError);
+  }
 }
