@@ -6,6 +6,7 @@
 import { getActiveUser, logout, getInitials } from "./authService.js";
 import { insertTemplates } from "./templateLoader.js";
 import { provisionActiveUser } from "./userProvisioning.js";
+import { icons } from "./svg-template.js";
 
 /**
  * Lädt Layout-Templates und initialisiert die Seitenstruktur
@@ -28,6 +29,7 @@ function hydrateLayout() {
   bindLogout();
   highlightActiveNav();
   provisionActiveUser();
+  setupAuthBasedNavigation();
 }
 
 /**
@@ -155,4 +157,37 @@ function highlightActiveNav() {
  */
 function getPageName(path) {
   return path.split("/").pop();
+}
+
+/**
+ * Richtet die Navigation basierend auf dem Auth-Status ein
+ * Blendet geschützte Menü-Items aus, wenn User nicht eingeloggt ist
+ */
+function setupAuthBasedNavigation() {
+  const user = getActiveUser();
+  const isGuest = !user || user.provider === "guest";
+
+  const authRequiredLinks = document.querySelectorAll("[data-auth-required]");
+  const guestOnlyLinks = document.querySelectorAll("[data-guest-only]");
+
+  authRequiredLinks.forEach((link) => {
+    link.classList.toggle("nav-link-hidden", isGuest);
+  });
+
+  guestOnlyLinks.forEach((link) => {
+    link.classList.toggle("nav-link-hidden", !isGuest);
+  });
+
+  if (isGuest) {
+    renderLoginIcon();
+  }
+}
+
+/**
+ * Rendert das Log In Icon mit SVG aus svg-template.js
+ */
+function renderLoginIcon() {
+  const iconContainer = document.getElementById("loginIcon");
+  if (!iconContainer) return;
+  iconContainer.innerHTML = icons.log;
 }
