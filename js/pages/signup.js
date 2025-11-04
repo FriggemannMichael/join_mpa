@@ -18,7 +18,7 @@ const val = (id) => (el(id)?.value ?? "").trim();
 
 /** Fehlermeldungen pro Feld */
 const ERR = {
-  name: "Bitte einen gültigen Namen eingeben (z. B. „Max Mustermann“).",
+  name: "Bitte einen gültigen Namen eingeben (erster Buchstabe groß).",
   email: "Bitte eine gültige E-Mail-Adresse eingeben.",
   password: "Passwort benötigt mindestens 6 Zeichen.",
   confirm: "Passwörter stimmen nicht überein.",
@@ -39,30 +39,30 @@ function setFieldState(id, ok) {
   node.setAttribute("aria-invalid", String(!ok));
 }
 
-/** Tooltip-Element am Container sicherstellen (absolut positioniert) */
-function ensureTooltip(container) {
-  let faultMessage = container.querySelector(".field-tooltip-error");
-  if (!tip) {
-    faultMessage = document.createElement("div");
-    faultMessage.className = "field-tooltip-error";
-    faultMessage.setAttribute("role", "status");
-    faultMessage.setAttribute("aria-live", "polite");
-    container.appendChild(faultMessage);
+/** Fehlernachricht-Element am Container sicherstellen */
+function ensureFaultMsg(container) {
+  let faultMsg = container.querySelector(".field-fault-msg");
+  if (!faultMsg) {
+    faultMsg = document.createElement("div");
+    faultMsg.className = "field-fault-msg";
+    faultMsg.setAttribute("role", "status");
+    faultMsg.setAttribute("aria-live", "polite");
+    container.appendChild(faultMsg);
   }
-  return faultMessage;
+  return faultMsg;
 }
 
-/** Tooltip setzen/entfernen (leerer Text = ausblenden) */
-function setFieldTooltip(id, message = "") {
+/** Fehlernachricht setzen oder entfernen */
+function setFieldFaultMsg(id, message = "") {
   const container = getContainer(id);
   if (!container) return;
-  const tip = ensureTooltip(container);
+  const faultMsg = ensureFaultMsg(container);
   if (message) {
-    tip.textContent = message;
-    tip.classList.add("visible");
+    faultMsg.textContent = message;
+    faultMsg.classList.add("visible");
   } else {
-    tip.textContent = "";
-    tip.classList.remove("visible");
+    faultMsg.textContent = "";
+    faultMsg.classList.remove("visible");
   }
 }
 
@@ -100,7 +100,7 @@ function bindSignupForm() {
   form.addEventListener("submit", handleSignupSubmit);
 }
 
-
+/** Live-Validierung bei Eingabe */
 function handleLiveInput() {
   ["signupName","signupEmail","signupPassword","signupPasswordConfirm"].forEach((id) => {
     const c = getContainer(id);
@@ -149,10 +149,10 @@ function validateSingleField(id, opts = {}) {
 
   if (shouldShow) {
     setFieldState(id, ok);
-    setFieldTooltip(id, ok ? "" : msg);
+    setFieldFaultMsg(id, ok ? "" : msg);
   } else {
     setFieldState(id, true);
-    setFieldTooltip(id, "");
+    setFieldFaultMsg(id, "");
   }
 
   return ok;
@@ -193,6 +193,7 @@ async function handleSignupSubmit(event) {
   disableSubmit(true);
   try {
     await registerUser(val("signupName"), val("signupEmail"), val("signupPassword"));
+    clearFaultMsgs(); // Nach Erfolg alle Fehlermeldungen entfernen
     window.location.href = "./summary.html";
   } catch (err) {
     setSignupStatus(readAuthError(err), true);
@@ -261,4 +262,14 @@ function setSignupStatus(message, isError) {
     status.textContent = message;
     status.classList.toggle("error", !!isError);
   }
+}
+
+/**
+ * Entfernt alle sichtbaren Fehlermeldungen
+ */
+function clearFaultMsgs() {
+  document.querySelectorAll(".field-fault-msg.visible").forEach(el => {
+    el.textContent = "";
+    el.classList.remove("visible");
+  });
 }
