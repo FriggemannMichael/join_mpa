@@ -145,6 +145,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-top: 0.1rem;
   }
 
   /* Signup container - ensure proper sizing */
@@ -267,6 +268,7 @@
   /* Smaller container */
   .signUp__container {
     max-width: 343px;
+    margin-top: 6rem;
     padding: 2rem 1.25rem;
   }
 
@@ -310,6 +312,7 @@
   /* Even smaller container */
   .signUp__container {
     width: calc(100% - 1.5rem);
+    margin-top: 6rem;
     padding: 1.75rem 1rem;
     border-radius: 24px;
   }

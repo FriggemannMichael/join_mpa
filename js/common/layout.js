@@ -159,7 +159,6 @@ function getPageName(path) {
   return path.split("/").pop();
 }
 
-
 /**
  * Richtet die Navigation basierend auf dem Auth-Status ein
  * Blendet geschützte Menü-Items aus, wenn User nicht eingeloggt ist
@@ -167,23 +166,22 @@ function getPageName(path) {
 function setupAuthBasedNavigation() {
   const user = getActiveUser();
   const isGuest = !user || user.provider === "guest";
-  
+
   const authRequiredLinks = document.querySelectorAll("[data-auth-required]");
   const guestOnlyLinks = document.querySelectorAll("[data-guest-only]");
-  
+
   authRequiredLinks.forEach((link) => {
     link.classList.toggle("nav-link-hidden", isGuest);
   });
-  
+
   guestOnlyLinks.forEach((link) => {
     link.classList.toggle("nav-link-hidden", !isGuest);
   });
-  
+
   if (isGuest) {
     renderLoginIcon();
   }
 }
-
 
 /**
  * Rendert das Log In Icon mit SVG aus svg-template.js

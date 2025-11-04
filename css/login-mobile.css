@@ -15,7 +15,7 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    padding: 2rem 0;
+    padding: 9rem 0;
     position: relative;
   }
 
@@ -240,6 +240,11 @@
     width: 100px;
   }
 
+  /* Adjust wrapper */
+  .login-view-wrapper {
+    margin-top: 0.1rem;
+  }
+
   /* Adjust card dimensions */
   .login-card {
     max-width: 343px;
@@ -327,6 +332,7 @@
 
   /* Wrapper padding */
   .login-view-wrapper {
+    margin-top: 6rem;
     padding: 1.5rem 0;
   }
 
