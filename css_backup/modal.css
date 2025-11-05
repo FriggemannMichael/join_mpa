@@ -1,3 +1,4 @@
+/* Avatar für Edit-Modal wie Add-Modal */
 .avatar-modal {
   align-items: center;
   background-color: var(--color-separator);
@@ -13,12 +14,11 @@
   width: 120px;
 }
 
-
 .avatar-modal img {
   object-fit: contain;
 }
 
-
+/* Edit-Button für Modal (z.B. Speichern) wie Add-Button */
 .savebtn {
   align-items: center;
   background-color: var(--primary-color);
@@ -37,7 +37,6 @@
   transition: background-color 300ms ease, transform 300ms ease;
 }
 
-
 .addcontact {
   background-color: var(--white);
   border: 1px solid var(--color-separator);
@@ -49,7 +48,6 @@
   overflow: hidden;
   width: 100%;
 }
-
 
 .leftside {
   align-items: flex-start;
@@ -64,14 +62,12 @@
   width: 453px;
 }
 
-
 .content {
   align-items: flex-start;
   display: flex;
   flex-direction: column;
   gap: 40px;
 }
-
 
 .titleblock {
   align-items: flex-start;
@@ -80,12 +76,10 @@
   gap: 5px;
 }
 
-
 .imglogo {
   height: 67px;
   width: 54px;
 }
-
 
 h1 {
   color: var(--white);
@@ -94,7 +88,6 @@ h1 {
   line-height: 120%;
 }
 
-
 .taskbetter {
   color: var(--white);
   font-size: 27px;
@@ -102,12 +95,10 @@ h1 {
   line-height: 120%;
 }
 
-
 .separator {
   height: 3px;
   width: 90px;
 }
-
 
 .rightside {
   align-items: center;
@@ -120,7 +111,6 @@ h1 {
   padding: 60px;
   position: relative;
 }
-
 
 .avatar {
   align-items: center;
@@ -137,13 +127,11 @@ h1 {
   width: 120px;
 }
 
-
 .avatar img {
   height: 60%;
   object-fit: contain;
   width: 60%;
 }
-
 
 .form {
   display: flex;
@@ -153,32 +141,27 @@ h1 {
   max-width: 400px;
 }
 
-
 .form form {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-
 .input {
-  position: relative; 
+  position: relative; /* nötig, damit das Icon relativ zum Input positioniert werden kann */
 }
 
-
 .input__icon--right {
-  pointer-events: none; 
+  pointer-events: none; /* verhindert, dass das Icon klicks blockiert */
   position: absolute;
-  right: 16px; 
+  right: 16px; /* Abstand vom rechten Rand */
   top: 50%;
   transform: translateY(-50%);
 }
 
-
 .input-with-icon {
-  padding-right: 40px; 
+  padding-right: 40px; /* je nach Icongröße anpassen */
 }
-
 
 .input input {
   border: 1px solid var(--color-separator);
@@ -189,19 +172,16 @@ h1 {
   width: 100%;
 }
 
-
 .input input:focus {
   border-color: var(--primary-color);
   outline: none;
 }
-
 
 .btneditcontact {
   display: flex;
   gap: 24px;
   margin-top: 16px;
 }
-
 
 .delbtn {
   background-color: var(--white);
@@ -216,11 +196,9 @@ h1 {
   transition: background-color 300ms ease;
 }
 
-
 .delbtn:hover {
   background-color: var(--grey-lightest);
 }
-
 
 .creatbtn {
   align-items: center;
@@ -240,11 +218,9 @@ h1 {
   transition: background-color 300ms ease, transform 300ms ease;
 }
 
-
 .creatbtn:hover {
   background-color: var(--grey-darkest);
 }
-
 
 .btnclosemodal {
   align-items: center;
@@ -263,14 +239,14 @@ h1 {
   width: 40px;
 }
 
-
 .btnclosemodal:hover {
   transform: scale(1.1);
 }
 
-
 @media (width <= 1000px) {
-  
+  /* body {
+    padding: 10px;
+  } */
 
   .addcontact {
     flex-direction: column;
@@ -278,8 +254,7 @@ h1 {
     width: 100%;
   }
 
-
-.leftside {
+  .leftside {
     border-radius: 20px 20px 0 0;
     gap: 20px;
     min-height: auto;
@@ -287,88 +262,73 @@ h1 {
     width: 100%;
   }
 
-
-h1 {
+  h1 {
     font-size: 40px;
   }
 
-
-.taskbetter {
+  .taskbetter {
     font-size: 20px;
   }
 
-
-.rightside {
+  .rightside {
     flex-direction: column;
     gap: 30px;
     padding: 40px 20px;
   }
 
-
-.avatar {
+  .avatar {
     margin: 0;
   }
 
-
-.form {
+  .form {
     max-width: 100%;
     width: 100%;
   }
 
-
-.input input {
+  .input input {
     width: 100%;
   }
 
-
-.btneditcontact {
+  .btneditcontact {
     flex-flow: row wrap;
     justify-content: center;
   }
 
-
-.delbtn,
+  .delbtn,
   .creatbtn {
     flex: 1;
     min-width: 120px;
   }
 
-
-.addcontact {
+      .addcontact {
     height: 660px;
     width: 396px;
   }
 
-
-.leftside {
+  .leftside {
     flex: 1;
   }
 
-
-.rightside {
+  .rightside {
     padding: 80px 20px 40px 20px;
   }
 
-
-.avatar-modal {
+  .avatar-modal {
     position: absolute;
     top: -15%;
   }
 
-
-.imglogo {
+  .imglogo {
     display: none;
     visibility: hidden;
   }
 
-
-.btnclosemodal {
+  .btnclosemodal {
     position: absolute;
     top: -75%;
   }
 
-
-.delbtn{
+  .delbtn{
     width: 82px;
     min-width: 82px;
      height: 51px;
@@ -376,39 +336,33 @@ h1 {
      padding: 0;
   }
 
-
-.savebtn {
+  .savebtn {
     min-width: 99px;
     height: 51px;
     gap: 4px;
       padding: 8px;
-  }
+  } 
 
-
-.btnclosemodal {
+  .btnclosemodal {
     color: white;
   }
 }
-
 
 @media (width <= 500px) {
   h1 {
     font-size: 32px;
   }
 
-
-.taskbetter {
+  .taskbetter {
     font-size: 18px;
   }
 
-
-.addcontact{
+   .addcontact{
     height: 580px;
     width: 310px;
   }
 
-
-.btnclosemodal {
+    .btnclosemodal {
     top: -55%;
   }
 }

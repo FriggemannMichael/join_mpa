@@ -4,12 +4,12 @@
   padding: 0;
 }
 
-
 body {
   background-color: var(--background-color);
   font-family: var(--font-family);
 }
 
+/* ===== ADD TASK PAGE STYLES ===== */
 
 .container {
   margin: 0 auto;
@@ -18,7 +18,6 @@ body {
   padding-top: 4.5625rem;
 }
 
-
 .page-title {
   color: var(--primary-color);
   font-size: 61px;
@@ -26,13 +25,11 @@ body {
   margin-bottom: 40px;
 }
 
-
 .form-wrapper {
   display: flex;
   gap: 48px;
   margin-bottom: 40px;
 }
-
 
 .left-section,
 .right-section {
@@ -40,20 +37,17 @@ body {
   max-width: 440px;
 }
 
-
 .divider {
   background-color: var(--color-separator);
   display: block;
-  
+  /* In Desktop sichtbar */
   min-height: 424px;
   width: 1px;
 }
 
-
 .form-group {
   margin-bottom: 24px;
 }
-
 
 label {
   color: var(--primary-color);
@@ -64,11 +58,9 @@ label {
   margin-bottom: 8px;
 }
 
-
 .required {
   color: var(--color-danger);
 }
-
 
 input[type="text"],
 input[type="date"],
@@ -83,35 +75,29 @@ select {
   width: 100%;
 }
 
-
 input[type="text"]::placeholder,
 textarea::placeholder {
   color: var(--color-separator);
 }
-
 
 textarea {
   height: 136px;
   resize: vertical;
 }
 
-
 input[type="date"] {
   height: 48px;
 }
-
 
 select {
   cursor: pointer;
   height: 48px;
 }
 
-
 .priority-buttons {
   display: flex;
   gap: 16px;
 }
-
 
 .priority-btn {
   align-items: center;
@@ -131,34 +117,28 @@ select {
   transition: all 0.3s ease;
 }
 
-
 .priority-btn:hover {
   box-shadow: 0 2px 8px 0 var(--shadow-color);
   transform: translateY(-2px);
 }
-
 
 .priority-btn.active {
   box-shadow: 0 0 8px 0 var(--shadow-hover);
   color: var(--white);
 }
 
-
 .priority-btn.active[data-priority="urgent"] {
   background-color: var(--color-danger);
 }
-
 
 .priority-btn.active[data-priority="medium"] {
   background-color: var(--color-priority-medium);
 }
 
-
 .priority-btn.active[data-priority="low"] {
   background-color: var(--color-success);
   color: var(--primary-color);
 }
-
 
 .priority-btn .prio-icon {
   display: inline-block;
@@ -166,7 +146,6 @@ select {
   vertical-align: middle;
   width: 16px;
 }
-
 
 .required-text {
   align-items: baseline;
@@ -176,7 +155,6 @@ select {
   line-height: 1.4;
 }
 
-
 .required-text .required {
   font-size: 0.75em;
   line-height: 0;
@@ -185,24 +163,21 @@ select {
   top: -0.5em;
 }
 
-
 .button-group {
   align-items: baseline;
   display: flex;
   gap: 16px;
   justify-content: space-between;
   max-width: calc(440px + 48px + 1px + 48px + 440px);
-  
+  /* left + gap + divider + gap + right */
 }
-
 
 .buttons {
   display: flex;
   gap: 16px;
   margin-left: auto;
-  
+  /* Positioniert die Buttons rechtsbündig */
 }
-
 
 .btn-clear,
 .btn-create {
@@ -219,13 +194,11 @@ select {
   transition: all 0.3s ease;
 }
 
-
 .btn-clear img,
 .btn-create img {
   height: 16px;
   width: 16px;
 }
-
 
 .btn-clear {
   background-color: var(--background-color);
@@ -234,11 +207,9 @@ select {
   width: 110px;
 }
 
-
 .btn-clear:hover {
   background-color: var(--grey-lightest);
 }
-
 
 .btn-create {
   background-color: var(--primary-color);
@@ -247,11 +218,9 @@ select {
   width: 183px;
 }
 
-
 .btn-create:hover {
   background-color: var(--grey-darkest);
 }
-
 
 .btn-create:disabled,
 .btn-create.disabled {
@@ -260,7 +229,6 @@ select {
   cursor: not-allowed;
   pointer-events: none;
 }
-
 
 .btn-create:disabled:hover,
 .btn-create.disabled:hover {
@@ -277,7 +245,6 @@ select {
   border: 1px solid #E60026;
   border-radius: 0.85rem;
 }
-
 
 .inputField__container.input-fault:active {
   border-color: #29ABE2;
@@ -307,19 +274,16 @@ select {
   transform: translateY(8px);
 }
 
-
 .privacy-policy-section,
 .legal-notice-section {
   max-width: 80%;
   margin-bottom: 5rem;
 }
 
-
 .privacy-policy-section.left-328,
 .legal-notice-section.left-328 {
   left: 74px
 }
-
 
 @media(max-width: 560px) {
 
@@ -329,174 +293,166 @@ select {
       left: 24px
     }
 
-
-.privacy-policy-section,
+    .privacy-policy-section,
     .legal-notice-section {
       max-width: 90%;
     }
   }
 
 
-@media (max-width: 420px) {
+  @media (max-width: 420px) {
     .field-tooltip-error {
       top: auto;
       bottom: 100%;
       transform: translateY(-6px);
     }
 
-
-.field-tooltip-error.visible {
+    .field-tooltip-error.visible {
       transform: translateY(-8px);
     }
 
-
-.field-tooltip-error::after {
+    .field-tooltip-error::after {
       top: auto;
       bottom: -6px;
       border-color: #e53935 transparent transparent transparent;
     }
 
-
-.field-fault-msg {
+    .field-fault-msg {
       font-size: 0.5rem;
     }
   }
 
 
-@media (width <=1400px) {
+  /* ===== RESPONSIVE DESIGN - ADD TASK ===== */
+
+  /* Desktop Large (1200px - 1400px) */
+  @media (width <=1400px) {
     .container {
       padding-left: 4rem;
       padding-right: 2rem;
     }
   }
 
-
-@media (width <=1200px) {
+  /* Tablet/Desktop Small (768px - 1200px) */
+  @media (width <=1200px) {
     .container {
       padding-left: 2rem;
       padding-right: 2rem;
     }
 
-
-.form-wrapper {
+    .form-wrapper {
       flex-direction: column;
       gap: 32px;
     }
 
-
-.page-title {
+    .page-title {
       font-size: 48px;
     }
 
-
-.divider {
+    .divider {
       display: none;
-      
+      /* In mobiler Ansicht ausblenden */
     }
 
-
-.left-section,
+    .left-section,
     .right-section {
       max-width: 100%;
     }
   }
 
-
-@media (width <=1024px) {
+  /* Tablet/Mobile Breakpoint (1024px) */
+  @media (width <=1024px) {
     textarea {
       width: 100%;
     }
 
-
-.subtask-input-container {
+    .subtask-input-container {
       width: 100%;
     }
   }
 
-
-@media (width <=768px) {
+  /* Tablet (600px - 768px) */
+  @media (width <=768px) {
     .container {
       padding-left: 1.5rem;
       padding-right: 1.5rem;
       padding-top: 3rem;
     }
 
-
-.page-title {
+    .page-title {
       font-size: 40px;
       margin-bottom: 32px;
     }
 
-
-label {
+    label {
       font-size: 18px;
     }
 
-
-input[type="text"],
+    input[type="text"],
     input[type="date"],
     textarea,
     select {
       font-size: 16px;
     }
 
-
-.button-group {
+    .button-group {
       align-items: stretch;
       flex-direction: column;
       gap: 24px;
     }
 
-
-.buttons {
+    .buttons {
       justify-content: space-around;
     }
 
-
-textarea {
+    textarea {
       width: 100%;
     }
 
-
-.subtask-input-container {
+    .subtask-input-container {
       width: 100%;
     }
 
-    
-    
+    /* Auskommentiert - wird in add_task.css definiert */
+    /*
+  .btn-clear {
+    width: clamp(82px, 26vw, 110px);
+    height: clamp(42px, 13vw, 56px);
   }
 
+  .btn-create {
+    width: clamp(136px, 43vw, 183px);
+    height: clamp(42px, 13vw, 56px);
+  }
+  */
+  }
 
-@media (width <=600px) {
+  /* Mobile (425px - 600px) */
+  @media (width <=600px) {
     .container {
       padding-left: 1rem;
       padding-right: 1rem;
       padding-top: 2rem;
     }
 
-
-.page-title {
+    .page-title {
       font-size: 32px;
       margin-bottom: 24px;
     }
 
-
-.form-wrapper {
+    .form-wrapper {
       gap: 24px;
     }
 
-
-.form-group {
+    .form-group {
       margin-bottom: 20px;
     }
 
-
-label {
+    label {
       font-size: 16px;
     }
 
-
-input[type="text"],
+    input[type="text"],
     input[type="date"],
     textarea,
     select {
@@ -504,48 +460,41 @@ input[type="text"],
       padding: 10px 14px;
     }
 
-
-.priority-buttons {
+    .priority-buttons {
       flex-direction: column;
       gap: 12px;
     }
 
-
-.priority-btn {
+    .priority-btn {
       font-size: 14px;
       height: 48px;
     }
 
-
-.button-group {
+    .button-group {
       gap: 16px;
     }
 
-
-.required-text {
+    .required-text {
       font-size: 14px;
     }
   }
 
-
-@media (width <=425px) {
+  /* Mobile Small (320px - 425px) */
+  @media (width <=425px) {
     .container {
       padding-left: 0.75rem;
       padding-right: 0.75rem;
     }
 
-
-.page-title {
+    .page-title {
       font-size: 28px;
     }
 
-
-textarea {
+    textarea {
       width: 100%;
     }
 
-
-.subtask-input-container {
+    .subtask-input-container {
       width: 100%;
     }
 

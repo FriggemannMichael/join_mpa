@@ -14,6 +14,9 @@ body.no-select * {
   -webkit-user-select: none !important;
 }
 
+/* ===============================
+   Headings
+================================ */
 
 h2 {
   font-size: var(--fs-h2);
@@ -21,6 +24,9 @@ h2 {
   font-weight: 700;
 }
 
+/* ===============================
+   Kanban-Header
+================================ */
 
 .kanban_header {
   align-items: center;
@@ -34,6 +40,9 @@ h2 {
   text-decoration: none;
 }
 
+/* ===============================
+   Search
+================================ */
 
 .search_input_field {
   display: inline-flex;
@@ -42,13 +51,11 @@ h2 {
   position: relative;
 }
 
-
 .search_field {
   display: block;
   height: var(--input-h);
   position: relative;
 }
-
 
 .search_input {
   border: 1px solid var(--color-border);
@@ -61,11 +68,9 @@ h2 {
   width: var(--search-w);
 }
 
-
 .search_input:focus {
   border-color: var(--color-btn-hover);
 }
-
 
 .search_affix {
   align-items: center;
@@ -78,7 +83,6 @@ h2 {
   transform: translateY(-50%);
 }
 
-
 .separator_input_field {
   background-color: var(--color-separator);
   cursor: pointer;
@@ -86,7 +90,6 @@ h2 {
   pointer-events: none;
   width: 1px;
 }
-
 
 .search_button {
   all: unset;
@@ -98,16 +101,13 @@ h2 {
   width: var(--search-btn-w);
 }
 
-
 .search_button:hover {
   background-image: url("../assets/icons/search-hover.svg");
 }
 
-
 .search_button:active {
   background-image: url("../assets/icons/search-click.svg");
 }
-
 
 .search_error {
   color: var(--color-danger);
@@ -120,7 +120,6 @@ h2 {
   white-space: nowrap;
   z-index: 2;
 }
-
 
 .add_task_button {
   align-items: center;
@@ -139,16 +138,17 @@ h2 {
   width: var(--add-task-button-width);
 }
 
-
 .add_task_button:hover {
   background-color: var(--color-btn-hover);
 }
-
 
 .add_task_button:active {
   background-color: var(--color-btn-active);
 }
 
+/* ===============================
+   Board
+================================ */
 
 .kanban-board {
   background-color: var(--bg-board);
@@ -162,7 +162,6 @@ h2 {
   text-decoration: none;
 }
 
-
 .task_column {
   display: flex;
   flex-direction: column;
@@ -170,20 +169,17 @@ h2 {
   width: var(--task-width);
 }
 
-
 .task_column_header {
   display: flex;
   justify-content: space-between;
   width: var(--task-width);
 }
 
-
 .task_column_header h3 {
   color: var(--color-text-strong);
   font-size: var(--fs-h3);
   font-weight: 700;
 }
-
 
 .add_task_button_kanban {
   align-items: center;
@@ -198,18 +194,15 @@ h2 {
   width: var(--add-task-button-kanban);
 }
 
-
 .add_task_button_kanban:hover {
   background-image: url("../assets/icons/add-task-Hover.svg");
   cursor: pointer;
 }
 
-
 .add_task_button_kanban:active {
   background-image: url("../assets/icons/add-task-click.svg");
   cursor: pointer;
 }
-
 
 .task_space {
   display: flex;
@@ -217,14 +210,12 @@ h2 {
   gap: var(--space-md);
 }
 
-
 .task_column.active {
   background-color: rgba(8, 8, 8, 0.1);
   border: 1px dashed #000000;
   border-radius: 30px;
-  
+  /* padding-top: 20px; */
 }
-
 
 .no_task_to_do {
   align-items: center;
@@ -240,28 +231,27 @@ h2 {
   width: 100%;
 }
 
+/* ===============================
+   Utilities
+================================ */
 
 .display_flex {
   display: flex;
 }
-
 
 .no-select,
 .no-select * {
   user-select: none;
 }
 
-
 body.loading {
   cursor: progress;
 }
-
 
 body.loading button {
   cursor: not-allowed;
   opacity: 0.6;
 }
-
 
 @media (width <=90rem) {
   .kanban_header {
@@ -269,42 +259,36 @@ body.loading button {
     padding-left: var(--pad-page-x-mobile);
     padding-right: var(--pad-page-x-mobile);
 
-    
+    /* gap: 48px; */
     padding-top: var(--space-2xl);
   }
 
-
-.search_input_field {
+  .search_input_field {
     order: 1;
     padding-top: var(--space-2xl);
     width: 100%;
   }
 
-
-.kanban-board {
+  .kanban-board {
     flex-direction: column;
     padding: var(--space-lg) var(--pad-page-x-mobile) 1rem
       var(--pad-page-x-mobile);
   }
 
-
-.task_space {
+  .task_space {
     flex-direction: row;
     overflow-x: auto;
     padding: var(--space-sm);
   }
 
-
-.task_column {
+  .task_column {
     width: 100%;
   }
 
-
-.task_column_header {
+  .task_column_header {
     width: 100%;
   }
 }
-
 
 @media (width <=30rem) {
   .task_column_header h3 {
@@ -312,13 +296,11 @@ body.loading button {
     color: var(--primary-color);
   }
 
-
-.task_column {
+  .task_column {
     gap: 1rem;
   }
 
-
-.add_task_button {
+  .add_task_button {
     align-items: center;
     display: flex;
     height: var(--add-task-btn-kanban-resp);
@@ -327,32 +309,27 @@ body.loading button {
     width: var(--add-task-btn-kanban-resp);
   }
 
-
-.add_task_lable {
+  .add_task_lable {
     display: none;
   }
 
-
-h2 {
+  h2 {
     font-size: var(--fs-h2-resp);
   }
 }
-
 
 @media (width <=500px), (hover: none) {
   .add_task_button_kanban:hover {
     background-image: url("../assets/icons/add-task-Default.svg");
   }
 
-
-.add_task_button_kanban:active {
+  .add_task_button_kanban:active {
     animation: toDark 0.01s forwards;
     background-image: url("../assets/icons/add-task-Hover.svg");
 
-    
+    /* 10 ms */
   }
 }
-
 
 @keyframes toDark {
   to {
@@ -360,6 +337,9 @@ h2 {
   }
 }
 
+/* ===============================
+   Confirm Modal Overlay
+================================ */
 
 .modal_overlay {
   position: fixed;
@@ -372,7 +352,6 @@ h2 {
   animation: fadeIn 0.2s ease-in-out;
 }
 
-
 .modal_box {
   background: #fff;
   border-radius: 12px;
@@ -384,7 +363,6 @@ h2 {
   animation: scaleIn 0.2s ease-in-out;
 }
 
-
 .modal_message {
   font-size: 16px;
   color: var(--primary-color);
@@ -392,13 +370,11 @@ h2 {
   line-height: 1.4;
 }
 
-
 .modal_actions {
   display: flex;
   justify-content: center;
   gap: 16px;
 }
-
 
 .btn_cancel,
 .btn_confirm {
@@ -411,17 +387,14 @@ h2 {
   transition: all 120ms ease-in-out;
 }
 
-
 .btn_cancel {
   background: #f1f1f1;
   color: var(--primary-color);
 }
 
-
 .btn_cancel:hover {
   background: #e3e3e3;
 }
-
 
 .btn_confirm {
   background: #ff3b3b;
@@ -429,23 +402,19 @@ h2 {
   font-weight: 600;
 }
 
-
 .btn_confirm:hover {
   background: #e13232;
 }
-
 
 @keyframes fadeIn {
   from {
     opacity: 0;
   }
 
-
-to {
+  to {
     opacity: 1;
   }
 }
-
 
 @keyframes scaleIn {
   from {
@@ -453,18 +422,15 @@ to {
     opacity: 0;
   }
 
-
-to {
+  to {
     transform: scale(1);
     opacity: 1;
   }
 }
 
-
 .has_tooltip {
   position: relative;
 }
-
 
 .has_tooltip::after {
   content: attr(data-tooltip);
@@ -483,7 +449,6 @@ to {
   transition: opacity 120ms, transform 120ms;
   background-color: var(--color-btn);
 }
-
 
 .has_tooltip:hover::after,
 .has_tooltip:focus-within::after {

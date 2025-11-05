@@ -10,6 +10,7 @@
   z-index: calc(var(--z-splash) + 10);
 }
 
+
 .brand-splash img {
   display: block;
   height: auto;
@@ -17,16 +18,19 @@
   transition: width 700ms ease, height 700ms ease;
 }
 
+
 .brand-splash.brand-fixed {
   left: 77px;
   top: 80px;
   transform: translate(0, 0) scale(1);
 }
 
+
 .brand-splash.brand-fixed img {
   width: 100.03px;
   height: 121.97px;
 }
+
 
 @media (width <= 430px) {
   .brand-splash.brand-fixed {
@@ -41,19 +45,23 @@
   }
 }
 
+
 .login-card {
   transition: opacity 400ms ease, transform 400ms ease;
 }
+
 
 .login-card-hidden {
   opacity: 0;
   transform: translateY(1.25rem);
 }
 
+
 .login-card-shown {
   opacity: 1;
   transform: translateY(0);
 }
+
 
 .summary__overlay__container {
   align-items: center;
@@ -68,6 +76,7 @@
   z-index: var(--z-modal-backdrop);
 }
 
+
 .summary__greeting__container-mobile {
   align-items: center;
   display: flex;
@@ -76,6 +85,7 @@
   justify-content: center;
   width: 100%;
 }
+
 
 @keyframes fadeOut {
   0% {

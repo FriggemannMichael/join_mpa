@@ -6,7 +6,6 @@
   height: 592px;
 }
 
-
 .add_contact_headline {
   align-items: flex-start;
   background-color: var(--primary-color);
@@ -21,30 +20,25 @@
   width: 44%;
 }
 
-
 .add_contact_headline img {
   height: auto;
   width: 55.6px;
 }
-
 
 .add_contact_headline h2 {
   font-size: 61px;
   font-weight: 700;
 }
 
-
 .add_contact_headline span {
   font-size: 27px;
   font-weight: 400;
 }
 
-
 .add_contact_headline_seperator {
   border: 3px solid var(--secondary-color);
   width: 90px;
 }
-
 
 .add_contact_main {
   align-items: center;
@@ -60,7 +54,6 @@
   width: 120px;
 }
 
-
 #personimg {
   filter: brightness(0) saturate(100%) invert(100%) sepia(3%) saturate(7500%)
     hue-rotate(197deg) brightness(106%) contrast(103%);
@@ -68,7 +61,6 @@
   margin: 0 40px;
   width: 64px;
 }
-
 
 #add_contact_name {
   display: flex;
@@ -94,23 +86,19 @@
     width: 100%;
   }
 
-
-#add_contact_name {
+  #add_contact_name {
     background-image: url("../assets/icons/person.svg");
     margin-top: 25px;
   }
 
-
-#add_contact_email {
+  #add_contact_email {
     background-image: url("../assets/icons/mail.svg");
   }
 
-
-#add_contact_phone {
+  #add_contact_phone {
     background-image: url("../assets/icons/call.svg");
   }
 }
-
 
 .add_contact_input_buttons button {
   align-items: center;
@@ -126,19 +114,16 @@
   white-space: nowrap;
 }
 
-
 .add_contact_input_buttons img {
   height: 24px;
   margin: 0;
   width: 24px;
 }
 
-
 #add_contact_cancel {
   font-size: 20px;
   font-weight: 400;
 }
-
 
 #create_contact {
   background-color: var(--primary-color);
@@ -146,7 +131,6 @@
   font-size: 21px;
   font-weight: 700;
 }
-
 
 #create_contact img {
   filter: brightness(0) saturate(100%) invert(100%) sepia(3%) saturate(7500%)
