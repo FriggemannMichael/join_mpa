@@ -7,7 +7,7 @@
   display: block;
 }
 
-@media (width >= 429px) and (width <= 767px) {
+@media (width >= 431px) and (width <= 767px) {
   /* Back button positioning for tablet range */
   .goback {
     position: absolute;
@@ -23,10 +23,11 @@
   /* Signup view wrapper */
   .signUp__view {
     padding: 2.5rem 2rem;
+    padding-top: max(2.5rem, 220px);
     min-height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
   }
 
   /* Signup container */
@@ -135,17 +136,18 @@
   }
 }
 
-@media (width <= 428px) {
+@media (width <= 430px) {
   /* Brand splash - use central rules from animations.css */
 
   /* Signup view wrapper */
   .signUp__view {
-    padding: 2rem 1rem;
+    padding: 9rem 1rem 2rem;
     min-height: 100vh;
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-top: 0.1rem;
+    justify-content: flex-start;
+    position: relative;
+    z-index: var(--z-base);
   }
 
   /* Signup container - ensure proper sizing */
@@ -268,7 +270,6 @@
   /* Smaller container */
   .signUp__container {
     max-width: 343px;
-    margin-top: 6rem;
     padding: 2rem 1.25rem;
   }
 
@@ -312,7 +313,6 @@
   /* Even smaller container */
   .signUp__container {
     width: calc(100% - 1.5rem);
-    margin-top: 6rem;
     padding: 1.75rem 1rem;
     border-radius: 24px;
   }

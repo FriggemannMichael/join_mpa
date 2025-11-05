@@ -229,6 +229,9 @@
   justify-content: center;
   min-height: 100vh;
   padding: 2rem 1rem;
+  padding-top: max(2rem, 220px);
+  position: relative;
+  z-index: var(--z-base);
 }
 
 .signUp__container {
@@ -542,10 +545,6 @@ body.dark-theme .goback:hover {
     right: 2rem;
     top: 2rem;
   }
-
-  .signup-text {
-    /* font-size: 0.875rem; */
-  }
 }
 
 /* ===== LOGIN VIEW ===== */
@@ -556,7 +555,9 @@ body.dark-theme .goback:hover {
   justify-content: center;
   min-height: 100vh;
   padding: var(--space-xl) var(--space-md);
+  padding-top: max(var(--space-xl), 220px);
   position: relative;
+  z-index: var(--z-base);
 
   /* Footer für Login/Signup */
   .login-footer {

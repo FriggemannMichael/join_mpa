@@ -8,38 +8,39 @@
   top: 50%;
   transform: translate(-50%, -50%) scale(1);
   transition: top 700ms ease, left 700ms ease, transform 700ms ease,
-    opacity 400ms ease;
+    width 700ms ease, height 700ms ease, opacity 400ms ease;
   will-change: top, left, transform, opacity;
-  z-index: calc(var(--z-overlay) + 20);
+  z-index: calc(var(--z-splash) + 10);
 }
 
 .brand-splash img {
   display: block;
   height: auto;
   width: 12rem;
+  transition: width 700ms ease, height 700ms ease;
 }
 
 /* Desktop: Fixed position nach Animation - einheitlich für Login & Signup */
-.brand-fixed {
+.brand-splash.brand-fixed {
   left: 77px;
   top: 80px;
-  transform: none;
+  transform: translate(0, 0) scale(1);
 }
 
-.brand-fixed img {
+.brand-splash.brand-fixed img {
   width: 100.03px;
   height: 121.97px;
 }
 
 /* Mobile: Fixed position - einheitlich für Login & Signup */
-@media (width <= 428px) {
-  .brand-fixed {
+@media (width <= 430px) {
+  .brand-splash.brand-fixed {
     left: 38px;
     top: 37px;
-    transform: none;
+    transform: translate(0, 0) scale(1);
   }
 
-  .brand-fixed img {
+  .brand-splash.brand-fixed img {
     width: 64px;
     height: 78px;
   }
@@ -71,7 +72,7 @@
   opacity: 1;
   overflow-y: auto;
   position: absolute;
-  z-index: var(--z-overlay);
+  z-index: var(--z-modal-backdrop);
 }
 
 .summary__greeting__container-mobile {

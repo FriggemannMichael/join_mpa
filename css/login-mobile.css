@@ -3,20 +3,41 @@
    Card dimensions: 396px × 475px, positioned at x:16, y:17
    ========================================= */
 
+/* Tablet range: ensure logo stays clear */
+@media (width >= 431px) and (width <= 768px) {
+  .login-view-wrapper {
+    padding-top: max(var(--space-xl), 220px);
+    justify-content: center;
+  }
+
+  .brand-splash {
+    position: fixed;
+    z-index: calc(var(--z-splash) + 10);
+  }
+}
+
 @media (width <= 430px) {
   /* Hide desktop sign-up header */
   .login-view-wrapper .login-header-signup-desktop {
     display: none;
   }
 
-  /* Container for proper stacking */
+  /* Container for proper stacking - ensure logo area stays clear */
   .login-view-wrapper {
     align-items: center;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    padding: 9rem 0;
+    padding: 9rem 0 2rem;
     position: relative;
+    z-index: var(--z-base);
+    justify-content: flex-start;
+  }
+
+  /* Ensure brand logo is always on top and never overlapped */
+  .brand-splash {
+    z-index: calc(var(--z-splash) + 10);
+    position: fixed;
   }
 
   /* Login card - override inline styles if needed */
@@ -234,15 +255,9 @@
 }
 
 @media (width <= 375px) {
-  /* Smaller brand logo */
-  .brand-splash {
-    top: 1.5rem;
-    width: 100px;
-  }
-
-  /* Adjust wrapper */
+  /* Adjust wrapper - no margin-top needed, padding handles spacing */
   .login-view-wrapper {
-    margin-top: 0.1rem;
+    padding-top: 8rem;
   }
 
   /* Adjust card dimensions */
@@ -324,16 +339,10 @@
 }
 
 @media (width <= 320px) {
-  /* Even smaller brand logo */
-  .brand-splash {
-    top: 1rem;
-    width: 80px;
-  }
-
-  /* Wrapper padding */
+  /* Wrapper padding - ensure logo stays clear */
   .login-view-wrapper {
-    margin-top: 6rem;
-    padding: 1.5rem 0;
+    padding: 7.5rem 0 1.5rem;
+    justify-content: flex-start;
   }
 
   /* Tighter card spacing */
