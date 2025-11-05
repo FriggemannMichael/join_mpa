@@ -63,6 +63,16 @@
   }
 }
 
+.layout.summary{
+  padding-left: 46px;
+}
+
+@media (max-width: 768px) {
+ .layout.summary{
+  padding-left: 0px;
+}
+}
+
 .summary-layout-wrapper {
   display: grid;
   grid-template-columns: 1fr;
