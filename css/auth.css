@@ -50,6 +50,8 @@
   opacity: 1;
   padding-bottom: 16px;
   width: 100%;
+  position: relative;
+  z-index: calc(var(--z-splash) + 20);
 }
 
 .login-footer button {
@@ -86,7 +88,7 @@
   align-items: center;
   background: none;
   border: none;
-  color: var(--grey-medium);
+  color: var(--primary-color);
   cursor: pointer;
   display: flex;
   font-family: Inter, Arial, sans-serif;
@@ -213,12 +215,14 @@
 .signUp__view {
   align-items: center;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   min-height: 100vh;
   padding: 2rem 1rem;
   padding-top: max(2rem, 220px);
   position: relative;
   z-index: var(--z-base);
+  gap: 1rem;
 }
 
 .signUp__container {

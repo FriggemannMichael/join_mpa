@@ -1,7 +1,7 @@
 .brand-splash {
   left: 50%;
   pointer-events: none;
-  position: fixed;
+  position: absolute;
   top: 50%;
   transform: translate(-50%, -50%) scale(1);
   transition: top 700ms ease, left 700ms ease, transform 700ms ease,

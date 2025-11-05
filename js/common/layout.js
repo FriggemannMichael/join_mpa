@@ -162,23 +162,28 @@ function getPageName(path) {
 /**
  * Richtet die Navigation basierend auf dem Auth-Status ein
  * Blendet geschützte Menü-Items aus, wenn User nicht eingeloggt ist
+ * ODER wenn User direkt von Login/Signup-Seite kommt
  */
 function setupAuthBasedNavigation() {
   const user = getActiveUser();
   const isGuest = !user || user.provider === "guest";
 
+  const referrer = document.referrer;
+  const comesFromAuth =
+    referrer.includes("login.html") || referrer.includes("signup.html");
+
   const authRequiredLinks = document.querySelectorAll("[data-auth-required]");
   const guestOnlyLinks = document.querySelectorAll("[data-guest-only]");
 
   authRequiredLinks.forEach((link) => {
-    link.classList.toggle("nav-link-hidden", isGuest);
+    link.classList.toggle("nav-link-hidden", isGuest || comesFromAuth);
   });
 
   guestOnlyLinks.forEach((link) => {
-    link.classList.toggle("nav-link-hidden", !isGuest);
+    link.classList.toggle("nav-link-hidden", !isGuest && !comesFromAuth);
   });
 
-  if (isGuest) {
+  if (isGuest || comesFromAuth) {
     renderLoginIcon();
   }
 }
