@@ -10,8 +10,8 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { person, mail, call, check, close, icons } from "../common/svg-template.js";
 import { colorFromString, getInitials } from "../board/utils.js"
-import {contactDetailTemplate} from "../contacts/templates.js"
-import {confirmModal} from "../board/modals/confirmModal.js"
+import { contactDetailTemplate } from "../contacts/templates.js"
+import { confirmModal } from "../board/modals/confirmModal.js"
 
 
 initContactsPage();
@@ -242,6 +242,11 @@ async function handleDeleteContact() {
       info.style.display = "none";
     }
     if (placeholder) placeholder.style.display = "flex";
+
+    const overlay = document.getElementById("contactOverlay");
+    if (overlay && !overlay.hasAttribute("hidden")) {
+      overlay.setAttribute("hidden", "hidden");
+    }
   } catch (error) {
     alert("Fehler beim Löschen: " + error.message);
   }
@@ -340,7 +345,7 @@ function renderContactDetail({ name, email, phone, initials, color }) {
   if (!info) return;
   if (placeholder) placeholder.style.display = "none";
 
-  info.innerHTML =  contactDetailTemplate({ name, email, phone, initials, color })  ;
+  info.innerHTML = contactDetailTemplate({ name, email, phone, initials, color });
 
   info.classList.remove("fade-in"); // reset falls schon aktiv
   void info.offsetWidth; // force reflow für wiederholtes Abspielen
@@ -573,10 +578,20 @@ function bindEditContactControls() {
  * @returns {void} Nothing is returned; updates the DOM and event bindings.
  */
 function openEditOverlay() {
-  const overlayElement = document.getElementById("contactOverlay");
-  if (!overlayElement) return;
-  overlayElement.removeAttribute("hidden");
-  addModalCloseListeners(overlayElement, closeEditOverlay);
+  const overlay = document.getElementById("contactOverlay");
+  if (!overlay) return;
+  overlay.removeAttribute("hidden");
+  overlay.inert = false; // sicherheitshalber interaktiv
+  addModalCloseListeners(overlay, closeEditOverlay);
+
+  // Delegation – Listener bleibt auch nach innerHTML-Änderungen erhalten
+  if (!overlay._hasDeleteDelegation) {
+    overlay.addEventListener("click", (e) => {
+      const delBtn = e.target.closest("#deleteContactBtn");
+      if (delBtn) handleDeleteContact(e);
+    });
+    overlay._hasDeleteDelegation = true;
+  }
 }
 
 
@@ -764,12 +779,21 @@ function initEditDeleteRespMenu() {
     bindEditDeleteButtons()
   })
 
-  document.addEventListener("click", e => {
-    if (!menu.classList.contains("menu-hidden") && !menu.contains(e.target) && e.target !== btn) {
-      menu.classList.add("menu-hidden")
-      bindEditDeleteButtons()
+  document.addEventListener("click", (e) => {
+    const isClickInsideMenu = menu.contains(e.target);
+    const isButtonClick = e.target === btn;
+    const isOverlayClick = e.target.closest("#contactOverlay"); // 🩵 das ist der Trick!
+
+    if (
+      !menu.classList.contains("menu-hidden") &&
+      !isClickInsideMenu &&
+      !isButtonClick &&
+      !isOverlayClick
+    ) {
+      menu.classList.add("menu-hidden");
+      bindEditDeleteButtons();
     }
-  })
+  });
 
   document.addEventListener("keydown", e => {
     if (!menu.classList.contains("menu-hidden") && e.key === "Escape") {
@@ -813,4 +837,3 @@ window.addEventListener('resize', () => {
     btn.classList.add('menu-hidden');
   }
 });
-
