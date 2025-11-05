@@ -3,13 +3,14 @@
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   flex-direction: column;
-  gap: var(--gap-md);
   min-width: var(--task-width);
   overflow: hidden;
   padding: var(--space-md);
   width: var(--task-width);
+  height: fit-content;
+  gap: 24px;
 }
 
 .drag-ghost {
@@ -162,11 +163,6 @@ h5 {
 }
 
 @media (width <=30rem) {
-  .task_card {
-    gap: 24px;
-    height: fit-content;
-  }
-
   .task_category {
     padding: 0.25rem 1rem;
   }
