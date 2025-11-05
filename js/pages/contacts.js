@@ -216,14 +216,7 @@ function bindEditDeleteButtons() {
 
   ["deleteContactBtn", "deleteContactBtnResp"].forEach(id => {
     const btn = document.getElementById(id);
-    if (btn) {
-      btn.addEventListener("click", () => {
-        const taskId = btn.dataset.id; // oder wie du deine ID übergibst
-        confirmModal("Are you sure you want to delete this Contact?", () => {
-          deleteTask(taskId);
-        });
-      });
-    }
+    if (btn) btn.addEventListener("click", handleDeleteContact);
   });
 }
 
