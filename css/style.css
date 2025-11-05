@@ -39,7 +39,8 @@ body {
 
 .divider {
   background-color: var(--color-separator);
-  display: block; /* In Desktop sichtbar */
+  display: block;
+  /* In Desktop sichtbar */
   min-height: 424px;
   width: 1px;
 }
@@ -167,15 +168,15 @@ select {
   display: flex;
   gap: 16px;
   justify-content: space-between;
-  max-width: calc(
-    440px + 48px + 1px + 48px + 440px
-  ); /* left + gap + divider + gap + right */
+  max-width: calc(440px + 48px + 1px + 48px + 440px);
+  /* left + gap + divider + gap + right */
 }
 
 .buttons {
   display: flex;
   gap: 16px;
-  margin-left: auto; /* Positioniert die Buttons rechtsbündig */
+  margin-left: auto;
+  /* Positioniert die Buttons rechtsbündig */
 }
 
 .btn-clear,
@@ -235,7 +236,9 @@ select {
 }
 
 
-.inputField__container { position: relative; }
+.inputField__container {
+  position: relative;
+}
 
 
 .inputField__container.input-fault {
@@ -243,7 +246,7 @@ select {
   border-radius: 0.85rem;
 }
 
-.inputField__container.input-fault:active{
+.inputField__container.input-fault:active {
   border-color: #29ABE2;
 }
 
@@ -271,118 +274,147 @@ select {
   transform: translateY(8px);
 }
 
-
-@media (max-width: 420px) {
-  .field-tooltip-error {
-    top: auto;
-    bottom: 100%;
-    transform: translateY(-6px);
-  }
-  .field-tooltip-error.visible {
-    transform: translateY(-8px);
-  }
-  .field-tooltip-error::after {
-    top: auto;
-    bottom: -6px;
-    border-color: #e53935 transparent transparent transparent;
-  }
-  .field-fault-msg{
-    font-size: 0.5rem;
-  }
+.privacy-policy-section,
+.legal-notice-section {
+  max-width: 80%;
+  margin-bottom: 5rem;
 }
 
-
-/* ===== RESPONSIVE DESIGN - ADD TASK ===== */
-
-/* Desktop Large (1200px - 1400px) */
-@media (width <= 1400px) {
-  .container {
-    padding-left: 4rem;
-    padding-right: 2rem;
-  }
+.privacy-policy-section.left-328,
+.legal-notice-section.left-328 {
+  left: 74px
 }
 
-/* Tablet/Desktop Small (768px - 1200px) */
-@media (width <= 1200px) {
-  .container {
-    padding-left: 2rem;
-    padding-right: 2rem;
+@media(max-width: 560px) {
+
+  .privacy-policy-section.left-328,
+  .legal-notice-section.left-328 
+      {
+      left: 24px
+    }
+
+    .privacy-policy-section,
+    .legal-notice-section {
+      max-width: 90%;
+    }
   }
 
-  .form-wrapper {
-    flex-direction: column;
-    gap: 32px;
+
+  @media (max-width: 420px) {
+    .field-tooltip-error {
+      top: auto;
+      bottom: 100%;
+      transform: translateY(-6px);
+    }
+
+    .field-tooltip-error.visible {
+      transform: translateY(-8px);
+    }
+
+    .field-tooltip-error::after {
+      top: auto;
+      bottom: -6px;
+      border-color: #e53935 transparent transparent transparent;
+    }
+
+    .field-fault-msg {
+      font-size: 0.5rem;
+    }
   }
 
-  .page-title {
-    font-size: 48px;
+
+  /* ===== RESPONSIVE DESIGN - ADD TASK ===== */
+
+  /* Desktop Large (1200px - 1400px) */
+  @media (width <=1400px) {
+    .container {
+      padding-left: 4rem;
+      padding-right: 2rem;
+    }
   }
 
-  .divider {
-    display: none; /* In mobiler Ansicht ausblenden */
+  /* Tablet/Desktop Small (768px - 1200px) */
+  @media (width <=1200px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+
+    .form-wrapper {
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .page-title {
+      font-size: 48px;
+    }
+
+    .divider {
+      display: none;
+      /* In mobiler Ansicht ausblenden */
+    }
+
+    .left-section,
+    .right-section {
+      max-width: 100%;
+    }
   }
 
-  .left-section,
-  .right-section {
-    max-width: 100%;
-  }
-}
+  /* Tablet/Mobile Breakpoint (1024px) */
+  @media (width <=1024px) {
+    textarea {
+      width: 100%;
+    }
 
-/* Tablet/Mobile Breakpoint (1024px) */
-@media (width <= 1024px) {
-  textarea {
-    width: 100%;
-  }
-
-  .subtask-input-container {
-    width: 100%;
-  }
-}
-
-/* Tablet (600px - 768px) */
-@media (width <= 768px) {
-  .container {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    padding-top: 3rem;
+    .subtask-input-container {
+      width: 100%;
+    }
   }
 
-  .page-title {
-    font-size: 40px;
-    margin-bottom: 32px;
-  }
+  /* Tablet (600px - 768px) */
+  @media (width <=768px) {
+    .container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      padding-top: 3rem;
+    }
 
-  label {
-    font-size: 18px;
-  }
+    .page-title {
+      font-size: 40px;
+      margin-bottom: 32px;
+    }
 
-  input[type="text"],
-  input[type="date"],
-  textarea,
-  select {
-    font-size: 16px;
-  }
+    label {
+      font-size: 18px;
+    }
 
-  .button-group {
-    align-items: stretch;
-    flex-direction: column;
-    gap: 24px;
-  }
+    input[type="text"],
+    input[type="date"],
+    textarea,
+    select {
+      font-size: 16px;
+    }
 
-  .buttons {
-    justify-content: space-around;
-  }
+    .button-group {
+      align-items: stretch;
+      flex-direction: column;
+      gap: 24px;
+    }
 
-  textarea {
-    width: 100%;
-  }
+    .buttons {
+      justify-content: space-around;
+    }
 
-  .subtask-input-container {
-    width: 100%;
-  }
+    textarea {
+      width: 100%;
+    }
 
-  /* Auskommentiert - wird in add_task.css definiert */
-  /*
+    .subtask-input-container {
+      width: 100%;
+    }
+
+    /* Auskommentiert - wird in add_task.css definiert */
+    /*
   .btn-clear {
     width: clamp(82px, 26vw, 110px);
     height: clamp(42px, 13vw, 56px);
@@ -393,78 +425,78 @@ select {
     height: clamp(42px, 13vw, 56px);
   }
   */
-}
-
-/* Mobile (425px - 600px) */
-@media (width <= 600px) {
-  .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
-    padding-top: 2rem;
   }
 
-  .page-title {
-    font-size: 32px;
-    margin-bottom: 24px;
+  /* Mobile (425px - 600px) */
+  @media (width <=600px) {
+    .container {
+      padding-left: 1rem;
+      padding-right: 1rem;
+      padding-top: 2rem;
+    }
+
+    .page-title {
+      font-size: 32px;
+      margin-bottom: 24px;
+    }
+
+    .form-wrapper {
+      gap: 24px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 16px;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    textarea,
+    select {
+      font-size: 14px;
+      padding: 10px 14px;
+    }
+
+    .priority-buttons {
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .priority-btn {
+      font-size: 14px;
+      height: 48px;
+    }
+
+    .button-group {
+      gap: 16px;
+    }
+
+    .required-text {
+      font-size: 14px;
+    }
   }
 
-  .form-wrapper {
-    gap: 24px;
+  /* Mobile Small (320px - 425px) */
+  @media (width <=425px) {
+    .container {
+      padding-left: 0.75rem;
+      padding-right: 0.75rem;
+    }
+
+    .page-title {
+      font-size: 28px;
+    }
+
+    textarea {
+      width: 100%;
+    }
+
+    .subtask-input-container {
+      width: 100%;
+    }
+
+
   }
-
-  .form-group {
-    margin-bottom: 20px;
-  }
-
-  label {
-    font-size: 16px;
-  }
-
-  input[type="text"],
-  input[type="date"],
-  textarea,
-  select {
-    font-size: 14px;
-    padding: 10px 14px;
-  }
-
-  .priority-buttons {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .priority-btn {
-    font-size: 14px;
-    height: 48px;
-  }
-
-  .button-group {
-    gap: 16px;
-  }
-
-  .required-text {
-    font-size: 14px;
-  }
-}
-
-/* Mobile Small (320px - 425px) */
-@media (width <= 425px) {
-  .container {
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
-  }
-
-  .page-title {
-    font-size: 28px;
-  }
-
-  textarea {
-    width: 100%;
-  }
-
-  .subtask-input-container {
-    width: 100%;
-  }
-
-
-}

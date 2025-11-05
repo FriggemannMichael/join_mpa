@@ -23,9 +23,9 @@
     margin-right: 0;
     box-sizing: border-box;
   }
-  .login-view-wrapper .login-header-signup {
+  /* .login-view-wrapper .login-header-signup {
     display: none;
-  }
+  } */
 }
 
 /* Mobile 428px and below: special positioning */
@@ -544,7 +544,7 @@ body.dark-theme .goback:hover {
   }
 
   .signup-text {
-    display: none;
+    /* font-size: 0.875rem; */
   }
 }
 

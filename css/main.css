@@ -1,4 +1,4 @@
-@media (width <= 600px) {
+@media (width <=600px) {
   .login-footer {
     align-items: center;
     background: none;
@@ -33,13 +33,13 @@
   will-change: top, left, width, height;
 }
 
-@media (width <= 600px) {
+@media (width <=600px) {
   .splash-bg {
     background: #2a3647;
   }
 }
 
-@media (width >= 601px) {
+@media (width >=601px) {
   .splash-bg {
     background: #f6f7f8;
   }
@@ -524,7 +524,8 @@ main {
 }
 
 /* ===== RESPONSIVE DESIGN - HEADER ===== */
-@media (width <= 64rem) {
+@media (width <=64rem) {
+
   /* 1024px */
   .main__container {
     padding-bottom: 6rem;
@@ -532,10 +533,6 @@ main {
 
   .help-link {
     display: block;
-  }
-
-  .help-icon {
-    display: none;
   }
 
   .header-slogan {
@@ -557,7 +554,8 @@ main {
   }
 }
 
-@media (width <= 48rem) {
+@media (width <=48rem) {
+
   /* 768px */
   .sub-menu-close {
     /* Override desktop rule */
@@ -627,12 +625,13 @@ main {
   }
 }
 
-@media (width <= 26.5625rem) {
+@media (width <=26.5625rem) {
   /* 425px */
 }
 
 /* ===== RESPONSIVE DESIGN - NAVIGATION ===== */
-@media (width <= 64rem) {
+@media (width <=64rem) {
+
   /* 1024px */
   .nav-logo {
     display: none;
@@ -719,7 +718,8 @@ main {
   }
 }
 
-@media (width <= 48rem) {
+@media (width <=48rem) {
+
   /* 768px */
   nav {
     height: 5rem;
@@ -761,7 +761,8 @@ main {
   }
 }
 
-@media (width <= 22.8125rem) {
+@media (width <=22.8125rem) {
+
   /* 365px */
   nav {
     padding: 0 var(--space-xs);
@@ -781,7 +782,8 @@ main {
 }
 
 /* ===== RESPONSIVE DESIGN - MAIN ===== */
-@media (width <= 64rem) {
+@media (width <=64rem) {
+
   /* 1024px */
   .main__container {
     justify-content: center;
@@ -857,4 +859,16 @@ main {
     padding-top: 5rem;
     padding-bottom: 4rem;
   }
+
+  .privacy-policy-section h1 ,
+  .privacy-policy-section h2 {
+    hyphens: auto;
+  }
 }
+
+@media(max-width: 560px) {
+  .privacy-policy-section h1 {
+    font-size: 40px;
+  }
+}
+
