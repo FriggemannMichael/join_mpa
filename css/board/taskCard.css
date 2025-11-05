@@ -38,10 +38,14 @@
   width: fit-content;
 }
 
+.task_card {
+  gap: 24px;
+}
+
 .task_card_description {
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 8px;
 }
 
 h5 {
