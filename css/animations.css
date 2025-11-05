@@ -18,7 +18,7 @@
 }
 
 .brand-splash.brand-fixed {
-  left: 77px;
+  left: max(77px, calc((100vw - 90rem) / 2 + 77px));
   top: 80px;
   transform: translate(0, 0) scale(1);
 }
