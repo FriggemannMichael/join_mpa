@@ -1,13 +1,17 @@
+/* Auth CSS - Login, Signup, Header, Footer, Overlays */
+/* Mobile Sign-up Button im Footer */
 .signup-footer-mobile {
   display: none;
 }
 
+/* Desktop Sign-up header positioning */
 @media (min-width: 769px) {
   .signup-footer-mobile {
     display: none;
   }
 }
 
+/* Tablet: hide desktop header, show footer button */
 @media (max-width: 768px) and (min-width: 429px) {
   .signup-footer-mobile {
     display: inline-block;
@@ -19,8 +23,12 @@
     margin-right: 0;
     box-sizing: border-box;
   }
+  /* .login-view-wrapper .login-header-signup {
+    display: none;
+  } */
 }
 
+/* Mobile 428px and below: special positioning */
 @media (max-width: 428px) {
   .login-view-wrapper .login-header-signup {
     display: none;
@@ -30,12 +38,12 @@
     display: none;
   }
 
+  /* Show sign-up section below card */
   .login-view-wrapper::after {
     content: "";
     display: none;
   }
 }
-
 .login-footer {
   align-items: center;
   color: var(--grey-medium);
@@ -82,6 +90,7 @@
   text-decoration: underline;
 }
 
+/* Neue semantische Footer-Links (anstelle Buttons) */
 .login-footer__link {
   align-items: center;
   background: none;
@@ -113,6 +122,9 @@
   text-decoration: underline;
 }
 
+/* ===== SIGN UP OVERLAY STYLES ===== */
+
+/* === Signup Overlay (lightweight styles) === */
 .signup-overlay {
   align-items: center;
   background: rgb(0 0 0 / 40%);
@@ -210,6 +222,7 @@
   color: var(--color-danger);
 }
 
+/* ===== Full SignUp View (neues Markup) ===== */
 .signUp__view {
   align-items: center;
   display: flex;
@@ -292,6 +305,7 @@
   width: 150px;
 }
 
+/* Zurück Icon: keine Button-Stile, nur Image. Positionierung übernimmt .headline__container absolute Rule */
 .goback {
   align-items: center;
   background: none;
@@ -456,6 +470,7 @@ body.dark-theme .goback:hover {
   transform: translateY(1px);
 }
 
+/* Disabled state - important for overriding hover states */
 .btn__signUp.btn__disabled,
 .btn__signUp:disabled {
   background: #97a2b3;
@@ -482,6 +497,8 @@ body.dark-theme .goback:hover {
   }
 }
 
+/* ===== SIGN UP HEADER ===== */
+/* Desktop version - top right positioned absolute within .login-view-wrapper */
 .login-header-signup-desktop {
   align-items: center;
   display: flex;
@@ -492,6 +509,7 @@ body.dark-theme .goback:hover {
   z-index: 10;
 }
 
+/* Mobile version - hidden by default */
 .login-header-signup-mobile {
   display: none;
 }
@@ -529,6 +547,7 @@ body.dark-theme .goback:hover {
   }
 }
 
+/* ===== LOGIN VIEW ===== */
 .login-view-wrapper {
   align-items: center;
   display: flex;
@@ -540,6 +559,7 @@ body.dark-theme .goback:hover {
   position: relative;
   z-index: var(--z-base);
 
+  /* Footer für Login/Signup */
   .login-footer {
     align-items: center;
     color: var(--grey-medium);
@@ -740,6 +760,7 @@ a.btn-outline:hover {
   height: 0.0625rem;
 }
 
+/* Logo inside card - versteckt in Desktop und Mobile */
 .login-logo-fixed {
   display: none;
 }

@@ -12,7 +12,7 @@
   }
 }
 
-
+/* Splash-Screen Ergänzungen */
 .splash-bg {
   align-items: center;
   background: #2a3647;
@@ -27,13 +27,11 @@
   z-index: 9999;
 }
 
-
 .splash-logo {
   position: absolute;
   transition: all 100ms ease-in-out;
   will-change: top, left, width, height;
 }
-
 
 @media (width <=600px) {
   .splash-bg {
@@ -41,44 +39,44 @@
   }
 }
 
-
 @media (width >=601px) {
   .splash-bg {
     background: #f6f7f8;
   }
 }
 
+/* Main CSS - Hauptlayout-Komponenten (Header, Navigation, Main Container) */
 
+/* ===== LAYOUT CONTAINER ===== */
 .layout {
   max-width: 1920px;
   margin: 0 auto;
   position: relative;
 }
 
-
+/* ===== HEADER ===== */
 header {
   align-items: center;
   background-color: var(--white);
   box-shadow: var(--box-shadow-medium);
 
-  
+  /* remove left padding since we use left positioning */
   display: flex;
 
-  
+  /* full width minus sidebar width */
   height: 6rem;
   justify-content: space-between;
   left: 14.5rem;
 
-  
+  /* 96px */
   padding: var(--space-lg) var(--space-xxl);
   position: fixed;
   top: 0;
   width: calc(100% - 14.5rem);
 
-  
+  /* 232px - start after sidebar */
   z-index: var(--z-header);
 }
-
 
 .header-slogan {
   cursor: default;
@@ -86,30 +84,27 @@ header {
   margin: 0;
 }
 
-
 .header-icons {
   align-items: center;
   display: flex;
 
-  
+  /* 56px */
   gap: var(--space-md);
   height: 3.5rem;
   justify-content: space-between;
 }
 
-
 .help-icon {
   align-items: center;
   display: flex;
 
-  
+  /* 32px */
   height: 2rem;
   justify-content: center;
   width: 2rem;
 
-  
+  /* 32px */
 }
-
 
 .help-icon a {
   align-items: center;
@@ -118,39 +113,36 @@ header {
   text-decoration: none;
 }
 
-
 .help-icon img {
-  
+  /* 20px */
   height: 1.25rem;
   width: 1.25rem;
 
-  
+  /* 20px */
 }
-
 
 .help-icon img:hover {
   cursor: pointer;
 
-  
+  /* 24px */
   height: 1.5rem;
   width: 1.5rem;
 
-  
+  /* 24px */
 }
-
 
 .profile-icon {
   align-items: center;
 
-  
+  /* 56px */
   border-radius: var(--radius-round);
   box-shadow: inset 0 0 0 0.1875rem var(--primary-color);
 
-  
+  /* 3px */
   cursor: pointer;
   display: flex;
 
-  
+  /* 56px */
   height: 3.5rem;
   justify-content: center;
   position: relative;
@@ -158,46 +150,41 @@ header {
   width: 3.5rem;
 }
 
-
 .profile-icon:hover {
   box-shadow: inset 0 0 0 0.1875rem var(--secondary-color);
   transform: scale(1.05);
 
-  
+  /* 3px */
 }
-
 
 .profile-name {
   align-items: center;
 
-  
+  /* 48px */
   border-radius: 34.9375rem;
 
-  
+  /* 559px */
   color: var(--secondary-color);
   display: flex;
   font-size: var(--font-lg);
   font-weight: 700;
 
-  
+  /* 48px */
   height: 3rem;
   justify-content: center;
   width: 3rem;
 }
 
-
 .guest-font-size {
   font-size: 1.75rem;
 
-  
+  /* 28px */
 }
-
 
 .profile-name:hover {
   background-color: rgb(12 46 98 / 12%);
   cursor: pointer;
 }
-
 
 .sub-menu-bg {
   display: block;
@@ -209,13 +196,11 @@ header {
   z-index: var(--z-submenu-bg);
 }
 
-
 body.sub-menu-bg-open {
   overflow: hidden;
   position: relative;
   touch-action: none;
 }
-
 
 .sub-menu {
   background-color: var(--primary-color);
@@ -232,14 +217,12 @@ body.sub-menu-bg-open {
   z-index: var(--z-submenu);
 }
 
-
 .sub-menu-open {
   opacity: 1;
   pointer-events: auto;
   transform: translateX(0);
   visibility: visible;
 }
-
 
 .sub-menu-close {
   opacity: 0;
@@ -248,7 +231,7 @@ body.sub-menu-bg-open {
   visibility: hidden;
 }
 
-
+/* Desktop dropdown states */
 .sub-menu :is(a, button) {
   background: none;
   border: none;
@@ -263,36 +246,33 @@ body.sub-menu-bg-open {
   width: 100%;
 }
 
-
 .sub-menu :is(a, button):is(:hover, :focus-visible) {
   background-color: var(--secondary-color);
   color: var(--white);
   outline: none;
 }
 
-
 .help-link {
   display: none;
 }
 
-
 .header-logo {
-  
+  /* 56px */
   display: none;
   height: 3.5rem;
 }
 
-
+/* ===== NAVIGATION ===== */
 nav {
   align-items: center;
 
-  
+  /* 64px */
   background-color: var(--primary-color);
   box-shadow: var(--box-shadow-light);
   display: flex;
   flex-direction: column;
 
-  
+  /* 232px */
   height: 100vh;
   justify-content: space-between;
   left: 0;
@@ -303,44 +283,40 @@ nav {
   z-index: var(--z-nav);
 }
 
-
 .nav-logo {
   height: 7.6231rem;
 
-  
+  /* 121.97px */
   width: 6.2519rem;
 
-  
+  /* 100.03px */
 }
-
 
 .nav-menu {
   display: flex;
   flex-direction: column;
 
-  
+  /* 232px */
   gap: 0.9375rem;
   height: 14.3125rem;
 
-  
+  /* 229px */
   width: 14.5rem;
 
-  
+  /* 15px */
 }
 
-
 .nav-link {
-  
+  /* 53px */
   color: var(--grey-light);
   cursor: pointer;
   display: flex;
   gap: 0.375rem;
 
-  
+  /* 6px */
   padding: var(--space-xs) 3.3125rem;
   transition: var(--transition-fast);
 }
-
 
 .link-active {
   background-color: var(--color-btn-active);
@@ -348,107 +324,95 @@ nav {
   pointer-events: none;
 }
 
-
 .nav-link:hover {
   background-color: var(--grey-dark);
   transition: var(--transition-fast);
 }
 
-
 .nav-link:hover img {
-  
+  /* 2px */
   left: 0.1875rem;
   top: 0.125rem;
 
-  
+  /* 3px */
 }
 
-
 .nav-link:hover .link-name p {
-  
+  /* 5px */
   left: 0.03125rem;
   top: 0.3125rem;
 
-  
+  /* 0.5px */
 }
-
 
 .link-name {
   position: relative;
   width: 4.5rem;
 
-  
+  /* 72px */
 }
-
 
 .link-name p {
   position: absolute;
   top: 0.34375rem;
 
-  
+  /* 5.5px */
 }
 
-
 .link-icon {
-  
+  /* 30px */
   height: 1.875rem;
   position: relative;
   width: 1.875rem;
 
-  
+  /* 30px */
 }
 
-
 .link-icon img {
-  
+  /* 25px */
   height: 1.5625rem;
 
-  
+  /* 2.5px */
   left: 0.15625rem;
   position: absolute;
   top: 0.15625rem;
 
-  
+  /* 2.5px */
   width: 1.5625rem;
 
-  
+  /* 25px */
 }
-
 
 .privacy-and-legal {
   display: flex;
   flex-direction: column;
 
-  
+  /* 232px */
   gap: var(--space-xxs);
   width: 14.5rem;
 }
-
 
 .privacy-and-legal a {
   color: var(--grey-medium);
   padding: var(--space-xs) var(--space-xs) var(--space-xs) 3.25rem;
   text-align: left;
 
-  
+  /* 52px */
 }
 
-
 .privacy-and-legal a p {
-  
+  /* 110px */
   height: 1.1875rem;
   width: 6.875rem;
 
-  
+  /* 19px */
 }
-
 
 .privacy-and-legal :last-child p {
   width: 6.25rem;
 
-  
+  /* 100px */
 }
-
 
 .privacy-and-legal a p:hover {
   color: var(--secondary-color);
@@ -456,11 +420,10 @@ nav {
   font-weight: 700;
 }
 
-
+/* Navigation - Auth-basierte Sichtbarkeit */
 .nav-link-hidden {
   display: none !important;
 }
-
 
 #loginIcon {
   display: flex;
@@ -470,43 +433,36 @@ nav {
   width: 1.875rem;
 }
 
-
 #loginIcon svg {
   width: 100%;
   height: 100%;
   color: var(--grey-light);
 }
 
-
 .link-login:hover #loginIcon svg {
   color: var(--white);
 }
-
 
 .link-1 {
   order: 1;
 }
 
-
 .link-2 {
   order: 2;
 }
-
 
 .link-3 {
   order: 3;
 }
 
-
 .link-4 {
   order: 4;
 }
 
-
+/* ===== MAIN CONTAINER ===== */
 main {
   font-family: var(--font-family);
 }
-
 
 .main__container {
   align-items: center;
@@ -515,19 +471,18 @@ main {
   height: 100%;
   max-width: 90rem;
 
-  
+  /* 96px */
 
-  
+  /* padding-bottom: var(--space-xxl); */
   padding-left: 14.5rem;
   padding-top: 6rem;
   position: relative;
 
-  
+  /* 1440px */
   width: 100%;
 
-  
+  /* 232px sidebar + spacing */
 }
-
 
 .standalone-page {
   background-color: var(--white);
@@ -536,7 +491,6 @@ main {
   min-height: 100vh;
 }
 
-
 .standalone-header {
   align-items: center;
   display: flex;
@@ -544,24 +498,20 @@ main {
   padding: var(--space-lg) var(--space-xl);
 }
 
-
 .standalone-back {
   color: var(--primary-color);
   font-weight: 600;
 }
 
-
 .standalone-logo {
   height: 3rem;
 }
-
 
 .standalone {
   align-items: center;
   display: flex;
   justify-content: center;
 }
-
 
 .standalone-card {
   background: var(--white);
@@ -573,156 +523,138 @@ main {
   width: 100%;
 }
 
-
+/* ===== RESPONSIVE DESIGN - HEADER ===== */
 @media (width <=64rem) {
 
-  
+  /* 1024px */
   .main__container {
     padding-bottom: 6rem;
   }
 
-
-.help-link {
+  .help-link {
     display: block;
   }
 
-
-.header-slogan {
+  .header-slogan {
     display: none;
   }
 
-
-.header-logo {
+  .header-logo {
     display: block;
   }
 
-
-header {
+  header {
     left: 0;
 
-    
+    /* full width on tablet/mobile */
     padding: var(--space-lg) var(--space-xxl);
 
-    
+    /* reset left positioning on tablet/mobile */
     width: 100%;
   }
 }
 
-
 @media (width <=48rem) {
 
-  
+  /* 768px */
   .sub-menu-close {
-    
+    /* Override desktop rule */
     opacity: 0 !important;
     transform: translateX(200%) !important;
   }
 
-
-.sub-menu-open {
+  .sub-menu-open {
     opacity: 1 !important;
     transform: translateX(0) !important;
   }
 
-
-header {
-    
+  header {
+    /* 36px */
     height: 5rem;
 
-    
+    /* 80px */
   }
 
-
-.sub-menu {
-    
+  .sub-menu {
+    /* 60px */
     right: 0.625rem;
     top: 3.75rem;
 
-    
+    /* 10px */
   }
 
-
-.header-logo {
+  .header-logo {
     height: 2.4375rem;
 
-    
+    /* 39px */
   }
 
-
-.header-icons {
+  .header-icons {
     height: 2.5rem;
 
-    
+    /* 40px */
   }
 
-
-.profile-icon {
+  .profile-icon {
     height: 2.5rem;
 
-    
+    /* 40px */
     width: 2.5rem;
 
-    
+    /* 40px */
   }
 
-
-.profile-name {
-    
+  .profile-name {
+    /* 32px */
     font-size: var(--font-sm);
     height: 2rem;
 
-    
+    /* 32px */
     width: 2rem;
   }
 
-
-.guest-font-size {
+  .guest-font-size {
     font-size: 1.125rem;
 
-    
+    /* 18px */
   }
 
-
-.main__container {
+  .main__container {
     padding-top: 5rem;
     padding-bottom: 5rem;
   }
 }
 
-
 @media (width <=26.5625rem) {
-  
+  /* 425px */
 }
 
-
+/* ===== RESPONSIVE DESIGN - NAVIGATION ===== */
 @media (width <=64rem) {
 
-  
+  /* 1024px */
   .nav-logo {
     display: none;
   }
 
-
-.privacy-and-legal {
+  .privacy-and-legal {
     display: none;
   }
 
-
-nav {
+  nav {
     bottom: 0;
 
-    
+    /* 96px */
     display: block;
     height: 6rem;
     padding: 0 1.625rem;
     top: auto;
     width: 100%;
 
-    
+    /* 26px */
   }
 
-
-.nav-menu {
+  .nav-menu {
     align-items: center;
     flex-direction: row;
     height: 100%;
@@ -730,153 +662,136 @@ nav {
     width: 100%;
   }
 
-
-.nav-link {
+  .nav-link {
     align-items: center;
 
-    
+    /* 86px */
     border-radius: var(--radius-lg);
     flex-direction: column;
     gap: var(--space-xs);
 
-    
+    /* 96px */
     height: 5.375rem;
     justify-content: center;
     padding: 0.9375rem 0;
     width: 6rem;
 
-    
+    /* 15px */
   }
 
-
-.link-name p {
+  .link-name p {
     position: static;
     text-align: center;
   }
 
-
-.link-icon {
+  .link-icon {
     height: 1.75rem;
 
-    
+    /* 28px */
     width: 1.75rem;
 
-    
+    /* 28px */
   }
 
-
-.link-icon img {
+  .link-icon img {
     height: 1.75rem;
     position: static;
     width: auto;
 
-    
+    /* 28px */
   }
 
-
-.link-1 {
+  .link-1 {
     order: 1;
   }
 
-
-.link-2 {
+  .link-2 {
     order: 3;
   }
 
-
-.link-3 {
+  .link-3 {
     order: 2;
   }
 
-
-.link-4 {
+  .link-4 {
     order: 4;
   }
 }
 
-
 @media (width <=48rem) {
 
-  
+  /* 768px */
   nav {
     height: 5rem;
 
-    
+    /* 80px */
     padding: 0 var(--space-md);
   }
 
-
-.nav-link {
-    
+  .nav-link {
+    /* 76px */
     gap: var(--space-xxs);
 
-    
+    /* 80px */
     height: 4.75rem;
     width: 5rem;
   }
 
-
-.nav-link:hover {
+  .nav-link:hover {
     background-color: var(--primary-color);
   }
 
-
-.link-name p {
+  .link-name p {
     font-size: var(--font-sm);
   }
 
-
-.link-icon {
+  .link-icon {
     height: 1.5rem;
 
-    
+    /* 24px */
     width: 1.5rem;
 
-    
+    /* 24px */
   }
 
-
-.link-icon img {
+  .link-icon img {
     height: 1.5rem;
 
-    
+    /* 24px */
   }
 }
 
-
 @media (width <=22.8125rem) {
 
-  
+  /* 365px */
   nav {
     padding: 0 var(--space-xs);
   }
 
-
-.nav-menu {
+  .nav-menu {
     gap: var(--space-xs);
   }
 
-
-.nav-link {
-    
+  .nav-link {
+    /* 68px */
     height: 4.375rem;
     width: 4.25rem;
 
-    
+    /* 70px */
   }
 }
 
-
+/* ===== RESPONSIVE DESIGN - MAIN ===== */
 @media (width <=64rem) {
 
-  
+  /* 1024px */
   .main__container {
     justify-content: center;
     padding-left: 0;
   }
 }
 
-
+/* Privacy Policy Typografie */
 .privacy-policy-section h1 {
   font-family: var(--font-family);
   font-size: 61px;
@@ -886,7 +801,6 @@ nav {
   line-height: 120%;
 }
 
-
 .privacy-policy-section h2 {
   font-family: var(--font-family);
   font-size: 27px;
@@ -895,7 +809,6 @@ nav {
   letter-spacing: 0;
   line-height: 120%;
 }
-
 
 .privacy-policy-section p,
 .privacy-policy-section ul,
@@ -908,7 +821,6 @@ nav {
   line-height: 120%;
 }
 
-
 .summary_card {
   align-items: center;
   background-color: var(--white);
@@ -920,19 +832,16 @@ nav {
   padding: var(--summary-card-padding-y) var(--summary-card-padding-x);
 }
 
-
 .df_row {
   display: flex;
   gap: var(--summary-gap);
 }
 
-
 .gap_18 {
   gap: 1.125rem;
 
-  
+  /* 18px */
 }
-
 
 .round_icon {
   align-items: center;
@@ -945,23 +854,21 @@ nav {
   width: var(--summary-icon-size);
 }
 
-
 @media (max-width: 768px) {
   .main__container {
     padding-top: 5rem;
     padding-bottom: 4rem;
   }
 
-
-.privacy-policy-section h1 ,
+  .privacy-policy-section h1 ,
   .privacy-policy-section h2 {
     hyphens: auto;
   }
 }
-
 
 @media(max-width: 560px) {
   .privacy-policy-section h1 {
     font-size: 40px;
   }
 }
+
