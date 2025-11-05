@@ -88,7 +88,7 @@
   align-items: center;
   background: none;
   border: none;
-  color: var(--primary-color);
+  color: var(--grey-medium);
   cursor: pointer;
   display: flex;
   font-family: Inter, Arial, sans-serif;
@@ -223,6 +223,24 @@
   position: relative;
   z-index: var(--z-base);
   gap: 1rem;
+
+  .login-footer {
+    align-items: center;
+    color: var(--grey-medium);
+    display: flex;
+    flex-direction: row;
+    font-family: Inter, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    gap: 8px;
+    height: 35px;
+    justify-content: center;
+    line-height: 120%;
+    margin: 2rem auto 0;
+    opacity: 1;
+    padding-bottom: 16px;
+    width: 246px;
+  }
 }
 
 .signUp__container {

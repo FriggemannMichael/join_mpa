@@ -161,30 +161,44 @@ function getPageName(path) {
 
 /**
  * Richtet die Navigation basierend auf dem Auth-Status ein
- * Blendet geschützte Menü-Items aus, wenn User nicht eingeloggt ist
- * ODER wenn User direkt von Login/Signup-Seite kommt
+ * Zeigt normale Menü-Links wenn eingeloggt (inkl. Guest)
+ * Zeigt Login-Link auf Legal/Privacy/Help wenn nicht eingeloggt
  */
 function setupAuthBasedNavigation() {
   const user = getActiveUser();
-  const isGuest = !user || user.provider === "guest";
+  const isLoggedIn = !!user;
 
-  const referrer = document.referrer;
-  const comesFromAuth =
-    referrer.includes("login.html") || referrer.includes("signup.html");
+  const currentPage = getPageName(window.location.pathname);
+  const isLegalPage =
+    currentPage === "legal.html" ||
+    currentPage === "privacy.html" ||
+    currentPage === "help.html";
 
   const authRequiredLinks = document.querySelectorAll("[data-auth-required]");
   const guestOnlyLinks = document.querySelectorAll("[data-guest-only]");
 
-  authRequiredLinks.forEach((link) => {
-    link.classList.toggle("nav-link-hidden", isGuest || comesFromAuth);
-  });
-
-  guestOnlyLinks.forEach((link) => {
-    link.classList.toggle("nav-link-hidden", !isGuest && !comesFromAuth);
-  });
-
-  if (isGuest || comesFromAuth) {
+  if (isLoggedIn) {
+    authRequiredLinks.forEach((link) => {
+      link.classList.remove("nav-link-hidden");
+    });
+    guestOnlyLinks.forEach((link) => {
+      link.classList.add("nav-link-hidden");
+    });
+  } else if (isLegalPage) {
+    authRequiredLinks.forEach((link) => {
+      link.classList.add("nav-link-hidden");
+    });
+    guestOnlyLinks.forEach((link) => {
+      link.classList.remove("nav-link-hidden");
+    });
     renderLoginIcon();
+  } else {
+    authRequiredLinks.forEach((link) => {
+      link.classList.add("nav-link-hidden");
+    });
+    guestOnlyLinks.forEach((link) => {
+      link.classList.add("nav-link-hidden");
+    });
   }
 }
 
