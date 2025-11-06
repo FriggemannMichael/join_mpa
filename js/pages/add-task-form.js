@@ -8,7 +8,7 @@ import { icons } from "../common/svg-template.js";
 import { subtasks, renderSubtasks } from "./add-task-subtasks.js";
 import { updateAssigneeSelection } from "./add-task-assignees-ui.js";
 import { validatePriorityGroup } from "../validation/validation-fields.js";
-import { updateAddTaskValidationButton  } from "../validation/validation-addTask.js"; 
+import { updateAddTaskValidationButton } from "../validation/validation-addTask.js";
 
 /**
  * Bindet Event-Listener für Prioritäts-Buttons
@@ -40,6 +40,7 @@ export function setActivePriority(activeButton) {
   const group = activeButton.closest(".priority-buttons");
   validatePriorityGroup(group, "Priority", { show: true });
 
+  // Gesamt-Button-Status aktualisieren
   updateAddTaskValidationButton?.();
 }
 

@@ -4,22 +4,18 @@
     justify-content: center;
   }
 
-
-.brand-splash.brand-fixed {
+  .brand-splash.brand-fixed {
     position: absolute;
     z-index: calc(var(--z-splash) + 10);
   }
 }
 
-
 @media (width <= 430px) {
-  
   .login-view-wrapper .login-header-signup-desktop {
     display: none;
   }
 
-
-.login-view-wrapper {
+  .login-view-wrapper {
     align-items: center;
     display: flex;
     flex-direction: column;
@@ -30,22 +26,19 @@
     justify-content: flex-start;
   }
 
-
-.brand-splash.brand-fixed {
+  .brand-splash.brand-fixed {
     z-index: calc(var(--z-splash) + 10);
     position: absolute;
   }
 
-
-.login-view-wrapper .login-card {
+  .login-view-wrapper .login-card {
     margin-bottom: 0;
     position: relative;
     top: auto;
     left: auto;
   }
 
-
-.login-view-wrapper .login-header-signup-mobile {
+  .login-view-wrapper .login-header-signup-mobile {
     align-items: center;
     display: flex !important;
     flex-direction: row;
@@ -61,8 +54,7 @@
     box-sizing: border-box;
   }
 
-
-.login-header-signup-mobile .signup-text {
+  .login-header-signup-mobile .signup-text {
     color: var(--black);
     font-size: 0.9375rem;
     font-weight: 400;
@@ -71,8 +63,7 @@
     display: block;
   }
 
-
-.login-header-signup-mobile .btn-signup {
+  .login-header-signup-mobile .btn-signup {
     background: var(--primary-color);
     border: none;
     border-radius: 8px;
@@ -93,13 +84,11 @@
     flex: 0 0 auto;
   }
 
-
-.login-header-signup-mobile .btn-signup:hover {
+  .login-header-signup-mobile .btn-signup:hover {
     background: var(--secondary-color);
   }
 
-
-.login-card {
+  .login-card {
     border-radius: 30px;
     box-shadow: 0 0 14px rgb(0 0 0 / 4%);
     margin: 0 1rem;
@@ -115,19 +104,16 @@
     transition: opacity 0.3s ease, transform 0.3s ease;
   }
 
-
-.login-card-hidden {
+  .login-card-hidden {
     opacity: 0;
     transform: translateY(20px);
   }
 
-
-.login-header {
+  .login-header {
     margin-bottom: 0.5rem;
   }
 
-
-.login-header h1 {
+  .login-header h1 {
     font-size: 3.8125rem;
     font-weight: 700;
     letter-spacing: 0.5px;
@@ -136,8 +122,7 @@
     text-align: center;
   }
 
-
-.signUp__separator_login {
+  .signUp__separator_login {
     background-color: var(--secondary-color);
     border: none;
     border-radius: 1.5px;
@@ -146,20 +131,17 @@
     width: 88px;
   }
 
-
-.inputField__container {
+  .inputField__container {
     margin-bottom: 0;
     width: 100%;
     box-sizing: border-box;
   }
 
-
-.inputField__container-margin24 {
+  .inputField__container-margin24 {
     margin-bottom: 2.0625rem;
   }
 
-
-.inputField__container input {
+  .inputField__container input {
     border: 1px solid #d1d1d1;
     border-radius: 9.5px;
     font-size: 1rem;
@@ -169,14 +151,12 @@
     box-sizing: border-box;
   }
 
-
-.inputField__username__icon,
+  .inputField__username__icon,
   .inputField__password__icon {
     right: 1rem;
   }
 
-
-.login-actions {
+  .login-actions {
     display: flex;
     flex-direction: row;
     gap: 1rem;
@@ -186,8 +166,7 @@
     padding: 0;
   }
 
-
-button.btn,
+  button.btn,
   a.btn {
     border-radius: 8px;
     font-size: 1rem;
@@ -207,33 +186,28 @@ button.btn,
     white-space: nowrap;
   }
 
-
-a.btn {
+  a.btn {
     line-height: 1;
     padding: 0 1rem;
   }
 
-
-button.btn-primary,
+  button.btn-primary,
   a.btn-primary {
     background: var(--primary-color);
   }
 
-
-button.btn-outline,
+  button.btn-outline,
   a.btn-outline {
     background: var(--white);
     border: 1px solid var(--primary-color);
     color: var(--primary-color);
   }
 
-
-.login-view-wrapper .signup-footer-mobile {
+  .login-view-wrapper .signup-footer-mobile {
     display: none;
   }
 
-
-.login-footer {
+  .login-footer {
     display: flex;
     flex-direction: row;
     gap: 1rem;
@@ -244,8 +218,7 @@ button.btn-outline,
     width: 100%;
   }
 
-
-.login-footer__link {
+  .login-footer__link {
     color: var(--grey-medium);
     font-size: 16px;
     height: auto;
@@ -254,47 +227,39 @@ button.btn-outline,
     width: auto;
   }
 
-
-.login-footer__link:hover {
+  .login-footer__link:hover {
     text-decoration: underline;
   }
 }
 
-
 @media (width <= 375px) {
-  
   .login-view-wrapper {
     padding-top: 8rem;
   }
 
-
-.login-card {
+  .login-card {
     max-width: 343px;
     padding: 2rem 1.5rem 1.75rem;
     width: calc(100% - 2rem);
     box-sizing: border-box;
   }
 
-
-.login-header h1 {
+  .login-header h1 {
     font-size: 3.25rem;
     letter-spacing: 0.4px;
   }
 
-
-.signUp__separator_login {
+  .signUp__separator_login {
     width: 76px;
   }
 
-
-.inputField__container input {
+  .inputField__container input {
     font-size: 0.9375rem;
     height: 45px;
     padding: 0 2.75rem 0 0.875rem;
   }
 
-
-button.btn,
+  button.btn,
   a.btn {
     font-size: 0.9375rem;
     height: 48px;
@@ -304,15 +269,13 @@ button.btn,
     min-width: 120px;
   }
 
-
-a.btn {
+  a.btn {
     box-sizing: border-box;
     line-height: 1;
     padding: 0 0.75rem;
   }
 
-
-.login-actions {
+  .login-actions {
     display: flex;
     flex-direction: row;
     gap: 0.75rem;
@@ -321,42 +284,35 @@ a.btn {
     justify-content: center;
   }
 
-
-.login-view-wrapper .login-header-signup-mobile {
+  .login-view-wrapper .login-header-signup-mobile {
     display: flex !important;
     gap: 0.875rem;
   }
 
-
-.login-header-signup-mobile .signup-text {
+  .login-header-signup-mobile .signup-text {
     font-size: 0.9375rem;
   }
 
-
-.btn-signup {
+  .btn-signup {
     font-size: 0.9375rem;
     height: 46px;
     width: 96px;
     min-width: 96px;
   }
 
-
-.login-footer__link {
+  .login-footer__link {
     font-size: 14px;
     padding: 0.375rem;
   }
 }
 
-
 @media (width <= 320px) {
-  
   .login-view-wrapper {
     padding: 7.5rem 0 1.5rem;
     justify-content: flex-start;
   }
 
-
-.login-card {
+  .login-card {
     border-radius: 24px;
     margin: 0 0.75rem;
     max-width: 100%;
@@ -366,41 +322,35 @@ a.btn {
     box-sizing: border-box;
   }
 
-
-.login-header h1 {
+  .login-header h1 {
     font-size: 2.75rem;
     letter-spacing: 0.3px;
   }
 
-
-.signUp__separator_login {
+  .signUp__separator_login {
     height: 2.5px;
     margin: 0.875rem auto 1.25rem;
     width: 65px;
   }
 
-
-.inputField__container input {
+  .inputField__container input {
     border-radius: 8px;
     font-size: 0.875rem;
     height: 42px;
     padding: 0 2.5rem 0 0.75rem;
   }
 
-
-.inputField__container-margin24 {
+  .inputField__container-margin24 {
     margin-bottom: 1.25rem;
   }
 
-
-.inputField__username__icon,
+  .inputField__username__icon,
   .inputField__password__icon {
     right: 0.75rem;
     width: 1.25rem;
   }
 
-
-button.btn,
+  button.btn,
   a.btn {
     border-radius: 7px;
     font-size: 0.8125rem;
@@ -412,23 +362,20 @@ button.btn,
     min-width: 100px;
   }
 
-
-a.btn {
+  a.btn {
     box-sizing: border-box;
     line-height: 1;
     padding: 0 0.5rem;
   }
 
-
-.login-actions {
+  .login-actions {
     gap: 0.5rem;
     margin-top: 1.25rem;
     flex-direction: row;
     justify-content: center;
   }
 
-
-button.btn-primary,
+  button.btn-primary,
   button.btn-outline,
   a.btn-primary,
   a.btn-outline {
@@ -436,21 +383,18 @@ button.btn-primary,
     white-space: nowrap;
   }
 
-
-.login-view-wrapper .login-header-signup-mobile {
+  .login-view-wrapper .login-header-signup-mobile {
     display: flex !important;
     height: 44px;
     margin: 1.5rem auto;
     gap: 0.75rem;
   }
 
-
-.login-header-signup-mobile .signup-text {
+  .login-header-signup-mobile .signup-text {
     font-size: 0.875rem;
   }
 
-
-.login-header-signup-mobile .btn-signup {
+  .login-header-signup-mobile .btn-signup {
     border-radius: 7px;
     font-size: 0.875rem;
     height: 44px;
@@ -459,15 +403,13 @@ button.btn-primary,
     min-width: 88px;
   }
 
-
-.login-footer {
+  .login-footer {
     flex-direction: column;
     gap: 0.5rem;
     padding: 1rem 0 1.5rem;
   }
 
-
-.login-footer__link {
+  .login-footer__link {
     font-size: 13px;
     padding: 0.25rem;
   }

@@ -248,10 +248,11 @@ select {
 
 .field-fault-msg {
   position: absolute;
-  top: 90%;
+  top: 100%;
   left: 0;
-  transform: translateY(6px);
+  transform: translateY(12px);
   padding: 0px 10px;
+  margin-bottom: 1.5rem;
   font-size: 0.875rem;
   line-height: 1.3;
   color: #e60026;

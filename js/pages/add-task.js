@@ -13,7 +13,7 @@ import {
   toggleCategoryDropdown,
   selectCategory,
 } from "./add-task-form.js";
-import {mountAddTaskValidation} from "../validation/validation-addTask.js"
+import { mountAddTaskValidation } from "../validation/validation-addTask.js";
 
 initAddTaskPage();
 

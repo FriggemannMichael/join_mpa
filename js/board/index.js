@@ -6,11 +6,12 @@ import { observeTasks } from "./state/liveTasks.js";
 import { buildColumnsConfig, groupTasksByStatus } from "./state/columns.js";
 import { renderColumn } from "./components/columns.js";
 import { setGlobalButtonsDisabled } from "./utils.js";
-import { selectCategory, toggleCategoryDropdown } from "../pages/add-task-form.js";
-
+import {
+  selectCategory,
+  toggleCategoryDropdown,
+} from "../pages/add-task-form.js";
 
 initBoardPage();
-
 
 /**
  * Initializes the main board page and its core features.
@@ -25,10 +26,9 @@ async function initBoardPage() {
   await bootLayout();
   initBoardSearch();
   bindColumnShortcuts();
-  await observeTasks();
+  observeTasks();
   setGlobalButtonsDisabled(false);
 }
-
 
 /**
  * Renders the entire board with all task columns.

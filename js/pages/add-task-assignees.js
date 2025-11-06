@@ -4,9 +4,13 @@
  */
 
 import { auth } from "../common/firebase.js";
+import { getActiveUser } from "../common/session.js";
 import { loadFirebaseDatabase } from "../common/database.js";
-import { renderAssigneeDropdown, updateAssigneeSelection, filterAssignees } from "./add-task-assignees-ui.js";
-
+import {
+  renderAssigneeDropdown,
+  updateAssigneeSelection,
+  filterAssignees,
+} from "./add-task-assignees-ui.js";
 
 /**
  * Lädt und füllt die Assignee-Auswahlliste mit Kontakten
@@ -18,7 +22,7 @@ export async function populateAssignees() {
 
   setAssigneeLoading(true);
 
-  const currentUser = auth.currentUser;
+  const currentUser = getActiveUser();
   if (!currentUser) {
     setAssigneeLoading(false);
     return;
@@ -27,7 +31,6 @@ export async function populateAssignees() {
   await loadAssigneesFromDatabase(dropdown, currentUser.uid);
   bindAssigneeEvents();
 }
-
 
 /**
  * Lädt Kontakte aus der Firebase-Datenbank
@@ -43,7 +46,6 @@ async function loadAssigneesFromDatabase(dropdown, currentUserUid) {
   }
 }
 
-
 /**
  * Holt Kontakte aus Firebase
  * @returns {Promise<Object|null>} Kontakte-Objekt oder null
@@ -53,7 +55,6 @@ async function fetchContactsFromFirebase() {
   const snapshot = await db.get(db.ref(db.getDatabase(), "contacts"));
   return snapshot.exists() ? snapshot.val() : null;
 }
-
 
 /**
  * Behandelt erfolgreich geladene Kontakte
@@ -77,7 +78,6 @@ function handleContactsLoaded(dropdown, contacts, currentUserUid) {
   setAssigneeLoading(false);
 }
 
-
 /**
  * Behandelt Fehler beim Laden der Kontakte
  * @param {Error} error Fehler-Objekt
@@ -94,7 +94,6 @@ function handleContactsLoadError(error) {
   showErrorStatus(message);
 }
 
-
 /**
  * Zeigt eine Fehlermeldung an
  * @param {string} message Fehlermeldung
@@ -105,7 +104,6 @@ function showErrorStatus(message) {
   status.textContent = message;
   status.classList.add("error");
 }
-
 
 /**
  * Baut Assignee-Optionen aus rohen Kontakt-Daten
@@ -118,7 +116,6 @@ function buildAssigneeOptions(rawUsers, currentUid) {
   const mappedUsers = mapUsersToOptions(users, currentUid);
   return sortUsersByLabel(mappedUsers);
 }
-
 
 /**
  * Mappt User-Objekte zu Assignee-Optionen
@@ -133,7 +130,6 @@ function mapUsersToOptions(users, currentUid) {
     .filter((entry) => entry.value);
 }
 
-
 /**
  * Erstellt eine Assignee-Option aus einem User-Entry
  * @param {Object} entry User-Entry
@@ -143,12 +139,16 @@ function mapUsersToOptions(users, currentUid) {
 function createAssigneeOption(entry, currentUid) {
   return {
     value: entry.uid || entry.email || "",
-    label: entry.name || entry.displayName || entry.email || entry.uid || "Unbekannt",
+    label:
+      entry.name ||
+      entry.displayName ||
+      entry.email ||
+      entry.uid ||
+      "Unbekannt",
     email: entry.email || "",
     isCurrentUser: entry.uid === currentUid,
   };
 }
-
 
 /**
  * Sortiert User-Optionen alphabetisch nach Label
@@ -158,7 +158,6 @@ function createAssigneeOption(entry, currentUid) {
 function sortUsersByLabel(users) {
   return users.sort((a, b) => a.label.localeCompare(b.label, "de"));
 }
-
 
 /**
  * Bindet Event-Listener für Assignee-Dropdown
@@ -174,7 +173,6 @@ function bindAssigneeEvents() {
   bindSearchInputEvent(searchInput);
 }
 
-
 /**
  * Bindet Click-Event für Header
  * @param {HTMLElement} header Header-Element
@@ -188,7 +186,6 @@ function bindHeaderClickEvent(header) {
     toggleAssigneeDropdown();
   });
 }
-
 
 /**
  * Bindet Change-Event für Dropdown
@@ -207,7 +204,6 @@ function bindDropdownChangeEvent(dropdown) {
   });
 }
 
-
 /**
  * Bindet Outside-Click-Event zum Schließen des Dropdowns
  * @param {HTMLElement} dropdown Dropdown-Element
@@ -223,7 +219,6 @@ function bindOutsideClickEvent(dropdown) {
     signal: ctrl.signal,
   });
 }
-
 
 /**
  * Togglet die Sichtbarkeit des Assignee-Dropdowns
@@ -245,11 +240,10 @@ function toggleAssigneeDropdown() {
 
   // Suchfeld leeren beim Schließen
   if (!isOpening && searchInput) {
-    searchInput.value = '';
-    filterAssignees('');
+    searchInput.value = "";
+    filterAssignees("");
   }
 }
-
 
 /**
  * Bindet Event-Listener für das Suchfeld
@@ -271,7 +265,6 @@ function bindSearchInputEvent(searchInput) {
   });
 }
 
-
 /**
  * Setzt den Loading-Status für Assignees
  * @param {boolean} isLoading Loading-Status
@@ -285,7 +278,6 @@ function setAssigneeLoading(isLoading) {
   }
 }
 
-
 /**
  * Extrahiert Initialen aus einem Namen
  * @param {string} name Name
@@ -298,7 +290,6 @@ export function getInitials(name) {
   if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
-
 
 /**
  * Behandelt Klicks außerhalb des Dropdowns
