@@ -103,9 +103,8 @@ function getInactivePriorityIcon(priority) {
   };
 
   const src = iconMap[priority] || "";
-  const alt = `${
-    priority.charAt(0).toUpperCase() + priority.slice(1)
-  } priority`;
+  const alt = `${priority.charAt(0).toUpperCase() + priority.slice(1)
+    } priority`;
   return `<img class="prio-icon" src="${src}" alt="${alt}" />`;
 }
 
@@ -344,9 +343,33 @@ export function setTaskStatus(message, isError) {
 export function toggleCategoryDropdown() {
   const header = document.querySelector(".category-select-header");
   const dropdown = document.getElementById("category-dropdown");
-  dropdown?.classList.toggle("d-none");
-  header?.classList.toggle("open");
+  if (!dropdown || !header) return;
+
+  const isOpen = !dropdown.classList.toggle("d-none");
+  header.classList.toggle("open", isOpen);
+
+  // Listener nur aktiv, wenn geöffnet
+  if (isOpen) {
+    document.addEventListener("click", handleOutsideCategoryClick);
+  } else {
+    document.removeEventListener("click", handleOutsideCategoryClick);
+  }
 }
+
+
+function handleOutsideCategoryClick(e) {
+  const dropdown = document.getElementById("category-dropdown");
+  const header = document.querySelector(".category-select-header");
+  if (!dropdown || !header) return;
+
+  // Klick außerhalb -> schließen
+  if (!dropdown.contains(e.target) && !header.contains(e.target)) {
+    dropdown.classList.add("d-none");
+    header.classList.remove("open");
+    document.removeEventListener("click", handleOutsideCategoryClick);
+  }
+}
+
 
 /**
  * Setzt die Kategorie (wird inline per onclick in HTML aufgerufen)

@@ -544,7 +544,7 @@ label {
   position: absolute;
   top: 100%;
   width: 100%;
-  z-index: 100;
+  z-index: 5;
 }
 
 .assignee-search-container {
@@ -1078,3 +1078,4 @@ label {
 .subtask-list-item.editing .subtask-actions {
   display: none !important;
 }
+

@@ -228,8 +228,8 @@
 
   
   --z-base: 1;
-  --z-nav: 2;
-  --z-header: 3;
+  --z-nav: 11;
+  --z-header:12;
   --z-submenu-bg: 4;
   --z-submenu: 5;
   --z-dropdown: 10;
@@ -363,6 +363,7 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
 
 
 .d-none {
