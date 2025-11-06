@@ -244,26 +244,27 @@ function bindEditDeleteButtons() {
  */
 async function handleDeleteContact() {
   if (!selectedContactKey) return;
-  if (!confirm("Kontakt wirklich löschen?")) return;
-  try {
-    const contactRef = ref(db, `/contacts/${selectedContactKey}`);
-    await remove(contactRef);
-    selectedContactKey = null;
-    const info = document.querySelector(".contact-info");
-    const placeholder = document.querySelector(".contact-detail-placeholder");
-    if (info) {
-      info.innerHTML = "";
-      info.style.display = "none";
-    }
-    if (placeholder) placeholder.style.display = "flex";
+  confirmModal("Kontakt wirklich löschen?", async () => {
+    try {
+      const contactRef = ref(db, `/contacts/${selectedContactKey}`);
+      await remove(contactRef);
+      selectedContactKey = null;
+      const info = document.querySelector(".contact-info");
+      const placeholder = document.querySelector(".contact-detail-placeholder");
+      if (info) {
+        info.innerHTML = "";
+        info.style.display = "none";
+      }
+      if (placeholder) placeholder.style.display = "flex";
 
-    const overlay = document.getElementById("contactOverlay");
-    if (overlay && !overlay.hasAttribute("hidden")) {
-      overlay.setAttribute("hidden", "hidden");
+      const overlay = document.getElementById("contactOverlay");
+      if (overlay && !overlay.hasAttribute("hidden")) {
+        overlay.setAttribute("hidden", "hidden");
+      }
+    } catch (error) {
+      showAlert("error", 2500, `Fehler beim Löschen: ${error.message}`);
     }
-  } catch (error) {
-    showAlert("error", 2500, `Fehler beim Löschen: ${error.message}`);
-  }
+  });
 }
 
 /**
