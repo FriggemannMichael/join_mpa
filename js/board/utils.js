@@ -1,7 +1,10 @@
 import { auth, db } from "../common/firebase.js";
 import { icons } from "../common/svg-template.js";
-import { ref, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-
+import { showAlert } from "../common/alertService.js";
+import {
+  ref,
+  update,
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 /**
  * Returns the currently authenticated user.
@@ -9,9 +12,10 @@ import { ref, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-
  */
 export function getCurrentUser() {
   const user = auth.currentUser;
-  return user ? { id: user.uid, name: user.displayName, email: user.email } : null;
+  return user
+    ? { id: user.uid, name: user.displayName, email: user.email }
+    : null;
 }
-
 
 /**
  * Generates a visually distinct and stable HSL color from a given string.
@@ -41,7 +45,6 @@ export function colorFromString(str) {
   return `hsl(${hue}, ${sat}%, ${light}%)`;
 }
 
-
 /**
  * Utility for locking and restoring page scroll.
  * Used to prevent background scrolling when modals are open.
@@ -61,7 +64,6 @@ export const ScrollLock = (() => {
     b.style.left = "0";
     b.style.right = "0";
     b.style.overflow = "hidden";
-
   }
 
   function unlock() {
@@ -72,13 +74,11 @@ export const ScrollLock = (() => {
     b.style.left = "";
     b.style.right = "";
 
-
     window.scrollTo(0, y);
   }
 
   return { set: lock, release: unlock };
 })();
-
 
 /**
  * Generiert eine Farbe basierend auf Initialen
@@ -101,7 +101,6 @@ export function getInitials(name) {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
-
 /**
  * Updates the task status message in the UI.
  * @param {string} message - Text to display in the status element.
@@ -114,7 +113,6 @@ export function setTaskStatus(message, isError) {
   status.textContent = message;
   status.classList.toggle("error", !!isError);
 }
-
 
 /**
  * Closes the task overlay and resets the UI.
@@ -132,7 +130,6 @@ export function closeTaskOverlay() {
   ScrollLock.release?.();
 }
 
-
 /**
  * Clears the task modal after a short delay.
  * Removes all content and attributes except the ID.
@@ -143,50 +140,31 @@ export function clearModal(delay = 300) {
   const section = document.getElementById("taskModal");
   if (!section) return;
 
-  ScrollLock.release()
+  ScrollLock.release();
 
   setTimeout(() => {
     section.innerHTML = "";
-    [...section.attributes].forEach(attr => {
+    [...section.attributes].forEach((attr) => {
       if (attr.name !== "id") section.removeAttribute(attr.name);
     });
   }, delay);
 }
 
-
 /**
- * Shows a temporary alert message in the UI.
- * Automatically fades out after a short delay.
- * @param {string} type - Alert type (e.g. 'created', 'updated', 'deleted', 'signUp', 'createContact').
- * @param {number} [ms=1800] - Duration before the alert disappears in milliseconds.
+ * Shows board-specific alert and optionally closes task overlay.
+ * Wraps the global showAlert with board-specific behavior.
+ *
+ * @param {string} type - Alert type.
+ * @param {number} [ms=1800] - Duration in milliseconds.
  * @returns {void}
  */
-export function showAlert(type, ms = 1800) {
-  const alert = document.createElement('div');
-  alert.className = 'alert task-added';
-  document.body.append(alert);
-
-  const texts = {
-    created: `Task added to board ${icons.board} `,
-    updated: 'Task updated successfully',
-    deleted: 'Task deleted from board',
-    signUp: 'You Signed Up successfully',
-    createContact: 'Contact successfully created'
-  };
-
-  alert.innerHTML = texts[type];
-  if (type === 'created') alert.classList.add('center');
-
-  requestAnimationFrame(() => alert.classList.add('visible'));
-
-  clearTimeout(alert.t);
-  alert.t = setTimeout(() => {
-    alert.classList.remove('visible', 'center');
-    alert.remove();
-    if (type === 'created') closeTaskOverlay?.();
-  }, ms);
+export function showBoardAlert(type, ms = 1800) {
+  if (type === "created") {
+    showAlert(type, ms, null, () => closeTaskOverlay?.());
+  } else {
+    showAlert(type, ms);
+  }
 }
-
 
 /**
  * Formats a given date string into DD/MM/YYYY (en-GB) format.
@@ -195,16 +173,15 @@ export function showAlert(type, ms = 1800) {
  * @returns {string} Formatted date or "—" if invalid.
  */
 export function formatDate(dueDate) {
-  if (!dueDate) return "—";                      
+  if (!dueDate) return "—";
   const d = new Date(dueDate);
-  if (isNaN(d)) return "—";                      
+  if (isNaN(d)) return "—";
   return d.toLocaleDateString("en-GB", {
     day: "2-digit",
     month: "2-digit",
-    year: "numeric"
+    year: "numeric",
   });
 }
-
 
 /**
  * Enables or disables all buttons inside the given root element.
@@ -220,7 +197,6 @@ export function setGlobalButtonsDisabled(state, root = document.body) {
 
   document.body.classList.toggle("loading", state);
 }
-
 
 /**
  * Updates the status of a task in the database.
