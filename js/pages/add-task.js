@@ -13,9 +13,9 @@ import {
   toggleCategoryDropdown,
   selectCategory,
 } from "./add-task-form.js";
+import { initAddTaskValidation } from "../validation/validation-addTask.js";
 
 initAddTaskPage();
-
 
 /**
  * Initialisiert die Add-Task-Seite mit Authentication-Check und UI-Setup
@@ -29,21 +29,8 @@ async function initAddTaskPage() {
   bindPriorityButtons();
   bindActionButtons();
   initSubtaskInput();
-  setMinDateToToday();
+  initAddTaskValidation();
 }
-
-
-/**
- * Setzt das Mindestdatum des Due-Date-Felds auf heute
- */
-function setMinDateToToday() {
-  const dateInput = document.getElementById("taskDueDate");
-  if (dateInput) {
-    const today = new Date().toISOString().split("T")[0];
-    dateInput.setAttribute("min", today);
-  }
-}
-
 
 window.toggleCategoryDropdown = toggleCategoryDropdown;
 window.selectCategory = selectCategory;
