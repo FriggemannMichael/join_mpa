@@ -137,7 +137,7 @@ h1 {
   border-radius: 10px 10px 0 0;
 }
 
-.select-btn.show-menu ~ .list-items {
+.select-btn.show-menu~.list-items {
   display: block;
 }
 
@@ -381,7 +381,7 @@ label {
   font-size: var(--fs-input);
 }
 
-@media screen and (width <= 1369px) {
+@media screen and (width <=1369px) {
   .form-col-container {
     gap: 0;
     justify-content: center;
@@ -408,7 +408,7 @@ label {
   }
 }
 
-@media screen and (width <= 1024px) {
+@media screen and (width <=1024px) {
   .add-task-container {
     margin-left: 0;
   }
@@ -422,7 +422,7 @@ label {
   }
 }
 
-@media (width <= 576px) {
+@media (width <=576px) {
   .form-container {
     margin-top: 48px;
   }
@@ -466,7 +466,7 @@ label {
   }
 }
 
-@media (width <= 427px) {
+@media (width <=427px) {
   .prio-buttons {
     flex-direction: column;
   }
@@ -662,13 +662,14 @@ label {
   background: var(--primary-color);
 }
 
-@media (width <= 1369px) {
+@media (width <=1369px) {
   .custom-multiselect {
     width: 100%;
   }
 }
 
-@media (width <= 576px) {
+@media (width <=576px) {
+
   .multiselect-header,
   .checkbox-label {
     font-size: 16px;
@@ -713,7 +714,7 @@ label {
 }
 
 .category-select-header:active {
- border-bottom: none;
+  border-bottom: none;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
   border-color: var(--accent-color);
@@ -834,6 +835,14 @@ label {
   width: 18px;
 }
 
+@media (width <=768px) {
+
+  .priority-btn,
+  .priority-btn.active {
+    font-size: var(--fs-input);
+  }
+}
+
 .subtask-input-container {
   align-items: center;
   box-sizing: border-box;
@@ -888,7 +897,7 @@ label {
   display: flex;
 }
 
-.subtask-btn .check-cancel-div.active ~ #subtaskAddIcon {
+.subtask-btn .check-cancel-div.active~#subtaskAddIcon {
   display: none;
 }
 
