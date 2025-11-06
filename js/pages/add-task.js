@@ -29,6 +29,19 @@ async function initAddTaskPage() {
   bindPriorityButtons();
   bindActionButtons();
   initSubtaskInput();
+  setMinDateToToday();
+}
+
+
+/**
+ * Setzt das Mindestdatum des Due-Date-Felds auf heute
+ */
+function setMinDateToToday() {
+  const dateInput = document.getElementById("taskDueDate");
+  if (dateInput) {
+    const today = new Date().toISOString().split("T")[0];
+    dateInput.setAttribute("min", today);
+  }
 }
 
 
