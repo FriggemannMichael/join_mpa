@@ -1,9 +1,12 @@
-// common/validation-ui.js
 export const byId = (id) => document.getElementById(id);
 
 export function showError(inputElement, message) {
   if (!inputElement) return;
-  const host = inputElement.parentElement || inputElement;
+  const host =
+    inputElement.closest?.(".inputField__container, .form-group") ||
+    inputElement.parentElement ||
+    inputElement;
+
   let faultMsg = host.querySelector(".field-fault-msg");
   if (!faultMsg) {
     faultMsg = document.createElement("div");
@@ -12,13 +15,21 @@ export function showError(inputElement, message) {
   }
   faultMsg.textContent = message;
   faultMsg.classList.add("visible");
+
+  host.classList.add("input-fault");
   inputElement.classList.add("input-fault");
 }
 
 export function clearError(inputElement) {
   if (!inputElement) return;
+  const host =
+    inputElement.closest?.(".inputField__container, .form-group") ||
+    inputElement.parentElement ||
+    inputElement;
+
   inputElement.classList.remove("input-fault");
-  const host = inputElement.parentElement || inputElement;
+  host.classList.remove("input-fault");
+
   const faultMsg = host.querySelector(".field-fault-msg");
   if (faultMsg) faultMsg.classList.remove("visible");
 }

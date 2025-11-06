@@ -1,11 +1,9 @@
 import { auth, db } from "../common/firebase.js";
 import { getActiveUser } from "../common/session.js";
 import { icons } from "../common/svg-template.js";
-import { showAlert } from "../common/alertService.js";
-import {
-  ref,
-  update,
-} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { ref, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import {unmountAddTaskValidation} from "../validation/validation-addTask.js"
+
 
 /**
  * Returns the currently authenticated user.
@@ -129,6 +127,7 @@ export function closeTaskOverlay() {
   delete overlay.cleanup;
   clearModal();
   ScrollLock.release?.();
+  unmountAddTaskValidation()
 }
 
 /**

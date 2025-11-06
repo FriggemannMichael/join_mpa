@@ -3,7 +3,12 @@
  * @module layout
  */
 
-import { getActiveUser, logout, getInitials, authReady } from "./authService.js";
+import {
+  getActiveUser,
+  logout,
+  getInitials,
+  authReady,
+} from "./authService.js";
 import { insertTemplates } from "./templateLoader.js";
 import { provisionActiveUser } from "./userProvisioning.js";
 import { icons } from "./svg-template.js";
@@ -15,15 +20,15 @@ import { icons } from "./svg-template.js";
 export async function bootLayout() {
   // Warte auf Firebase Auth Initialisierung
   await authReady;
-  
+
   await insertTemplates([
     ["[data-template=header]", "./templates/header.html"],
     ["[data-template=sidebar]", "./templates/sidebar.html"],
   ]);
-  
+
   // Warte einen Tick, damit das DOM aktualisiert wird
-  await new Promise(resolve => setTimeout(resolve, 0));
-  
+  await new Promise((resolve) => setTimeout(resolve, 0));
+
   hydrateLayout();
 }
 
@@ -185,13 +190,13 @@ function setupAuthBasedNavigation() {
   const authRequiredLinks = document.querySelectorAll("[data-auth-required]");
   const guestOnlyLinks = document.querySelectorAll("[data-guest-only]");
 
-  console.log("🔍 setupAuthBasedNavigation:", { 
-    isLoggedIn, 
-    currentPage, 
-    isLegalPage, 
+  console.log("🔍 setupAuthBasedNavigation:", {
+    isLoggedIn,
+    currentPage,
+    isLegalPage,
     user: user ? user.email || "Guest" : "none",
     authRequiredLinksCount: authRequiredLinks.length,
-    guestOnlyLinksCount: guestOnlyLinks.length
+    guestOnlyLinksCount: guestOnlyLinks.length,
   });
 
   if (isLoggedIn) {
@@ -236,17 +241,17 @@ function hideProfileIconOnLegalPagesIfNotLoggedIn() {
 
   const currentPage = getPageName(window.location.pathname);
   const isLegalPage =
-    currentPage === "legal.html" || 
+    currentPage === "legal.html" ||
     currentPage === "privacy.html" ||
     currentPage === "help.html";
 
   const profileIcon = document.getElementById("profileIcon");
 
-  console.log("👤 hideProfileIconOnLegalPagesIfNotLoggedIn:", { 
-    isLoggedIn, 
-    currentPage, 
+  console.log("👤 hideProfileIconOnLegalPagesIfNotLoggedIn:", {
+    isLoggedIn,
+    currentPage,
     isLegalPage,
-    profileIconExists: !!profileIcon
+    profileIconExists: !!profileIcon,
   });
 
   if (!isLoggedIn && isLegalPage && profileIcon) {

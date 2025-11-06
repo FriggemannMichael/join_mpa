@@ -4,7 +4,7 @@ import {
   bindActionButtons,
 } from "../../pages/add-task-form.js";
 import { initSubtaskInput } from "../../pages/add-task-subtasks.js";
-import { initAddTaskValidation } from "../../validation/validation-addTask.js";
+import { mountAddTaskValidation } from "../../validation/validation-addTask.js";
 import { boardTemplates } from "../templates/board-templates.js";
 import { closeTaskOverlay, ScrollLock } from "../utils.js";
 
@@ -34,12 +34,11 @@ function renderAddTaskModal() {
 export async function initAddTask() {
   ScrollLock.set();
   await renderAddTaskModal();
-
-  // Initialisiere Validierung nach dem Rendern des Templates
-  initAddTaskValidation();
-
   await populateAssignees();
   bindPriorityButtons();
   bindActionButtons();
   initSubtaskInput();
+
+  // Initialisiere Validierung nach dem Rendern des Templates
+  mountAddTaskValidation();
 }

@@ -1,4 +1,3 @@
-// common/form-binder.js
 import { releaseSubmit } from "./validation-helpers.js";
 
 /**
@@ -11,8 +10,7 @@ import { releaseSubmit } from "./validation-helpers.js";
 export function bindForm({ fields, submitBtn, validateAllSilent }) {
   const listeners = [];
 
-  // pro Feld: Sichtbare Validierung + Button-State
-  fields.forEach((f) => {
+  fields.forEach(f => {
     const { el, events, validateVisible } = f;
     if (!el) {
       console.warn("bindForm: Element ist null, überspringe Feld-Binding");
@@ -20,8 +18,8 @@ export function bindForm({ fields, submitBtn, validateAllSilent }) {
     }
     events.forEach((evt) => {
       const handler = () => {
-        validateVisible(); // zeigt Fehler für dieses Feld
-        updateSubmit(); // prüft alles silent
+        validateVisible();  
+        updateSubmit();    
       };
       el.addEventListener(evt, handler);
       listeners.push({ el, evt, handler });
@@ -34,7 +32,6 @@ export function bindForm({ fields, submitBtn, validateAllSilent }) {
     return ok;
   }
 
-  // initial (silent)
   updateSubmit();
 
   return {
