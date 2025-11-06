@@ -10,16 +10,23 @@ import { updateAssigneeSelection } from "./add-task-assignees-ui.js";
 import { validatePriorityGroup } from "../validation/validation-fields.js";
 import { controller } from "../validation/validation-addTask.js"; 
 
-
 /**
  * Bindet Event-Listener für Prioritäts-Buttons
  */
 export function bindPriorityButtons() {
-  document.querySelectorAll(".priority-btn").forEach((button) => {
+  const buttons = document.querySelectorAll(".priority-btn");
+
+  buttons.forEach((button) => {
     button.addEventListener("click", () => setActivePriority(button));
   });
-}
 
+  const mediumButton = document.querySelector(
+    '.priority-btn[data-priority="medium"]'
+  );
+  if (mediumButton) {
+    setActivePriority(mediumButton);
+  }
+}
 
 /**
  * Setzt einen Prioritäts-Button als aktiv und deaktiviert andere
@@ -39,7 +46,6 @@ export function setActivePriority(activeButton) {
   controller.updateSubmit();
 }
 
-
 /**
  * Aktualisiert den aktiven Status eines Buttons
  * @param {HTMLElement} button Button-Element
@@ -56,7 +62,6 @@ function updateButtonActiveState(button, isActive) {
   }
 }
 
-
 /**
  * Aktualisiert das Prioritäts-Icon
  * @param {HTMLElement} iconContainer Icon-Container
@@ -70,7 +75,6 @@ function updatePriorityIcon(iconContainer, priority, isActive) {
     iconContainer.outerHTML = getInactivePriorityIcon(priority);
   }
 }
-
 
 /**
  * Holt das aktive Icon für eine Priorität
@@ -88,7 +92,6 @@ function getActivePriorityIcon(priority) {
   return `<div class="prio-icon">${icon}</div>`;
 }
 
-
 /**
  * Holt das inaktive Icon für eine Priorität
  * @param {string} priority Priorität
@@ -96,16 +99,17 @@ function getActivePriorityIcon(priority) {
  */
 function getInactivePriorityIcon(priority) {
   const iconMap = {
-    urgent: './assets/icons/prio-urgent.svg',
-    medium: './assets/icons/prio-medium.svg',
-    low: './assets/icons/prio-low.svg',
+    urgent: "./assets/icons/prio-urgent.svg",
+    medium: "./assets/icons/prio-medium.svg",
+    low: "./assets/icons/prio-low.svg",
   };
 
   const src = iconMap[priority] || "";
-  const alt = `${priority.charAt(0).toUpperCase() + priority.slice(1)} priority`;
+  const alt = `${
+    priority.charAt(0).toUpperCase() + priority.slice(1)
+  } priority`;
   return `<img class="prio-icon" src="${src}" alt="${alt}" />`;
 }
-
 
 /**
  * Bindet Event-Listener für Aktions-Buttons (Clear, Create)
@@ -121,7 +125,6 @@ export function bindActionButtons() {
   // Event-Listener für Formularfelder
   bindFormValidation();
 }
-
 
 /**
  * Liest die Task-Daten aus dem Formular
@@ -144,7 +147,6 @@ export function readTaskData() {
   };
 }
 
-
 /**
  * Liest die ausgewählten Assignees
  * @returns {Array} Array von Assignee-Objekten
@@ -160,7 +162,6 @@ function readAssignees() {
   }));
 }
 
-
 /**
  * Liest die ausgewählte Kategorie
  * @returns {Object} Kategorie-Objekt mit value und label
@@ -173,7 +174,6 @@ function readCategory() {
   return { value: categoryValue, label: categoryLabel };
 }
 
-
 /**
  * Liest den Wert eines Formularfeldes
  * @param {string} id Element-ID
@@ -184,7 +184,6 @@ export function readValue(id) {
   return field ? field.value.trim() : "";
 }
 
-
 /**
  * Liest die aktive Priorität
  * @returns {string} Priorität
@@ -193,7 +192,6 @@ export function readActivePriority() {
   const active = document.querySelector(".priority-btn.active");
   return active ? active.dataset.priority || "" : "";
 }
-
 
 /**
  * Löscht das Formular und setzt es zurück
@@ -209,7 +207,6 @@ export function clearTaskForm() {
   // Button-Status nach Clear aktualisieren
   validateFormAndUpdateButton();
 }
-
 
 /**
  * Löscht alle Textfelder im Formular
@@ -228,7 +225,6 @@ function clearTextFields() {
     });
 }
 
-
 /**
  * Deaktiviert alle Checkboxen
  */
@@ -240,16 +236,21 @@ function clearCheckboxes() {
     });
 }
 
-
 /**
- * Deaktiviert alle Prioritäts-Buttons
+ * Deaktiviert alle Prioritäts-Buttons und setzt Medium als Default
  */
 function clearPriorityButtons() {
   document.querySelectorAll(".priority-btn").forEach((btn) => {
     btn.classList.remove("active");
   });
-}
 
+  const mediumButton = document.querySelector(
+    '.priority-btn[data-priority="medium"]'
+  );
+  if (mediumButton) {
+    setActivePriority(mediumButton);
+  }
+}
 
 /**
  * Behandelt das Erstellen eines Tasks
@@ -269,13 +270,15 @@ export async function handleTaskCreate() {
     await createTask(data);
     setTaskStatus("Task erfolgreich erstellt!", false);
     clearTaskForm();
+    setTimeout(() => {
+      window.location.href = "board.html";
+    }, 100);
   } catch (error) {
     setTaskStatus("Task konnte nicht gespeichert werden", true);
   } finally {
     if (createBtn) createBtn.disabled = false;
   }
 }
-
 
 /**
  * Validiert die Task-Daten
@@ -285,7 +288,6 @@ export async function handleTaskCreate() {
 function validateTaskData(data) {
   return !!(data.title && data.dueDate && data.category && data.priority);
 }
-
 
 /**
  * Bindet Event-Listener für Formularfeld-Änderungen zur Validierung
@@ -297,9 +299,12 @@ function bindFormValidation() {
   const priorityButtons = document.querySelectorAll(".priority-btn");
 
   // Title und Due Date bei Eingabe validieren
-  if (titleField) titleField.addEventListener("input", validateFormAndUpdateButton);
-  if (dueDateField) dueDateField.addEventListener("change", validateFormAndUpdateButton);
-  if (categoryField) categoryField.addEventListener("change", validateFormAndUpdateButton);
+  if (titleField)
+    titleField.addEventListener("input", validateFormAndUpdateButton);
+  if (dueDateField)
+    dueDateField.addEventListener("change", validateFormAndUpdateButton);
+  if (categoryField)
+    categoryField.addEventListener("change", validateFormAndUpdateButton);
 
   // Priorität bei Klick validieren
   priorityButtons.forEach((btn) => {
@@ -308,7 +313,6 @@ function bindFormValidation() {
     });
   });
 }
-
 
 /**
  * Validiert das Formular und aktiviert/deaktiviert den Create-Button
@@ -324,7 +328,6 @@ export function validateFormAndUpdateButton() {
   createBtn.classList.toggle("disabled", !isValid);
 }
 
-
 /**
  * Setzt den Task-Status
  * @param {string} message Status-Nachricht
@@ -337,7 +340,6 @@ export function setTaskStatus(message, isError) {
   status.classList.toggle("error", !!isError);
 }
 
-
 /**
  * Toggle für das Category-Dropdown (wird inline per onclick in HTML aufgerufen)
  */
@@ -347,7 +349,6 @@ export function toggleCategoryDropdown() {
   dropdown?.classList.toggle("d-none");
   header?.classList.toggle("open");
 }
-
 
 /**
  * Setzt die Kategorie (wird inline per onclick in HTML aufgerufen)
@@ -361,14 +362,13 @@ export function selectCategory(value) {
   if (input) {
     input.value = value;
     // Trigger change event für Validierung
-    input.dispatchEvent(new Event('change'));
+    input.dispatchEvent(new Event("change"));
   }
   if (placeholder) placeholder.textContent = getCategoryLabel(value);
 
   dropdown?.classList.add("d-none");
   document.querySelector(".category-select-header")?.classList.remove("open");
 }
-
 
 /**
  * Holt das Label für eine Kategorie
