@@ -403,7 +403,8 @@ body {
 }
 
 
-.contact-person:hover {
+.contact-person:hover,
+.contact-person.active {
   background-color: #2a3647;
   color: #fff;
 }
