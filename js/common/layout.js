@@ -30,6 +30,7 @@ function hydrateLayout() {
   highlightActiveNav();
   provisionActiveUser();
   setupAuthBasedNavigation();
+  hideProfileIconOnLegalPagesIfNotLoggedIn();
 }
 
 /**
@@ -162,7 +163,7 @@ function getPageName(path) {
 /**
  * Richtet die Navigation basierend auf dem Auth-Status ein
  * Zeigt normale Menü-Links wenn eingeloggt (inkl. Guest)
- * Zeigt Login-Link auf Legal/Privacy/Help wenn nicht eingeloggt
+ * Zeigt Login-Link auf Legal/Privacy/Help nur wenn nicht eingeloggt
  */
 function setupAuthBasedNavigation() {
   const user = getActiveUser();
@@ -184,21 +185,20 @@ function setupAuthBasedNavigation() {
     guestOnlyLinks.forEach((link) => {
       link.classList.add("nav-link-hidden");
     });
-  } else if (isLegalPage) {
-    authRequiredLinks.forEach((link) => {
-      link.classList.add("nav-link-hidden");
-    });
-    guestOnlyLinks.forEach((link) => {
-      link.classList.remove("nav-link-hidden");
-    });
-    renderLoginIcon();
   } else {
     authRequiredLinks.forEach((link) => {
       link.classList.add("nav-link-hidden");
     });
-    guestOnlyLinks.forEach((link) => {
-      link.classList.add("nav-link-hidden");
-    });
+    if (isLegalPage) {
+      guestOnlyLinks.forEach((link) => {
+        link.classList.remove("nav-link-hidden");
+      });
+      renderLoginIcon();
+    } else {
+      guestOnlyLinks.forEach((link) => {
+        link.classList.add("nav-link-hidden");
+      });
+    }
   }
 }
 
@@ -209,4 +209,22 @@ function renderLoginIcon() {
   const iconContainer = document.getElementById("loginIcon");
   if (!iconContainer) return;
   iconContainer.innerHTML = icons.log;
+}
+
+/**
+ * Blendet das Profil-Icon auf Legal/Privacy-Seiten aus, wenn kein User eingeloggt ist
+ */
+function hideProfileIconOnLegalPagesIfNotLoggedIn() {
+  const user = getActiveUser();
+  const isLoggedIn = !!user;
+
+  const currentPage = getPageName(window.location.pathname);
+  const isLegalPage =
+    currentPage === "legal.html" || currentPage === "privacy.html";
+
+  const profileIcon = document.getElementById("profileIcon");
+
+  if (!isLoggedIn && isLegalPage && profileIcon) {
+    profileIcon.style.display = "none";
+  }
 }

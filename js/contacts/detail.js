@@ -36,6 +36,15 @@ export function showContactDetail(entry, key) {
   selectedContactKey = key;
   const contact = contactsCache.find((c) => c.key === key);
   if (!contact) return;
+
+  document.querySelectorAll(".contact-person.active").forEach((el) => {
+    el.classList.remove("active");
+  });
+
+  if (entry) {
+    entry.classList.add("active");
+  }
+
   const initials = getInitials(contact.name);
   const color = colorFromString(contact.name);
   renderContactDetail({

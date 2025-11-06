@@ -1,7 +1,11 @@
 import { db } from "../../common/firebase.js";
-import { ref, get, child, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-import { closeTaskOverlay, showAlert }  from "../utils.js";
-
+import {
+  ref,
+  get,
+  child,
+  update,
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { closeTaskOverlay, showBoardAlert } from "../utils.js";
 
 /**
  * Fetches all contacts from the database and returns them as an object map.
@@ -12,7 +16,6 @@ export async function getContactsMap() {
   const snap = await get(child(ref(db), "contacts"));
   return snap.exists() ? snap.val() : {};
 }
-
 
 /**
  * Updates the "done" state of a specific subtask in the database.
@@ -31,7 +34,6 @@ export async function updateSubtaskDone(taskId, index, done) {
   });
 }
 
-
 /**
  * Deletes a task from the database and updates the UI.
  * Closes the overlay and shows a delete alert.
@@ -44,9 +46,8 @@ export async function deleteTask(taskId) {
   await update(ref(db), { [path]: null });
   console.log("🗑️ Task deleted:", taskId);
   closeTaskOverlay();
-  showAlert('deleted');
+  showBoardAlert("deleted");
 }
-
 
 /**
  * Loads a task by its ID from the database.
@@ -60,7 +61,6 @@ export async function loadTask(id) {
   return snap.exists() ? { id, ...snap.val() } : null;
 }
 
-
 /**
  * Updates a task in the database and shows a success alert.
  * @async
@@ -71,6 +71,6 @@ export async function loadTask(id) {
 export async function updateTask(taskId, task) {
   const taskRef = ref(db, `tasks/${taskId}`);
   await update(taskRef, task);
-  showAlert("updated");
+  showBoardAlert("updated");
   return true;
 }

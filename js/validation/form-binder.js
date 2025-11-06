@@ -10,9 +10,13 @@ import { releaseSubmit } from "./validation-helpers.js";
 export function bindForm({ fields, submitBtn, validateAllSilent }) {
   const listeners = [];
 
-  fields.forEach(f => {
+  fields.forEach(f) => {
     const { el, events, validateVisible } = f;
-    events.forEach(evt => {
+    if (!el) {
+      console.warn("bindForm: Element ist null, überspringe Feld-Binding");
+      return;
+    }
+    events.forEach((evt) => {
       const handler = () => {
         validateVisible();  
         updateSubmit();    
@@ -33,7 +37,9 @@ export function bindForm({ fields, submitBtn, validateAllSilent }) {
   return {
     updateSubmit,
     detach() {
-      listeners.forEach(({ el, evt, handler }) => el.removeEventListener(evt, handler));
+      listeners.forEach(({ el, evt, handler }) =>
+        el.removeEventListener(evt, handler)
+      );
     },
   };
 }

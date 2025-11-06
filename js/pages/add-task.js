@@ -17,7 +17,6 @@ import {mountAddTaskValidation} from "../validation/validation-addTask.js"
 
 initAddTaskPage();
 
-
 /**
  * Initialisiert die Add-Task-Seite mit Authentication-Check und UI-Setup
  */
@@ -32,7 +31,6 @@ async function initAddTaskPage() {
   initSubtaskInput();
   mountAddTaskValidation();
 }
-
 
 window.toggleCategoryDropdown = toggleCategoryDropdown;
 window.selectCategory = selectCategory;
