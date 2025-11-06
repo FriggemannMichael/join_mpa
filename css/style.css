@@ -262,6 +262,10 @@ select {
   z-index: 10;
 }
 
+.input .field-fault-msg {
+  top: 80%;
+}
+
 .field-fault-msg.visible {
   opacity: 1;
   visibility: visible;
