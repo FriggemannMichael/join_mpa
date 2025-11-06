@@ -4,6 +4,7 @@
  */
 
 import { auth } from "./firebase.js";
+import { getActiveUser } from "./session.js";
 import {
   getDatabase,
   ref,
@@ -13,14 +14,12 @@ import {
   off,
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-
 const TASKS_PATH = "tasks";
-
 
 /**
  * Creates and stores a new task entry in the Firebase Realtime Database.
  * Builds the full task payload, pushes it under the tasks path, and returns the generated ID.
- * 
+ *
  * @async
  * @param {Object} task - The raw task data to store (title, description, subtasks, etc.).
  * @returns {Promise<string>} The unique key of the newly created task in the database.
@@ -33,7 +32,6 @@ export async function createTask(task) {
   await set(newTaskRef, entry);
   return newTaskRef.key;
 }
-
 
 /**
  * Subscribes to all tasks in the Firebase Realtime Database and listens for changes in real time.
@@ -60,7 +58,6 @@ export function subscribeToTasks(listener) {
   return () => off(tasksRef, "value", handler);
 }
 
-
 /**
  * Builds a normalized and complete task payload ready to be stored in Firebase.
  * Fills in default values for missing fields and adds metadata like timestamps and user info.
@@ -70,7 +67,7 @@ export function subscribeToTasks(listener) {
  */
 function buildTaskPayload(task) {
   const now = Date.now();
-  const currentUser = auth.currentUser;
+  const currentUser = getActiveUser();
 
   return {
     title: task.title || "",
@@ -91,7 +88,6 @@ function buildTaskPayload(task) {
     updatedAt: now,
   };
 }
-
 
 /**
  * Converts a raw Firebase task object into a normalized and sorted task array.

@@ -3,7 +3,7 @@
  * @module layout
  */
 
-import { getActiveUser, logout, getInitials } from "./authService.js";
+import { getActiveUser, logout, getInitials, authReady } from "./authService.js";
 import { insertTemplates } from "./templateLoader.js";
 import { provisionActiveUser } from "./userProvisioning.js";
 import { icons } from "./svg-template.js";
@@ -13,10 +13,17 @@ import { icons } from "./svg-template.js";
  * @returns {Promise<void>}
  */
 export async function bootLayout() {
+  // Warte auf Firebase Auth Initialisierung
+  await authReady;
+  
   await insertTemplates([
     ["[data-template=header]", "./templates/header.html"],
     ["[data-template=sidebar]", "./templates/sidebar.html"],
   ]);
+  
+  // Warte einen Tick, damit das DOM aktualisiert wird
+  await new Promise(resolve => setTimeout(resolve, 0));
+  
   hydrateLayout();
 }
 
@@ -178,6 +185,15 @@ function setupAuthBasedNavigation() {
   const authRequiredLinks = document.querySelectorAll("[data-auth-required]");
   const guestOnlyLinks = document.querySelectorAll("[data-guest-only]");
 
+  console.log("🔍 setupAuthBasedNavigation:", { 
+    isLoggedIn, 
+    currentPage, 
+    isLegalPage, 
+    user: user ? user.email || "Guest" : "none",
+    authRequiredLinksCount: authRequiredLinks.length,
+    guestOnlyLinksCount: guestOnlyLinks.length
+  });
+
   if (isLoggedIn) {
     authRequiredLinks.forEach((link) => {
       link.classList.remove("nav-link-hidden");
@@ -212,7 +228,7 @@ function renderLoginIcon() {
 }
 
 /**
- * Blendet das Profil-Icon auf Legal/Privacy-Seiten aus, wenn kein User eingeloggt ist
+ * Blendet das Profil-Icon auf Legal/Privacy/Help-Seiten aus, wenn kein User eingeloggt ist
  */
 function hideProfileIconOnLegalPagesIfNotLoggedIn() {
   const user = getActiveUser();
@@ -220,11 +236,22 @@ function hideProfileIconOnLegalPagesIfNotLoggedIn() {
 
   const currentPage = getPageName(window.location.pathname);
   const isLegalPage =
-    currentPage === "legal.html" || currentPage === "privacy.html";
+    currentPage === "legal.html" || 
+    currentPage === "privacy.html" ||
+    currentPage === "help.html";
 
   const profileIcon = document.getElementById("profileIcon");
 
+  console.log("👤 hideProfileIconOnLegalPagesIfNotLoggedIn:", { 
+    isLoggedIn, 
+    currentPage, 
+    isLegalPage,
+    profileIconExists: !!profileIcon
+  });
+
   if (!isLoggedIn && isLegalPage && profileIcon) {
     profileIcon.style.display = "none";
+  } else if (profileIcon) {
+    profileIcon.style.display = "";
   }
 }

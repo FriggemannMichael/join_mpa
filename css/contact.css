@@ -150,6 +150,10 @@ body {
   padding: 15px 24px;
 }
 
+.creatbtn:hover {
+  background-color: var(--secondary-color);
+}
+
 .creatbtn .btn__icon--left svg,
 .creatbtn .btn__icon--right svg {
   color: #fff;

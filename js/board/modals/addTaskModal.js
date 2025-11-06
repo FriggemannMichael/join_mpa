@@ -1,9 +1,12 @@
-import { populateAssignees } from '../../pages/add-task-assignees.js';
-import { bindPriorityButtons, bindActionButtons } from '../../pages/add-task-form.js';
-import { initSubtaskInput } from '../../pages/add-task-subtasks.js';
+import { populateAssignees } from "../../pages/add-task-assignees.js";
+import {
+  bindPriorityButtons,
+  bindActionButtons,
+} from "../../pages/add-task-form.js";
+import { initSubtaskInput } from "../../pages/add-task-subtasks.js";
+import { initAddTaskValidation } from "../../validation/validation-addTask.js";
 import { boardTemplates } from "../templates/board-templates.js";
 import { closeTaskOverlay, ScrollLock } from "../utils.js";
-
 
 /**
  * Renders the "Add Task" modal using the predefined board template.
@@ -11,17 +14,16 @@ import { closeTaskOverlay, ScrollLock } from "../utils.js";
  * @returns {void}
  */
 function renderAddTaskModal() {
-    const section = document.getElementById("taskModal");
-    section.classList.add("add_task_overlay");
+  const section = document.getElementById("taskModal");
+  section.classList.add("add_task_overlay");
 
-    section.innerHTML = boardTemplates.addTask;
-    section.addEventListener("click", (e) => {
-        if (e.target.closest("#closeAddTask")) {
-            closeTaskOverlay();
-        }
-    });
+  section.innerHTML = boardTemplates.addTask;
+  section.addEventListener("click", (e) => {
+    if (e.target.closest("#closeAddTask")) {
+      closeTaskOverlay();
+    }
+  });
 }
-
 
 /**
  * Initializes the "Add Task" modal and its interactive components.
@@ -30,15 +32,14 @@ function renderAddTaskModal() {
  * @returns {Promise<void>}
  */
 export async function initAddTask() {
-    ScrollLock.set()
-    await renderAddTaskModal()
-    await populateAssignees();
-    bindPriorityButtons();
-    bindActionButtons();
-    initSubtaskInput();
+  ScrollLock.set();
+  await renderAddTaskModal();
+
+  // Initialisiere Validierung nach dem Rendern des Templates
+  initAddTaskValidation();
+
+  await populateAssignees();
+  bindPriorityButtons();
+  bindActionButtons();
+  initSubtaskInput();
 }
-
-
-
-
-

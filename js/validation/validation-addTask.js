@@ -7,6 +7,9 @@ import {
   validatePriorityGroup,
 } from "./validation-fields.js";
 
+// Globaler Controller, der von überall aktualisiert werden kann
+export let controller = null;
+
 export function initAddTaskValidation() {
   const titleEl = byId("taskTitle");
   const dateEl = byId("taskDueDate");
@@ -35,7 +38,7 @@ export function initAddTaskValidation() {
     return okTitle && okDate && okCat && okPrio;
   };
 
-  return bindForm({
+  const newController = bindForm({
     submitBtn: submit,
     validateAllSilent,
     fields: [
@@ -44,6 +47,8 @@ export function initAddTaskValidation() {
       { el: catEl, events: ["change"], validateVisible: showCat },
     ],
   });
-}
 
-export const controller = initAddTaskValidation();
+  // Aktualisiere den globalen Controller
+  controller = newController;
+  return newController;
+}

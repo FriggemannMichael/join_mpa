@@ -1,4 +1,5 @@
 import { auth, db } from "../common/firebase.js";
+import { getActiveUser } from "../common/session.js";
 import { icons } from "../common/svg-template.js";
 import { showAlert } from "../common/alertService.js";
 import {
@@ -11,7 +12,7 @@ import {
  * @returns {{id: string, name: string, email: string} | null} User object if logged in, otherwise null.
  */
 export function getCurrentUser() {
-  const user = auth.currentUser;
+  const user = getActiveUser();
   return user
     ? { id: user.uid, name: user.displayName, email: user.email }
     : null;

@@ -8,7 +8,7 @@ import { icons } from "../common/svg-template.js";
 import { subtasks, renderSubtasks } from "./add-task-subtasks.js";
 import { updateAssigneeSelection } from "./add-task-assignees-ui.js";
 import { validatePriorityGroup } from "../validation/validation-fields.js";
-import { controller } from "../validation/validation-addTask.js"; 
+import { controller } from "../validation/validation-addTask.js";
 
 /**
  * Bindet Event-Listener für Prioritäts-Buttons
@@ -43,7 +43,9 @@ export function setActivePriority(activeButton) {
   validatePriorityGroup(group, "Priority", { show: true });
 
   // 3️⃣ Gesamt-Button-Status aktualisieren (silent)
-  controller.updateSubmit();
+  if (controller?.updateSubmit) {
+    controller.updateSubmit();
+  }
 }
 
 /**
