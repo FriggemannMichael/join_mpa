@@ -8,8 +8,9 @@ import {
   validatePriorityGroup,
 } from "./validation-fields.js";
 
-let controller = null;           
-let abortCtrl = null;           
+let controller = null;
+let abortCtrl = null;
+
 
 /**
  * Hängt die Validierung an (nur einmal aktiv). Root = document oder Modal-Container.
@@ -18,12 +19,11 @@ let abortCtrl = null;
 export function mountAddTaskValidation(root = document) {
   if (controller) return controller;
 
-  const $ = (sel) => (root.querySelector ? root.querySelector(sel) : document.querySelector(sel));
-  const titleEl = root.getElementById ? root.getElementById("taskTitle") : byId("taskTitle");
-  const dateEl  = root.getElementById ? root.getElementById("taskDueDate") : byId("taskDueDate");
-  const catEl   = root.getElementById ? root.getElementById("category") : byId("category");
-  const prioGrp = $(".priority-buttons");
-  const submit  = root.getElementById ? root.getElementById("taskCreateBtn") : byId("taskCreateBtn");
+  const titleEl = root.getElementById("taskTitle");
+  const dateEl = root.getElementById("taskDueDate");
+  const catEl = root.getElementById("category");
+  const prioGrp = root.querySelector(".priority-buttons");
+  const submit = root.getElementById("taskCreateBtn");
 
   if (!titleEl || !dateEl || !catEl || !prioGrp || !submit) {
     controller = makeNoopController();
@@ -33,10 +33,10 @@ export function mountAddTaskValidation(root = document) {
   abortCtrl = new AbortController();
   const signal = abortCtrl.signal;
 
-  const showTitle = () => validateMinLengthEl(titleEl, 3, "Title",    { show: true });
-  const showDate  = () => validateDateNotPastEl(dateEl,  "Due date",  { show: true });
-  const showCat   = () => validateRequiredEl(catEl,      "Category",  { show: true });
-  const showPrio  = () => validatePriorityGroup(prioGrp, "Priority",  { show: true });
+  const showTitle = () => validateMinLengthEl(titleEl, 3, "Title", { show: true });
+  const showDate = () => validateDateNotPastEl(dateEl, "Due date", { show: true });
+  const showCat = () => validateRequiredEl(catEl, "Category", { show: true });
+  const showPrio = () => validatePriorityGroup(prioGrp, "Priority", { show: true });
 
   prioGrp.addEventListener("click", (e) => {
     if (e.target.closest(".priority-btn")) {
@@ -46,10 +46,10 @@ export function mountAddTaskValidation(root = document) {
   }, { signal });
 
   const validateAllSilent = () => {
-    const okTitle = validateMinLengthEl(titleEl, 3, "Title",    { show: false });
-    const okDate  = validateDateNotPastEl(dateEl,  "Due date",  { show: true });
-    const okCat   = validateRequiredEl(catEl,      "Category",  { show: true });
-    const okPrio  = validatePriorityGroup(prioGrp, "Priority",  { show: true });
+    const okTitle = validateMinLengthEl(titleEl, 3, "Title", { show: false });
+    const okDate = validateDateNotPastEl(dateEl, "Due date", { show: true });
+    const okCat = validateRequiredEl(catEl, "Category", { show: true });
+    const okPrio = validatePriorityGroup(prioGrp, "Priority", { show: true });
     return okTitle && okDate && okCat && okPrio;
   };
 
@@ -57,11 +57,11 @@ export function mountAddTaskValidation(root = document) {
     submitBtn: submit,
     validateAllSilent,
     fields: [
-      { el: titleEl, events: ["blur"],   validateVisible: showTitle },
-      { el: dateEl,  events: ["blur"],   validateVisible: showDate  },
-      { el: catEl,   events: ["change"], validateVisible: showCat   },
+      { el: titleEl, events: ["blur"], validateVisible: showTitle },
+      { el: dateEl, events: ["blur"], validateVisible: showDate },
+      { el: catEl, events: ["change"], validateVisible: showCat },
     ],
-    signal, 
+    signal,
   });
 
   return controller;
@@ -84,7 +84,49 @@ export function updateAddTaskValidationButton() {
 
 function makeNoopController() {
   return {
-    updateSubmit() {},
-    detach() {},
+    updateSubmit() { },
+    detach() { },
   };
+}
+
+
+
+export function mountEditTaskValidation() {
+  if (controller) return controller;
+
+  const titleEl = document.getElementById("taskTitle");
+  const dateEl = document.getElementById("taskDueDate");
+  const prioGrp = document.querySelector(".priority-buttons");
+  const submit = document.getElementById("taskSaveBtn") ;
+
+  if (!titleEl || !dateEl || !prioGrp || !submit) {
+    controller = makeNoopController();
+    return controller;
+  }
+
+  abortCtrl = new AbortController();
+  const signal = abortCtrl.signal;
+
+
+  const showTitle = () => validateMinLengthEl(titleEl, 3, "Title", { show: true });
+  const showDate = () => validateDateNotPastEl(dateEl, "Due date", { show: true });
+
+  const validateAll = () => {
+    const okTitle = validateMinLengthEl(titleEl, 3, "Title", { show: false });
+    const okDate = validateDateNotPastEl(dateEl, "Due date", { show: true });
+    const okPrio = validatePriorityGroup(prioGrp, "Priority", { show: true });
+    return okTitle && okDate && okPrio;
+  };
+
+  controller = bindForm({
+    submitBtn: submit,
+    validateAllSilent: validateAll,
+    fields: [
+      { el: titleEl, events: ["blur"], validateVisible: showTitle },
+      { el: dateEl, events: ["blur"], validateVisible: showDate },
+    ],
+    signal,
+  });
+
+  return controller;
 }

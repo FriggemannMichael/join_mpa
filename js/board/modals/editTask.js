@@ -6,6 +6,7 @@ import { setSubtasksFrom, initSubtaskInput, renderSubtasks, subtasks as subtasks
 import { icons } from "../../common/svg-template.js";
 import { closeTaskOverlay } from "../utils.js";
 import { updateTask, loadTask } from "../services/tasks.repo.js"
+import {mountEditTaskValidation, unmountAddTaskValidation} from "../../validation/validation-addTask.js"
 
 /**
  * Opens and renders the edit form inside the task modal.
@@ -27,6 +28,9 @@ export async function openEditForm(taskId) {
   await populateAssignees();
   bindPriorityButtons();
   await fillEdit(taskId);
+  unmountAddTaskValidation()
+  mountEditTaskValidation(section)
+
 }
 
 
@@ -79,6 +83,7 @@ function createFooter(onUpdate) {
   const btn = document.createElement("button");
   btn.type = "button";
   btn.className = "update-task-btn";
+  btn.id = "taskSaveBtn"
   btn.innerHTML = `OK ${icons.checkwhite}`;
   btn.addEventListener("click", onUpdate);
 

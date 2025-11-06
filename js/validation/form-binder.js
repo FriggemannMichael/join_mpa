@@ -10,7 +10,7 @@ import { releaseSubmit } from "./validation-helpers.js";
 export function bindForm({ fields, submitBtn, validateAllSilent }) {
   const listeners = [];
 
-  fields.forEach(f) => {
+  fields.forEach(f => {
     const { el, events, validateVisible } = f;
     if (!el) {
       console.warn("bindForm: Element ist null, überspringe Feld-Binding");
