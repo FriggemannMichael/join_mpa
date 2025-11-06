@@ -248,7 +248,7 @@ select {
 
 .field-fault-msg {
   position: absolute;
-  top: 100%;
+  top: 90%;
   left: 0;
   transform: translateY(12px);
   padding: 0px 10px;
@@ -314,10 +314,6 @@ select {
     top: auto;
     bottom: -6px;
     border-color: #e53935 transparent transparent transparent;
-  }
-
-  .field-fault-msg {
-    font-size: 0.5rem;
   }
 }
 

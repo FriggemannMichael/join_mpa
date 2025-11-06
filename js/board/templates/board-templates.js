@@ -241,7 +241,7 @@ export const boardTemplates = {
             <div class="selected-assignee-avatars" id="selected-assignee-avatars"></div>
           </div>
           <div class="form-group">
-                <label>Category <span class="required-marker">*</span></label>
+                <label>Category <sup class="required-marker">*</sup></label>
                 <div class="custom-category-select">
                   <div
                     class="category-select-header"

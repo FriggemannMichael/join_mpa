@@ -687,6 +687,7 @@ label {
 }
 
 .required-marker {
+  font-size: 0.65em;
   color: red;
   font-weight: bold;
   margin-right: 4px;
@@ -700,12 +701,22 @@ label {
 .category-select-header {
   align-items: center;
   background-color: var(--white);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
+  border: 1px solid var(--color-separator);
+  border-radius: 10px;
   cursor: pointer;
   display: flex;
+  font-size: 20px;
+  height: 48px;
   justify-content: space-between;
-  padding: 10px;
+  padding: 12px 16px;
+  transition: border-color 0.3s ease;
+}
+
+.category-select-header:active {
+ border-bottom: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-color: var(--accent-color);
 }
 
 .category-dropdown {
