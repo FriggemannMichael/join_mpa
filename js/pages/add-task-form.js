@@ -262,7 +262,7 @@ export async function handleTaskCreate() {
     clearTaskForm();
     setTimeout(() => {
       window.location.href = "board.html";
-    }, 500);
+    }, 100);
   } catch (error) {
     setTaskStatus("Task konnte nicht gespeichert werden", true);
   } finally {
