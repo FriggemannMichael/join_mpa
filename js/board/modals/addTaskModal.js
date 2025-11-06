@@ -3,6 +3,7 @@ import { bindPriorityButtons, bindActionButtons } from '../../pages/add-task-for
 import { initSubtaskInput } from '../../pages/add-task-subtasks.js';
 import { boardTemplates } from "../templates/board-templates.js";
 import { closeTaskOverlay, ScrollLock } from "../utils.js";
+import {mountAddTaskValidation} from "../../validation/validation-addTask.js"
 
 
 /**
@@ -36,6 +37,7 @@ export async function initAddTask() {
     bindPriorityButtons();
     bindActionButtons();
     initSubtaskInput();
+    mountAddTaskValidation();
 }
 
 

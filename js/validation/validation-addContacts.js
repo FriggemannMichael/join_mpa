@@ -1,6 +1,6 @@
 import { byId } from "./valdiation-ui.js";
-import { attachValidationByIds } from "./validation.helpers.js";
-import { validateRequiredEl, validateMinLengthEl, validateEmailEl, validatePhoneEl } from "./validation-fields.js";
+// import { attachValidationByIds } from "./validation-helpers.js";
+// import { validateRequiredEl, validateMinLengthEl, validateEmailEl, validatePhoneEl } from "./validation-fields.js";
 
 export function validateAddContact() {
   const nameEl  = byId("addContactName");
