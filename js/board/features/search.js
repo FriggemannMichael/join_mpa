@@ -1,3 +1,5 @@
+import { buildEmptyState } from "../components/placeholders.js"
+
 /**
  * Initializes the board search input and button.
  * Attaches event listeners and prepares the search UI.
@@ -33,6 +35,8 @@ function runSearch(term) {
     if (isMatch) foundAny = true;
   });
 
+  ensureColumnEmptyStates(hasTerm)
+
   toggleSearchMessage(hasTerm && !foundAny);
 }
 
@@ -64,3 +68,36 @@ function toggleSearchMessage(show) {
   msg.style.display = show ? "block" : "none";
 }
 
+
+/**
+ * Ensures each board column shows a temporary empty state when no visible tasks remain.
+ * Removes the placeholder once tasks are visible again or search is cleared.
+ * @param {boolean} searchActive - Whether the search filter is currently active.
+ * @returns {void}
+ */
+function ensureColumnEmptyStates(searchActive) {
+  getBoardColumns().forEach((col) => {
+    const visible = [...col.querySelectorAll(".task_card")]
+      .filter(c => c.style.display !== "none");
+    const temp = col.querySelector(".search-temp-empty");
+
+    if (searchActive && visible.length === 0) {
+      if (!temp) {
+        const el = buildEmptyState("No search results");
+        col.append(el);
+      }
+    } else if (temp) {
+      temp.remove();
+    }
+  });
+}
+
+
+/**
+ * Returns all column elements on the board.
+ * Used to iterate over each Kanban column when updating task visibility.
+ * @returns {HTMLElement[]} An array of all board column elements.
+ */
+function getBoardColumns() {
+  return Array.from(document.querySelectorAll(".task_space"));
+}

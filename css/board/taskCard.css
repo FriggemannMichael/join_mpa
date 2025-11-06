@@ -153,8 +153,8 @@ h5 {
   margin-left: -16px;
 }
 
-.usertask,
-.user-task {
+.userstory,
+.user-story {
   background-color: var(--color-task-user-story);
 }
 

@@ -58,9 +58,9 @@ export function mountAddTaskValidation(root = document) {
 
   const validateAllSilent = () => {
     const okTitle = validateMinLengthEl(titleEl, 3, "Title", { show: false });
-    const okDate = validateDateNotPastEl(dateEl, "Due date", { show: true });
-    const okCat = validateRequiredEl(catEl, "Category", { show: true });
-    const okPrio = validatePriorityGroup(prioGrp, "Priority", { show: true });
+    const okDate = validateDateNotPastEl(dateEl, "Due date", { show: false });
+    const okCat = validateRequiredEl(catEl, "Category", { show: false });
+    const okPrio = validatePriorityGroup(prioGrp, "Priority", { show: false });
     return okTitle && okDate && okCat && okPrio;
   };
 
@@ -150,8 +150,8 @@ export function mountEditTaskValidation(root = document) {
 
   const validateAllSilent = () => {
     const okTitle = validateMinLengthEl(titleEl, 3, "Title", { show: false });
-    const okDate = validateDateNotPastEl(dateEl, "Due date", { show: true });
-    const okPrio = validatePriorityGroup(prioGrp, "Priority", { show: true });
+    const okDate = validateDateNotPastEl(dateEl, "Due date", { show: false });
+    const okPrio = validatePriorityGroup(prioGrp, "Priority", { show: false });
     return okTitle && okDate && okPrio;
   };
 

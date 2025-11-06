@@ -1,7 +1,8 @@
 
 import { renderTaskModal } from "../modals/taskModal.view.js"
+import { db } from "../../common/firebase.js";
+import { ref, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { loadTask } from "../services/tasks.repo.js"
-import { updateTaskStatus } from "../utils.js";
 
 
 let currentDrag = null;
@@ -14,12 +15,22 @@ let currentDrag = null;
  * @returns {void}
  */
 export function enableCardInteractions(card) {
+  const MOBILE_BREAKPOINT = 900;
+  const updateTouchAction = () => {
+    const isMobileView = window.innerWidth < MOBILE_BREAKPOINT;
+    card.style.touchAction = isMobileView ? "none" : "auto";
+    card.style.webkitUserSelect = isMobileView ? "none" : "auto";
+  };
+  updateTouchAction();
+  window.addEventListener("resize", updateTouchAction);
+
   const HOLD_MS = 300;
   const MOVE_THRESHOLD = 5;
+
   const s = initDragState();
 
   card.addEventListener("pointerdown", (e) => onDown(card, e, s, HOLD_MS));
-  card.addEventListener("pointermove", (e) => onMove(card, e, s, MOVE_THRESHOLD), { passive: false });
+  card.addEventListener("pointermove", (e) => onMove(card, e, s, MOVE_THRESHOLD));
   card.addEventListener("pointerup", (e) => onUp(card, e, s, HOLD_MS));
   card.addEventListener("pointercancel", (e) => onUp(card, e, s, HOLD_MS));
 }
@@ -62,6 +73,10 @@ function onDown(card, e, s, HOLD_MS) {
   s.isPointerDown = true;
   s.pointerId = e.pointerId;
 
+  if (s.isTouch || window.innerWidth < 900) {
+    card.setPointerCapture(e.pointerId);
+    card.style.touchAction = "none";
+  }
   if (s.isTouch) startHoldTimer(card, e, s, HOLD_MS);
 }
 
@@ -78,23 +93,19 @@ function onDown(card, e, s, HOLD_MS) {
 function onMove(card, e, s, THRESHOLD) {
   if (!samePointer(e, s)) return;
   if (!s.isTouch && e.buttons === 0) return;
-
-  const moved = exceededThreshold(e, s, THRESHOLD);
-
+  if (s.isTouch && e.cancelable) e.preventDefault();
   if (!s.dragging) {
-    if (s.isTouch && moved) {
+    if (s.isTouch && exceededThreshold(e, s, THRESHOLD)) {
       s.moved = true;
       clearHoldTimer(s);
       return;
     }
-    if (!s.isTouch && moved) {
+    if (!s.isTouch && exceededThreshold(e, s, THRESHOLD)) {
       startDrag(card, e, s);
-      if (e.cancelable) e.preventDefault();
       return;
     }
     return;
   }
-
   if (e.cancelable) e.preventDefault();
   moveDragging(card, e);
 }
@@ -196,10 +207,8 @@ function isTap(s, HOLD_MS) {
 function startDrag(card, e, s) {
   startDragging(card, e);
   clearHoldTimer(s);
-  s.dragging = true;
 
-  card.style.touchAction = "none";
-  card.style.webkitUserSelect = "none";
+  s.dragging = true;
 
   document.querySelectorAll(".no_task_to_do").forEach(el => {
     el.style.display = "none";
@@ -223,10 +232,14 @@ function resetPointerState(card, e, s) {
     s.isPointerDown = false;
     s.pointerId = null;
 
-    card.style.removeProperty("touch-action");
-    card.style.removeProperty("webkit-user-select");
-  } catch { };
+    if (window.innerWidth >= 900) {
+      card.style.touchAction = "auto";
+      card.style.webkitUserSelect = "auto";
+    }
+  }
+  catch { }
 }
+
 
 /**
  * Opens the task modal for the given card.
@@ -240,7 +253,6 @@ async function openModal(card) {
   const task = await loadTask(id);
   await renderTaskModal(id, task);
 }
-
 
 
 /**
@@ -385,6 +397,7 @@ function deleteDragSettings(card) {
 }
 
 
+
 /**
  * Finds the nearest task space element to the given pointer position.
  * Calculates distances to all spaces and returns the closest one.
@@ -410,7 +423,22 @@ function findNearestSpace(clientX, clientY) {
       nearest = space;
     }
   });
+
   return nearest;
+}
+
+
+/**
+ * Updates the status of a task in the database.
+ * Sets the new status and updates the timestamp.
+ * @async
+ * @param {string} taskId - The ID of the task to update.
+ * @param {string} newStatus - The new status value for the task.
+ * @returns {Promise<void>}
+ */
+export async function updateTaskStatus(taskId, newStatus) {
+  const taskRef = ref(db, `tasks/${taskId}`);
+  await update(taskRef, { status: newStatus, updatedAt: Date.now() });
 }
 
 
