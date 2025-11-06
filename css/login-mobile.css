@@ -5,8 +5,8 @@
   }
 
 
-.brand-splash {
-    position: fixed;
+.brand-splash.brand-fixed {
+    position: absolute;
     z-index: calc(var(--z-splash) + 10);
   }
 }
@@ -31,9 +31,9 @@
   }
 
 
-.brand-splash {
+.brand-splash.brand-fixed {
     z-index: calc(var(--z-splash) + 10);
-    position: fixed;
+    position: absolute;
   }
 
 

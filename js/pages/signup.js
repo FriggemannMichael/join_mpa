@@ -10,16 +10,31 @@ initSignupPage();
 
 /** ===== Regex ===== */
 const RX_EMAIL = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const RX_NAME  = /^[A-ZÄÖÜ][a-zäöüß]+(?:[ -][A-ZÄÖÜ][a-zäöüß]+)*$/;
+const RX_NAME = /^[A-ZÄÖÜ][a-zäöüß]+(?:[ -][A-ZÄÖÜ][a-zäöüß]+)*$/;
+
+/** ===== Blockierte E-Mail-Adressen ===== */
+const BLOCKED_EMAILS = [
+  "test@test.de",
+  "example@example.com",
+  "no-reply@example.com",
+  "admin@admin.com",
+  "info@info.de",
+  "user@user.com",
+  "demo@demo.com",
+  "fake@fake.com",
+  "123@123.com",
+  "placeholder@domain.com",
+];
 
 /** ===== DOM-Helper ===== */
-const el  = (id) => document.getElementById(id);
+const el = (id) => document.getElementById(id);
 const val = (id) => (el(id)?.value ?? "").trim();
 
 /** Fehlermeldungen pro Feld */
 const ERR = {
   name: "Bitte einen gültigen Namen eingeben (erster Buchstabe groß).",
   email: "Bitte eine gültige E-Mail-Adresse eingeben.",
+  emailBlocked: "Diese E-Mail-Adresse kann nicht verwendet werden.",
   password: "Passwort benötigt mindestens 6 Zeichen.",
   confirm: "Passwörter stimmen nicht überein.",
 };
@@ -27,7 +42,7 @@ const ERR = {
 /** Eltern Container finden */
 function getContainer(id) {
   const node = el(id);
-  return node ? (node.closest(".inputField__container") || node) : null;
+  return node ? node.closest(".inputField__container") || node : null;
 }
 
 /** roten Rand + aria-invalid toggeln */
@@ -102,10 +117,15 @@ function bindSignupForm() {
 
 /** Live-Validierung bei Eingabe */
 function handleLiveInput() {
-  ["signupName","signupEmail","signupPassword","signupPasswordConfirm"].forEach((id) => {
+  [
+    "signupName",
+    "signupEmail",
+    "signupPassword",
+    "signupPasswordConfirm",
+  ].forEach((id) => {
     const c = getContainer(id);
     if (c?.dataset.touched === "true") {
-      validateSingleField(id, { showErrors: true }); 
+      validateSingleField(id, { showErrors: true });
     }
   });
   updateSubmitState();
@@ -119,7 +139,8 @@ function handleLiveInput() {
 function validateSingleField(id, opts = {}) {
   const { showErrors = false, markTouch = false } = opts;
   const v = val(id);
-  let ok = true, msg = "";
+  let ok = true,
+    msg = "";
 
   switch (id) {
     case "signupName":
@@ -128,7 +149,12 @@ function validateSingleField(id, opts = {}) {
       break;
     case "signupEmail":
       ok = !!v && RX_EMAIL.test(v);
-      if (!ok) msg = ERR.email;
+      if (!ok) {
+        msg = ERR.email;
+      } else if (BLOCKED_EMAILS.includes(v.toLowerCase())) {
+        ok = false;
+        msg = ERR.emailBlocked;
+      }
       break;
     case "signupPassword":
       ok = v.length >= 6;
@@ -161,7 +187,11 @@ function validateSingleField(id, opts = {}) {
 /** Navigation */
 function bindBackButton() {
   const backBtn = el("signupBackBtn");
-  if (backBtn) backBtn.addEventListener("click", () => (window.location.href = "./index.html"));
+  if (backBtn)
+    backBtn.addEventListener(
+      "click",
+      () => (window.location.href = "./index.html")
+    );
 }
 
 /**
@@ -169,7 +199,9 @@ function bindBackButton() {
  */
 function bindPasswordToggles() {
   document.querySelectorAll("[data-toggle]").forEach((button) => {
-    button.addEventListener("click", () => togglePassword(button.dataset.toggle));
+    button.addEventListener("click", () =>
+      togglePassword(button.dataset.toggle)
+    );
   });
 }
 
@@ -180,8 +212,14 @@ async function handleSignupSubmit(event) {
   const okAll =
     validateSingleField("signupName", { showErrors: true, markTouch: true }) &&
     validateSingleField("signupEmail", { showErrors: true, markTouch: true }) &&
-    validateSingleField("signupPassword", { showErrors: true, markTouch: true }) &&
-    validateSingleField("signupPasswordConfirm", { showErrors: true, markTouch: true });
+    validateSingleField("signupPassword", {
+      showErrors: true,
+      markTouch: true,
+    }) &&
+    validateSingleField("signupPasswordConfirm", {
+      showErrors: true,
+      markTouch: true,
+    });
 
   const accepted = el("signupPrivacy")?.checked ?? false;
   if (!accepted) {
@@ -192,7 +230,11 @@ async function handleSignupSubmit(event) {
 
   disableSubmit(true);
   try {
-    await registerUser(val("signupName"), val("signupEmail"), val("signupPassword"));
+    await registerUser(
+      val("signupName"),
+      val("signupEmail"),
+      val("signupPassword")
+    );
     clearFaultMsgs(); // Nach Erfolg alle Fehlermeldungen entfernen
     window.location.href = "./summary.html";
   } catch (err) {
@@ -227,7 +269,8 @@ function updateSubmitState() {
 function showPasswordMismatch(password, confirm) {
   const hint = el("signupPasswordHint");
   if (!hint) return;
-  hint.textContent = password && confirm && password !== confirm ? ERR.confirm : "";
+  hint.textContent =
+    password && confirm && password !== confirm ? ERR.confirm : "";
 }
 
 /**
@@ -268,7 +311,7 @@ function setSignupStatus(message, isError) {
  * Entfernt alle sichtbaren Fehlermeldungen
  */
 function clearFaultMsgs() {
-  document.querySelectorAll(".field-fault-msg.visible").forEach(el => {
+  document.querySelectorAll(".field-fault-msg.visible").forEach((el) => {
     el.textContent = "";
     el.classList.remove("visible");
   });

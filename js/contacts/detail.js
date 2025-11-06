@@ -8,6 +8,7 @@ import {
 } from "../common/svg-template.js";
 import { colorFromString, getInitials } from "../board/utils.js";
 import { db, ref, remove } from "./repo.js";
+import { confirmModal } from "../board/modals/confirmModal.js";
 import {
   contactsCache,
   selectedContactKey as selectedKeyFromList,
@@ -91,19 +92,20 @@ export function bindEditDeleteButtons() {
  */
 export async function handleDeleteContact() {
   if (!selectedContactKey) return;
-  if (!confirm("Kontakt wirklich löschen?")) return;
-  try {
-    const contactRef = ref(db, `/contacts/${selectedContactKey}`);
-    await remove(contactRef);
-    selectedContactKey = null;
-    const info = document.querySelector(".contact-info");
-    const placeholder = document.querySelector(".contact-detail-placeholder");
-    if (info) {
-      info.innerHTML = "";
-      info.style.display = "none";
-    }
-    if (placeholder) placeholder.style.display = "flex";
-  } catch (error) {}
+  confirmModal("Kontakt wirklich löschen?", async () => {
+    try {
+      const contactRef = ref(db, `/contacts/${selectedContactKey}`);
+      await remove(contactRef);
+      selectedContactKey = null;
+      const info = document.querySelector(".contact-info");
+      const placeholder = document.querySelector(".contact-detail-placeholder");
+      if (info) {
+        info.innerHTML = "";
+        info.style.display = "none";
+      }
+      if (placeholder) placeholder.style.display = "flex";
+    } catch (error) {}
+  });
 }
 
 /**
