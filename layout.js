@@ -190,6 +190,15 @@ function setupAuthBasedNavigation() {
   const authRequiredLinks = document.querySelectorAll("[data-auth-required]");
   const guestOnlyLinks = document.querySelectorAll("[data-guest-only]");
 
+  console.log("🔍 setupAuthBasedNavigation:", {
+    isLoggedIn,
+    currentPage,
+    isLegalPage,
+    user: user ? user.email || "Guest" : "none",
+    authRequiredLinksCount: authRequiredLinks.length,
+    guestOnlyLinksCount: guestOnlyLinks.length,
+  });
+
   if (isLoggedIn) {
     authRequiredLinks.forEach((link) => {
       link.classList.remove("nav-link-hidden");
@@ -237,6 +246,13 @@ function hideProfileIconOnLegalPagesIfNotLoggedIn() {
     currentPage === "help.html";
 
   const profileIcon = document.getElementById("profileIcon");
+
+  console.log("👤 hideProfileIconOnLegalPagesIfNotLoggedIn:", {
+    isLoggedIn,
+    currentPage,
+    isLegalPage,
+    profileIconExists: !!profileIcon,
+  });
 
   if (!isLoggedIn && isLegalPage && profileIcon) {
     profileIcon.style.display = "none";
