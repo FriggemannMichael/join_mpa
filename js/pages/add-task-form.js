@@ -7,6 +7,8 @@ import { createTask } from "../common/tasks.js";
 import { icons } from "../common/svg-template.js";
 import { subtasks, renderSubtasks } from "./add-task-subtasks.js";
 import { updateAssigneeSelection } from "./add-task-assignees-ui.js";
+import { validatePriorityGroup } from "../validation/validation-fields.js";
+import { controller } from "../validation/validation-addTask.js"; 
 
 
 /**
@@ -24,9 +26,17 @@ export function bindPriorityButtons() {
  * @param {HTMLElement} activeButton Der zu aktivierende Button
  */
 export function setActivePriority(activeButton) {
+  // 1️⃣ UI-State
   document.querySelectorAll(".priority-btn").forEach((button) => {
     updateButtonActiveState(button, button === activeButton);
   });
+
+  // 2️⃣ Priority-Gruppe prüfen (zeigt/entfernt Fehler)
+  const group = activeButton.closest(".priority-buttons");
+  validatePriorityGroup(group, "Priority", { show: true });
+
+  // 3️⃣ Gesamt-Button-Status aktualisieren (silent)
+  controller.updateSubmit();
 }
 
 

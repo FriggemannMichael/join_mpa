@@ -13,6 +13,7 @@ import {
   toggleCategoryDropdown,
   selectCategory,
 } from "./add-task-form.js";
+import {initAddTaskValidation} from "../validation/validation-addTask.js"
 
 initAddTaskPage();
 
@@ -29,6 +30,7 @@ async function initAddTaskPage() {
   bindPriorityButtons();
   bindActionButtons();
   initSubtaskInput();
+  initAddTaskValidation();
 }
 
 
