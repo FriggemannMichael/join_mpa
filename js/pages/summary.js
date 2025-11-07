@@ -10,20 +10,15 @@ import { subscribeToTasks } from "../common/tasks.js";
 
 let unsubscribeFromTasks = null;
 
-// DOM ready event listener for immediate guest handling
 document.addEventListener("DOMContentLoaded", () => {
   handleGuestDisplay();
 });
 
 initSummaryPage();
 
-/**
- * Handles display for guest users immediately on DOM load
- */
 function handleGuestDisplay() {
   const user = getActiveUser();
   const nameField = document.getElementById("greeting__name");
-
   if (
     nameField &&
     user &&
@@ -33,61 +28,39 @@ function handleGuestDisplay() {
   }
 }
 
-/**
- * Initializes the summary page with authentication check and layout loading
- */
 async function initSummaryPage() {
   const allowed = await guardPage("./index.html");
   if (!allowed) return;
   await bootLayout();
-
-  // Show mobile greeting AFTER auth initialization
   showMobileGreetingIfNeeded();
-
   renderGreeting();
   await loadSummaryData();
 }
 
-/**
- * Loads and subscribes to task data for summary display
- */
 async function loadSummaryData() {
   try {
     unsubscribeFromTasks = await subscribeToTasks(updateSummaryMetrics);
   } catch (error) {
-    console.error("Error loading summary data:", error);
     showFallbackMetrics();
   }
 }
 
-/**
- * Renders personalized greeting based on user and time of day
- */
 function renderGreeting() {
   const nameField = document.getElementById("greeting__name");
   const textField = document.getElementById("greeting__text");
   if (!nameField || !textField) return;
-
   const user = getActiveUser();
   const isGuest = isGuestUser(user);
-
   if (isGuest) {
-    // For guest user: hide name element completely
     nameField.style.display = "none";
     textField.textContent = buildGreetingPrefixForGuest();
   } else {
-    // For real user: show name element
     nameField.style.display = "block";
     nameField.textContent = resolveUserName();
     textField.textContent = buildGreetingPrefix();
   }
 }
 
-/**
- * Checks if the current user is a guest
- * @param {Object|null} user User object
- * @returns {boolean} True if guest user
- */
 function isGuestUser(user) {
   if (!user) return true;
   if (user.uid === "guest-user") return true;
@@ -96,25 +69,15 @@ function isGuestUser(user) {
   return false;
 }
 
-/**
- * Updates all summary metrics based on task data
- * @param {Array} tasks Array with all tasks from the database
- */
 function updateSummaryMetrics(tasks) {
   if (!Array.isArray(tasks)) {
     showFallbackMetrics();
     return;
   }
-
   const metrics = calculateTaskMetrics(tasks);
   updateSummaryDisplay(metrics);
 }
 
-/**
- * Calculates all necessary task metrics for summary display
- * @param {Array} tasks Array with task objects
- * @returns {Object} Calculated metrics
- */
 function calculateTaskMetrics(tasks) {
   const todoTasks = tasks.filter((t) => t.status === "toDo");
   const doneTasks = tasks.filter((t) => t.status === "done");
@@ -123,7 +86,6 @@ function calculateTaskMetrics(tasks) {
     (t) => t.status === "awaitFeedback"
   );
   const urgentTasks = tasks.filter((t) => t.priority === "urgent");
-
   return {
     todo: todoTasks.length,
     done: doneTasks.length,
@@ -135,26 +97,15 @@ function calculateTaskMetrics(tasks) {
   };
 }
 
-/**
- * Finds the nearest deadline from all tasks
- * @param {Array} tasks Array with task objects
- * @returns {string|null} Formatted deadline or null
- */
 function findUpcomingDeadline(tasks) {
   const now = new Date();
   const upcomingTasks = tasks
     .filter((t) => t.dueDate && new Date(t.dueDate) >= now)
     .sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-
   if (upcomingTasks.length === 0) return null;
   return formatDeadlineDate(upcomingTasks[0].dueDate);
 }
 
-/**
- * Formats a date for deadline display
- * @param {string} dateString ISO date string
- * @returns {string} Formatted date
- */
 function formatDeadlineDate(dateString) {
   const date = new Date(dateString);
   return date.toLocaleDateString("en-US", {
@@ -164,10 +115,6 @@ function formatDeadlineDate(dateString) {
   });
 }
 
-/**
- * Updates DOM elements with calculated metrics
- * @param {Object} metrics Calculated task metrics
- */
 function updateSummaryDisplay(metrics) {
   updateElementById("amount_toDo", metrics.todo);
   updateElementById("amount_done", metrics.done);
@@ -175,7 +122,6 @@ function updateSummaryDisplay(metrics) {
   updateElementById("amount_tasks", metrics.total);
   updateElementById("amount_inProgress", metrics.inProgress);
   updateElementById("amount_awaitingFeedback", metrics.awaitingFeedback);
-
   const deadlineElement = document.getElementById("amount_deadline");
   if (deadlineElement) {
     deadlineElement.textContent =
@@ -183,11 +129,6 @@ function updateSummaryDisplay(metrics) {
   }
 }
 
-/**
- * Helper function to safely update element content
- * @param {string} elementId ID of the DOM element
- * @param {number} value Number to display
- */
 function updateElementById(elementId, value) {
   const element = document.getElementById(elementId);
   if (element) {
@@ -195,9 +136,6 @@ function updateElementById(elementId, value) {
   }
 }
 
-/**
- * Displays fallback values when no data can be loaded
- */
 function showFallbackMetrics() {
   const fallbackMetrics = {
     todo: 0,
@@ -211,10 +149,6 @@ function showFallbackMetrics() {
   updateSummaryDisplay(fallbackMetrics);
 }
 
-/**
- * Resolves the username to display based on authentication status
- * @returns {string} Display name for the user
- */
 function resolveUserName() {
   const user = getActiveUser();
   if (isGuestUser(user)) return "Guest";
@@ -224,10 +158,6 @@ function resolveUserName() {
   return "Guest";
 }
 
-/**
- * Creates the greeting prefix based on the current time of day
- * @returns {string} Greeting text depending on time
- */
 function buildGreetingPrefix() {
   const hour = new Date().getHours();
   if (hour < 12) return "Good morning,";
@@ -235,10 +165,6 @@ function buildGreetingPrefix() {
   return "Good evening,";
 }
 
-/**
- * Creates the greeting for guest users without comma
- * @returns {string} Greeting text without comma for guest users
- */
 function buildGreetingPrefixForGuest() {
   const hour = new Date().getHours();
   if (hour < 12) return "Good morning";
@@ -246,63 +172,57 @@ function buildGreetingPrefixForGuest() {
   return "Good evening";
 }
 
-/**
- * Shows the mobile greeting screen after login (mobile only)
- * Checks if user just came from login (sessionStorage flag)
- * Desktop: No greeting screen
- * Mobile + Registered User: Greeting with name
- * Mobile + Guest User: Only time-based greeting without name
- */
-function showMobileGreetingIfNeeded() {
-  // Mobile only (max 767px)
-  if (window.innerWidth >= 768) return;
+function isMobileDevice() {
+  return window.innerWidth < 768;
+}
 
-  // Check if user just logged in
+function shouldShowMobileGreeting() {
+  if (!isMobileDevice()) return false;
   const justLoggedIn = sessionStorage.getItem("justLoggedIn");
-  if (!justLoggedIn) return;
-
-  // Remove flag (only once per login)
+  if (!justLoggedIn) return false;
   sessionStorage.removeItem("justLoggedIn");
+  return true;
+}
 
-  const greetingScreen = document.getElementById("mobileGreeting");
-  const greetingText = document.getElementById("mobileGreetingText");
-  const greetingName = document.getElementById("mobileGreetingName");
+function getMobileGreetingElements() {
+  return {
+    screen: document.getElementById("mobileGreeting"),
+    text: document.getElementById("mobileGreetingText"),
+    name: document.getElementById("mobileGreetingName"),
+  };
+}
 
-  if (!greetingScreen || !greetingText || !greetingName) return;
-
-  const user = getActiveUser();
-  const isGuest = isGuestUser(user);
-
-  // Time-based greeting (with or without comma)
+function setMobileGreetingContent(elements, user, isGuest) {
   const timeGreeting = isGuest
     ? buildGreetingPrefixForGuest()
     : buildGreetingPrefix();
-  greetingText.textContent = timeGreeting;
+  elements.text.textContent = timeGreeting;
+  elements.name.textContent = isGuest ? "" : resolveUserName();
+}
 
-  // Name only for registered users
-  if (!isGuest) {
-    greetingName.textContent = resolveUserName();
-  } else {
-    greetingName.textContent = ""; // Guest: No name
-  }
-
-  // Show greeting screen
-  greetingScreen.classList.add("active");
-
-  // Fade out after 2 seconds
+function displayMobileGreeting(screen) {
+  screen.classList.add("active");
   setTimeout(() => {
-    greetingScreen.classList.add("fade-out");
-
-    // Nach Fade-Out komplett verstecken
+    screen.classList.add("fade-out");
     setTimeout(() => {
-      greetingScreen.classList.remove("active", "fade-out");
-    }, 500); // Dauer der CSS-Transition
+      screen.classList.remove("active", "fade-out");
+    }, 500);
   }, 2000);
 }
 
 /**
- * Cleanup function called when leaving the page
+ * Shows the mobile greeting screen after login
  */
+function showMobileGreetingIfNeeded() {
+  if (!shouldShowMobileGreeting()) return;
+  const elements = getMobileGreetingElements();
+  if (!elements.screen || !elements.text || !elements.name) return;
+  const user = getActiveUser();
+  const isGuest = isGuestUser(user);
+  setMobileGreetingContent(elements, user, isGuest);
+  displayMobileGreeting(elements.screen);
+}
+
 window.addEventListener("beforeunload", () => {
   if (unsubscribeFromTasks) {
     unsubscribeFromTasks();

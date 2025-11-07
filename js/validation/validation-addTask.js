@@ -23,11 +23,11 @@ let abortCtrl = null;
 export function mountAddTaskValidation(root = document) {
   if (controller) return controller;
 
-  const titleEl = root.getElementById("taskTitle");
-  const dateEl = root.getElementById("taskDueDate");
-  const catEl = root.getElementById("category");
+  const titleEl = root.querySelector("#taskTitle");
+  const dateEl = root.querySelector("#taskDueDate");
+  const catEl = root.querySelector("#category");
   const prioGrp = root.querySelector(".priority-buttons");
-  const submit = root.getElementById("taskCreateBtn");
+  const submit = root.querySelector("#taskCreateBtn");
 
   if (!titleEl || !dateEl || !catEl || !prioGrp || !submit) {
     controller = makeNoopController();
@@ -69,7 +69,7 @@ export function mountAddTaskValidation(root = document) {
     validateAllSilent,
     fields: [
       { el: titleEl, events: ["blur"], validateVisible: showTitle },
-      { el: dateEl, events: ["blur"], validateVisible: showDate },
+      { el: dateEl, events: ["blur", "change"], validateVisible: showDate },
       { el: catEl, events: ["change"], validateVisible: showCat },
     ],
     signal,
@@ -117,10 +117,10 @@ function makeNoopController() {
 export function mountEditTaskValidation(root = document) {
   if (controller) return controller;
 
-  const titleEl = root.getElementById("taskTitle");
-  const dateEl = root.getElementById("taskDueDate");
+  const titleEl = root.querySelector("#taskTitle");
+  const dateEl = root.querySelector("#taskDueDate");
   const prioGrp = root.querySelector(".priority-buttons");
-  const submit = root.getElementById("taskSaveBtn");
+  const submit = root.querySelector("#taskSaveBtn");
 
   if (!titleEl || !dateEl || !prioGrp || !submit) {
     controller = makeNoopController();

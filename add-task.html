@@ -199,11 +199,17 @@
                 ></div>
               </div>
               <div class="form-group">
-                <label>Category <sup class="required-marker">*</sup></label>
+                <label for="category-select">Category <sup class="required-marker">*</sup></label>
                 <div class="custom-category-select">
                   <div
+                    id="category-select"
                     class="category-select-header"
                     onclick="toggleCategoryDropdown()"
+                    role="button"
+                    aria-haspopup="listbox"
+                    aria-expanded="false"
+                    aria-labelledby="category-select"
+                    tabindex="0"
                   >
                     <span id="selected-category-placeholder"
                       >Select category</span
@@ -211,18 +217,23 @@
                     <img
                       src="./assets/icons/arrow_drop_down.svg"
                       class="dropdown-icon"
+                      alt=""
                     />
                   </div>
-                  <div class="category-dropdown d-none" id="category-dropdown">
+                  <div class="category-dropdown d-none" id="category-dropdown" role="listbox">
                     <div
                       class="category-option"
                       onclick="selectCategory('technical-task')"
+                      role="option"
+                      tabindex="0"
                     >
                       Technical Task
                     </div>
                     <div
                       class="category-option"
                       onclick="selectCategory('user-story')"
+                      role="option"
+                      tabindex="0"
                     >
                       User Story
                     </div>

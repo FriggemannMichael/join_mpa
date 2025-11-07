@@ -32,6 +32,11 @@ export async function openEditForm(taskId) {
       return;
     }
 
+    const overlay = document.getElementById("taskOverlay");
+    if (overlay?.cleanup) {
+      overlay.cleanup();
+    }
+
     section.classList.add("task-overlay");
 
     section.replaceChildren(

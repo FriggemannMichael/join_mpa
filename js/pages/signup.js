@@ -9,14 +9,8 @@ import { validateEmail } from "../common/emailValidator.js";
 
 initSignupPage();
 
-/**
- * Regex for name validation
- * Requires first letter capitalized, allows German characters (äöüÄÖÜß)
- * Supports compound names with spaces or hyphens (e.g., "Max Mustermann", "Anna-Maria Müller")
- */
 const RX_NAME = /^[A-ZÄÖÜ][a-zäöüß]+(?:[ -][A-ZÄÖÜ][a-zäöüß]+)*$/;
 
-/** ===== Blocked email addresses ===== */
 const BLOCKED_EMAILS = [
   "test@test.de",
   "example@example.com",
@@ -30,11 +24,9 @@ const BLOCKED_EMAILS = [
   "placeholder@domain.com",
 ];
 
-/** ===== DOM-Helper ===== */
 const el = (id) => document.getElementById(id);
 const val = (id) => (el(id)?.value ?? "").trim();
 
-/** Error messages per field */
 const ERR = {
   name: "Please enter a valid name (first letter capitalized).",
   email: "Please enter a valid email address.",
@@ -44,13 +36,11 @@ const ERR = {
   confirm: "Passwords do not match.",
 };
 
-/** Find parent container */
 function getContainer(id) {
   const node = el(id);
   return node ? node.closest(".inputField__container") || node : null;
 }
 
-/** Toggle red border + aria-invalid */
 function setFieldState(id, ok) {
   const node = el(id);
   const container = getContainer(id);
@@ -59,7 +49,6 @@ function setFieldState(id, ok) {
   node.setAttribute("aria-invalid", String(!ok));
 }
 
-/** Ensure error message element at container */
 function ensureFaultMsg(container) {
   let faultMsg = container.querySelector(".field-fault-msg");
   if (!faultMsg) {
@@ -72,7 +61,6 @@ function ensureFaultMsg(container) {
   return faultMsg;
 }
 
-/** Set or remove error message */
 function setFieldFaultMsg(id, message = "") {
   const container = getContainer(id);
   if (!container) return;
@@ -86,13 +74,11 @@ function setFieldFaultMsg(id, message = "") {
   }
 }
 
-/** Mark field as "touched" (after blur) */
 function markTouched(id) {
   const c = getContainer(id);
   if (c) c.dataset.touched = "true";
 }
 
-/** ===== Init ===== */
 async function initSignupPage() {
   await redirectIfAuthenticated("./summary.html");
   bindSignupForm();
@@ -101,26 +87,19 @@ async function initSignupPage() {
   updateSubmitState();
 }
 
-/**
- * Binds event listeners for the signup form
- */
 function bindSignupForm() {
   const form = el("signupForm");
   if (!form) return;
-
   form.addEventListener("input", handleLiveInput);
   form.addEventListener("change", handleLiveInput);
-
   form.querySelectorAll("input").forEach((input) => {
     input.addEventListener("blur", () =>
       validateSingleField(input.id, { showErrors: true, markTouch: true })
     );
   });
-
   form.addEventListener("submit", handleSignupSubmit);
 }
 
-/** Live validation on input */
 function handleLiveInput() {
   [
     "signupName",
@@ -136,53 +115,56 @@ function handleLiveInput() {
   updateSubmitState();
 }
 
+function validateName(value) {
+  const ok = !!value && RX_NAME.test(value);
+  return { ok, msg: ok ? "" : ERR.name };
+}
+
+function validateEmailField(value) {
+  if (!value || !validateEmail(value)) {
+    const msg = value.includes("..") ? ERR.emailDouble : ERR.email;
+    return { ok: false, msg };
+  }
+  if (BLOCKED_EMAILS.includes(value.toLowerCase())) {
+    return { ok: false, msg: ERR.emailBlocked };
+  }
+  return { ok: true, msg: "" };
+}
+
+function validatePasswordField(value) {
+  const ok = value.length >= 6;
+  return { ok, msg: ok ? "" : ERR.password };
+}
+
+function validatePasswordConfirm(value, password) {
+  const ok = value.length >= 6 && value === password;
+  return { ok, msg: ok ? "" : ERR.confirm };
+}
+
+function getFieldValidator(id) {
+  const validators = {
+    signupName: () => validateName(val(id)),
+    signupEmail: () => validateEmailField(val(id)),
+    signupPassword: () => validatePasswordField(val(id)),
+    signupPasswordConfirm: () =>
+      validatePasswordConfirm(val(id), val("signupPassword")),
+  };
+  return validators[id] || (() => ({ ok: true, msg: "" }));
+}
+
 /**
  * Validate single field with comprehensive email validation
- * Uses centralized email validator to catch consecutive dots and other malformed patterns
- *
- * @param {string} id - Field ID (signupName, signupEmail, signupPassword, signupPasswordConfirm)
- * @param {{showErrors?: boolean, markTouch?: boolean}} opts - Validation options
- * @returns {boolean} True if field is valid, false otherwise
+ * @param {string} id Field ID
+ * @param {{showErrors?: boolean, markTouch?: boolean}} opts Validation options
+ * @returns {boolean} True if field is valid
  */
 function validateSingleField(id, opts = {}) {
   const { showErrors = false, markTouch = false } = opts;
-  const v = val(id);
-  let ok = true,
-    msg = "";
-
-  switch (id) {
-    case "signupName":
-      ok = !!v && RX_NAME.test(v);
-      if (!ok) msg = ERR.name;
-      break;
-    case "signupEmail":
-      // Use robust email validator from centralized module
-      ok = !!v && validateEmail(v);
-      if (!ok) {
-        // Provide specific error message if consecutive dots detected
-        msg = v.includes("..") ? ERR.emailDouble : ERR.email;
-      } else if (BLOCKED_EMAILS.includes(v.toLowerCase())) {
-        ok = false;
-        msg = ERR.emailBlocked;
-      }
-      break;
-    case "signupPassword":
-      ok = v.length >= 6;
-      if (!ok) msg = ERR.password;
-      break;
-    case "signupPasswordConfirm":
-      ok = v.length >= 6 && v === val("signupPassword");
-      if (!ok) msg = ERR.confirm;
-      break;
-    default:
-      ok = true;
-  }
-
+  const validator = getFieldValidator(id);
+  const { ok, msg } = validator();
   if (markTouch) markTouched(id);
-
   const touched = getContainer(id)?.dataset.touched === "true";
   const shouldShow = showErrors || touched;
-
   if (shouldShow) {
     setFieldState(id, ok);
     setFieldFaultMsg(id, ok ? "" : msg);
@@ -190,23 +172,19 @@ function validateSingleField(id, opts = {}) {
     setFieldState(id, true);
     setFieldFaultMsg(id, "");
   }
-
   return ok;
 }
 
-/** Navigation */
 function bindBackButton() {
   const backBtn = el("signupBackBtn");
-  if (backBtn)
+  if (backBtn) {
     backBtn.addEventListener(
       "click",
       () => (window.location.href = "./index.html")
     );
+  }
 }
 
-/**
- * Binds event listeners for password visibility toggles
- */
 function bindPasswordToggles() {
   document.querySelectorAll("[data-toggle]").forEach((button) => {
     button.addEventListener("click", () =>
@@ -215,29 +193,35 @@ function bindPasswordToggles() {
   });
 }
 
-/** Submit-Handler */
-async function handleSignupSubmit(event) {
-  event.preventDefault();
+function validateAllFields() {
+  const nameOk = validateSingleField("signupName", {
+    showErrors: true,
+    markTouch: true,
+  });
+  const emailOk = validateSingleField("signupEmail", {
+    showErrors: true,
+    markTouch: true,
+  });
+  const passwordOk = validateSingleField("signupPassword", {
+    showErrors: true,
+    markTouch: true,
+  });
+  const confirmOk = validateSingleField("signupPasswordConfirm", {
+    showErrors: true,
+    markTouch: true,
+  });
+  return nameOk && emailOk && passwordOk && confirmOk;
+}
 
-  const okAll =
-    validateSingleField("signupName", { showErrors: true, markTouch: true }) &&
-    validateSingleField("signupEmail", { showErrors: true, markTouch: true }) &&
-    validateSingleField("signupPassword", {
-      showErrors: true,
-      markTouch: true,
-    }) &&
-    validateSingleField("signupPasswordConfirm", {
-      showErrors: true,
-      markTouch: true,
-    });
-
+function checkPrivacyAccepted() {
   const accepted = el("signupPrivacy")?.checked ?? false;
   if (!accepted) {
     setSignupStatus("Please accept the privacy policy.", true);
-    return;
   }
-  if (!okAll) return;
+  return accepted;
+}
 
+async function submitRegistration() {
   disableSubmit(true);
   try {
     await registerUser(
@@ -245,41 +229,42 @@ async function handleSignupSubmit(event) {
       val("signupEmail"),
       val("signupPassword")
     );
-    clearFaultMsgs(); // Nach Erfolg alle Fehlermeldungen entfernen
+    clearFaultMsgs();
     window.location.href = "./summary.html";
   } catch (err) {
     setSignupStatus(readAuthError(err), true);
+  } finally {
+    disableSubmit(false);
   }
-  disableSubmit(false);
 }
 
-/**
- * Updates submit button state based on all field validations
- * Provides live feedback on form validity
- */
-function updateSubmitState() {
+async function handleSignupSubmit(event) {
+  event.preventDefault();
+  if (!validateAllFields()) return;
+  if (!checkPrivacyAccepted()) return;
+  await submitRegistration();
+}
+
+function checkAllFieldsValid() {
   const name = val("signupName");
   const email = val("signupEmail");
   const password = val("signupPassword");
   const confirm = val("signupPasswordConfirm");
-  const accepted = el("signupPrivacy")?.checked ?? false;
-
   const okName = !!name && RX_NAME.test(name);
-  // Use robust email validator instead of simple regex
   const okEmail = !!email && validateEmail(email);
   const okPwLen = password.length >= 6;
   const okConfirm = confirm.length >= 6 && password === confirm;
-
-  const enabled = okName && okEmail && okPwLen && okConfirm && accepted;
-  disableSubmit(!enabled);
-  showPasswordMismatch(password, confirm);
+  return okName && okEmail && okPwLen && okConfirm;
 }
 
-/**
- * Displays a hint when passwords don't match
- * @param {string} password The password
- * @param {string} confirm The confirmation password
- */
+function updateSubmitState() {
+  const accepted = el("signupPrivacy")?.checked ?? false;
+  const allValid = checkAllFieldsValid();
+  const enabled = allValid && accepted;
+  disableSubmit(!enabled);
+  showPasswordMismatch(val("signupPassword"), val("signupPasswordConfirm"));
+}
+
 function showPasswordMismatch(password, confirm) {
   const hint = el("signupPasswordHint");
   if (!hint) return;
@@ -287,43 +272,25 @@ function showPasswordMismatch(password, confirm) {
     password && confirm && password !== confirm ? ERR.confirm : "";
 }
 
-/**
- * Enables or disables the submit button
- * @param {boolean} disabled True to disable, false to enable
- */
 function disableSubmit(disabled) {
   const button = el("signupSubmit");
-  if (button) {
-    button.disabled = disabled;
-    button.classList.toggle("btn__disabled", disabled);
-  }
+  if (!button) return;
+  button.disabled = disabled;
+  button.classList.toggle("btn__disabled", disabled);
 }
 
-/**
- * Toggles the visibility of a password field
- * @param {string} id The ID of the password input field
- */
 function togglePassword(id) {
   const field = el(id);
   if (field) field.type = field.type === "password" ? "text" : "password";
 }
 
-/**
- * Displays a status message on the signup page
- * @param {string} message The message to display
- * @param {boolean} isError True for error message, false for normal message
- */
 function setSignupStatus(message, isError) {
   const status = el("signupStatus");
-  if (status) {
-    status.textContent = message;
-    status.classList.toggle("error", !!isError);
-  }
+  if (!status) return;
+  status.textContent = message;
+  status.classList.toggle("error", !!isError);
 }
 
-/**
- * Removes all visible error messages
- */
 function clearFaultMsgs() {
   document.querySelectorAll(".field-fault-msg.visible").forEach((el) => {
     el.textContent = "";

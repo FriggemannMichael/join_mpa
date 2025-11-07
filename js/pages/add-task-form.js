@@ -7,7 +7,12 @@ import { createTask } from "../common/tasks.js";
 import { icons } from "../common/svg-template.js";
 import { subtasks, renderSubtasks } from "./add-task-subtasks.js";
 import { updateAssigneeSelection } from "./add-task-assignees-ui.js";
-import { validatePriorityGroup } from "../validation/validation-fields.js";
+import {
+  validatePriorityGroup,
+  validateMinLengthEl,
+  validateDateNotPastEl,
+  validateRequiredEl,
+} from "../validation/validation-fields.js";
 import { updateAddTaskValidationButton } from "../validation/validation-addTask.js";
 
 /**
@@ -118,10 +123,8 @@ export function bindActionButtons() {
   if (clearBtn) clearBtn.addEventListener("click", clearTaskForm);
   if (createBtn) createBtn.addEventListener("click", handleTaskCreate);
 
-  // Initial validation
+  // Initial validation - Note: mountAddTaskValidation handles field validation
   validateFormAndUpdateButton();
-  // Event listeners for form fields
-  bindFormValidation();
 }
 
 /**
@@ -196,12 +199,10 @@ export function readActivePriority() {
  * Removes all error messages, resets field borders, and clears all values
  */
 export function clearTaskForm() {
-  const form = document.getElementById("taskForm");
+  const pageContent = document.getElementById("pageContent");
 
-  // Use centralized form reset utility to clear validation
-  if (form) {
-    resetFormCompletely(form);
-  }
+  // Clear all validation errors manually
+  clearAllValidationErrors(pageContent);
 
   // Clear task-specific data
   clearTextFields();
@@ -212,8 +213,38 @@ export function clearTaskForm() {
   renderSubtasks();
   setTaskStatus("Form reset", false);
 
+  // Clear category placeholder
+  const categoryPlaceholder = document.getElementById("selected-category-placeholder");
+  if (categoryPlaceholder) {
+    categoryPlaceholder.textContent = "Select category";
+  }
+
   // Update button status after clear
   validateFormAndUpdateButton();
+}
+
+/**
+ * Clears all validation error states from the form
+ * @param {HTMLElement} container Container element
+ */
+function clearAllValidationErrors(container) {
+  if (!container) return;
+
+  // Clear all input-fault classes
+  container.querySelectorAll(".input-fault").forEach((el) => {
+    el.classList.remove("input-fault");
+  });
+
+  // Clear all field-fault-msg elements
+  container.querySelectorAll(".field-fault-msg").forEach((msg) => {
+    msg.textContent = "";
+    msg.classList.remove("visible");
+  });
+
+  // Clear form-group input-fault
+  container.querySelectorAll(".form-group").forEach((group) => {
+    group.classList.remove("input-fault");
+  });
 }
 
 /**
@@ -268,6 +299,8 @@ export async function handleTaskCreate() {
     const data = readTaskData();
 
     if (!validateTaskData(data)) {
+      // Show visual validation errors for all fields
+      showAllValidationErrors(data);
       setTaskStatus("Please fill all required fields (incl. Priority)", true);
       return;
     }
@@ -289,37 +322,37 @@ export async function handleTaskCreate() {
 }
 
 /**
+ * Shows visual validation errors for all required fields
+ * @param {Object} data Task data to validate
+ */
+function showAllValidationErrors(data) {
+  const titleEl = document.getElementById("taskTitle");
+  const dateEl = document.getElementById("taskDueDate");
+  const catEl = document.getElementById("category");
+  const prioGrp = document.querySelector(".priority-buttons");
+
+  // Validate each field with show: true to display errors
+  if (titleEl && !data.title) {
+    validateMinLengthEl(titleEl, 3, "Title", { show: true });
+  }
+  if (dateEl && !data.dueDate) {
+    validateDateNotPastEl(dateEl, "Due date", { show: true });
+  }
+  if (catEl && !data.category) {
+    validateRequiredEl(catEl, "Category", { show: true });
+  }
+  if (prioGrp && !data.priority) {
+    validatePriorityGroup(prioGrp, "Priority", { show: true });
+  }
+}
+
+/**
  * Validates the task data
  * @param {Object} data Task data
  * @returns {boolean} True if valid
  */
 function validateTaskData(data) {
   return !!(data.title && data.dueDate && data.category && data.priority);
-}
-
-/**
- * Binds event listeners for form field changes for validation
- */
-function bindFormValidation() {
-  const titleField = document.getElementById("taskTitle");
-  const dueDateField = document.getElementById("taskDueDate");
-  const categoryField = document.getElementById("category");
-  const priorityButtons = document.querySelectorAll(".priority-btn");
-
-  // Validate title and due date on input
-  if (titleField)
-    titleField.addEventListener("input", validateFormAndUpdateButton);
-  if (dueDateField)
-    dueDateField.addEventListener("change", validateFormAndUpdateButton);
-  if (categoryField)
-    categoryField.addEventListener("change", validateFormAndUpdateButton);
-
-  // Validate priority on click
-  priorityButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      setTimeout(validateFormAndUpdateButton, 0);
-    });
-  });
 }
 
 /**
@@ -358,6 +391,7 @@ export function toggleCategoryDropdown() {
 
   const isOpen = !dropdown.classList.toggle("d-none");
   header.classList.toggle("open", isOpen);
+  header.setAttribute("aria-expanded", isOpen.toString());
 
   // Listener only active when open
   if (isOpen) {
@@ -376,6 +410,7 @@ function handleOutsideCategoryClick(e) {
   if (!dropdown.contains(e.target) && !header.contains(e.target)) {
     dropdown.classList.add("d-none");
     header.classList.remove("open");
+    header.setAttribute("aria-expanded", "false");
     document.removeEventListener("click", handleOutsideCategoryClick);
   }
 }

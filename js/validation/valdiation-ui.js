@@ -18,6 +18,12 @@ export function showError(inputElement, message) {
 
   host.classList.add("input-fault");
   inputElement.classList.add("input-fault");
+
+  // Special handling for category dropdown
+  const categoryHeader = host.querySelector(".category-select-header");
+  if (categoryHeader) {
+    categoryHeader.classList.add("input-fault");
+  }
 }
 
 export function clearError(inputElement) {
@@ -32,6 +38,12 @@ export function clearError(inputElement) {
 
   const faultMsg = host.querySelector(".field-fault-msg");
   if (faultMsg) faultMsg.classList.remove("visible");
+
+  // Special handling for category dropdown
+  const categoryHeader = host.querySelector(".category-select-header");
+  if (categoryHeader) {
+    categoryHeader.classList.remove("input-fault");
+  }
 }
 
 export function toggleError(inputElement, isValid, message) {
