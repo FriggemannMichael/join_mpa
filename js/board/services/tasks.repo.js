@@ -44,7 +44,6 @@ export async function updateSubtaskDone(taskId, index, done) {
 export async function deleteTask(taskId) {
   const path = `tasks/${taskId}`;
   await update(ref(db), { [path]: null });
-  console.log("🗑️ Task deleted:", taskId);
   closeTaskOverlay();
   showBoardAlert("deleted");
 }
