@@ -13,6 +13,7 @@ import {
   onValue,
   off,
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { showAlert } from "./alertService.js";
 
 const TASKS_PATH = "tasks";
 
@@ -25,12 +26,27 @@ const TASKS_PATH = "tasks";
  * @returns {Promise<string>} The unique key of the newly created task in the database.
  */
 export async function createTask(task) {
-  const db = getDatabase();
-  const tasksRef = ref(db, TASKS_PATH);
-  const newTaskRef = push(tasksRef);
-  const entry = buildTaskPayload(task);
-  await set(newTaskRef, entry);
-  return newTaskRef.key;
+  try {
+    if (!task || typeof task !== "object") {
+      showAlert("error", 2500, "Invalid task data");
+      throw new Error("Invalid task data");
+    }
+
+    if (!task.title?.trim()) {
+      showAlert("error", 2500, "Task title is required");
+      throw new Error("Task title is required");
+    }
+
+    const db = getDatabase();
+    const tasksRef = ref(db, TASKS_PATH);
+    const newTaskRef = push(tasksRef);
+    const entry = buildTaskPayload(task);
+    await set(newTaskRef, entry);
+    return newTaskRef.key;
+  } catch (error) {
+    showAlert("error", 2500, "Failed to create task");
+    throw error;
+  }
 }
 
 /**
@@ -42,20 +58,35 @@ export async function createTask(task) {
  * @returns {() => void} Function to stop listening for changes (unsubscribe).
  */
 export function subscribeToTasks(listener) {
-  const db = getDatabase();
-  const tasksRef = ref(db, TASKS_PATH);
+  try {
+    if (typeof listener !== "function") {
+      showAlert("error", 2500, "Invalid listener function");
+      return () => {};
+    }
 
-  const handler = (snapshot) => {
-    const tasks = snapshot.exists() ? snapshot.val() : null;
-    listener(normalizeTasks(tasks));
-  };
+    const db = getDatabase();
+    const tasksRef = ref(db, TASKS_PATH);
 
-  onValue(tasksRef, handler, (error) => {
-    console.error("Tasks could not be loaded", error);
-    listener([]);
-  });
+    const handler = (snapshot) => {
+      try {
+        const tasks = snapshot.exists() ? snapshot.val() : null;
+        listener(normalizeTasks(tasks));
+      } catch (error) {
+        showAlert("error", 2500, "Error processing tasks");
+        listener([]);
+      }
+    };
 
-  return () => off(tasksRef, "value", handler);
+    onValue(tasksRef, handler, (error) => {
+      showAlert("error", 2500, "Failed to load tasks");
+      listener([]);
+    });
+
+    return () => off(tasksRef, "value", handler);
+  } catch (error) {
+    showAlert("error", 2500, "Error subscribing to tasks");
+    return () => {};
+  }
 }
 
 /**

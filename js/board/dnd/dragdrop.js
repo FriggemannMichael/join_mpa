@@ -1,12 +1,12 @@
-
-import { renderTaskModal } from "../modals/taskModal.view.js"
+import { renderTaskModal } from "../modals/taskModal.view.js";
 import { db } from "../../common/firebase.js";
-import { ref, update } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-import { loadTask } from "../services/tasks.repo.js"
-
+import {
+  ref,
+  update,
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { loadTask } from "../services/tasks.repo.js";
 
 let currentDrag = null;
-
 
 /**
  * Enables drag and pointer interactions for a task card.
@@ -30,11 +30,12 @@ export function enableCardInteractions(card) {
   const s = initDragState();
 
   card.addEventListener("pointerdown", (e) => onDown(card, e, s, HOLD_MS));
-  card.addEventListener("pointermove", (e) => onMove(card, e, s, MOVE_THRESHOLD));
+  card.addEventListener("pointermove", (e) =>
+    onMove(card, e, s, MOVE_THRESHOLD)
+  );
   card.addEventListener("pointerup", (e) => onUp(card, e, s, HOLD_MS));
   card.addEventListener("pointercancel", (e) => onUp(card, e, s, HOLD_MS));
 }
-
 
 /**
  * Initializes and returns the default drag state object.
@@ -44,13 +45,16 @@ export function enableCardInteractions(card) {
 function initDragState() {
   return {
     timer: null,
-    startX: 0, startY: 0, startTime: 0,
-    dragging: false, moved: false,
-    isTouch: false, isPointerDown: false,
+    startX: 0,
+    startY: 0,
+    startTime: 0,
+    dragging: false,
+    moved: false,
+    isTouch: false,
+    isPointerDown: false,
     pointerId: null,
   };
 }
-
 
 /**
  * Handles the pointer down event on a task card.
@@ -79,7 +83,6 @@ function onDown(card, e, s, HOLD_MS) {
   }
   if (s.isTouch) startHoldTimer(card, e, s, HOLD_MS);
 }
-
 
 /**
  * Handles pointer movement during drag interactions.
@@ -110,7 +113,6 @@ function onMove(card, e, s, THRESHOLD) {
   moveDragging(card, e);
 }
 
-
 /**
  * Handles the pointer up event after a drag or tap.
  * Ends dragging or opens the modal if a quick tap is detected.
@@ -133,7 +135,6 @@ async function onUp(card, e, s, HOLD_MS) {
   resetPointerState(card, e, s);
 }
 
-
 /**
  * Starts a hold timer to trigger dragging after a delay.
  * Used for touch interactions before initiating a drag.
@@ -151,16 +152,17 @@ function startHoldTimer(card, e, s, HOLD_MS) {
   }, HOLD_MS);
 }
 
-
 /**
  * Clears the active hold timer in the drag state.
  * @param {Object} s - The current drag state object.
  * @returns {void}
  */
 function clearHoldTimer(s) {
-  if (s.timer) { clearTimeout(s.timer); s.timer = null; }
+  if (s.timer) {
+    clearTimeout(s.timer);
+    s.timer = null;
+  }
 }
-
 
 /**
  * Checks if the event belongs to the same active pointer.
@@ -172,7 +174,6 @@ function samePointer(e, s) {
   return s.isPointerDown && e.pointerId === s.pointerId;
 }
 
-
 /**
  * Checks if the pointer movement exceeds the defined threshold.
  * @param {PointerEvent} e - The current pointer event.
@@ -181,9 +182,10 @@ function samePointer(e, s) {
  * @returns {boolean} True if the movement exceeds the threshold.
  */
 function exceededThreshold(e, s, t) {
-  return Math.abs(e.clientX - s.startX) > t || Math.abs(e.clientY - s.startY) > t;
+  return (
+    Math.abs(e.clientX - s.startX) > t || Math.abs(e.clientY - s.startY) > t
+  );
 }
-
 
 /**
  * Determines if the pointer interaction should be treated as a tap.
@@ -194,7 +196,6 @@ function exceededThreshold(e, s, t) {
 function isTap(s, HOLD_MS) {
   return Date.now() - s.startTime < HOLD_MS;
 }
-
 
 /**
  * Starts the drag operation for the given card.
@@ -210,11 +211,10 @@ function startDrag(card, e, s) {
 
   s.dragging = true;
 
-  document.querySelectorAll(".no_task_to_do").forEach(el => {
+  document.querySelectorAll(".no_task_to_do").forEach((el) => {
     el.style.display = "none";
   });
 }
-
 
 /**
  * Resets the pointer and drag state after interaction ends.
@@ -236,10 +236,8 @@ function resetPointerState(card, e, s) {
       card.style.touchAction = "auto";
       card.style.webkitUserSelect = "auto";
     }
-  }
-  catch { }
+  } catch {}
 }
-
 
 /**
  * Opens the task modal for the given card.
@@ -254,7 +252,6 @@ async function openModal(card) {
   await renderTaskModal(id, task);
 }
 
-
 /**
  * Starts the visual drag process for a task card.
  * Creates a ghost element, sets initial offsets, and prepares placeholders.
@@ -268,7 +265,9 @@ function startDragging(card, e) {
 
   card.setPointerCapture(e.pointerId);
   card.style.touchAction = "none";
-  document.body.classList.add('no-select');
+  card.style.cursor = "grabbing";
+  document.body.classList.add("no-select");
+  document.body.style.cursor = "grabbing";
 
   const ghost = buildGhost(card, rect);
   const offsetX = e.clientX - rect.left;
@@ -279,7 +278,6 @@ function startDragging(card, e) {
   buildPlaceholders(originColumn, rect.height);
   card.classList.add("dragging");
 }
-
 
 /**
  * Updates the dragged card's ghost position during movement.
@@ -298,12 +296,11 @@ function moveDragging(card, e) {
   const el = document.elementFromPoint(e.clientX, e.clientY);
   const hoveredCol = el?.closest(".task_column");
 
-  document.querySelectorAll(".task_column").forEach(col => {
+  document.querySelectorAll(".task_column").forEach((col) => {
     col.classList.toggle("active", col === hoveredCol);
   });
   autoScrollOnEdge(e);
 }
-
 
 /**
  * Ends the drag operation and updates task placement.
@@ -313,9 +310,13 @@ function moveDragging(card, e) {
  * @returns {void}
  */
 function endDragging(card, e) {
-  document.body.classList.remove('no-select');
-  document.querySelectorAll(".task_column.active").forEach(col => { col.classList.remove("active"); });
-  document.querySelectorAll(".no_task_to_do").forEach(el => { el.style.display = ""; });
+  document.body.classList.remove("no-select");
+  document.querySelectorAll(".task_column.active").forEach((col) => {
+    col.classList.remove("active");
+  });
+  document.querySelectorAll(".no_task_to_do").forEach((el) => {
+    el.style.display = "";
+  });
   const { originColumn } = currentDrag;
   card.releasePointerCapture(e.pointerId);
 
@@ -333,7 +334,6 @@ function endDragging(card, e) {
   }
   deleteDragSettings(card);
 }
-
 
 /**
  * Creates and styles a ghost clone of the dragged card.
@@ -357,7 +357,6 @@ function buildGhost(card, rect) {
   return ghost;
 }
 
-
 /**
  * Builds and inserts drop placeholders in all task columns.
  * Creates visual targets for drag-and-drop except in the origin column.
@@ -366,7 +365,7 @@ function buildGhost(card, rect) {
  * @returns {void}
  */
 function buildPlaceholders(originColumn, height) {
-  document.querySelectorAll(".task_column").forEach(col => {
+  document.querySelectorAll(".task_column").forEach((col) => {
     if (col !== originColumn) {
       const dropPh = document.createElement("div");
       dropPh.className = "drop_placeholder";
@@ -376,7 +375,6 @@ function buildPlaceholders(originColumn, height) {
   });
 }
 
-
 /**
  * Cleans up all drag-related elements and resets styles.
  * Removes ghost nodes, placeholders, and restores the card’s default state.
@@ -384,10 +382,11 @@ function buildPlaceholders(originColumn, height) {
  * @returns {void}
  */
 function deleteDragSettings(card) {
-  document.querySelectorAll(".drag-ghost").forEach(n => n.remove());
-  document.querySelectorAll(".drop_placeholder").forEach(n => n.remove());
+  document.querySelectorAll(".drag-ghost").forEach((n) => n.remove());
+  document.querySelectorAll(".drop_placeholder").forEach((n) => n.remove());
 
   card.classList.remove("dragging");
+  card.style.cursor = "";
 
   if (window.innerWidth >= 900) {
     card.style.touchAction = "auto";
@@ -395,8 +394,6 @@ function deleteDragSettings(card) {
   document.body.style.cursor = "";
   currentDrag = null;
 }
-
-
 
 /**
  * Finds the nearest task space element to the given pointer position.
@@ -410,7 +407,7 @@ function findNearestSpace(clientX, clientY) {
   let nearest = null;
   let minDist = Infinity;
 
-  spaces.forEach(space => {
+  spaces.forEach((space) => {
     const rect = space.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
@@ -427,7 +424,6 @@ function findNearestSpace(clientX, clientY) {
   return nearest;
 }
 
-
 /**
  * Updates the status of a task in the database.
  * Sets the new status and updates the timestamp.
@@ -440,7 +436,6 @@ export async function updateTaskStatus(taskId, newStatus) {
   const taskRef = ref(db, `tasks/${taskId}`);
   await update(taskRef, { status: newStatus, updatedAt: Date.now() });
 }
-
 
 /**
  * Automatically scrolls the window when dragging near screen edges.

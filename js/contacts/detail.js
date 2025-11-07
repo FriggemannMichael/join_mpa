@@ -21,6 +21,7 @@ import {
   readValue,
   handleContactCreate,
 } from "./modals.js";
+import { showAlert } from "../common/alertService.js";
 
 /** Lokaler State (entspricht deinem Original) */
 export let selectedContactKey = null;
@@ -91,12 +92,17 @@ export function bindEditDeleteButtons() {
  * @returns {Promise<void>} Resolves after the contact has been removed or the action was canceled.
  */
 export async function handleDeleteContact() {
-  if (!selectedContactKey) return;
+  if (!selectedContactKey) {
+    showAlert("error", 2500, "No contact selected");
+    return;
+  }
+
   confirmModal("Really delete contact?", async () => {
     try {
       const contactRef = ref(db, `/contacts/${selectedContactKey}`);
       await remove(contactRef);
       selectedContactKey = null;
+
       const info = document.querySelector(".contact-info");
       const placeholder = document.querySelector(".contact-detail-placeholder");
       if (info) {
@@ -104,7 +110,11 @@ export async function handleDeleteContact() {
         info.style.display = "none";
       }
       if (placeholder) placeholder.style.display = "flex";
-    } catch (error) {}
+
+      showAlert("deleted", 2000, "Contact deleted successfully");
+    } catch (error) {
+      showAlert("error", 2500, "Failed to delete contact");
+    }
   });
 }
 
@@ -158,25 +168,45 @@ export function openEditModal(contact) {
 export function setupEditFormHandler() {
   const form = document.getElementById("contactForm");
   if (!form) return;
+
   form.onsubmit = async (event) => {
     event.preventDefault();
-    const data = {
-      name: readValue("contactName"),
-      email: readValue("contactEmail"),
-      phone: readValue("contactPhone"),
-    };
-    if (!data.name || !data.email) return;
-    const { ref: dbRef, update } = await import(
-      "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"
-    );
-    await update(dbRef(db, `/contacts/${selectedContactKey}`), data);
-    resetContactForm();
-    closeEditOverlay();
-    showContactDetail(
-      { dataset: { key: selectedContactKey } },
-      selectedContactKey
-    );
-    form.onsubmit = handleContactCreate;
+
+    try {
+      const data = {
+        name: readValue("contactName"),
+        email: readValue("contactEmail"),
+        phone: readValue("contactPhone"),
+      };
+
+      if (!data.name || !data.email) {
+        showAlert("error", 2500, "Name and email are required");
+        return;
+      }
+
+      if (!selectedContactKey) {
+        showAlert("error", 2500, "No contact selected");
+        return;
+      }
+
+      const { ref: dbRef, update } = await import(
+        "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"
+      );
+
+      await update(dbRef(db, `/contacts/${selectedContactKey}`), data);
+
+      resetContactForm();
+      closeEditOverlay();
+      showContactDetail(
+        { dataset: { key: selectedContactKey } },
+        selectedContactKey
+      );
+
+      showAlert("updated", 2000, "Contact updated successfully");
+      form.onsubmit = handleContactCreate;
+    } catch (error) {
+      showAlert("error", 2500, "Failed to update contact");
+    }
   };
 }
 

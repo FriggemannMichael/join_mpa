@@ -594,12 +594,12 @@ async function handleAddContactSubmit(event) {
  */
 function resetAddContactForm() {
   const form = document.getElementById("addContactForm");
-  
+
   // Use centralized form reset to clear validation states
   if (form) {
     resetFormCompletely(form);
   }
-  
+
   // Clear field values manually as fallback
   ["addContactName", "addContactEmail", "addContactPhone"].forEach((id) => {
     const field = document.getElementById(id);
@@ -732,7 +732,7 @@ async function saveContactToFirebase(data) {
 function buildContactMarkup({ name, email }) {
   const initials = getInitials(name);
   const color = colorFromString(name);
-  return `<div class="initials" style="background-color: ${color};">${initials}</div>
+  return `<div class="initals" style="background-color: ${color};">${initials}</div>
     <div class="small-info"><h3>${name}</h3><span>${email}</span></div>`;
 }
 
@@ -744,12 +744,12 @@ function buildContactMarkup({ name, email }) {
  */
 function resetContactForm() {
   const form = document.getElementById("contactForm");
-  
+
   // Use centralized form reset to clear validation states
   if (form) {
     resetFormCompletely(form);
   }
-  
+
   // Clear field values manually as fallback
   ["contactName", "contactEmail", "contactPhone"].forEach((id) => {
     const field = document.getElementById(id);

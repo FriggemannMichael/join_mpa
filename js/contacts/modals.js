@@ -99,7 +99,7 @@ async function handleSignupSubmit(event) {
  * Validates all signup form inputs with comprehensive email validation
  * Uses centralized email validator to catch consecutive dots and malformed patterns
  * Marks invalid fields with a red border
- * 
+ *
  * @returns {boolean} True if all validations pass, otherwise false
  */
 function validateSignup() {
@@ -125,8 +125,8 @@ function validateSignup() {
     return reportError('Please enter a valid name (e.g. "Max Mustermann").');
   if (!okEmail) {
     // Provide specific error for consecutive dots
-    const msg = email.includes('..') 
-      ? "Email cannot contain consecutive dots (..)" 
+    const msg = email.includes("..")
+      ? "Email cannot contain consecutive dots (..)"
       : "Please enter a valid email address.";
     return reportError(msg);
   }

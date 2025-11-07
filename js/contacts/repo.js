@@ -7,6 +7,7 @@ import {
   remove,
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { renderContactList } from "./list.js";
+import { showAlert } from "../common/alertService.js";
 
 /**
  * Loads all contacts from Firebase and renders the contact list.
@@ -16,13 +17,24 @@ import { renderContactList } from "./list.js";
  * @returns {Promise<void>} Resolves once the initial contact data is rendered.
  */
 export async function loadAndRenderContacts() {
-  const list = document.getElementById("contact-list");
-  if (!list) return;
-  const contactsRef = ref(db, "/contacts");
-  onValue(contactsRef, (snapshot) => {
-    const contacts = extractContactsFromSnapshot(snapshot);
-    renderContactList(contacts);
-  });
+  try {
+    const list = document.getElementById("contact-list");
+    if (!list) return;
+
+    const contactsRef = ref(db, "/contacts");
+    onValue(
+      contactsRef,
+      (snapshot) => {
+        const contacts = extractContactsFromSnapshot(snapshot);
+        renderContactList(contacts);
+      },
+      (error) => {
+        showAlert("error", 2500, "Failed to load contacts");
+      }
+    );
+  } catch (error) {
+    showAlert("error", 2500, "Error initializing contacts");
+  }
 }
 
 /**
@@ -49,8 +61,19 @@ export function extractContactsFromSnapshot(snapshot) {
  * @returns {Promise<void>} Resolves once the contact has been successfully stored in Firebase.
  */
 export async function saveContactToFirebase(data) {
-  const contactsRef = ref(db, "/contacts");
-  await set(push(contactsRef), data);
+  try {
+    if (!data || !data.name || !data.email) {
+      showAlert("error", 2500, "Invalid contact data");
+      return;
+    }
+
+    const contactsRef = ref(db, "/contacts");
+    await set(push(contactsRef), data);
+    showAlert("createContact", 2000);
+  } catch (error) {
+    showAlert("error", 2500, "Failed to save contact");
+    throw error;
+  }
 }
 
 // These two exports are needed in detail.js (no behavioral change):

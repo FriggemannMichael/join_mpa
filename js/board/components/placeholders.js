@@ -6,7 +6,7 @@
  */
 export function buildEmptyState(text) {
   const node = document.createElement("div");
-  node.className = "no_task_to_do";
+  node.className = "no_task_to_do search-temp-empty";
   node.textContent = text;
   return node;
 }

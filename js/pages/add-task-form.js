@@ -264,17 +264,17 @@ function clearPriorityButtons() {
  * Handles the creation of a task
  */
 export async function handleTaskCreate() {
-  const data = readTaskData();
-
-  if (!validateTaskData(data)) {
-    setTaskStatus("Please fill all required fields (incl. Priority)", true);
-    return;
-  }
-
-  const createBtn = document.getElementById("taskCreateBtn");
-  if (createBtn) createBtn.disabled = true;
-
   try {
+    const data = readTaskData();
+
+    if (!validateTaskData(data)) {
+      setTaskStatus("Please fill all required fields (incl. Priority)", true);
+      return;
+    }
+
+    const createBtn = document.getElementById("taskCreateBtn");
+    if (createBtn) createBtn.disabled = true;
+
     await createTask(data);
     setTaskStatus("Task successfully created!", false);
     clearTaskForm();
@@ -282,8 +282,8 @@ export async function handleTaskCreate() {
       window.location.href = "board.html";
     }, 100);
   } catch (error) {
-    setTaskStatus("Task could not be saved", true);
-  } finally {
+    setTaskStatus("Task could not be saved. Please try again.", true);
+    const createBtn = document.getElementById("taskCreateBtn");
     if (createBtn) createBtn.disabled = false;
   }
 }

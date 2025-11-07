@@ -48,24 +48,24 @@ function bindLoginButton() {
 /**
  * Handles the login form submission with email validation
  * Validates email format before attempting authentication
- * 
+ *
  * @param {Event} event The submit event
  */
 async function handleLoginSubmit(event) {
   event.preventDefault();
   const email = readInputValue("email");
   const password = readInputValue("password");
-  
+
   // Basic presence check
   if (!email || !password) {
     return showLoginStatus("Please enter email & password", true);
   }
-  
+
   // Validate email format to catch obvious typos early
   if (!validateEmail(email)) {
     return showLoginStatus("Please enter a valid email address", true);
   }
-  
+
   disableButton("loginBtn", true);
   try {
     await login(email, password);

@@ -1,12 +1,21 @@
-import { boardTemplates } from "../templates/board-templates.js"
+import { boardTemplates } from "../templates/board-templates.js";
 import { populateAssignees } from "../../pages/add-task-assignees.js";
 import { updateAssigneeSelection } from "../../pages/add-task-assignees-ui.js";
 import { bindPriorityButtons } from "../../pages/add-task-form.js";
-import { setSubtasksFrom, initSubtaskInput, renderSubtasks, subtasks as subtasksState } from "../../pages/add-task-subtasks.js";
+import {
+  setSubtasksFrom,
+  initSubtaskInput,
+  renderSubtasks,
+  subtasks as subtasksState,
+} from "../../pages/add-task-subtasks.js";
 import { icons } from "../../common/svg-template.js";
 import { closeTaskOverlay } from "../utils.js";
-import { updateTask, loadTask } from "../services/tasks.repo.js"
-import {mountEditTaskValidation, unmountAddTaskValidation} from "../../validation/validation-addTask.js"
+import { updateTask, loadTask } from "../services/tasks.repo.js";
+import {
+  mountEditTaskValidation,
+  unmountAddTaskValidation,
+} from "../../validation/validation-addTask.js";
+import { showAlert } from "../../common/alertService.js";
 
 /**
  * Opens and renders the edit form inside the task modal.
@@ -16,23 +25,31 @@ import {mountEditTaskValidation, unmountAddTaskValidation} from "../../validatio
  * @returns {Promise<void>}
  */
 export async function openEditForm(taskId) {
-  const section = document.getElementById("taskModal");
-  section.classList.add("task-overlay");
+  try {
+    const section = document.getElementById("taskModal");
+    if (!section) {
+      showAlert("error", 2500, "Edit form could not be opened");
+      return;
+    }
 
-  section.replaceChildren(
-    createHeader(closeTaskOverlay),
-    createBody(),
-    createFooter(() => handleUpdate(taskId, section))
-  );
+    section.classList.add("task-overlay");
 
-  await populateAssignees();
-  bindPriorityButtons();
-  await fillEdit(taskId);
-  unmountAddTaskValidation()
-  mountEditTaskValidation(section)
+    section.replaceChildren(
+      createHeader(closeTaskOverlay),
+      createBody(),
+      createFooter(() => handleUpdate(taskId, section))
+    );
 
+    await populateAssignees();
+    bindPriorityButtons();
+    await fillEdit(taskId);
+    unmountAddTaskValidation();
+    mountEditTaskValidation(section);
+  } catch (error) {
+    showAlert("error", 2500, "Error loading task for editing");
+    closeTaskOverlay();
+  }
 }
-
 
 /**
  * Creates the header section for the edit task modal.
@@ -56,7 +73,6 @@ function createHeader(onClose) {
   return header;
 }
 
-
 /**
  * Creates the body section for the edit task modal.
  * Inserts the edit task template into the modal body.
@@ -68,7 +84,6 @@ function createBody() {
   body.innerHTML = boardTemplates.editTask;
   return body;
 }
-
 
 /**
  * Creates the footer section for the edit task modal.
@@ -83,14 +98,13 @@ function createFooter(onUpdate) {
   const btn = document.createElement("button");
   btn.type = "button";
   btn.className = "update-task-btn";
-  btn.id = "taskSaveBtn"
+  btn.id = "taskSaveBtn";
   btn.innerHTML = `OK ${icons.checkwhite}`;
   btn.addEventListener("click", onUpdate);
 
   footer.append(btn);
   return footer;
 }
-
 
 /**
  * Sets the value or text content of a field inside the given scope.
@@ -106,7 +120,6 @@ function setField(scope, selector, value) {
   el["value" in el ? "value" : "textContent"] = value ?? "";
 }
 
-
 /**
  * Fills the edit task form with existing task data.
  * Loads the task, preselects assignees, and renders subtasks.
@@ -115,24 +128,35 @@ function setField(scope, selector, value) {
  * @returns {Promise<void>}
  */
 export async function fillEdit(taskId) {
-  const task = await loadTask(taskId);
-  const scope = document.getElementById("taskModal");
+  try {
+    const task = await loadTask(taskId);
+    if (!task) {
+      showAlert("error", 2500, "Task not found");
+      closeTaskOverlay();
+      return;
+    }
 
-  setField(scope, "#taskTitle", task.title);
-  setField(scope, "#taskDescription", task.description);
-  setField(scope, "#taskDueDate", task.dueDate);
+    const scope = document.getElementById("taskModal");
+    if (!scope) return;
 
-  const prio = (task.priority || "").toLowerCase();
-  scope.querySelectorAll(".priority-btn").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.priority === prio);
-  });
+    setField(scope, "#taskTitle", task.title);
+    setField(scope, "#taskDescription", task.description);
+    setField(scope, "#taskDueDate", task.dueDate);
 
-  preselectAssignees(task.assignees || []);
-  setSubtasksFrom(task.subtasks || []);
-  initSubtaskInput();
-  renderSubtasks();
+    const prio = (task.priority || "").toLowerCase();
+    scope.querySelectorAll(".priority-btn").forEach((btn) => {
+      btn.classList.toggle("active", btn.dataset.priority === prio);
+    });
+
+    preselectAssignees(task.assignees || []);
+    setSubtasksFrom(task.subtasks || []);
+    initSubtaskInput();
+    renderSubtasks();
+  } catch (error) {
+    showAlert("error", 2500, "Error loading task data");
+    closeTaskOverlay();
+  }
 }
-
 
 /**
  * Preselects assignee checkboxes based on the given list of users.
@@ -141,13 +165,12 @@ export async function fillEdit(taskId) {
  * @returns {void}
  */
 function preselectAssignees(selected) {
-  const selectedIds = new Set(selected.map(a => a.uid));
+  const selectedIds = new Set(selected.map((a) => a.uid));
   document
     .querySelectorAll('#assignee-dropdown input[type="checkbox"]')
-    .forEach(cb => cb.checked = selectedIds.has(cb.value));
+    .forEach((cb) => (cb.checked = selectedIds.has(cb.value)));
   updateAssigneeSelection();
 }
-
 
 /**
  * Handles updating an existing task with new form data.
@@ -158,21 +181,35 @@ function preselectAssignees(selected) {
  * @returns {Promise<void>}
  */
 export async function handleUpdate(taskId, root = document) {
-  const base = collectTaskData(root);
-  const assignees = readAssignees(root);
-  const subtasks = normalizeSubtasks();
+  try {
+    if (!taskId) {
+      showAlert("error", 2500, "Invalid task ID");
+      return;
+    }
 
-  const task = {
-    ...base,
-    assignees,
-    subtasks,
-    updatedAt: Date.now(),
-  };
+    const base = collectTaskData(root);
 
-  await updateTask(taskId, task);
-  closeTaskOverlay();
+    if (!base.title?.trim()) {
+      showAlert("error", 2500, "Task title is required");
+      return;
+    }
+
+    const assignees = readAssignees(root);
+    const subtasks = normalizeSubtasks();
+
+    const task = {
+      ...base,
+      assignees,
+      subtasks,
+      updatedAt: Date.now(),
+    };
+
+    await updateTask(taskId, task);
+    closeTaskOverlay();
+  } catch (error) {
+    showAlert("error", 2500, "Failed to update task");
+  }
 }
-
 
 /**
  * Collects and returns task data from the given root element.
@@ -181,16 +218,15 @@ export async function handleUpdate(taskId, root = document) {
  * @returns {{title: string, description: string, dueDate: string|null, priority: string|null}} The collected task data.
  */
 function collectTaskData(root = document) {
-  const get = sel => root.querySelector(sel);
+  const get = (sel) => root.querySelector(sel);
 
-  const title = get('#taskTitle')?.value.trim() || '';
-  const description = get('#taskDescription')?.value.trim() || '';
-  const dueDate = get('#taskDueDate')?.value || null;
-  const priority = get('.priority-btn.active')?.dataset.priority || null;
+  const title = get("#taskTitle")?.value.trim() || "";
+  const description = get("#taskDescription")?.value.trim() || "";
+  const dueDate = get("#taskDueDate")?.value || null;
+  const priority = get(".priority-btn.active")?.dataset.priority || null;
 
   return { title, description, dueDate, priority };
 }
-
 
 /**
  * Reads and returns the list of selected assignees from the assignee dropdown.
@@ -199,14 +235,16 @@ function collectTaskData(root = document) {
  * @returns {Array<{uid: string, name: string, email: string}>} A list of selected assignee objects.
  */
 function readAssignees(root = document) {
-  return [...root.querySelectorAll('#assignee-dropdown input[type="checkbox"]:checked')]
-    .map(cb => ({
-      uid: cb.value,
-      name: cb.dataset.name?.replace(/\s*\(Du\)$/i, '').trim() || '',
-      email: cb.dataset.email || ''
-    }));
+  return [
+    ...root.querySelectorAll(
+      '#assignee-dropdown input[type="checkbox"]:checked'
+    ),
+  ].map((cb) => ({
+    uid: cb.value,
+    name: cb.dataset.name?.replace(/\s*\(Du\)$/i, "").trim() || "",
+    email: cb.dataset.email || "",
+  }));
 }
-
 
 /**
  * Normalizes the current subtask state into a consistent array format.
@@ -214,8 +252,8 @@ function readAssignees(root = document) {
  * @returns {Array<{text: string, done: boolean}>} The normalized list of subtasks.
  */
 function normalizeSubtasks() {
-  return (subtasksState || []).map(s => ({
-    text: (s?.text || '').trim(),
-    done: !!(s?.completed)
+  return (subtasksState || []).map((s) => ({
+    text: (s?.text || "").trim(),
+    done: !!s?.completed,
   }));
 }

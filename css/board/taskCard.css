@@ -14,15 +14,17 @@
 }
 
 .drag-ghost {
+  cursor: grabbing;
   transform: rotate(5deg);
   transition: all 0ms;
 }
 
 .task_card:hover {
-  cursor: pointer;
+  cursor: grab;
 }
 
 .task_card:active {
+  cursor: grabbing;
   transform: rotate(5deg);
 }
 
@@ -127,13 +129,12 @@ h5 {
   width: var(--task-width);
 }
 
-
 .avatar-group {
   display: flex;
   gap: 6px;
   list-style: none;
   margin: 0;
-  padding: 0
+  padding: 0;
 }
 
 .task-card-avatar {
