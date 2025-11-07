@@ -38,3 +38,6 @@ build/
 
 # Alte Daten ignorieren
 olddata/
+
+# CSS Backup
+css_backup/
