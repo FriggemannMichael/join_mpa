@@ -33,8 +33,9 @@ build/
 
 # Firebase-Konfiguration
 
-# Copilot instructions
+# AI Assistant instructions
 .copilot-instructions
+.claude/
 
 # Alte Daten ignorieren
 olddata/
