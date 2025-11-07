@@ -32,7 +32,6 @@ dist/
 build/
 
 # Firebase-Konfiguration
-js/common/firebase.js
 
 # AI Assistant instructions
 .copilot-instructions
