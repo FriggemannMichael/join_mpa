@@ -244,7 +244,7 @@ function bindEditDeleteButtons() {
  */
 async function handleDeleteContact() {
   if (!selectedContactKey) return;
-  confirmModal("Kontakt wirklich löschen?", async () => {
+  confirmModal("Really delete contact?", async () => {
     try {
       const contactRef = ref(db, `/contacts/${selectedContactKey}`);
       await remove(contactRef);
@@ -262,7 +262,7 @@ async function handleDeleteContact() {
         overlay.setAttribute("hidden", "hidden");
       }
     } catch (error) {
-      showAlert("error", 2500, `Fehler beim Löschen: ${error.message}`);
+      showAlert("error", 2500, `Error deleting: ${error.message}`);
     }
   });
 }
@@ -369,8 +369,8 @@ function renderContactDetail({ name, email, phone, initials, color }) {
     color,
   });
 
-  info.classList.remove("fade-in"); // reset falls schon aktiv
-  void info.offsetWidth; // force reflow für wiederholtes Abspielen
+  info.classList.remove("fade-in"); // reset if already active
+  void info.offsetWidth; // force reflow for repeated playback
   info.classList.add("fade-in");
   info.style.display = "block";
 }
@@ -632,7 +632,7 @@ function openEditOverlay() {
   }
   editContactValidator = initEditContactValidation();
 
-  // Delegation – Listener bleibt auch nach innerHTML-Änderungen erhalten
+  // Delegation – listener remains even after innerHTML changes
   if (!overlay._hasDeleteDelegation) {
     overlay.addEventListener("click", (e) => {
       const delBtn = e.target.closest("#deleteContactBtn");

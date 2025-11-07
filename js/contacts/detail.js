@@ -92,7 +92,7 @@ export function bindEditDeleteButtons() {
  */
 export async function handleDeleteContact() {
   if (!selectedContactKey) return;
-  confirmModal("Kontakt wirklich löschen?", async () => {
+  confirmModal("Really delete contact?", async () => {
     try {
       const contactRef = ref(db, `/contacts/${selectedContactKey}`);
       await remove(contactRef);

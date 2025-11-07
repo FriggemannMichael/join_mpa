@@ -1,4 +1,4 @@
-import { initAddTask } from "../modals/addTaskModal.js"; 
+import { initAddTask } from "../modals/addTaskModal.js";
 import { ScrollLock, clearModal } from "../utils.js";
 
 /**
@@ -25,7 +25,7 @@ export function bindColumnShortcuts() {
       return;
     }
 
-    // === Schließen-Handling ===
+    // === Close handling ===
 
     const isBackdrop = e.target.classList.contains("backdrop_overlay");
 
@@ -33,9 +33,9 @@ export function bindColumnShortcuts() {
       const overlay = document.querySelector("#taskOverlay");
       if (overlay) {
         overlay.classList.remove("active");
-        ScrollLock.release()
+        ScrollLock.release();
 
-        await clearModal()
+        await clearModal();
       }
       return;
     }
@@ -63,5 +63,3 @@ export function bindColumnShortcuts() {
   document.addEventListener("click", onClick);
   document.addEventListener("keydown", onKeydown);
 }
-
-

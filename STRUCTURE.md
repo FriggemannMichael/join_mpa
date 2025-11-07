@@ -1,27 +1,27 @@
-# Join - Projektstruktur
+# Join - Project Structure
 
-_Aktualisiert: 2025-10-03_  
-_Architektur: Multi Page Application (MPA) mit wiederverwendbaren Layout-Partials_
+_Updated: 2025-11-07_  
+_Architecture: Multi Page Application (MPA) with reusable layout partials_
 
-## 📁 Verzeichnisstruktur (Ist-Zustand)
+## 📁 Directory Structure (Current State)
 
 ```
 join/
-├── index.html                 # Login + Einstieg (öffentlich)
-├── signup.html                # Registrierung (öffentlich)
-├── summary.html               # Dashboard (authentifiziert)
-├── board.html                 # Kanban Board (authentifiziert)
-├── add-task.html              # Task-Formular (authentifiziert)
-├── contacts.html              # Kontakte (authentifiziert)
-├── privacy.html               # Datenschutz (öffentlich)
-├── legal.html                 # Impressum (öffentlich)
-├── profile.html               # Profil (authentifiziert)
-├── settings.html              # Einstellungen (authentifiziert)
-├── README.md                  # Projektdokumentation
-├── STRUCTURE.md               # Diese Datei
+├── index.html                 # Login + Entry (public)
+├── signup.html                # Registration (public)
+├── summary.html               # Dashboard (authenticated)
+├── board.html                 # Kanban Board (authenticated)
+├── add-task.html              # Task Form (authenticated)
+├── contacts.html              # Contacts (authenticated)
+├── privacy.html               # Privacy (public)
+├── legal.html                 # Legal Notice (public)
+├── profile.html               # Profile (authenticated)
+├── settings.html              # Settings (authenticated)
+├── README.md                  # Project documentation
+├── STRUCTURE.md               # This file
 ├── package.json               # NPM Scripts + Meta
-├── css/                       # Styles (Tokens, Layout, Seiten)
-├── img/                       # Icons, Grafiken, Schriftarten
+├── css/                       # Styles (Tokens, Layout, Pages)
+├── img/                       # Icons, Graphics, Fonts
 │   ├── icon/
 │   └── fonts/
 ├── js/
@@ -34,8 +34,8 @@ join/
 │   │   ├── layout.js
 │   │   ├── templateLoader.js
 │   │   └── errorMap.js
-│   │   ├── svg-template.js         # Zentrale SVG-Icon-Sammlung (dynamisch)
-│   └── pages/                 # Seiten-spezifische Controller
+│   │   ├── svg-template.js         # Central SVG icon collection (dynamic)
+│   └── pages/                 # Page-specific controllers
 │       ├── login.js
 │       ├── signup.js
 │       ├── summary.js
@@ -46,68 +46,76 @@ join/
 │       ├── legal.js
 │       ├── profile.js
 │       └── settings.js
-├── templates/                 # HTML-Teile für Header & Sidebar
+├── templates/                 # HTML parts for header & sidebar
 │   ├── header.html
 │   └── sidebar.html
-├── documentation/             # Generierte JSDoc HTML Files
-├── migration/                 # Datenmigrationen / Skripte
-└── olddata/                   # Altbestand (SPA-Ära)
+├── documentation/             # Generated JSDoc HTML files
+├── migration/                 # Data migrations / Scripts
+└── olddata/                   # Legacy (SPA era)
 ```
 
-## 🏗️ Architektur-Prinzipien
+## 🏗️ Architecture Principles
 
-### Mehrseitiges Layout mit Partials
+### Multi-page Layout with Partials
 
-### Modale & SVG-Icon-Integration
+Each page is a standalone HTML document. Authenticated pages load header and sidebar dynamically via `templateLoader.js`. Layout components are injected once and then enhanced with event listeners (profile menu, logout, navigation highlighting).
 
-- **Kontakt-Modale**: Sowohl für das Erstellen als auch Bearbeiten von Kontakten werden eigene Modale verwendet (`contacts.html`).
-- **Input-Icons**: Alle relevanten Input-Felder (Name, Email, Telefon) besitzen rechts ein Icon (`<span class="input__icon--right">`), das per JS aus `svg-template.js` gesetzt wird.
-- **SVG-Icons**: Die Icons werden zentral in `js/common/svg-template.js` als String-Objekte verwaltet und dynamisch per `innerHTML` in die jeweiligen `<span>`- oder Button-Elemente eingefügt.
-- **Button-Icons**: Die Save-/Create-Buttons in den Modalen nutzen SVG-Icons (z. B. `checkwhite`), die immer in der gewünschten Farbe (z. B. weiß) per JS gesetzt werden. CSS-Hover-Effekte werden gezielt überschrieben, um die Farbe zu fixieren.
+### Modals & SVG Icon Integration
 
-### Code-Organisation
+- **Contact Modals**: Dedicated modals are used for both creating and editing contacts (`contacts.html`).
+- **Input Icons**: All relevant input fields (Name, Email, Phone) have an icon on the right (`<span class="input__icon--right">`), which is set via JS from `svg-template.js`.
+- **SVG Icons**: Icons are managed centrally in `js/common/svg-template.js` as string objects and dynamically injected via `innerHTML` into the respective `<span>` or button elements.
+- **Button Icons**: Save/Create buttons in modals use SVG icons (e.g. `checkwhite`), which are always set in the desired color (e.g. white) via JS. CSS hover effects are specifically overridden to fix the color.
 
-- **Shared Layer (`js/common/`)**: Firebase Setup, Session-Handling, Auth-Service, Error-Mapping.
-- **Page Layer (`js/pages/`)**: Pro Seite ein schlanker Controller (Event-Bindings, Datenzugriffe).
-- **Templates (`templates/`)**: Reine HTML-Snippets ohne Skripte, werden nach dem Laden dekoriert.
-- Historische SPA-Skripte wurden entfernt; Referenzmaterial liegt nur noch unter `olddata/`.
+### Code Organization
 
-## 🌐 Seiten & Zugriff
+- **Shared Layer (`js/common/`)**: Firebase setup, session handling, auth service, error mapping.
+- **Page Layer (`js/pages/`)**: One lean controller per page (event bindings, data access).
+- **Templates (`templates/`)**: Pure HTML snippets without scripts, decorated after loading.
+- Historical SPA scripts have been removed; reference material is only under `olddata/`.
 
-| Seite           | Controller             | Zweck                 | Zugriff         |
+## 🌐 Pages & Access
+
+| Page            | Controller             | Purpose               | Access          |
 | --------------- | ---------------------- | --------------------- | --------------- |
-| `index.html`    | `js/pages/login.js`    | Login, Gast, Redirect | Öffentlich      |
-| `signup.html`   | `js/pages/signup.js`   | Registrierung         | Öffentlich      |
-| `summary.html`  | `js/pages/summary.js`  | Dashboard             | Authentifiziert |
-| `board.html`    | `js/pages/board.js`    | Kanban Board          | Authentifiziert |
-| `add-task.html` | `js/pages/add-task.js` | Task-Erstellung       | Authentifiziert |
-| `contacts.html` | `js/pages/contacts.js` | Kontakte              | Authentifiziert |
-| `profile.html`  | `js/pages/profile.js`  | Benutzerprofil        | Authentifiziert |
-| `settings.html` | `js/pages/settings.js` | Einstellungen         | Authentifiziert |
-| `privacy.html`  | `js/pages/privacy.js`  | Datenschutzerklärung  | Öffentlich      |
-| `legal.html`    | `js/pages/legal.js`    | Impressum             | Öffentlich      |
+| `index.html`    | `js/pages/login.js`    | Login, Guest, Redirect | Public          |
+| `signup.html`   | `js/pages/signup.js`   | Registration          | Public          |
+| `summary.html`  | `js/pages/summary.js`  | Dashboard             | Authenticated   |
+| `board.html`    | `js/pages/board.js`    | Kanban Board          | Authenticated   |
+| `add-task.html` | `js/pages/add-task.js` | Task Creation         | Authenticated   |
+| `contacts.html` | `js/pages/contacts.js` | Contacts              | Authenticated   |
+| `profile.html`  | `js/pages/profile.js`  | User Profile          | Authenticated   |
+| `settings.html` | `js/pages/settings.js` | Settings              | Authenticated   |
+| `privacy.html`  | `js/pages/privacy.js`  | Privacy Policy        | Public          |
+| `legal.html`    | `js/pages/legal.js`    | Legal Notice          | Public          |
 
-## 🎨 CSS-Architektur
+## 🎨 CSS Architecture
 
-- `css/add_task.css`, `css/board.css`, `css/contact.css`, … : Spezialstile pro Feature.
-- `css/modal.css`: Modale für Kontakt-Erstellung und -Bearbeitung, inkl. responsive Design und Icon-Positionierung.
+- `css/root.css`: Design tokens (colors, spacing, z-index layers)
+- `css/main.css`: Layout shell (header, sidebar, responsive breakpoints)
+- `css/add_task.css`, `css/board.css`, `css/contact.css`, etc.: Feature-specific styles.
+- `css/modal.css`: Modals for contact creation and editing, including responsive design and icon positioning.
 
-## 💻 JavaScript-Module (Kurzüberblick)
+## 💻 JavaScript Modules (Overview)
 
-| Bereich        | Datei / Ordner                  | Zweck                                             |
-| -------------- | ------------------------------- | ------------------------------------------------- |
-| Firebase Setup | `js/common/firebase.js`         | Initialisierung (Auth + DB Config)                |
-| Session Layer  | `js/common/session.js`          | Speicherung & Löschung aktiver Sitzung            |
-| Auth Service   | `js/common/authService.js`      | Login/Signup/Gast + Fehlerbehandlung              |
-| Provisioning   | `js/common/userProvisioning.js` | Anlage `users/<uid>`, `contacts/<uid>`            |
-| Layout         | `js/common/layout.js`           | Template Injection, Navigation Binding            |
-| Guard          | `js/common/pageGuard.js`        | Redirect bei fehlender Auth                       |
-| Pages          | `js/pages/*.js`                 | Controller & UI-Logik je Dokument                 |
-| SVG-Icons      | `js/common/svg-template.js`     | Zentrale SVG-Icon-Sammlung, dynamische Einbindung |
+| Area           | File / Folder                   | Purpose                                               |
+| -------------- | ------------------------------- | ----------------------------------------------------- |
+| Firebase Setup | `js/common/firebase.js`         | Initialization (Auth + DB Config)                     |
+| Session Layer  | `js/common/session.js`          | Storage & deletion of active session                  |
+| Auth Service   | `js/common/authService.js`      | Login/Signup/Guest + error handling                   |
+| Provisioning   | `js/common/userProvisioning.js` | Creation of `users/<uid>`, `contacts/<uid>`           |
+| Layout         | `js/common/layout.js`           | Template injection, navigation binding                |
+| Guard          | `js/common/pageGuard.js`        | Redirect if auth missing                              |
+| Pages          | `js/pages/*.js`                 | Controller & UI logic per document                    |
+| SVG Icons      | `js/common/svg-template.js`     | Central SVG icon collection, dynamic integration      |
 
-## 🔄 Datenfluss & State Management
+## 🔄 Data Flow & State Management
 
-- Input-Icons und Button-Icons werden nach dem Laden der Modale per JS aus `svg-template.js` gesetzt (z. B. `document.getElementById('contactSaveIcon').innerHTML = icons.checkwhite`).
+- **Firebase Realtime Database** for users and contacts (currently basic provisioning).
+- **Session Storage** for current user info (uid, email, displayName).
+- **Page Controllers** read from session, call Firebase services, update DOM.
+- No global state store; each page initializes independently.
+- Input icons and button icons are set after modal loading via JS from `svg-template.js` (e.g. `document.getElementById('contactSaveIcon').innerHTML = icons.checkwhite`).
 
 ## 📱 Responsive Breakpoints
 
@@ -123,18 +131,20 @@ join/
 }
 ```
 
-Die vorhandenen Styles wurden beibehalten; jede Seite lädt dieselben Stylesheets, sodass das responsive Verhalten konsistent bleibt.
+Existing styles have been retained; each page loads the same stylesheets so responsive behavior remains consistent.
 
-## 🚀 Deployment-Bereitschaft
+## 🚀 Deployment Readiness
 
-- Modale und SVG-Icon-Integration sind für alle gängigen Browser getestet.
+- All pages are static HTML + client-side JS (ES modules).
+- No server-side rendering or build step required.
+- Deploy directly to any static host (Netlify, Vercel, GitHub Pages, Firebase Hosting).
+- Modals and SVG icon integration are tested for all common browsers.
 
 ## 🗺️ Legacy & Migration
 
-- `olddata/` und `migration/` bleiben unverändert für Dokumentationszwecke.
-- Schrittweise Bereinigung (z. B. alte Assets) erfolgt nach Prüfung der Berechtigungen.
+- `olddata/` and `migration/` remain unchanged for documentation purposes.
+- Gradual cleanup (e.g. old assets) occurs after permission verification.
 
 ---
 
-Diese Struktur spiegelt den aktuellen Stand der MPA-Umstellung wider. Modale, SVG-Icons und Input-Icons sind vollständig integriert und dokumentiert. Weitere Aufräumarbeiten (Legacy-Code entfernen, Dokumentation angleichen) folgen iterativ.
-?
+This structure reflects the current state of the MPA conversion. Modals, SVG icons, and input icons are fully integrated and documented. Further cleanup (removing legacy code, aligning documentation) follows iteratively.

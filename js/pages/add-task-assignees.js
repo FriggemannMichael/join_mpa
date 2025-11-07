@@ -88,8 +88,8 @@ function handleContactsLoadError(error) {
   const isPermissionError =
     typeof error?.code === "string" && error.code.includes("permission_denied");
   const message = isPermissionError
-    ? "Zugriff auf Kontakte in der Datenbank verweigert. Bitte Regeln prüfen."
-    : "Kontakte konnten nicht geladen werden.";
+    ? "Access to contacts in database denied. Please check rules."
+    : "Contacts could not be loaded.";
 
   showErrorStatus(message);
 }
@@ -196,7 +196,7 @@ function bindDropdownChangeEvent(dropdown) {
 
   dropdown.dataset.bound = "1";
 
-  // Event Delegation für Checkboxen (funktioniert auch nach Filtern)
+  // Event delegation for checkboxes (works even after filtering)
   dropdown.addEventListener("change", (e) => {
     if (e.target.type === "checkbox") {
       updateAssigneeSelection();
@@ -233,12 +233,12 @@ function toggleAssigneeDropdown() {
   dropdown?.classList.toggle("d-none");
   header?.classList.toggle("open");
 
-  // Fokus auf Suchfeld setzen beim Öffnen
+  // Focus on search field when opening
   if (isOpening && searchInput) {
     setTimeout(() => searchInput.focus(), 100);
   }
 
-  // Suchfeld leeren beim Schließen
+  // Clear search field when closing
   if (!isOpening && searchInput) {
     searchInput.value = "";
     filterAssignees("");
@@ -254,12 +254,12 @@ function bindSearchInputEvent(searchInput) {
 
   searchInput.dataset.bound = "1";
 
-  // Input-Event für Live-Suche
+  // Input event for live search
   searchInput.addEventListener("input", (e) => {
     filterAssignees(e.target.value);
   });
 
-  // Verhindere, dass Klick auf Suchfeld das Dropdown schließt
+  // Prevent click on search field from closing the dropdown
   searchInput.addEventListener("click", (e) => {
     e.stopPropagation();
   });

@@ -1,5 +1,5 @@
 /**
- * Login-Seite für Benutzeranmeldung
+ * Login page for user authentication
  * @module login
  */
 
@@ -9,7 +9,7 @@ import { redirectIfAuthenticated } from "../common/pageGuard.js";
 initLoginPage();
 
 /**
- * Initialisiert die Login-Seite mit Redirect-Check und UI-Setup
+ * Initializes the login page with redirect check and UI setup
  */
 async function initLoginPage() {
   await redirectIfAuthenticated("./summary.html");
@@ -21,7 +21,7 @@ async function initLoginPage() {
 }
 
 /**
- * Bindet Event-Listener für das Login-Formular
+ * Binds event listeners for the login form
  */
 function bindLoginForm() {
   const form = document.getElementById("loginForm");
@@ -30,7 +30,7 @@ function bindLoginForm() {
 }
 
 /**
- * Bindet Event-Listener für den Login-Link
+ * Binds event listener for the login button
  */
 function bindLoginButton() {
   const loginBtn = document.getElementById("loginBtn");
@@ -45,15 +45,15 @@ function bindLoginButton() {
 }
 
 /**
- * Verarbeitet das Login-Formular-Submit
- * @param {Event} event Das Submit-Event
+ * Handles the login form submission
+ * @param {Event} event The submit event
  */
 async function handleLoginSubmit(event) {
   event.preventDefault();
   const email = readInputValue("email");
   const password = readInputValue("password");
   if (!email || !password)
-    return showLoginStatus("Bitte E-Mail & Passwort eingeben", true);
+    return showLoginStatus("Please enter email & password", true);
   disableButton("loginBtn", true);
   try {
     await login(email, password);
@@ -66,7 +66,7 @@ async function handleLoginSubmit(event) {
 }
 
 /**
- * Bindet Event-Listener für den Guest-Button
+ * Binds event listener for the guest button
  */
 function bindGuestButton() {
   const guestBtn = document.getElementById("guestBtn");
@@ -80,7 +80,7 @@ function bindGuestButton() {
 }
 
 /**
- * Bindet Event-Listener für den Signup-Button
+ * Binds event listener for the signup button
  */
 function bindSignupButton() {
   const signupBtn = document.getElementById("signupBtn");
@@ -91,7 +91,7 @@ function bindSignupButton() {
 }
 
 /**
- * Führt die Intro-Animation für die Login-Seite aus
+ * Runs the intro animation for the login page
  */
 function runIntroAnimation() {
   const card = document.querySelector(".login-card");
@@ -106,9 +106,9 @@ function runIntroAnimation() {
 }
 
 /**
- * Liest den Wert eines Input-Feldes und gibt ihn getrimmt zurück
- * @param {string} id Die ID des Input-Elements
- * @returns {string} Der getrimmte Wert des Feldes oder leerer String
+ * Reads the value of an input field and returns it trimmed
+ * @param {string} id The ID of the input element
+ * @returns {string} The trimmed value of the field or empty string
  */
 function readInputValue(id) {
   const field = document.getElementById(id);
@@ -116,9 +116,9 @@ function readInputValue(id) {
 }
 
 /**
- * Aktiviert oder deaktiviert einen Button
- * @param {string} id Die ID des Button-Elements
- * @param {boolean} disabled True zum Deaktivieren, false zum Aktivieren
+ * Enables or disables a button
+ * @param {string} id The ID of the button element
+ * @param {boolean} disabled True to disable, false to enable
  */
 function disableButton(id, disabled) {
   const button = document.getElementById(id);
@@ -126,9 +126,9 @@ function disableButton(id, disabled) {
 }
 
 /**
- * Zeigt eine Login-Statusmeldung an
- * @param {string} message Die anzuzeigende Nachricht
- * @param {boolean} isError True für Fehlermeldung, false für normale Meldung
+ * Displays a login status message
+ * @param {string} message The message to display
+ * @param {boolean} isError True for error message, false for normal message
  */
 function showLoginStatus(message, isError) {
   const status = document.getElementById("loginStatus");

@@ -1,5 +1,5 @@
 /**
- * Signup-Seite für Benutzerregistrierung
+ * Signup page for user registration
  * @module signup
  */
 
@@ -8,15 +8,15 @@ import { redirectIfAuthenticated } from "../common/pageGuard.js";
 
 initSignupPage();
 
-/** ===== Regex für Basis-Checks ===== */
+/** ===== Regex for basic checks ===== */
 const RX_EMAIL = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-const RX_NAME  = /^[A-ZÄÖÜ][a-zäöüß]+(?:[ -][A-ZÄÖÜ][a-zäöüß]+)*$/;
+const RX_NAME = /^[A-ZÄÖÜ][a-zäöüß]+(?:[ -][A-ZÄÖÜ][a-zäöüß]+)*$/;
 
-/** ===== kleine DOM-Helper ===== */
+/** ===== Small DOM helpers ===== */
 const el = (id) => document.getElementById(id);
 const val = (id) => (el(id)?.value ?? "").trim();
 
-/** Toggle rote Umrandung + aria-invalid */
+/** Toggle red border + aria-invalid */
 function setFieldState(id, ok) {
   const node = el(id);
   if (!node) return;
@@ -25,19 +25,19 @@ function setFieldState(id, ok) {
 }
 
 /**
- * Initialisiert die Signup-Seite mit Redirect-Check und UI-Setup
+ * Initializes the signup page with redirect check and UI setup
  */
 async function initSignupPage() {
   await redirectIfAuthenticated("./summary.html");
   bindSignupForm();
   bindBackButton();
   bindPasswordToggles();
-  // Initialer State beim Laden
+  // Initial state on load
   updateSubmitState();
 }
 
 /**
- * Bindet Event-Listener für das Signup-Formular
+ * Binds event listeners for the signup form
  */
 function bindSignupForm() {
   const form = el("signupForm");
@@ -48,33 +48,42 @@ function bindSignupForm() {
 }
 
 /**
- * Bindet Event-Listener für den Zurück-Button
+ * Binds event listeners for the back button
  */
 function bindBackButton() {
   const backBtn = el("signupBackBtn");
   if (!backBtn) return;
-  backBtn.addEventListener("click", () => (window.location.href = "./index.html"));
+  backBtn.addEventListener(
+    "click",
+    () => (window.location.href = "./index.html")
+  );
 }
 
 /**
- * Bindet Event-Listener für Passwort-Sichtbarkeits-Toggles
+ * Binds event listeners for password visibility toggles
  */
 function bindPasswordToggles() {
   document.querySelectorAll("[data-toggle]").forEach((button) => {
-    button.addEventListener("click", () => togglePassword(button.dataset.toggle));
+    button.addEventListener("click", () =>
+      togglePassword(button.dataset.toggle)
+    );
   });
 }
 
 /**
- * Verarbeitet das Signup-Formular-Submit
- * @param {Event} event Das Submit-Event
+ * Handles the signup form submit
+ * @param {Event} event The submit event
  */
 async function handleSignupSubmit(event) {
   event.preventDefault();
   if (!validateSignup()) return;
   disableSubmit(true);
   try {
-    await registerUser(val("signupName"), val("signupEmail"), val("signupPassword"));
+    await registerUser(
+      val("signupName"),
+      val("signupEmail"),
+      val("signupPassword")
+    );
     window.location.href = "./summary.html";
   } catch (err) {
     setSignupStatus(readAuthError(err), true);
@@ -83,9 +92,9 @@ async function handleSignupSubmit(event) {
 }
 
 /**
- * Validiert alle Eingaben des Signup-Formulars
- * und markiert fehlerhafte Felder mit rotem Rand
- * @returns {boolean} True wenn alle Validierungen erfolgreich, sonst false
+ * Validates all signup form inputs
+ * and marks invalid fields with a red border
+ * @returns {boolean} True if all validations pass, otherwise false
  */
 function validateSignup() {
   const name = val("signupName");
@@ -105,18 +114,19 @@ function validateSignup() {
   setFieldState("signupPassword", okPwLen);
   setFieldState("signupPasswordConfirm", okConfirm);
 
-  if (!okName)  return reportError("Bitte einen gültigen Namen eingeben (z. B. „Max Mustermann“).");
-  if (!okEmail) return reportError("Bitte eine gültige E-Mail-Adresse eingeben.");
-  if (!okPwLen) return reportError("Passwort benötigt mindestens 6 Zeichen.");
-  if (!okConfirm) return reportError("Passwörter stimmen nicht überein.");
-  if (!okPrivacy) return reportError("Bitte Datenschutz akzeptieren.");
+  if (!okName)
+    return reportError('Please enter a valid name (e.g. "Max Mustermann").');
+  if (!okEmail) return reportError("Please enter a valid email address.");
+  if (!okPwLen) return reportError("Password requires at least 6 characters.");
+  if (!okConfirm) return reportError("Passwords do not match.");
+  if (!okPrivacy) return reportError("Please accept the privacy policy.");
 
   setSignupStatus("", false);
   return true;
 }
 
 /**
- * Aktualisiert den Status des Submit-Buttons und die roten Ränder live
+ * Updates the submit button status and live field validation borders
  */
 function updateSubmitState() {
   const name = val("signupName");
@@ -130,35 +140,35 @@ function updateSubmitState() {
   const okPwLen = password.length >= 6;
   const okConfirm = confirm.length >= 6 && password === confirm;
 
-  // Live-Feldzustände (roter Rand an/aus)
+  // Live field states (red border on/off)
   setFieldState("signupName", name ? okName : true);
   setFieldState("signupEmail", email ? okEmail : true);
   setFieldState("signupPassword", password ? okPwLen : true);
   setFieldState("signupPasswordConfirm", confirm ? okConfirm : true);
 
-  // Button aktivieren, wenn alles passt
+  // Enable button when everything is valid
   const enabled = okName && okEmail && okPwLen && okConfirm && accepted;
   disableSubmit(!enabled);
 
-  // Hinweistext bei Passwort-Mismatch
+  // Show hint text on password mismatch
   showPasswordMismatch(password, confirm);
 }
 
 /**
- * Zeigt einen Hinweis an, wenn Passwörter nicht übereinstimmen
- * @param {string} password Das Passwort
- * @param {string} confirm Das Bestätigungspasswort
+ * Shows a hint when passwords do not match
+ * @param {string} password The password
+ * @param {string} confirm The confirmation password
  */
 function showPasswordMismatch(password, confirm) {
   const hint = el("signupPasswordHint");
   if (!hint) return;
   const mismatch = password && confirm && password !== confirm;
-  hint.textContent = mismatch ? "Passwörter stimmen nicht überein" : "";
+  hint.textContent = mismatch ? "Passwords do not match" : "";
 }
 
 /**
- * Aktiviert oder deaktiviert den Submit-Button
- * @param {boolean} disabled True zum Deaktivieren, false zum Aktivieren
+ * Enables or disables the submit button
+ * @param {boolean} disabled True to disable, false to enable
  */
 function disableSubmit(disabled) {
   const button = el("signupSubmit");
@@ -168,8 +178,8 @@ function disableSubmit(disabled) {
 }
 
 /**
- * Schaltet die Sichtbarkeit eines Passwort-Feldes um
- * @param {string} id Die ID des Passwort-Input-Feldes
+ * Toggles the visibility of a password field
+ * @param {string} id The ID of the password input field
  */
 function togglePassword(id) {
   const field = el(id);
@@ -177,9 +187,9 @@ function togglePassword(id) {
 }
 
 /**
- * Zeigt eine Statusmeldung auf der Signup-Seite an
- * @param {string} message Die anzuzeigende Nachricht
- * @param {boolean} isError True für Fehlermeldung, false für normale Meldung
+ * Displays a status message on the signup page
+ * @param {string} message The message to display
+ * @param {boolean} isError True for error message, false for normal message
  */
 function setSignupStatus(message, isError) {
   const status = el("signupStatus");
@@ -189,9 +199,9 @@ function setSignupStatus(message, isError) {
 }
 
 /**
- * Zeigt eine Fehlermeldung an und gibt false zurück
- * @param {string} message Die Fehlermeldung
- * @returns {boolean} Immer false
+ * Displays an error message and returns false
+ * @param {string} message The error message
+ * @returns {boolean} Always false
  */
 function reportError(message) {
   setSignupStatus(message, true);

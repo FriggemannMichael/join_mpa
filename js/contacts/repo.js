@@ -53,5 +53,5 @@ export async function saveContactToFirebase(data) {
   await set(push(contactsRef), data);
 }
 
-// Diese beiden Exporte brauchst du in detail.js (keine Verhaltensänderung):
+// These two exports are needed in detail.js (no behavioral change):
 export { db, ref, remove };

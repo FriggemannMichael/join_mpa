@@ -11,7 +11,7 @@ function initSplashScreen() {
   const splashLogo = document.getElementById("splash-logo");
   if (!splashScreen || !splashLogo) return;
 
-  // Responsive Werte für Start- und Zielposition
+  // Responsive values for start and target position
   if (window.innerWidth <= 600) {
     const baseW = 428,
       baseH = 926;
@@ -59,13 +59,13 @@ function initSplashScreen() {
       () => {
         splashScreen.style.backgroundColor = "#F6F7F8";
 
-        // Login-Card sichtbar machen (CSS übernimmt die Positionierung)
+        // Make login card visible (CSS handles positioning)
         const loginCard = document.querySelector(".login-card");
         if (loginCard) {
           loginCard.classList.remove("login-card-hidden");
         }
 
-        // Splash-Logo erst nach kurzem Delay ausblenden
+        // Fade out splash logo after short delay
         setTimeout(() => {
           splashLogo.style.opacity = "0";
           splashLogo.style.pointerEvents = "none";

@@ -1,5 +1,5 @@
 /**
- * Signup-Seite für Benutzerregistrierung
+ * Signup page for user registration
  * @module signup
  */
 
@@ -12,7 +12,7 @@ initSignupPage();
 const RX_EMAIL = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const RX_NAME = /^[A-ZÄÖÜ][a-zäöüß]+(?:[ -][A-ZÄÖÜ][a-zäöüß]+)*$/;
 
-/** ===== Blockierte E-Mail-Adressen ===== */
+/** ===== Blocked email addresses ===== */
 const BLOCKED_EMAILS = [
   "test@test.de",
   "example@example.com",
@@ -30,22 +30,22 @@ const BLOCKED_EMAILS = [
 const el = (id) => document.getElementById(id);
 const val = (id) => (el(id)?.value ?? "").trim();
 
-/** Fehlermeldungen pro Feld */
+/** Error messages per field */
 const ERR = {
-  name: "Bitte einen gültigen Namen eingeben (erster Buchstabe groß).",
-  email: "Bitte eine gültige E-Mail-Adresse eingeben.",
-  emailBlocked: "Diese E-Mail-Adresse kann nicht verwendet werden.",
-  password: "Passwort benötigt mindestens 6 Zeichen.",
-  confirm: "Passwörter stimmen nicht überein.",
+  name: "Please enter a valid name (first letter capitalized).",
+  email: "Please enter a valid email address.",
+  emailBlocked: "This email address cannot be used.",
+  password: "Password requires at least 6 characters.",
+  confirm: "Passwords do not match.",
 };
 
-/** Eltern Container finden */
+/** Find parent container */
 function getContainer(id) {
   const node = el(id);
   return node ? node.closest(".inputField__container") || node : null;
 }
 
-/** roten Rand + aria-invalid toggeln */
+/** Toggle red border + aria-invalid */
 function setFieldState(id, ok) {
   const node = el(id);
   const container = getContainer(id);
@@ -54,7 +54,7 @@ function setFieldState(id, ok) {
   node.setAttribute("aria-invalid", String(!ok));
 }
 
-/** Fehlernachricht-Element am Container sicherstellen */
+/** Ensure error message element at container */
 function ensureFaultMsg(container) {
   let faultMsg = container.querySelector(".field-fault-msg");
   if (!faultMsg) {
@@ -67,7 +67,7 @@ function ensureFaultMsg(container) {
   return faultMsg;
 }
 
-/** Fehlernachricht setzen oder entfernen */
+/** Set or remove error message */
 function setFieldFaultMsg(id, message = "") {
   const container = getContainer(id);
   if (!container) return;
@@ -81,7 +81,7 @@ function setFieldFaultMsg(id, message = "") {
   }
 }
 
-/** Feld als „touched“ markieren (nach blur) */
+/** Mark field as "touched" (after blur) */
 function markTouched(id) {
   const c = getContainer(id);
   if (c) c.dataset.touched = "true";
@@ -97,7 +97,7 @@ async function initSignupPage() {
 }
 
 /**
- * Bindet Event-Listener für das Signup-Formular
+ * Binds event listeners for the signup form
  */
 function bindSignupForm() {
   const form = el("signupForm");
@@ -115,7 +115,7 @@ function bindSignupForm() {
   form.addEventListener("submit", handleSignupSubmit);
 }
 
-/** Live-Validierung bei Eingabe */
+/** Live validation on input */
 function handleLiveInput() {
   [
     "signupName",
@@ -132,7 +132,7 @@ function handleLiveInput() {
 }
 
 /**
- * Einzelnes Feld prüfen
+ * Validate single field
  * @param {string} id
  * @param {{showErrors?: boolean, markTouch?: boolean}} opts
  */
@@ -195,7 +195,7 @@ function bindBackButton() {
 }
 
 /**
- * Bindet Event-Listener für Passwort-Sichtbarkeits-Toggles
+ * Binds event listeners for password visibility toggles
  */
 function bindPasswordToggles() {
   document.querySelectorAll("[data-toggle]").forEach((button) => {
@@ -223,7 +223,7 @@ async function handleSignupSubmit(event) {
 
   const accepted = el("signupPrivacy")?.checked ?? false;
   if (!accepted) {
-    setSignupStatus("Bitte Datenschutz akzeptieren.", true);
+    setSignupStatus("Please accept the privacy policy.", true);
     return;
   }
   if (!okAll) return;
@@ -262,9 +262,9 @@ function updateSubmitState() {
 }
 
 /**
- * Zeigt einen Hinweis an, wenn Passwörter nicht übereinstimmen
- * @param {string} password Das Passwort
- * @param {string} confirm Das Bestätigungspasswort
+ * Displays a hint when passwords don't match
+ * @param {string} password The password
+ * @param {string} confirm The confirmation password
  */
 function showPasswordMismatch(password, confirm) {
   const hint = el("signupPasswordHint");
@@ -274,8 +274,8 @@ function showPasswordMismatch(password, confirm) {
 }
 
 /**
- * Aktiviert oder deaktiviert den Submit-Button
- * @param {boolean} disabled True zum Deaktivieren, false zum Aktivieren
+ * Enables or disables the submit button
+ * @param {boolean} disabled True to disable, false to enable
  */
 function disableSubmit(disabled) {
   const button = el("signupSubmit");
@@ -286,8 +286,8 @@ function disableSubmit(disabled) {
 }
 
 /**
- * Schaltet die Sichtbarkeit eines Passwort-Feldes um
- * @param {string} id Die ID des Passwort-Input-Feldes
+ * Toggles the visibility of a password field
+ * @param {string} id The ID of the password input field
  */
 function togglePassword(id) {
   const field = el(id);
@@ -295,9 +295,9 @@ function togglePassword(id) {
 }
 
 /**
- * Zeigt eine Statusmeldung auf der Signup-Seite an
- * @param {string} message Die anzuzeigende Nachricht
- * @param {boolean} isError True für Fehlermeldung, false für normale Meldung
+ * Displays a status message on the signup page
+ * @param {string} message The message to display
+ * @param {boolean} isError True for error message, false for normal message
  */
 function setSignupStatus(message, isError) {
   const status = el("signupStatus");
@@ -308,7 +308,7 @@ function setSignupStatus(message, isError) {
 }
 
 /**
- * Entfernt alle sichtbaren Fehlermeldungen
+ * Removes all visible error messages
  */
 function clearFaultMsgs() {
   document.querySelectorAll(".field-fault-msg.visible").forEach((el) => {

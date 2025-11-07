@@ -1,5 +1,5 @@
 /**
- * Firebase Authentication Service für Login, Registrierung und User-Management
+ * Firebase Authentication Service for login, registration and user management
  * @module authService
  */
 
@@ -21,10 +21,10 @@ import {
 export { getActiveUser, startGuestSession as startGuest, authReady };
 
 /**
- * Meldet einen User mit E-Mail und Passwort bei Firebase an
- * @param {string} email E-Mail-Adresse des Users
- * @param {string} password Passwort des Users
- * @returns {Promise<Object>} Firebase User-Objekt
+ * Logs in a user with email and password via Firebase
+ * @param {string} email User's email address
+ * @param {string} password User's password
+ * @returns {Promise<Object>} Firebase user object
  */
 export async function login(email, password) {
   const cred = await signInWithEmailAndPassword(auth, email, password);
@@ -33,11 +33,11 @@ export async function login(email, password) {
 }
 
 /**
- * Registriert einen neuen User bei Firebase Authentication
- * @param {string} name Anzeigename des Users
- * @param {string} email E-Mail-Adresse des Users
- * @param {string} password Passwort des Users
- * @returns {Promise<Object>} Firebase User-Objekt
+ * Registers a new user with Firebase Authentication
+ * @param {string} name User's display name
+ * @param {string} email User's email address
+ * @param {string} password User's password
+ * @returns {Promise<Object>} Firebase user object
  */
 export async function registerUser(name, email, password) {
   const cred = await createUserWithEmailAndPassword(auth, email, password);
@@ -47,7 +47,7 @@ export async function registerUser(name, email, password) {
 }
 
 /**
- * Meldet den aktuellen User ab und beendet die Session
+ * Logs out the current user and ends the session
  * @returns {Promise<void>}
  */
 export async function logout() {
@@ -55,17 +55,17 @@ export async function logout() {
 }
 
 /**
- * Registriert einen Listener für Auth-Status-Änderungen
- * @param {Function} listener Callback-Funktion für Auth-Änderungen
+ * Registers a listener for auth status changes
+ * @param {Function} listener Callback function for auth changes
  */
 export function onAuthChange(listener) {
   window.addEventListener("auth-changed", ({ detail }) => listener(detail));
 }
 
 /**
- * Prüft Authentication und leitet bei Bedarf weiter
- * @param {string} redirectUrl URL für Weiterleitung bei fehlender Auth
- * @returns {Object|null} User-Objekt oder null
+ * Checks authentication and redirects if necessary
+ * @param {string} redirectUrl URL to redirect to if authentication is missing
+ * @returns {Object|null} User object or null
  */
 export function ensureAuthenticated(redirectUrl) {
   const user = getActiveUser();
@@ -75,18 +75,18 @@ export function ensureAuthenticated(redirectUrl) {
 }
 
 /**
- * Konvertiert Firebase-Fehler in lesbare Fehlermeldungen
- * @param {Error} err Firebase-Fehler-Objekt
- * @returns {string} Benutzerfreundliche Fehlermeldung
+ * Converts Firebase errors into readable error messages
+ * @param {Error} err Firebase error object
+ * @returns {string} User-friendly error message
  */
 export function readAuthError(err) {
   return mapFirebaseError(err);
 }
 
 /**
- * Erstellt Initialen aus User-Daten für Profildarstellung
- * @param {Object|null} user Firebase User-Objekt
- * @returns {string} Initialen (z.B. "JD" oder "GU" für Guest)
+ * Creates initials from user data for profile display
+ * @param {Object|null} user Firebase user object
+ * @returns {string} Initials (e.g. "JD" or "GU" for Guest)
  */
 export function getInitials(user) {
   if (!user) return "GU";
@@ -96,9 +96,9 @@ export function getInitials(user) {
 }
 
 /**
- * Erstellt Initialen aus einem Namen (maximal 2 Buchstaben)
- * @param {string} name Vollständiger Name des Users
- * @returns {string} Initialen (z.B. "John Doe" → "JD")
+ * Creates initials from a name (maximum 2 letters)
+ * @param {string} name User's full name
+ * @returns {string} Initials (e.g. "John Doe" → "JD")
  */
 function buildInitials(name) {
   return name

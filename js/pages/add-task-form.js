@@ -1,5 +1,5 @@
 /**
- * Formular-Verwaltung für Add-Task-Seite
+ * Form management for Add-Task page
  * @module add-task-form
  */
 
@@ -11,7 +11,7 @@ import { validatePriorityGroup } from "../validation/validation-fields.js";
 import { updateAddTaskValidationButton } from "../validation/validation-addTask.js";
 
 /**
- * Bindet Event-Listener für Prioritäts-Buttons
+ * Binds event listeners for priority buttons
  */
 export function bindPriorityButtons() {
   const buttons = document.querySelectorAll(".priority-btn");
@@ -29,8 +29,8 @@ export function bindPriorityButtons() {
 }
 
 /**
- * Setzt einen Prioritäts-Button als aktiv und deaktiviert andere
- * @param {HTMLElement} activeButton Der zu aktivierende Button
+ * Sets a priority button as active and deactivates others
+ * @param {HTMLElement} activeButton The button to activate
  */
 export function setActivePriority(activeButton) {
   document.querySelectorAll(".priority-btn").forEach((btn) => {
@@ -40,14 +40,14 @@ export function setActivePriority(activeButton) {
   const group = activeButton.closest(".priority-buttons");
   validatePriorityGroup(group, "Priority", { show: true });
 
-  // Gesamt-Button-Status aktualisieren
+  // Update overall button status
   updateAddTaskValidationButton?.();
 }
 
 /**
- * Aktualisiert den aktiven Status eines Buttons
- * @param {HTMLElement} button Button-Element
- * @param {boolean} isActive Aktiv-Status
+ * Updates the active state of a button
+ * @param {HTMLElement} button Button element
+ * @param {boolean} isActive Active status
  */
 function updateButtonActiveState(button, isActive) {
   button.classList.toggle("active", isActive);
@@ -61,10 +61,10 @@ function updateButtonActiveState(button, isActive) {
 }
 
 /**
- * Aktualisiert das Prioritäts-Icon
- * @param {HTMLElement} iconContainer Icon-Container
- * @param {string} priority Priorität
- * @param {boolean} isActive Aktiv-Status
+ * Updates the priority icon
+ * @param {HTMLElement} iconContainer Icon container
+ * @param {string} priority Priority
+ * @param {boolean} isActive Active status
  */
 function updatePriorityIcon(iconContainer, priority, isActive) {
   if (isActive) {
@@ -75,9 +75,9 @@ function updatePriorityIcon(iconContainer, priority, isActive) {
 }
 
 /**
- * Holt das aktive Icon für eine Priorität
- * @param {string} priority Priorität
- * @returns {string} HTML-String mit Icon
+ * Gets the active icon for a priority
+ * @param {string} priority Priority
+ * @returns {string} HTML string with icon
  */
 function getActivePriorityIcon(priority) {
   const iconMap = {
@@ -91,9 +91,9 @@ function getActivePriorityIcon(priority) {
 }
 
 /**
- * Holt das inaktive Icon für eine Priorität
- * @param {string} priority Priorität
- * @returns {string} HTML-String mit Icon
+ * Gets the inactive icon for a priority
+ * @param {string} priority Priority
+ * @returns {string} HTML string with icon
  */
 function getInactivePriorityIcon(priority) {
   const iconMap = {
@@ -103,13 +103,14 @@ function getInactivePriorityIcon(priority) {
   };
 
   const src = iconMap[priority] || "";
-  const alt = `${priority.charAt(0).toUpperCase() + priority.slice(1)
-    } priority`;
+  const alt = `${
+    priority.charAt(0).toUpperCase() + priority.slice(1)
+  } priority`;
   return `<img class="prio-icon" src="${src}" alt="${alt}" />`;
 }
 
 /**
- * Bindet Event-Listener für Aktions-Buttons (Clear, Create)
+ * Binds event listeners for action buttons (Clear, Create)
  */
 export function bindActionButtons() {
   const clearBtn = document.getElementById("taskClearBtn");
@@ -117,15 +118,15 @@ export function bindActionButtons() {
   if (clearBtn) clearBtn.addEventListener("click", clearTaskForm);
   if (createBtn) createBtn.addEventListener("click", handleTaskCreate);
 
-  // Initiale Validierung
+  // Initial validation
   validateFormAndUpdateButton();
-  // Event-Listener für Formularfelder
+  // Event listeners for form fields
   bindFormValidation();
 }
 
 /**
- * Liest die Task-Daten aus dem Formular
- * @returns {Object} Task-Daten
+ * Reads the task data from the form
+ * @returns {Object} Task data
  */
 export function readTaskData() {
   const assignees = readAssignees();
@@ -145,8 +146,8 @@ export function readTaskData() {
 }
 
 /**
- * Liest die ausgewählten Assignees
- * @returns {Array} Array von Assignee-Objekten
+ * Reads the selected assignees
+ * @returns {Array} Array of assignee objects
  */
 function readAssignees() {
   const checkboxes = document.querySelectorAll(
@@ -160,8 +161,8 @@ function readAssignees() {
 }
 
 /**
- * Liest die ausgewählte Kategorie
- * @returns {Object} Kategorie-Objekt mit value und label
+ * Reads the selected category
+ * @returns {Object} Category object with value and label
  */
 function readCategory() {
   const categoryValue = readValue("category");
@@ -172,9 +173,9 @@ function readCategory() {
 }
 
 /**
- * Liest den Wert eines Formularfeldes
- * @param {string} id Element-ID
- * @returns {string} Feldwert
+ * Reads the value of a form field
+ * @param {string} id Element ID
+ * @returns {string} Field value
  */
 export function readValue(id) {
   const field = document.getElementById(id);
@@ -182,8 +183,8 @@ export function readValue(id) {
 }
 
 /**
- * Liest die aktive Priorität
- * @returns {string} Priorität
+ * Reads the active priority
+ * @returns {string} Priority
  */
 export function readActivePriority() {
   const active = document.querySelector(".priority-btn.active");
@@ -191,7 +192,7 @@ export function readActivePriority() {
 }
 
 /**
- * Löscht das Formular und setzt es zurück
+ * Clears the form and resets it
  */
 export function clearTaskForm() {
   clearTextFields();
@@ -200,13 +201,13 @@ export function clearTaskForm() {
   updateAssigneeSelection();
   subtasks.length = 0;
   renderSubtasks();
-  setTaskStatus("Formular zurückgesetzt", false);
-  // Button-Status nach Clear aktualisieren
+  setTaskStatus("Form reset", false);
+  // Update button status after clear
   validateFormAndUpdateButton();
 }
 
 /**
- * Löscht alle Textfelder im Formular
+ * Clears all text fields in the form
  */
 function clearTextFields() {
   document
@@ -223,7 +224,7 @@ function clearTextFields() {
 }
 
 /**
- * Deaktiviert alle Checkboxen
+ * Deactivates all checkboxes
  */
 function clearCheckboxes() {
   document
@@ -234,7 +235,7 @@ function clearCheckboxes() {
 }
 
 /**
- * Deaktiviert alle Prioritäts-Buttons und setzt Medium als Default
+ * Deactivates all priority buttons and sets Medium as default
  */
 function clearPriorityButtons() {
   document.querySelectorAll(".priority-btn").forEach((btn) => {
@@ -250,13 +251,13 @@ function clearPriorityButtons() {
 }
 
 /**
- * Behandelt das Erstellen eines Tasks
+ * Handles the creation of a task
  */
 export async function handleTaskCreate() {
   const data = readTaskData();
 
   if (!validateTaskData(data)) {
-    setTaskStatus("Bitte alle Pflichtfelder ausfüllen (inkl. Priorität)", true);
+    setTaskStatus("Please fill all required fields (incl. Priority)", true);
     return;
   }
 
@@ -265,29 +266,29 @@ export async function handleTaskCreate() {
 
   try {
     await createTask(data);
-    setTaskStatus("Task erfolgreich erstellt!", false);
+    setTaskStatus("Task successfully created!", false);
     clearTaskForm();
     setTimeout(() => {
       window.location.href = "board.html";
     }, 100);
   } catch (error) {
-    setTaskStatus("Task konnte nicht gespeichert werden", true);
+    setTaskStatus("Task could not be saved", true);
   } finally {
     if (createBtn) createBtn.disabled = false;
   }
 }
 
 /**
- * Validiert die Task-Daten
- * @param {Object} data Task-Daten
- * @returns {boolean} True wenn valide
+ * Validates the task data
+ * @param {Object} data Task data
+ * @returns {boolean} True if valid
  */
 function validateTaskData(data) {
   return !!(data.title && data.dueDate && data.category && data.priority);
 }
 
 /**
- * Bindet Event-Listener für Formularfeld-Änderungen zur Validierung
+ * Binds event listeners for form field changes for validation
  */
 function bindFormValidation() {
   const titleField = document.getElementById("taskTitle");
@@ -295,7 +296,7 @@ function bindFormValidation() {
   const categoryField = document.getElementById("category");
   const priorityButtons = document.querySelectorAll(".priority-btn");
 
-  // Title und Due Date bei Eingabe validieren
+  // Validate title and due date on input
   if (titleField)
     titleField.addEventListener("input", validateFormAndUpdateButton);
   if (dueDateField)
@@ -303,7 +304,7 @@ function bindFormValidation() {
   if (categoryField)
     categoryField.addEventListener("change", validateFormAndUpdateButton);
 
-  // Priorität bei Klick validieren
+  // Validate priority on click
   priorityButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
       setTimeout(validateFormAndUpdateButton, 0);
@@ -312,7 +313,7 @@ function bindFormValidation() {
 }
 
 /**
- * Validiert das Formular und aktiviert/deaktiviert den Create-Button
+ * Validates the form and enables/disables the Create button
  */
 export function validateFormAndUpdateButton() {
   const data = readTaskData();
@@ -326,9 +327,9 @@ export function validateFormAndUpdateButton() {
 }
 
 /**
- * Setzt den Task-Status
- * @param {string} message Status-Nachricht
- * @param {boolean} isError Fehler-Flag
+ * Sets the task status
+ * @param {string} message Status message
+ * @param {boolean} isError Error flag
  */
 export function setTaskStatus(message, isError) {
   const status = document.getElementById("taskStatus");
@@ -338,7 +339,7 @@ export function setTaskStatus(message, isError) {
 }
 
 /**
- * Toggle für das Category-Dropdown (wird inline per onclick in HTML aufgerufen)
+ * Toggle for the category dropdown (called inline via onclick in HTML)
  */
 export function toggleCategoryDropdown() {
   const header = document.querySelector(".category-select-header");
@@ -348,7 +349,7 @@ export function toggleCategoryDropdown() {
   const isOpen = !dropdown.classList.toggle("d-none");
   header.classList.toggle("open", isOpen);
 
-  // Listener nur aktiv, wenn geöffnet
+  // Listener only active when open
   if (isOpen) {
     document.addEventListener("click", handleOutsideCategoryClick);
   } else {
@@ -356,13 +357,12 @@ export function toggleCategoryDropdown() {
   }
 }
 
-
 function handleOutsideCategoryClick(e) {
   const dropdown = document.getElementById("category-dropdown");
   const header = document.querySelector(".category-select-header");
   if (!dropdown || !header) return;
 
-  // Klick außerhalb -> schließen
+  // Click outside -> close
   if (!dropdown.contains(e.target) && !header.contains(e.target)) {
     dropdown.classList.add("d-none");
     header.classList.remove("open");
@@ -370,10 +370,9 @@ function handleOutsideCategoryClick(e) {
   }
 }
 
-
 /**
- * Setzt die Kategorie (wird inline per onclick in HTML aufgerufen)
- * @param {string} value Kategorie-Wert (z.B. 'technical-task')
+ * Sets the category (called inline via onclick in HTML)
+ * @param {string} value Category value (e.g. 'technical-task')
  */
 export function selectCategory(value) {
   const input = document.getElementById("category");
@@ -382,7 +381,7 @@ export function selectCategory(value) {
 
   if (input) {
     input.value = value;
-    // Trigger change event für Validierung
+    // Trigger change event for validation
     input.dispatchEvent(new Event("change"));
   }
   if (placeholder) placeholder.textContent = getCategoryLabel(value);
@@ -392,9 +391,9 @@ export function selectCategory(value) {
 }
 
 /**
- * Holt das Label für eine Kategorie
- * @param {string} value Kategorie-Wert
- * @returns {string} Kategorie-Label
+ * Gets the label for a category
+ * @param {string} value Category value
+ * @returns {string} Category label
  */
 function getCategoryLabel(value) {
   const labelMap = {

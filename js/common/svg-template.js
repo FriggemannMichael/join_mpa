@@ -172,10 +172,10 @@ export const icons = {
 };
 
 export function call(props = {}) {
-  // Alias für phone-Icon
+  // Alias for phone icon
   const svg = icons.phone;
   let svgTag = svg;
-  // Attribute dynamisch einfügen
+  // Insert attributes dynamically
   if (Object.keys(props).length > 0) {
     svgTag = svg.replace(
       "<svg ",

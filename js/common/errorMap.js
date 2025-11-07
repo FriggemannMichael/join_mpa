@@ -1,14 +1,14 @@
 const errorMessages = {
-  "auth/invalid-email": "Ungültige E-Mail-Adresse",
-  "auth/user-disabled": "Benutzer deaktiviert",
-  "auth/user-not-found": "Benutzer nicht gefunden",
-  "auth/wrong-password": "Falsches Passwort",
-  "auth/too-many-requests": "Zu viele Versuche – bitte später erneut",
-  "auth/email-already-in-use": "E-Mail wird bereits verwendet",
-  "auth/weak-password": "Passwort ist zu schwach (mind. 6 Zeichen)",
+  "auth/invalid-email": "Invalid email address",
+  "auth/user-disabled": "User account disabled",
+  "auth/user-not-found": "User not found",
+  "auth/wrong-password": "Wrong password",
+  "auth/too-many-requests": "Too many attempts – please try again later",
+  "auth/email-already-in-use": "Email already in use",
+  "auth/weak-password": "Password is too weak (min. 6 characters)",
 };
 
 export function mapFirebaseError(err) {
-  if (!err || !err.code) return "Unbekannter Fehler";
-  return errorMessages[err.code] || "Login fehlgeschlagen";
+  if (!err || !err.code) return "Unknown error";
+  return errorMessages[err.code] || "Login failed";
 }

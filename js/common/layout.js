@@ -65,10 +65,10 @@ function bindProfileMenu() {
   const menu = document.getElementById("profileMenu");
   const overlay = document.getElementById("profileMenuBackdrop");
 
-  // Debug-Logging für Troubleshooting
-  if (!icon) console.warn("Layout: profileIcon nicht gefunden");
-  if (!menu) console.warn("Layout: profileMenu nicht gefunden");
-  if (!overlay) console.warn("Layout: profileMenuBackdrop nicht gefunden");
+  // Debug logging for troubleshooting
+  if (!icon) console.warn("Layout: profileIcon not found");
+  if (!menu) console.warn("Layout: profileMenu not found");
+  if (!overlay) console.warn("Layout: profileMenuBackdrop not found");
 
   if (!icon || !menu || !overlay) return;
 

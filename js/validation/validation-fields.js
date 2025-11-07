@@ -4,19 +4,19 @@ import { DEFAULT_MIN_LENGTH } from "./validation-config.js";
 
 export function validateRequiredEl(el, label, opts) {
   const ok = (el?.value ?? "").toString().trim().length > 0;
-  return report(el, ok, `${label} ist erforderlich`, opts);
+  return report(el, ok, `${label} is required`, opts);
 }
 
 export function validateMinLengthEl(el, min = DEFAULT_MIN_LENGTH, label, opts) {
   const v = el?.value?.trim?.() || "";
   const m = Number.isFinite(min) ? min : DEFAULT_MIN_LENGTH;
   const ok = v.length >= m;
-  return report(el, ok, `${label}: mindestens ${m} Zeichen`, opts);
+  return report(el, ok, `${label}: at least ${m} characters`, opts);
 }
 
 export function validateDateNotPastEl(el, label, opts) {
   const v = el?.value || "";
-  if (!v) return report(el, false, `${label} ist erforderlich`, opts);
+  if (!v) return report(el, false, `${label} is required`, opts);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const d = new Date(v);
@@ -25,14 +25,14 @@ export function validateDateNotPastEl(el, label, opts) {
   return report(
     el,
     ok,
-    `${label} darf nicht in der Vergangenheit liegen`,
+    `${label} must not be in the past`,
     opts
   );
 }
 
 export function validatePriorityGroup(groupEl, label, opts) {
   const ok = !!groupEl?.querySelector(".priority-btn.active");
-  return report(groupEl, ok, `Bitte ${label} wählen`, opts);
+  return report(groupEl, ok, `Please select ${label}`, opts);
 }
 
 /**
@@ -49,7 +49,7 @@ export function validateEmailEl(el, label, opts) {
   return report(
     el,
     ok,
-    `${label}: Bitte gültige E-Mail-Adresse eingeben`,
+    `${label}: Please enter a valid email address`,
     opts
   );
 }
@@ -70,7 +70,7 @@ export function validatePhoneEl(el, label, opts) {
   return report(
     el,
     ok,
-    `${label}: Bitte gültiges Telefon-Format (mind. 7 Zeichen)`,
+    `${label}: Please enter a valid phone format (min. 7 characters)`,
     opts
   );
 }
