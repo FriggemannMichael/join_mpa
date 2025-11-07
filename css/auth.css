@@ -430,6 +430,7 @@ body.dark-theme .goback:hover {
   gap: 0.6rem;
   justify-content: center;
   line-height: 1;
+  margin-top: 8px;
 }
 
 .check-box input {
@@ -544,7 +545,7 @@ body.dark-theme .goback:hover {
   background: var(--secondary-color);
 }
 
-@media (width <= 48rem) {
+@media (width <=48rem) {
   .login-header-signup-desktop {
     right: 2rem;
     top: 2rem;
@@ -700,7 +701,7 @@ a.btn {
     transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-@media (width <= 48rem) {
+@media (width <=48rem) {
   .login-card {
     padding: var(--space-xl) var(--space-lg);
   }
