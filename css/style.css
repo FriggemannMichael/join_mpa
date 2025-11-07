@@ -224,7 +224,10 @@ select {
 .btn-create.disabled {
   background-color: var(--primary-color);
   color: var(--white);
-  cursor: not-allowed;
+  /* Cursor sollte beim Add-Task Button nicht "not-allowed" zeigen.
+     Falls der Button deaktiviert ist, behalten wir die Styles, erlauben aber einen normalen Pointer,
+     damit kein falsches UX-Signal entsteht. */
+  cursor: pointer;
 }
 
 .btn-create:disabled:hover,
