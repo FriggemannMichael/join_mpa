@@ -23,7 +23,7 @@ body {
 }
 
 .input input.input-with-icon,
-.input input + .input__icon--right ~ input {
+.input input+.input__icon--right~input {
   padding-right: 40px;
 }
 
@@ -584,6 +584,12 @@ body {
 @media (width <=1024px) {
   .contacts-list {
     max-height: max-content;
+  }
+}
+
+@media (width <=768px) {
+  .contacts-list {
+    margin-bottom: 1rem;
   }
 }
 
