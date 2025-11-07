@@ -10,30 +10,70 @@ let editContactValidator = null;
 
 /**
  * Opens the edit contact overlay.
- * Makes the overlay visible and attaches close listeners for ESC and backdrop click.
+ * Retrieves the overlay element, activates it, initializes validation,
+ * and ensures the delete event delegation is properly bound.
  *
- * @returns {void} Nothing is returned; updates the DOM and event bindings.
+ * @returns {void} Nothing is returned; updates DOM state and event bindings.
  */
 function openEditOverlay() {
-  const overlay = document.getElementById("contactOverlay");
+  const overlay = getEditOverlay();
   if (!overlay) return;
+  activateOverlay(overlay);
+  setupEditValidation();
+  ensureDeleteDelegation(overlay);
+}
+
+
+/**
+ * Retrieves the edit contact overlay element from the DOM.
+ *
+ * @returns {HTMLElement | null} The overlay element if found, otherwise null.
+ */
+function getEditOverlay() {
+  return document.getElementById("contactOverlay");
+}
+
+
+/**
+ * Activates and displays the edit contact overlay.
+ * Removes the hidden attribute, enables interactivity, and binds modal close listeners.
+ *
+ * @param {HTMLElement} overlay - The edit contact overlay element to activate.
+ * @returns {void} Nothing is returned; directly updates DOM visibility and event bindings.
+ */
+function activateOverlay(overlay) {
   overlay.removeAttribute("hidden");
   overlay.inert = false; // sicherheitshalber interaktiv
   addModalCloseListeners(overlay, closeEditOverlay);
+}
 
-  if (editContactValidator) {
-    editContactValidator.detach();
-  }
+
+/**
+ * Initializes the edit contact form validation.
+ * Detaches any existing validator before creating a new one to avoid duplicates.
+ *
+ * @returns {void} Nothing is returned; updates the global editContactValidator reference.
+ */
+function setupEditValidation() {
+  if (editContactValidator) editContactValidator.detach();
   editContactValidator = initEditContactValidation();
+}
 
-  // Delegation – Listener bleibt auch nach innerHTML-Änderungen erhalten
-  if (!overlay._hasDeleteDelegation) {
-    overlay.addEventListener("click", (e) => {
-      const delBtn = e.target.closest("#deleteContactBtn");
-      if (delBtn) handleDeleteContact(e);
-    });
-    overlay._hasDeleteDelegation = true;
-  }
+
+/**
+ * Ensures that the delete button event delegation is attached to the edit overlay.
+ * Prevents duplicate listeners and handles delete contact actions via event delegation.
+ *
+ * @param {HTMLElement} overlay - The edit contact overlay element.
+ * @returns {void} Nothing is returned; attaches the delegated click listener if not already active.
+ */
+function ensureDeleteDelegation(overlay) {
+  if (overlay._hasDeleteDelegation) return;
+  overlay.addEventListener("click", (e) => {
+    const delBtn = e.target.closest("#deleteContactBtn");
+    if (delBtn) handleDeleteContact(e);
+  });
+  overlay._hasDeleteDelegation = true;
 }
 
 

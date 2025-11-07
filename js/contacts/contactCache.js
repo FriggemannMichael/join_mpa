@@ -11,46 +11,65 @@ import { readValue } from "./helper.js"
 let contactsCache = [];
 let selectedContactKey = null;
 
+
 /**
- * Displays the detailed view for a selected contact.
- * Finds the contact from cache, builds its detail data,
- * and opens the detail overlay depending on screen size.
+ * Displays the detailed view for the selected contact.
+ * Finds the contact by key, highlights the entry, renders its details,
+ * binds edit/delete buttons, and opens the appropriate detail section.
  *
  * @param {HTMLElement} entry - The clicked contact list element.
- * @param {string} key - The unique Firebase key of the selected contact.
- * @returns {void} Nothing is returned; updates the DOM and opens the detail view.
+ * @param {string} key - The unique Firebase key identifying the contact.
+ * @returns {void} Nothing is returned; updates the DOM and opens the contact detail view.
  */
 export function showContactDetail(entry, key) {
-    selectedContactKey = key;
-    const contact = contactsCache.find((c) => c.key === key);
+  selectedContactKey = key;
+  const contact = contactsCache.find((c) => c.key === key);
+  if (!contact) return;
 
-    if (!contact) return;
+  highlightSelectedEntry(entry);
+  renderSelectedContact(contact);
+  setTimeout(bindEditDeleteButtons, 0);
+  openDetailSection();
+}
 
-    document.querySelectorAll(".contact-person.active").forEach((el) => {
-        el.classList.remove("active");
-    });
 
-    if (entry && entry.classList) {
-        entry.classList.add("active");
-    }
+/**
+ * Highlights the selected contact entry in the contact list.
+ * Removes the active state from all other entries before applying it to the selected one.
+ *
+ * @param {HTMLElement} entry - The contact list element that was selected.
+ * @returns {void} Nothing is returned; updates the active state in the DOM.
+ */
+function highlightSelectedEntry(entry) {
+  document.querySelectorAll(".contact-person.active").forEach((el) => el.classList.remove("active"));
+  if (entry?.classList) entry.classList.add("active");
+}
 
-    const initials = getInitials(contact.name);
-    const color = colorFromString(contact.name);
-    renderContactDetail({
-        name: contact.name,
-        email: contact.email,
-        phone: contact.phone,
-        initials,
-        color,
-    });
-    setTimeout(bindEditDeleteButtons, 0);
 
-    if (window.matchMedia("(max-width: 928px)").matches) {
-        openContactDetailOverlay();
-    } else {
-        const detail = document.querySelector(".contact-detail-section");
-        detail.setAttribute("aria-hidden", "false");
-    }
+/**
+ * Renders the selected contact's details in the detail view.
+ * Generates initials and color based on the contact's name before rendering.
+ *
+ * @param {{name: string, email: string, phone?: string}} contact - The contact data to display.
+ * @returns {void} Nothing is returned; updates the contact detail section in the DOM.
+ */
+function renderSelectedContact(contact) {
+  const initials = getInitials(contact.name);
+  const color = colorFromString(contact.name);
+  renderContactDetail({ ...contact, initials, color });
+}
+
+
+/**
+ * Opens the contact detail section based on the current viewport size.
+ * On smaller screens, opens the responsive contact detail overlay;
+ * on larger screens, makes the detail section visible.
+ *
+ * @returns {void} Nothing is returned; directly updates the DOM visibility state.
+ */
+function openDetailSection() {
+  if (window.matchMedia("(max-width: 928px)").matches) openContactDetailOverlay();
+  else document.querySelector(".contact-detail-section")?.setAttribute("aria-hidden", "false");
 }
 
 
@@ -103,65 +122,148 @@ export function renderContactList(contacts) {
 
 
 /**
- * Deletes the currently selected contact from Firebase.
- * Confirms the action with the user, removes the contact,
- * and resets the contact detail view on success.
+ * Handles the deletion process for the currently selected contact.
+ * Opens a confirmation modal and, if confirmed, triggers the contact deletion workflow.
  *
  * @async
- * @returns {Promise<void>} Resolves when the contact has been deleted and the UI is updated.
+ * @returns {Promise<void>} Resolves when the user confirms and the contact deletion is executed.
  */
 export async function handleDeleteContact() {
-    if (!selectedContactKey) return;
-    confirmModal("Confirm Delete Contact?", async () => {
-        try {
-            const contactRef = ref(db, `/contacts/${selectedContactKey}`);
-            await remove(contactRef);
-            selectedContactKey = null;
-            const info = document.querySelector(".contact-info");
-            const placeholder = document.querySelector(".contact-detail-placeholder");
-            if (info) {
-                info.innerHTML = "";
-                info.style.display = "none";
-            }
-            if (placeholder) placeholder.style.display = "flex";
+  if (!selectedContactKey) return;
+  confirmModal("Confirm Delete Contact?", async () => await deleteSelectedContact());
+}
 
-            const overlay = document.getElementById("contactOverlay");
-            if (overlay && !overlay.hasAttribute("hidden")) {
-                overlay.setAttribute("hidden", "hidden");
-            }
-        } catch (error) {
-        }
-    });
+
+/**
+ * Deletes the currently selected contact and updates the UI accordingly.
+ * Removes the contact from Firebase, clears the detail view, and hides the overlay.
+ * Logs an error message if the deletion fails.
+ *
+ * @async
+ * @returns {Promise<void>} Resolves when the contact is deleted and the UI has been updated.
+ */
+async function deleteSelectedContact() {
+  try {
+    await removeContactFromFirebase();
+    clearContactDetail();
+    hideContactOverlay();
+  } catch (error) {
+    console.error("Error deleting contact:", error);
+  }
+}
+
+
+/**
+ * Removes the currently selected contact from Firebase.
+ * Deletes the contact entry and resets the selected contact key.
+ *
+ * @async
+ * @returns {Promise<void>} Resolves when the contact is successfully removed from Firebase.
+ */
+async function removeContactFromFirebase() {
+  const contactRef = ref(db, `/contacts/${selectedContactKey}`);
+  await remove(contactRef);
+  selectedContactKey = null;
+}
+
+
+/**
+ * Clears the currently displayed contact details from the view.
+ * Empties the contact info container and restores the placeholder display.
+ *
+ * @returns {void} Nothing is returned; directly modifies DOM elements.
+ */
+function clearContactDetail() {
+  const info = document.querySelector(".contact-info");
+  const placeholder = document.querySelector(".contact-detail-placeholder");
+  if (info) Object.assign(info, { innerHTML: "", style: { display: "none" } });
+  if (placeholder) placeholder.style.display = "flex";
+}
+
+
+/**
+ * Hides the contact overlay if it is currently visible.
+ * Checks the overlay's visibility state before applying the hidden attribute.
+ *
+ * @returns {void} Nothing is returned; directly updates the DOM element's visibility.
+ */
+function hideContactOverlay() {
+  const overlay = document.getElementById("contactOverlay");
+  if (overlay && !overlay.hasAttribute("hidden")) overlay.setAttribute("hidden", "hidden");
 }
 
 
 /**
  * Sets up the submit handler for the contact edit form.
- * Updates the selected contact in Firebase and refreshes the detail view after saving.
+ * Assigns the edit submission logic to handle form updates in Firebase.
  *
- * @returns {void} Nothing is returned; assigns a new async submit handler to the form.
+ * @returns {void} Nothing is returned; binds the edit form submit event handler.
  */
 function setupEditFormHandler() {
-    const form = document.getElementById("contactForm");
-    if (!form) return;
-    form.onsubmit = async (event) => {
-        event.preventDefault();
-        const data = {
-            name: readValue("contactName"),
-            email: readValue("contactEmail"),
-            phone: readValue("contactPhone"),
-        };
-        if (!data.name || !data.email) return;
-        const { ref: dbRef, update } = await import(
-            "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"
-        );
-        await update(dbRef(db, `/contacts/${selectedContactKey}`), data);
-        resetContactForm();
-        closeEditOverlay();
-        showContactDetail(
-            { dataset: { key: selectedContactKey } },
-            selectedContactKey
-        );
-        form.onsubmit = handleContactCreate;
-    };
+  const form = document.getElementById("contactForm");
+  if (!form) return;
+  form.onsubmit = handleEditSubmit;
+}
+
+
+/**
+ * Handles the form submission when editing a contact.
+ * Validates the input, updates the contact in Firebase, and finalizes the edit process.
+ *
+ * @async
+ * @param {SubmitEvent} event - The form submission event.
+ * @returns {Promise<void>} Resolves when the contact has been updated and the UI is refreshed.
+ */
+async function handleEditSubmit(event) {
+  event.preventDefault();
+  const data = collectEditFormData();
+  if (!data.name || !data.email) return;
+  await updateContactInFirebase(data);
+  finalizeEditProcess();
+}
+
+
+/**
+ * Collects and returns the current values from the contact edit form fields.
+ *
+ * @returns {{name: string, email: string, phone: string}} 
+ * An object containing the name, email, and phone values from the form.
+ */
+function collectEditFormData() {
+  return {
+    name: readValue("contactName"),
+    email: readValue("contactEmail"),
+    phone: readValue("contactPhone"),
+  };
+}
+
+
+/**
+ * Updates an existing contact entry in Firebase with new data.
+ * Dynamically imports the Firebase update function and applies the changes.
+ *
+ * @async
+ * @param {{name: string, email: string, phone?: string}} data - The updated contact information.
+ * @returns {Promise<void>} Resolves when the contact data is successfully updated in Firebase.
+ */
+async function updateContactInFirebase(data) {
+  const { ref: dbRef, update } = await import(
+    "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js"
+  );
+  await update(dbRef(db, `/contacts/${selectedContactKey}`), data);
+}
+
+
+/**
+ * Finalizes the contact editing process.
+ * Resets the form, closes the edit overlay, refreshes the contact detail view,
+ * and restores the default form submission handler for creating new contacts.
+ *
+ * @returns {void} Nothing is returned; directly updates UI and form behavior.
+ */
+function finalizeEditProcess() {
+  resetContactForm();
+  closeEditOverlay();
+  showContactDetail({ dataset: { key: selectedContactKey } }, selectedContactKey);
+  document.getElementById("contactForm").onsubmit = handleContactCreate;
 }

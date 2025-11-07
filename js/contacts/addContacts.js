@@ -55,38 +55,64 @@ function closeAddContactModal() {
 
 
 /**
- * Adds listeners to close a modal overlay when the user clicks the backdrop or presses Escape.
- * Automatically removes the listeners once the modal is closed.
+ * Attaches event listeners to handle modal close interactions.
+ * Listens for the Escape key and backdrop clicks, removing listeners automatically after closing.
  *
- * @param {HTMLElement} overlayElement - The overlay element that contains the modal content and backdrop.
- * @param {Function} onCloseHandler - The function to call when the modal should be closed.
- * @returns {void} Nothing is returned; attaches and manages modal event listeners.
+ * @param {HTMLElement} overlayElement - The modal overlay element containing the backdrop.
+ * @param {Function} onCloseHandler - The callback function to execute when the modal should close.
+ * @returns {void} Nothing is returned; manages event listeners dynamically.
  */
 export function addModalCloseListeners(overlayElement, onCloseHandler) {
-    if (!overlayElement || typeof onCloseHandler !== "function") return;
+  if (!overlayElement || typeof onCloseHandler !== "function") return;
+  const { backdrop } = getModalNodes(overlayElement);
+  const handler = makeModalHandler(backdrop, onCloseHandler, detach);
 
-    const contentElement = overlayElement.querySelector(".overlay__content");
-    const backdropElement = overlayElement.querySelector(".overlay__backdrop");
+  attach();
+  function attach() {
+    document.addEventListener("keydown", handler);
+    if (backdrop) backdrop.addEventListener("click", handler);
+  }
+  function detach() {
+    document.removeEventListener("keydown", handler);
+    if (backdrop) backdrop.removeEventListener("click", handler);
+  }
+}
 
-    function handleModalEvent(event) {
-        const isEscape = event.type === "keydown" && event.key === "Escape";
-        const clickedBackdrop =
-            event.type === "click" && event.target === backdropElement;
-        if (isEscape || clickedBackdrop) {
-            onCloseHandler();
-            removeListeners();
-        }
+
+/**
+ * Retrieves key DOM nodes from a modal overlay element.
+ * Returns references to the modal content and backdrop elements.
+ *
+ * @param {HTMLElement} overlay - The modal overlay element containing content and backdrop.
+ * @returns {{content: HTMLElement | null, backdrop: HTMLElement | null}} 
+ * An object with references to the content and backdrop nodes.
+ */
+function getModalNodes(overlay) {
+  return {
+    content: overlay.querySelector(".overlay__content"),
+    backdrop: overlay.querySelector(".overlay__backdrop"),
+  };
+}
+
+
+/**
+ * Creates a unified event handler for closing a modal.
+ * Triggers the provided callbacks when Escape is pressed or the backdrop is clicked.
+ *
+ * @param {HTMLElement} backdrop - The backdrop element of the modal overlay.
+ * @param {Function} onClose - Function to call when the modal should close.
+ * @param {Function} afterClose - Function to execute after closing (e.g., remove listeners).
+ * @returns {(e: Event) => void} The event handler function for modal close events.
+ */
+function makeModalHandler(backdrop, onClose, afterClose) {
+  return (e) => {
+    const esc = e.type === "keydown" && e.key === "Escape";
+    const back = e.type === "click" && e.target === backdrop;
+    if (esc || back) {
+      onClose();
+      afterClose();
     }
-
-    document.addEventListener("keydown", handleModalEvent);
-    if (backdropElement)
-        backdropElement.addEventListener("click", handleModalEvent);
-
-    function removeListeners() {
-        document.removeEventListener("keydown", handleModalEvent);
-        if (backdropElement)
-            backdropElement.removeEventListener("click", handleModalEvent);
-    }
+  };
 }
 
 
@@ -132,32 +158,80 @@ export async function handleAddContactSubmit(event) {
 
 
 /**
- * Updates the avatar preview in the add contact modal.
- * Dynamically sets the initials and background color based on the entered name.
- * Displays or hides the placeholder image depending on input state.
+ * Updates the Add Contact avatar preview in real time.
+ * Reads the input value, computes avatar data, and applies initials and color.
  *
- * @returns {void} Nothing is returned; updates the DOM elements for the avatar display.
+ * @returns {void} Nothing is returned; directly updates avatar-related DOM elements.
  */
 export function updateAddContactAvatar() {
-    const nameInputField = document.getElementById("addContactName");
-    const avatarContainer = document.getElementById("addContactAvatar");
-    const initialsContainer = document.getElementById("addContactInitials");
-    const placeholderImage = document.getElementById(
-        "addContactAvatarPlaceholder"
-    );
+  const { nameInput, avatar, initialsEl, placeholder } = getAvatarNodes();
+  const data = computeAvatarData(readInput(nameInput));
+  applyAvatar(avatar, initialsEl, placeholder, data);
+}
 
-    const nameValue = nameInputField?.value?.trim() || "";
-    const initials = getInitials(nameValue) || "?";
-    const color = colorFromString(nameValue);
 
-    if (avatarContainer)
-        avatarContainer.style.backgroundColor = nameValue ? color : "";
-    if (initialsContainer) {
-        initialsContainer.textContent = initials;
-        initialsContainer.style.display = nameValue ? "block" : "none";
-    }
-    if (placeholderImage)
-        placeholderImage.style.display = nameValue ? "none" : "block";
+/**
+ * Retrieves all DOM elements related to the Add Contact avatar section.
+ * Returns references to input, avatar, initials, and placeholder nodes.
+ *
+ * @returns {{nameInput: HTMLInputElement, avatar: HTMLElement, initialsEl: HTMLElement, placeholder: HTMLElement}} 
+ * An object containing the key DOM nodes for the avatar display.
+ */
+function getAvatarNodes() {
+  return {
+    nameInput: document.getElementById("addContactName"),
+    avatar: document.getElementById("addContactAvatar"),
+    initialsEl: document.getElementById("addContactInitials"),
+    placeholder: document.getElementById("addContactAvatarPlaceholder"),
+  };
+}
+
+
+/**
+ * Reads and trims the value from a given input element.
+ * Returns an empty string if the input is missing or empty.
+ *
+ * @param {HTMLInputElement} [input] - The input element to read from.
+ * @returns {string} The trimmed input value or an empty string.
+ */
+function readInput(input) {
+  return input?.value?.trim() || "";
+}
+
+
+/**
+ * Generates avatar data (name, initials, and color) based on a given contact name.
+ * Falls back to "?" if no valid initials can be derived.
+ *
+ * @param {string} name - The contact's full name.
+ * @returns {{name: string, initials: string, color: string}} An object containing the name, generated initials, and background color.
+ */
+function computeAvatarData(name) {
+  return {
+    name,
+    initials: getInitials(name) || "?",
+    color: colorFromString(name),
+  };
+}
+
+
+/**
+ * Applies the avatar appearance inside the Add Contact modal.
+ * Sets background color, initials visibility, and toggles the placeholder image.
+ *
+ * @param {HTMLElement} avatar - The avatar container element.
+ * @param {HTMLElement} initialsEl - The element displaying the initials.
+ * @param {HTMLElement} placeholder - The placeholder image element.
+ * @param {{name: string, initials: string, color: string}} data - Avatar data containing name, initials, and color.
+ * @returns {void} Nothing is returned; directly updates DOM elements.
+ */
+function applyAvatar(avatar, initialsEl, placeholder, { name, initials, color }) {
+  if (avatar) avatar.style.backgroundColor = name ? color : "";
+  if (initialsEl) {
+    initialsEl.textContent = initials;
+    initialsEl.style.display = name ? "block" : "none";
+  }
+  if (placeholder) placeholder.style.display = name ? "none" : "block";
 }
 
 
