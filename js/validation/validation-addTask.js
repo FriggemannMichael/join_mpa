@@ -1,5 +1,5 @@
 /**
- * Add-Task Validierung mit mount/unmount Pattern
+ * Add-Task validation with mount/unmount pattern
  * @module validation-addTask
  */
 
@@ -15,10 +15,10 @@ let controller = null;
 let abortCtrl = null;
 
 /**
- * Hängt die Validierung an (nur einmal aktiv). Root = document oder Modal-Container.
- * Rufe diese Funktion NACHDEM das Add-Task-HTML im DOM ist.
- * @param {Document|HTMLElement} root - Root-Element für querySelector
- * @returns {Object} Controller-Objekt mit updateSubmit() Methode
+ * Attaches the validation (only active once). Root = document or Modal-Container.
+ * Call this function AFTER the Add-Task-HTML is in the DOM.
+ * @param {Document|HTMLElement} root - Root element for querySelector
+ * @returns {Object} Controller object with updateSubmit() method
  */
 export function mountAddTaskValidation(root = document) {
   if (controller) return controller;
@@ -79,7 +79,7 @@ export function mountAddTaskValidation(root = document) {
 }
 
 /**
- * Entfernt die Validierung und räumt Event-Listener auf
+ * Removes the validation and cleans up event listeners
  */
 export function unmountAddTaskValidation() {
   controller?.detach?.();
@@ -92,15 +92,15 @@ export function unmountAddTaskValidation() {
 }
 
 /**
- * Aktualisiert den Submit-Button Status (Enable/Disable)
+ * Updates the submit button status (Enable/Disable)
  */
 export function updateAddTaskValidationButton() {
   return controller?.updateSubmit?.();
 }
 
 /**
- * Erstellt einen No-Op Controller als Fallback
- * @returns {Object} Dummy-Controller
+ * Creates a No-Op controller as fallback
+ * @returns {Object} Dummy controller
  */
 function makeNoopController() {
   return {
@@ -110,9 +110,9 @@ function makeNoopController() {
 }
 
 /**
- * Hängt die Validierung für Edit-Task an (ohne Category-Validierung)
- * @param {Document|HTMLElement} root - Root-Element für querySelector
- * @returns {Object} Controller-Objekt mit updateSubmit() Methode
+ * Attaches the validation for Edit-Task (without category validation)
+ * @param {Document|HTMLElement} root - Root element for querySelector
+ * @returns {Object} Controller object with updateSubmit() method
  */
 export function mountEditTaskValidation(root = document) {
   if (controller) return controller;

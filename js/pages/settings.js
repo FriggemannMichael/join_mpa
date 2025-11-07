@@ -1,5 +1,5 @@
 /**
- * Settings-Seite für Anwendungseinstellungen
+ * Settings page for application settings
  * @module settings
  */
 
@@ -9,7 +9,7 @@ import { guardPage } from "../common/pageGuard.js";
 initSettingsPage();
 
 /**
- * Initialisiert die Settings-Seite mit Authentication-Check und Layout-Setup
+ * Initializes the settings page with authentication check and layout setup
  */
 async function initSettingsPage() {
   const allowed = await guardPage("./index.html");

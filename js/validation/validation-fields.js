@@ -1,6 +1,7 @@
 // common/validation-fields.js
 import { report } from "./validation-core.js";
 import { DEFAULT_MIN_LENGTH } from "./validation-config.js";
+import { validateEmail } from "../common/emailValidator.js";
 
 export function validateRequiredEl(el, label, opts) {
   const ok = (el?.value ?? "").toString().trim().length > 0;
@@ -22,12 +23,7 @@ export function validateDateNotPastEl(el, label, opts) {
   const d = new Date(v);
   d.setHours(0, 0, 0, 0);
   const ok = d >= today;
-  return report(
-    el,
-    ok,
-    `${label} must not be in the past`,
-    opts
-  );
+  return report(el, ok, `${label} must not be in the past`, opts);
 }
 
 export function validatePriorityGroup(groupEl, label, opts) {
@@ -36,22 +32,36 @@ export function validatePriorityGroup(groupEl, label, opts) {
 }
 
 /**
- * Validates email format
+ * Validates email format using robust validator
+ * Prevents consecutive dots (..), dots at invalid positions, and other malformed patterns
+ *
  * @param {HTMLElement} el - Input element
  * @param {string} label - Field label for error message
  * @param {Object} opts - Options including show flag
- * @returns {boolean} True if valid
+ * @returns {boolean} True if valid, false otherwise
+ *
+ * @example
+ * validateEmailEl(emailInput, "Email", { show: true })
+ * // Catches: test..@example.com, test@example..com, test@.example.com
  */
 export function validateEmailEl(el, label, opts) {
-  const RX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
   const v = el?.value?.trim() || "";
-  const ok = v.length > 0 && RX_EMAIL.test(v);
-  return report(
-    el,
-    ok,
-    `${label}: Please enter a valid email address`,
-    opts
-  );
+
+  // Check if field is not empty
+  if (v.length === 0) {
+    return report(el, false, `${label}: Email address is required`, opts);
+  }
+
+  // Use centralized email validator with comprehensive checks
+  const ok = validateEmail(v);
+
+  // Provide specific error message for common issues
+  let errorMsg = `${label}: Please enter a valid email address`;
+  if (!ok && v.includes("..")) {
+    errorMsg = `${label}: Email cannot contain consecutive dots (..)`;
+  }
+
+  return report(el, ok, errorMsg, opts);
 }
 
 /**

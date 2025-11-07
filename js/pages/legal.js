@@ -1,5 +1,5 @@
 /**
- * Legal-Seite für rechtliche Hinweise
+ * Legal page for legal notices
  * @module legal
  */
 
@@ -8,7 +8,7 @@ import { bootLayout } from "../common/layout.js";
 initLegalPage();
 
 /**
- * Initialisiert die Legal-Seite mit Layout-Setup
+ * Initializes the legal page with layout setup
  */
 async function initLegalPage() {
   await bootLayout();

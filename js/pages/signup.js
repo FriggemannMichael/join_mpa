@@ -5,11 +5,15 @@
 
 import { registerUser, readAuthError } from "../common/authService.js";
 import { redirectIfAuthenticated } from "../common/pageGuard.js";
+import { validateEmail } from "../common/emailValidator.js";
 
 initSignupPage();
 
-/** ===== Regex ===== */
-const RX_EMAIL = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+/**
+ * Regex for name validation
+ * Requires first letter capitalized, allows German characters (äöüÄÖÜß)
+ * Supports compound names with spaces or hyphens (e.g., "Max Mustermann", "Anna-Maria Müller")
+ */
 const RX_NAME = /^[A-ZÄÖÜ][a-zäöüß]+(?:[ -][A-ZÄÖÜ][a-zäöüß]+)*$/;
 
 /** ===== Blocked email addresses ===== */
@@ -34,6 +38,7 @@ const val = (id) => (el(id)?.value ?? "").trim();
 const ERR = {
   name: "Please enter a valid name (first letter capitalized).",
   email: "Please enter a valid email address.",
+  emailDouble: "Email cannot contain consecutive dots (..).",
   emailBlocked: "This email address cannot be used.",
   password: "Password requires at least 6 characters.",
   confirm: "Passwords do not match.",
@@ -132,9 +137,12 @@ function handleLiveInput() {
 }
 
 /**
- * Validate single field
- * @param {string} id
- * @param {{showErrors?: boolean, markTouch?: boolean}} opts
+ * Validate single field with comprehensive email validation
+ * Uses centralized email validator to catch consecutive dots and other malformed patterns
+ *
+ * @param {string} id - Field ID (signupName, signupEmail, signupPassword, signupPasswordConfirm)
+ * @param {{showErrors?: boolean, markTouch?: boolean}} opts - Validation options
+ * @returns {boolean} True if field is valid, false otherwise
  */
 function validateSingleField(id, opts = {}) {
   const { showErrors = false, markTouch = false } = opts;
@@ -148,9 +156,11 @@ function validateSingleField(id, opts = {}) {
       if (!ok) msg = ERR.name;
       break;
     case "signupEmail":
-      ok = !!v && RX_EMAIL.test(v);
+      // Use robust email validator from centralized module
+      ok = !!v && validateEmail(v);
       if (!ok) {
-        msg = ERR.email;
+        // Provide specific error message if consecutive dots detected
+        msg = v.includes("..") ? ERR.emailDouble : ERR.email;
       } else if (BLOCKED_EMAILS.includes(v.toLowerCase())) {
         ok = false;
         msg = ERR.emailBlocked;
@@ -243,7 +253,10 @@ async function handleSignupSubmit(event) {
   disableSubmit(false);
 }
 
-/** Button-Zustand & Mismatch-Hinweis */
+/**
+ * Updates submit button state based on all field validations
+ * Provides live feedback on form validity
+ */
 function updateSubmitState() {
   const name = val("signupName");
   const email = val("signupEmail");
@@ -252,7 +265,8 @@ function updateSubmitState() {
   const accepted = el("signupPrivacy")?.checked ?? false;
 
   const okName = !!name && RX_NAME.test(name);
-  const okEmail = !!email && RX_EMAIL.test(email);
+  // Use robust email validator instead of simple regex
+  const okEmail = !!email && validateEmail(email);
   const okPwLen = password.length >= 6;
   const okConfirm = confirm.length >= 6 && password === confirm;
 

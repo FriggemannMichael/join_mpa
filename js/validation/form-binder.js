@@ -1,11 +1,11 @@
 import { releaseSubmit } from "./validation-helpers.js";
 
 /**
- * Kapselt alle Feld-Listener und steuert zentral den Submit-Button.
+ * Encapsulates all field listeners and centrally controls the submit button.
  * @param {Object} cfg
  * @param {Array}  cfg.fields  [{ el, events, validateVisible }]
  * @param {HTMLButtonElement} cfg.submitBtn
- * @param {Function} cfg.validateAllSilent  Prüft alle Felder ohne UI
+ * @param {Function} cfg.validateAllSilent  Checks all fields without UI
  */
 export function bindForm({ fields, submitBtn, validateAllSilent }) {
   const listeners = [];
@@ -13,7 +13,7 @@ export function bindForm({ fields, submitBtn, validateAllSilent }) {
   fields.forEach(f => {
     const { el, events, validateVisible } = f;
     if (!el) {
-      console.warn("bindForm: Element ist null, überspringe Feld-Binding");
+      console.warn("bindForm: Element is null, skip field binding");
       return;
     }
     events.forEach((evt) => {

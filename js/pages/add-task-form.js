@@ -192,9 +192,18 @@ export function readActivePriority() {
 }
 
 /**
- * Clears the form and resets it
+ * Clears the form and resets all validation states
+ * Removes all error messages, resets field borders, and clears all values
  */
 export function clearTaskForm() {
+  const form = document.getElementById("taskForm");
+
+  // Use centralized form reset utility to clear validation
+  if (form) {
+    resetFormCompletely(form);
+  }
+
+  // Clear task-specific data
   clearTextFields();
   clearCheckboxes();
   clearPriorityButtons();
@@ -202,6 +211,7 @@ export function clearTaskForm() {
   subtasks.length = 0;
   renderSubtasks();
   setTaskStatus("Form reset", false);
+
   // Update button status after clear
   validateFormAndUpdateButton();
 }

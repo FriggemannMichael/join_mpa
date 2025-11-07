@@ -81,7 +81,7 @@ export const ScrollLock = (() => {
 })();
 
 /**
- * Generiert eine Farbe basierend auf Initialen
+ * Generates a color based on initials
  */
 export function getColorForInitials(initials) {
   return colorFromString(initials);

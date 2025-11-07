@@ -5,11 +5,15 @@
 
 import { registerUser, readAuthError } from "../common/authService.js";
 import { redirectIfAuthenticated } from "../common/pageGuard.js";
+import { validateEmail } from "../common/emailValidator.js";
 
 initSignupPage();
 
-/** ===== Regex for basic checks ===== */
-const RX_EMAIL = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+/**
+ * Regex for name validation
+ * Requires first letter capitalized, allows German characters (äöüÄÖÜß)
+ * Supports compound names with spaces or hyphens
+ */
 const RX_NAME = /^[A-ZÄÖÜ][a-zäöüß]+(?:[ -][A-ZÄÖÜ][a-zäöüß]+)*$/;
 
 /** ===== Small DOM helpers ===== */
@@ -92,8 +96,10 @@ async function handleSignupSubmit(event) {
 }
 
 /**
- * Validates all signup form inputs
- * and marks invalid fields with a red border
+ * Validates all signup form inputs with comprehensive email validation
+ * Uses centralized email validator to catch consecutive dots and malformed patterns
+ * Marks invalid fields with a red border
+ * 
  * @returns {boolean} True if all validations pass, otherwise false
  */
 function validateSignup() {
@@ -104,7 +110,8 @@ function validateSignup() {
   const accepted = el("signupPrivacy")?.checked ?? false;
 
   const okName = !!name && RX_NAME.test(name);
-  const okEmail = !!email && RX_EMAIL.test(email);
+  // Use robust email validator instead of simple regex
+  const okEmail = !!email && validateEmail(email);
   const okPwLen = password.length >= 6;
   const okConfirm = confirm.length >= 6 && password === confirm;
   const okPrivacy = accepted === true;
@@ -116,7 +123,13 @@ function validateSignup() {
 
   if (!okName)
     return reportError('Please enter a valid name (e.g. "Max Mustermann").');
-  if (!okEmail) return reportError("Please enter a valid email address.");
+  if (!okEmail) {
+    // Provide specific error for consecutive dots
+    const msg = email.includes('..') 
+      ? "Email cannot contain consecutive dots (..)" 
+      : "Please enter a valid email address.";
+    return reportError(msg);
+  }
   if (!okPwLen) return reportError("Password requires at least 6 characters.");
   if (!okConfirm) return reportError("Passwords do not match.");
   if (!okPrivacy) return reportError("Please accept the privacy policy.");
@@ -127,6 +140,7 @@ function validateSignup() {
 
 /**
  * Updates the submit button status and live field validation borders
+ * Uses robust email validation to prevent malformed email addresses
  */
 function updateSubmitState() {
   const name = val("signupName");
@@ -136,7 +150,8 @@ function updateSubmitState() {
   const accepted = el("signupPrivacy")?.checked ?? false;
 
   const okName = !!name && RX_NAME.test(name);
-  const okEmail = !!email && RX_EMAIL.test(email);
+  // Use robust email validator for comprehensive validation
+  const okEmail = !!email && validateEmail(email);
   const okPwLen = password.length >= 6;
   const okConfirm = confirm.length >= 6 && password === confirm;
 

@@ -1,8 +1,8 @@
 import { toggleError } from "./valdiation-ui.js";
 
 /**
- * Zeigt Fehler nur, wenn show === true
- * Sonst prüft nur still und gibt boolean zurück.
+ * Shows errors only when show === true
+ * Otherwise checks silently and returns boolean.
  */
 export function report(el, ok, msg, { show = false } = {}) {
   if (show) return toggleError(el, ok, ok ? "" : msg);

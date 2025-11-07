@@ -1,8 +1,8 @@
 let databaseModulePromise = null;
 
 /**
- * Lädt das Firebase Realtime Database SDK einmalig und cached das Modul.
- * @returns {Promise<any>} Firebase Database Modul
+ * Loads the Firebase Realtime Database SDK once and caches the module.
+ * @returns {Promise<any>} Firebase Database module
  */
 export function loadFirebaseDatabase() {
   if (!databaseModulePromise) {

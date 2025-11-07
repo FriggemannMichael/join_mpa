@@ -1,5 +1,5 @@
 /**
- * Assignee-Dropdown-Verwaltung für Add-Task-Seite
+ * Assignee dropdown management for Add-Task page
  * @module add-task-assignees
  */
 
@@ -13,7 +13,7 @@ import {
 } from "./add-task-assignees-ui.js";
 
 /**
- * Lädt und füllt die Assignee-Auswahlliste mit Kontakten
+ * Loads and populates the assignee selection list with contacts
  */
 export async function populateAssignees() {
   const header = document.getElementById("assigneeHeader");
@@ -33,9 +33,9 @@ export async function populateAssignees() {
 }
 
 /**
- * Lädt Kontakte aus der Firebase-Datenbank
- * @param {HTMLElement} dropdown Dropdown-Element
- * @param {string} currentUserUid ID des aktuellen Users
+ * Loads contacts from the Firebase database
+ * @param {HTMLElement} dropdown Dropdown element
+ * @param {string} currentUserUid Current user ID
  */
 async function loadAssigneesFromDatabase(dropdown, currentUserUid) {
   try {
@@ -47,8 +47,8 @@ async function loadAssigneesFromDatabase(dropdown, currentUserUid) {
 }
 
 /**
- * Holt Kontakte aus Firebase
- * @returns {Promise<Object|null>} Kontakte-Objekt oder null
+ * Fetches contacts from Firebase
+ * @returns {Promise<Object|null>} Contacts object or null
  */
 async function fetchContactsFromFirebase() {
   const db = await loadFirebaseDatabase();
@@ -57,10 +57,10 @@ async function fetchContactsFromFirebase() {
 }
 
 /**
- * Behandelt erfolgreich geladene Kontakte
- * @param {HTMLElement} dropdown Dropdown-Element
- * @param {Object|null} contacts Kontakte-Objekt
- * @param {string} currentUserUid ID des aktuellen Users
+ * Handles successfully loaded contacts
+ * @param {HTMLElement} dropdown Dropdown element
+ * @param {Object|null} contacts Contacts object
+ * @param {string} currentUserUid Current user ID
  */
 function handleContactsLoaded(dropdown, contacts, currentUserUid) {
   if (!contacts) {
@@ -79,8 +79,8 @@ function handleContactsLoaded(dropdown, contacts, currentUserUid) {
 }
 
 /**
- * Behandelt Fehler beim Laden der Kontakte
- * @param {Error} error Fehler-Objekt
+ * Handles errors when loading contacts
+ * @param {Error} error Error object
  */
 function handleContactsLoadError(error) {
   setAssigneeLoading(false);
@@ -95,8 +95,8 @@ function handleContactsLoadError(error) {
 }
 
 /**
- * Zeigt eine Fehlermeldung an
- * @param {string} message Fehlermeldung
+ * Displays an error message
+ * @param {string} message Error message
  */
 function showErrorStatus(message) {
   const status = document.getElementById("taskStatus");
@@ -106,10 +106,10 @@ function showErrorStatus(message) {
 }
 
 /**
- * Baut Assignee-Optionen aus rohen Kontakt-Daten
- * @param {Object} rawUsers Rohe User-Daten
- * @param {string} currentUid ID des aktuellen Users
- * @returns {Array} Array von Assignee-Optionen
+ * Builds assignee options from raw contact data
+ * @param {Object} rawUsers Raw user data
+ * @param {string} currentUid Current user ID
+ * @returns {Array} Array of assignee options
  */
 function buildAssigneeOptions(rawUsers, currentUid) {
   const users = rawUsers && typeof rawUsers === "object" ? rawUsers : {};
@@ -118,10 +118,10 @@ function buildAssigneeOptions(rawUsers, currentUid) {
 }
 
 /**
- * Mappt User-Objekte zu Assignee-Optionen
- * @param {Object} users User-Objekt
- * @param {string} currentUid ID des aktuellen Users
- * @returns {Array} Gemappte Optionen
+ * Maps user objects to assignee options
+ * @param {Object} users User object
+ * @param {string} currentUid Current user ID
+ * @returns {Array} Mapped options
  */
 function mapUsersToOptions(users, currentUid) {
   return Object.values(users)
@@ -131,10 +131,10 @@ function mapUsersToOptions(users, currentUid) {
 }
 
 /**
- * Erstellt eine Assignee-Option aus einem User-Entry
- * @param {Object} entry User-Entry
- * @param {string} currentUid ID des aktuellen Users
- * @returns {Object} Assignee-Option
+ * Creates an assignee option from a user entry
+ * @param {Object} entry User entry
+ * @param {string} currentUid Current user ID
+ * @returns {Object} Assignee option
  */
 function createAssigneeOption(entry, currentUid) {
   return {
@@ -151,16 +151,16 @@ function createAssigneeOption(entry, currentUid) {
 }
 
 /**
- * Sortiert User-Optionen alphabetisch nach Label
- * @param {Array} users User-Optionen
- * @returns {Array} Sortierte User-Optionen
+ * Sorts user options alphabetically by label
+ * @param {Array} users User options
+ * @returns {Array} Sorted user options
  */
 function sortUsersByLabel(users) {
   return users.sort((a, b) => a.label.localeCompare(b.label, "de"));
 }
 
 /**
- * Bindet Event-Listener für Assignee-Dropdown
+ * Binds event listeners for assignee dropdown
  */
 function bindAssigneeEvents() {
   const header = document.getElementById("assigneeHeader");
@@ -174,8 +174,8 @@ function bindAssigneeEvents() {
 }
 
 /**
- * Bindet Click-Event für Header
- * @param {HTMLElement} header Header-Element
+ * Binds click event for header
+ * @param {HTMLElement} header Header element
  */
 function bindHeaderClickEvent(header) {
   if (!header || header.dataset.bound) return;
@@ -188,8 +188,8 @@ function bindHeaderClickEvent(header) {
 }
 
 /**
- * Bindet Change-Event für Dropdown
- * @param {HTMLElement} dropdown Dropdown-Element
+ * Binds change event for dropdown
+ * @param {HTMLElement} dropdown Dropdown element
  */
 function bindDropdownChangeEvent(dropdown) {
   if (!dropdown || dropdown.dataset.bound) return;
@@ -205,8 +205,8 @@ function bindDropdownChangeEvent(dropdown) {
 }
 
 /**
- * Bindet Outside-Click-Event zum Schließen des Dropdowns
- * @param {HTMLElement} dropdown Dropdown-Element
+ * Binds outside click event to close the dropdown
+ * @param {HTMLElement} dropdown Dropdown element
  */
 function bindOutsideClickEvent(dropdown) {
   if (!dropdown) return;
@@ -221,7 +221,7 @@ function bindOutsideClickEvent(dropdown) {
 }
 
 /**
- * Togglet die Sichtbarkeit des Assignee-Dropdowns
+ * Toggles the visibility of the assignee dropdown
  */
 function toggleAssigneeDropdown() {
   const header = document.getElementById("assigneeHeader");
@@ -246,8 +246,8 @@ function toggleAssigneeDropdown() {
 }
 
 /**
- * Bindet Event-Listener für das Suchfeld
- * @param {HTMLElement} searchInput Suchfeld-Element
+ * Binds event listener for the search field
+ * @param {HTMLElement} searchInput Search field element
  */
 function bindSearchInputEvent(searchInput) {
   if (!searchInput || searchInput.dataset.bound) return;
@@ -266,8 +266,8 @@ function bindSearchInputEvent(searchInput) {
 }
 
 /**
- * Setzt den Loading-Status für Assignees
- * @param {boolean} isLoading Loading-Status
+ * Sets the loading status for assignees
+ * @param {boolean} isLoading Loading status
  */
 function setAssigneeLoading(isLoading) {
   const placeholder = document.getElementById("selected-assignees-placeholder");
@@ -279,9 +279,9 @@ function setAssigneeLoading(isLoading) {
 }
 
 /**
- * Extrahiert Initialen aus einem Namen
+ * Extracts initials from a name
  * @param {string} name Name
- * @returns {string} Initialen
+ * @returns {string} Initials
  */
 export function getInitials(name) {
   if (!name) return "??";
@@ -292,8 +292,8 @@ export function getInitials(name) {
 }
 
 /**
- * Behandelt Klicks außerhalb des Dropdowns
- * @param {Event} e Click-Event
+ * Handles clicks outside the dropdown
+ * @param {Event} e Click event
  */
 export function handleOutsideDropdownClick(e) {
   if (e.cancelBubble) return;

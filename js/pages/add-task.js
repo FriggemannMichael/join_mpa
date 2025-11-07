@@ -1,5 +1,5 @@
 /**
- * Add-Task-Seite für das Erstellen neuer Tasks
+ * Add-Task page for creating new tasks
  * @module add-task
  */
 
@@ -18,7 +18,7 @@ import { mountAddTaskValidation } from "../validation/validation-addTask.js";
 initAddTaskPage();
 
 /**
- * Initialisiert die Add-Task-Seite mit Authentication-Check und UI-Setup
+ * Initializes the Add-Task page with authentication check and UI setup
  */
 async function initAddTaskPage() {
   const allowed = await guardPage("./index.html");

@@ -1,10 +1,10 @@
 /**
- * Steuert Splash-Screen Animation und Logo-Wechsel
+ * Controls splash screen animation and logo transition
  * @module splashScreen
  */
 
 /**
- * Initialisiert Splash-Screen Animation und Logo-Tausch
+ * Initializes splash screen animation and logo transition
  */
 function initSplashScreen() {
   const splashScreen = document.getElementById("splash-screen");
@@ -17,14 +17,14 @@ function initSplashScreen() {
       baseH = 926;
     const w = window.innerWidth,
       h = window.innerHeight;
-    // Splash Logo Startwerte (zentriert)
+    // Splash logo start values (centered)
     const start = {
       top: (h - (100 * h) / baseH) / 2,
       left: (w - (121 * w) / baseW) / 2,
       width: (100 * w) / baseW,
       height: (121 * h) / baseH,
     };
-    // Zielwerte oben links
+    // Target values top left
     const end = {
       top: (37 * h) / baseH,
       left: (38 * w) / baseW,
@@ -32,7 +32,7 @@ function initSplashScreen() {
       height: (78 * h) / baseH,
     };
 
-    // Splash Logo initial setzen
+    // Set splash logo initial values
     splashLogo.style.position = "absolute";
     splashLogo.style.top = start.top + "px";
     splashLogo.style.left = start.left + "px";
@@ -76,13 +76,13 @@ function initSplashScreen() {
       { once: true }
     );
   } else {
-    // Desktop: Splash ausblenden, Standard-Layout bleibt
+    // Desktop: Hide splash, standard layout remains
     const splashScreen = document.getElementById("splash-screen");
     const splashLogo = document.getElementById("splash-logo");
     if (splashScreen) splashScreen.style.display = "none";
     if (splashLogo) splashLogo.style.display = "none";
 
-    // Login-Card sichtbar machen
+    // Make login card visible
     const loginCard = document.querySelector(".login-card");
     if (loginCard) {
       loginCard.classList.remove("login-card-hidden");

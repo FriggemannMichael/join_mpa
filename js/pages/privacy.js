@@ -1,5 +1,5 @@
 /**
- * Privacy-Seite für Datenschutzinformationen
+ * Privacy page for privacy information
  * @module privacy
  */
 
@@ -8,7 +8,7 @@ import { bootLayout } from "../common/layout.js";
 initPrivacyPage();
 
 /**
- * Initialisiert die Privacy-Seite mit Layout-Setup
+ * Initializes the privacy page with layout setup
  */
 async function initPrivacyPage() {
   await bootLayout();

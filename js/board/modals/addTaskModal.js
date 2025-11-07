@@ -39,6 +39,6 @@ export async function initAddTask() {
   bindActionButtons();
   initSubtaskInput();
 
-  // Initialisiere Validierung nach dem Rendern des Templates
+  // Initialize validation after rendering the template
   mountAddTaskValidation();
 }

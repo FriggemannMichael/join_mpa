@@ -196,7 +196,7 @@ function updateElementById(elementId, value) {
 }
 
 /**
- * Zeigt Fallback-Werte an wenn keine Daten geladen werden können
+ * Displays fallback values when no data can be loaded
  */
 function showFallbackMetrics() {
   const fallbackMetrics = {
@@ -212,8 +212,8 @@ function showFallbackMetrics() {
 }
 
 /**
- * Löst den anzuzeigenden Benutzernamen basierend auf Auth-Status auf
- * @returns {string} Anzeigename für den User
+ * Resolves the username to display based on authentication status
+ * @returns {string} Display name for the user
  */
 function resolveUserName() {
   const user = getActiveUser();
@@ -225,8 +225,8 @@ function resolveUserName() {
 }
 
 /**
- * Erstellt das Begrüßungsprefix basierend auf der aktuellen Tageszeit
- * @returns {string} Begrüßungstext je nach Uhrzeit
+ * Creates the greeting prefix based on the current time of day
+ * @returns {string} Greeting text depending on time
  */
 function buildGreetingPrefix() {
   const hour = new Date().getHours();
@@ -236,8 +236,8 @@ function buildGreetingPrefix() {
 }
 
 /**
- * Erstellt die Begrüßung für Guest-User ohne Komma
- * @returns {string} Begrüßungstext ohne Komma für Guest-User
+ * Creates the greeting for guest users without comma
+ * @returns {string} Greeting text without comma for guest users
  */
 function buildGreetingPrefixForGuest() {
   const hour = new Date().getHours();
@@ -247,11 +247,11 @@ function buildGreetingPrefixForGuest() {
 }
 
 /**
- * Zeigt den mobilen Begrüßungs-Screen nach dem Login (nur mobil)
- * Prüft ob User gerade von Login kommt (sessionStorage Flag)
- * Desktop: Kein Greeting-Screen
- * Mobile + Registered User: Begrüßung mit Namen
- * Mobile + Guest User: Nur zeitabhängige Begrüßung ohne Namen
+ * Shows the mobile greeting screen after login (mobile only)
+ * Checks if user just came from login (sessionStorage flag)
+ * Desktop: No greeting screen
+ * Mobile + Registered User: Greeting with name
+ * Mobile + Guest User: Only time-based greeting without name
  */
 function showMobileGreetingIfNeeded() {
   // Mobile only (max 767px)
@@ -301,7 +301,7 @@ function showMobileGreetingIfNeeded() {
 }
 
 /**
- * Cleanup-Funktion die beim Verlassen der Seite aufgerufen wird
+ * Cleanup function called when leaving the page
  */
 window.addEventListener("beforeunload", () => {
   if (unsubscribeFromTasks) {

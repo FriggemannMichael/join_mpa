@@ -1,5 +1,5 @@
 /**
- * Profile-Seite für Benutzereinstellungen
+ * Profile page for user settings
  * @module profile
  */
 
@@ -9,7 +9,7 @@ import { guardPage } from "../common/pageGuard.js";
 initProfilePage();
 
 /**
- * Initialisiert die Profile-Seite mit Authentication-Check und Layout-Setup
+ * Initializes the profile page with authentication check and layout setup
  */
 async function initProfilePage() {
   const allowed = await guardPage("./index.html");

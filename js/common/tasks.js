@@ -51,7 +51,7 @@ export function subscribeToTasks(listener) {
   };
 
   onValue(tasksRef, handler, (error) => {
-    console.error("Tasks konnten nicht geladen werden", error);
+    console.error("Tasks could not be loaded", error);
     listener([]);
   });
 

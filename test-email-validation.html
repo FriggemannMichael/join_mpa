@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Validation Test Suite</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .test-container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    h2 {
+      color: #666;
+      font-size: 18px;
+      margin-top: 30px;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 10px;
+    }
+    .test-case {
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .test-case.pass {
+      background: #e8f5e9;
+      border-left: 4px solid #4caf50;
+    }
+    .test-case.fail {
+      background: #ffebee;
+      border-left: 4px solid #f44336;
+    }
+    .test-email {
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+    }
+    .test-result {
+      font-weight: bold;
+      padding: 5px 15px;
+      border-radius: 4px;
+    }
+    .pass .test-result {
+      color: #2e7d32;
+      background: #c8e6c9;
+    }
+    .fail .test-result {
+      color: #c62828;
+      background: #ffcdd2;
+    }
+    .summary {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .summary.all-pass {
+      background: #c8e6c9;
+      color: #2e7d32;
+    }
+    .summary.has-fail {
+      background: #ffcdd2;
+      color: #c62828;
+    }
+    .form-test {
+      margin-top: 40px;
+      padding: 20px;
+      background: #fff3e0;
+      border-radius: 8px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      font-size: 16px;
+    }
+    input.input-fault {
+      border-color: #f44336;
+    }
+    .field-fault-msg {
+      color: #f44336;
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+    }
+    .field-fault-msg.visible {
+      display: block;
+    }
+    button {
+      padding: 12px 24px;
+      margin: 10px 5px 10px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+    }
+    .btn-primary {
+      background: #2196f3;
+      color: white;
+    }
+    .btn-secondary {
+      background: #757575;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="test-container">
+    <h1>📧 Email Validation Test Suite</h1>
+    <p>Testing the robust email validator with double-dot detection</p>
+
+    <h2>✅ Valid Emails (Should Pass)</h2>
+    <div id="valid-tests"></div>
+
+    <h2>❌ Invalid Emails (Should Fail)</h2>
+    <div id="invalid-tests"></div>
+
+    <div id="summary" class="summary"></div>
+  </div>
+
+  <div class="test-container form-test">
+    <h2>🧪 Live Form Validation Test</h2>
+    <p>Test that validation clears properly on form reset</p>
+    
+    <div>
+      <label for="testEmail">Email Address:</label>
+      <input type="email" id="testEmail" placeholder="Try: test..@example.com">
+      <div class="field-fault-msg" id="emailError"></div>
+    </div>
+
+    <button class="btn-primary" onclick="validateTestForm()">Validate</button>
+    <button class="btn-secondary" onclick="resetTestForm()">Reset Form</button>
+    
+    <div id="formStatus" style="margin-top: 20px; padding: 15px; border-radius: 4px;"></div>
+  </div>
+
+  <script type="module">
+    import { validateEmail } from './js/common/emailValidator.js';
+
+    // Test cases
+    const validEmails = [
+      'test@example.com',
+      'user.name@example.com',
+      'user_name@example.co.uk',
+      'first-last@test-domain.com',
+      'a@b.co',
+      'valid.email@sub.domain.com',
+      'user123@example.org'
+    ];
+
+    const invalidEmails = [
+      'test..@example.com',        // Double dot before @
+      'test@example..com',         // Double dot in domain
+      'test@.example.com',         // Dot after @
+      'test.@example.com',         // Dot before @
+      'test@example.com.',         // Trailing dot
+      'test@@example.com',         // Double @
+      '@example.com',              // Missing local part
+      'test@',                     // Missing domain
+      'test@example',              // Missing TLD
+      'test example@domain.com',   // Space in email
+      'test@exam ple.com',         // Space in domain
+      ''                           // Empty string
+    ];
+
+    // Run tests
+    let passCount = 0;
+    let failCount = 0;
+
+    function renderTest(email, shouldPass, container) {
+      const result = validateEmail(email);
+      const isCorrect = result === shouldPass;
+      
+      if (isCorrect) passCount++;
+      else failCount++;
+
+      const div = document.createElement('div');
+      div.className = `test-case ${isCorrect ? 'pass' : 'fail'}`;
+      div.innerHTML = `
+        <span class="test-email">${email || '(empty string)'}</span>
+        <span class="test-result">${isCorrect ? '✓ PASS' : '✗ FAIL'}</span>
+      `;
+      container.appendChild(div);
+    }
+
+    // Render valid email tests
+    const validContainer = document.getElementById('valid-tests');
+    validEmails.forEach(email => renderTest(email, true, validContainer));
+
+    // Render invalid email tests
+    const invalidContainer = document.getElementById('invalid-tests');
+    invalidEmails.forEach(email => renderTest(email, false, invalidContainer));
+
+    // Show summary
+    const total = validEmails.length + invalidEmails.length;
+    const summaryDiv = document.getElementById('summary');
+    summaryDiv.className = `summary ${failCount === 0 ? 'all-pass' : 'has-fail'}`;
+    summaryDiv.textContent = `${passCount}/${total} tests passed ${failCount === 0 ? '🎉' : '⚠️'}`;
+
+    // Make functions global for form test
+    window.validateTestForm = function() {
+      const input = document.getElementById('testEmail');
+      const error = document.getElementById('emailError');
+      const status = document.getElementById('formStatus');
+      const email = input.value.trim();
+
+      const isValid = validateEmail(email);
+      
+      if (isValid) {
+        input.classList.remove('input-fault');
+        error.classList.remove('visible');
+        error.textContent = '';
+        status.style.background = '#c8e6c9';
+        status.style.color = '#2e7d32';
+        status.textContent = '✓ Valid email address!';
+      } else {
+        input.classList.add('input-fault');
+        error.classList.add('visible');
+        
+        if (email.includes('..')) {
+          error.textContent = 'Email cannot contain consecutive dots (..)';
+        } else {
+          error.textContent = 'Please enter a valid email address';
+        }
+        
+        status.style.background = '#ffcdd2';
+        status.style.color = '#c62828';
+        status.textContent = '✗ Invalid email address';
+      }
+    };
+
+    window.resetTestForm = function() {
+      const input = document.getElementById('testEmail');
+      const error = document.getElementById('emailError');
+      const status = document.getElementById('formStatus');
+      
+      // Reset input value
+      input.value = '';
+      
+      // Clear validation states
+      input.classList.remove('input-fault');
+      error.classList.remove('visible');
+      error.textContent = '';
+      
+      // Clear status
+      status.style.background = '#e3f2fd';
+      status.style.color = '#1976d2';
+      status.textContent = '↻ Form reset - validation cleared successfully!';
+    };
+  </script>
+</body>
+</html>

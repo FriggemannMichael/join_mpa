@@ -1,5 +1,5 @@
 /**
- * Subtask-Verwaltung für Add-Task-Seite
+ * Subtask management for Add-Task page
  * @module add-task-subtasks
  */
 
@@ -7,13 +7,13 @@ import { icons } from "../common/svg-template.js";
 
 
 /**
- * Array zur Speicherung aller Subtasks
+ * Array for storing all subtasks
  */
 export let subtasks = [];
 
 
 /**
- * Initialisiert das Subtask-Eingabefeld mit Icons und Event-Handlers
+ * Initializes the subtask input field with icons and event handlers
  */
 export function initSubtaskInput() {
   const elements = getSubtaskElements();
@@ -26,8 +26,8 @@ export function initSubtaskInput() {
 
 
 /**
- * Holt alle benötigten DOM-Elemente für Subtasks
- * @returns {Object|null} Objekt mit DOM-Elementen oder null
+ * Gets all required DOM elements for subtasks
+ * @returns {Object|null} Object with DOM elements or null
  */
 function getSubtaskElements() {
   const subtaskInput = document.getElementById("taskSubtasks");
@@ -44,8 +44,8 @@ function getSubtaskElements() {
 
 
 /**
- * Fügt SVG-Icons in die Icon-Container ein
- * @param {Object} elements DOM-Elemente
+ * Inserts SVG icons into the icon containers
+ * @param {Object} elements DOM elements
  */
 function insertSubtaskIcons(elements) {
   elements.closeIcon.innerHTML = icons.close;
@@ -54,8 +54,8 @@ function insertSubtaskIcons(elements) {
 
 
 /**
- * Bindet Event-Listener für das Subtask-Eingabefeld
- * @param {Object} elements DOM-Elemente
+ * Binds event listeners for the subtask input field
+ * @param {Object} elements DOM elements
  */
 function bindSubtaskInputEvents(elements) {
   const { subtaskInput, subtaskIcons } = elements;
@@ -82,8 +82,8 @@ function bindSubtaskInputEvents(elements) {
 
 
 /**
- * Bindet Event-Listener für die Subtask-Icons
- * @param {Object} elements DOM-Elemente
+ * Binds event listeners for the subtask icons
+ * @param {Object} elements DOM elements
  */
 function bindSubtaskIconEvents(elements) {
   const { closeIcon, checkIcon } = elements;
@@ -99,7 +99,7 @@ function bindSubtaskIconEvents(elements) {
 
 
 /**
- * Löscht den Inhalt des Subtask-Eingabefeldes
+ * Clears the content of the subtask input field
  */
 export function clearSubtaskInput() {
   const subtaskInput = document.getElementById("taskSubtasks");
@@ -117,7 +117,7 @@ export function clearSubtaskInput() {
 
 
 /**
- * Fügt eine neue Subtask hinzu
+ * Adds a new subtask
  */
 export function addSubtask() {
   const subtaskInput = document.getElementById("taskSubtasks");
@@ -132,9 +132,9 @@ export function addSubtask() {
 
 
 /**
- * Erstellt ein neues Subtask-Objekt
- * @param {string} text Subtask-Text
- * @returns {Object} Neues Subtask-Objekt
+ * Creates a new subtask object
+ * @param {string} text Subtask text
+ * @returns {Object} New subtask object
  */
 function createNewSubtask(text) {
   return {
@@ -146,7 +146,7 @@ function createNewSubtask(text) {
 
 
 /**
- * Rendert alle Subtasks in der Liste
+ * Renders all subtasks in the list
  */
 export function renderSubtasks() {
   const subtasksList = document.getElementById("subtasksList");
@@ -161,9 +161,9 @@ export function renderSubtasks() {
 
 
 /**
- * Erstellt ein DOM-Element für eine Subtask
- * @param {Object} subtask Subtask-Objekt
- * @returns {HTMLElement} DOM-Element
+ * Creates a DOM element for a subtask
+ * @param {Object} subtask Subtask object
+ * @returns {HTMLElement} DOM element
  */
 function createSubtaskElement(subtask) {
   const subtaskDiv = document.createElement("div");
@@ -178,9 +178,9 @@ function createSubtaskElement(subtask) {
 
 
 /**
- * Baut das HTML für eine Subtask
- * @param {Object} subtask Subtask-Objekt
- * @returns {string} HTML-String
+ * Builds the HTML for a subtask
+ * @param {Object} subtask Subtask object
+ * @returns {string} HTML string
  */
 function buildSubtaskHTML(subtask) {
   return `
@@ -202,9 +202,9 @@ function buildSubtaskHTML(subtask) {
 
 
 /**
- * Fügt Event-Listener zu Subtask-Elementen hinzu
- * @param {HTMLElement} subtaskDiv Subtask-DOM-Element
- * @param {number} id Subtask-ID
+ * Attaches event listeners to subtask elements
+ * @param {HTMLElement} subtaskDiv Subtask DOM element
+ * @param {number} id Subtask ID
  */
 function attachSubtaskEventListeners(subtaskDiv, id) {
   const editBtn = subtaskDiv.querySelector(".subtask-edit-btn");
@@ -220,8 +220,8 @@ function attachSubtaskEventListeners(subtaskDiv, id) {
 
 
 /**
- * Löscht eine Subtask
- * @param {number} id Subtask-ID
+ * Deletes a subtask
+ * @param {number} id Subtask ID
  */
 export function deleteSubtask(id) {
   const index = subtasks.findIndex((subtask) => subtask.id === id);
@@ -233,8 +233,8 @@ export function deleteSubtask(id) {
 
 
 /**
- * Bearbeitet eine Subtask
- * @param {number} id Subtask-ID
+ * Edits a subtask
+ * @param {number} id Subtask ID
  */
 export function editSubtask(id) {
   const subtask = subtasks.find((s) => s.id === id);
@@ -246,10 +246,10 @@ export function editSubtask(id) {
 
 
 /**
- * Rendert den Edit-Modus für eine Subtask
- * @param {HTMLElement} subtaskElement DOM-Element
- * @param {Object} subtask Subtask-Objekt
- * @param {number} id Subtask-ID
+ * Renders edit mode for a subtask
+ * @param {HTMLElement} subtaskElement DOM element
+ * @param {Object} subtask Subtask object
+ * @param {number} id Subtask ID
  */
 function renderEditMode(subtaskElement, subtask, id) {
   subtaskElement.classList.add("editing");
@@ -263,9 +263,9 @@ function renderEditMode(subtaskElement, subtask, id) {
 
 
 /**
- * Baut das HTML für den Edit-Modus
- * @param {Object} subtask Subtask-Objekt
- * @returns {string} HTML-String
+ * Builds the HTML for edit mode
+ * @param {Object} subtask Subtask object
+ * @returns {string} HTML string
  */
 function buildEditModeHTML(subtask) {
   return `
@@ -286,8 +286,8 @@ function buildEditModeHTML(subtask) {
 
 
 /**
- * Fokussiert und selektiert das Input-Feld
- * @param {HTMLInputElement} input Input-Element
+ * Focuses and selects the input field
+ * @param {HTMLInputElement} input Input element
  */
 function focusAndSelectInput(input) {
   input.focus();
@@ -296,9 +296,9 @@ function focusAndSelectInput(input) {
 
 
 /**
- * Bindet Event-Listener für den Edit-Modus
- * @param {HTMLElement} subtaskElement DOM-Element
- * @param {number} id Subtask-ID
+ * Binds event listeners for edit mode
+ * @param {HTMLElement} subtaskElement DOM element
+ * @param {number} id Subtask ID
  */
 function bindEditModeEvents(subtaskElement, id) {
   const saveBtn = subtaskElement.querySelector(".subtask-save-btn");
@@ -319,8 +319,8 @@ function bindEditModeEvents(subtaskElement, id) {
 
 
 /**
- * Speichert die bearbeitete Subtask
- * @param {number} id Subtask-ID
+ * Saves the edited subtask
+ * @param {number} id Subtask ID
  */
 function saveSubtaskEdit(id) {
   const subtaskElement = document.querySelector(`[data-id="${id}"]`);
@@ -338,9 +338,9 @@ function saveSubtaskEdit(id) {
 
 
 /**
- * Aktualisiert den Text einer Subtask
- * @param {number} id Subtask-ID
- * @param {string} newText Neuer Text
+ * Updates the text of a subtask
+ * @param {number} id Subtask ID
+ * @param {string} newText New text
  */
 function updateSubtaskText(id, newText) {
   const subtask = subtasks.find((s) => s.id === id);
@@ -351,7 +351,7 @@ function updateSubtaskText(id, newText) {
 
 
 /**
- * Bricht die Bearbeitung ab
+ * Cancels the edit operation
  */
 function cancelSubtaskEdit() {
   renderSubtasks();
@@ -359,8 +359,8 @@ function cancelSubtaskEdit() {
 
 
 /**
- * Setzt die Subtasks aus einer Liste
- * @param {Array} list Array von Subtasks
+ * Sets the subtasks from a list
+ * @param {Array} list Array of subtasks
  */
 export function setSubtasksFrom(list) {
   const arr = Array.isArray(list) ? list : [];

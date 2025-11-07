@@ -8,9 +8,9 @@ import { getInitials } from "./add-task-assignees.js";
 
 
 /**
- * Rendert die Assignee-Dropdown-Liste mit Checkboxen
- * @param {HTMLElement} dropdown Dropdown-Element
- * @param {Array} options Assignee-Optionen
+ * Renders the assignee dropdown list with checkboxes
+ * @param {HTMLElement} dropdown Dropdown element
+ * @param {Array} options Assignee options
  */
 export function renderAssigneeDropdown(dropdown, options) {
   const listContainer = dropdown.querySelector('#assignee-list') || dropdown;
@@ -24,8 +24,8 @@ export function renderAssigneeDropdown(dropdown, options) {
 
 
 /**
- * Filtert die Assignee-Liste basierend auf Suchtext
- * @param {string} searchText Suchtext
+ * Filters the assignee list based on search text
+ * @param {string} searchText Search text
  */
 export function filterAssignees(searchText) {
   const listContainer = document.getElementById('assignee-list');
@@ -46,10 +46,10 @@ export function filterAssignees(searchText) {
 
 
 /**
- * Erstellt ein Label-Element für einen Assignee
- * @param {Object} option Assignee-Option
+ * Creates a label element for an assignee
+ * @param {Object} option Assignee option
  * @param {number} index Index
- * @returns {HTMLElement} Label-Element
+ * @returns {HTMLElement} Label element
  */
 function createAssigneeLabel(option, index) {
   const initials = getInitials(option.label);
@@ -66,13 +66,13 @@ function createAssigneeLabel(option, index) {
 
 
 /**
- * Baut das HTML für ein Assignee-Label
- * @param {string} displayName Anzeigename
- * @param {string} color Hintergrundfarbe
- * @param {string} initials Initialen
- * @param {string} checkboxId Checkbox-ID
- * @param {Object} option Assignee-Option
- * @returns {string} HTML-String
+ * Builds the HTML for an assignee label
+ * @param {string} displayName Display name
+ * @param {string} color Background color
+ * @param {string} initials Initials
+ * @param {string} checkboxId Checkbox ID
+ * @param {Object} option Assignee option
+ * @returns {string} HTML string
  */
 function buildAssigneeLabelHTML(displayName, color, initials, checkboxId, option) {
   return `
@@ -86,7 +86,7 @@ function buildAssigneeLabelHTML(displayName, color, initials, checkboxId, option
 
 
 /**
- * Aktualisiert die Anzeige der ausgewählten Assignees
+ * Updates the display of selected assignees
  */
 export function updateAssigneeSelection() {
   const avatarsContainer = document.getElementById("selected-assignee-avatars");
@@ -103,8 +103,8 @@ export function updateAssigneeSelection() {
 
 
 /**
- * Aktualisiert die Checkbox-Labels (selected-Klasse)
- * @param {NodeList} checkboxes Checkbox-Elemente
+ * Updates the checkbox labels (selected class)
+ * @param {NodeList} checkboxes Checkbox elements
  */
 function updateCheckboxLabels(checkboxes) {
   checkboxes.forEach((cb) => {
@@ -115,9 +115,9 @@ function updateCheckboxLabels(checkboxes) {
 
 
 /**
- * Holt die ausgewählten Kontakte
- * @param {NodeList} checkboxes Checkbox-Elemente
- * @returns {Array} Ausgewählte Kontakte
+ * Gets the selected contacts
+ * @param {NodeList} checkboxes Checkbox elements
+ * @returns {Array} Selected contacts
  */
 function getSelectedContacts(checkboxes) {
   return Array.from(checkboxes)
@@ -130,9 +130,9 @@ function getSelectedContacts(checkboxes) {
 
 
 /**
- * Aktualisiert den Placeholder-Text
- * @param {HTMLElement} placeholder Placeholder-Element
- * @param {Array} selected Ausgewählte Kontakte
+ * Updates the placeholder text
+ * @param {HTMLElement} placeholder Placeholder element
+ * @param {Array} selected Selected contacts
  */
 function updatePlaceholderText(placeholder, selected) {
   if (selected.length === 0) {
@@ -146,9 +146,9 @@ function updatePlaceholderText(placeholder, selected) {
 
 
 /**
- * Rendert die Avatare der ausgewählten Kontakte
- * @param {HTMLElement} avatarsContainer Container-Element
- * @param {Array} selected Ausgewählte Kontakte
+ * Renders the avatars of selected contacts
+ * @param {HTMLElement} avatarsContainer Container element
+ * @param {Array} selected Selected contacts
  */
 function renderAvatars(avatarsContainer, selected) {
   avatarsContainer.innerHTML = "";
@@ -165,10 +165,10 @@ function renderAvatars(avatarsContainer, selected) {
 
 
 /**
- * Rendert die sichtbaren Avatare
- * @param {HTMLElement} container Container-Element
- * @param {Array} selected Ausgewählte Kontakte
- * @param {number} maxVisible Maximale Anzahl
+ * Renders the visible avatars
+ * @param {HTMLElement} container Container element
+ * @param {Array} selected Selected contacts
+ * @param {number} maxVisible Maximum number
  */
 function renderVisibleAvatars(container, selected, maxVisible) {
   selected.slice(0, maxVisible).forEach((contact) => {
@@ -179,10 +179,10 @@ function renderVisibleAvatars(container, selected, maxVisible) {
 
 
 /**
- * Rendert den "Mehr"-Avatar wenn nötig
- * @param {HTMLElement} container Container-Element
- * @param {Array} selected Ausgewählte Kontakte
- * @param {number} maxVisible Maximale Anzahl
+ * Renders the "more" avatar if needed
+ * @param {HTMLElement} container Container element
+ * @param {Array} selected Selected contacts
+ * @param {number} maxVisible Maximum number
  */
 function renderMoreAvatar(container, selected, maxVisible) {
   if (selected.length > maxVisible) {
@@ -196,9 +196,9 @@ function renderMoreAvatar(container, selected, maxVisible) {
 
 
 /**
- * Erstellt einen Avatar für einen Kontakt
- * @param {string} name Kontaktname
- * @returns {HTMLElement} Avatar-Element
+ * Creates an avatar for a contact
+ * @param {string} name Contact name
+ * @returns {HTMLElement} Avatar element
  */
 function createAvatar(name) {
   const initials = getInitials(name);

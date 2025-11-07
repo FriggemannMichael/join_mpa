@@ -6,6 +6,7 @@ import {
   initAddContactValidation,
   initEditContactValidation,
 } from "../validation/validation-addContacts.js";
+import { resetFormCompletely } from "../common/formReset.js";
 import {
   ref,
   onValue,
@@ -586,12 +587,20 @@ async function handleAddContactSubmit(event) {
 }
 
 /**
- * Resets all input fields in the add contact form.
- * Clears name, email, and phone values.
+ * Resets all input fields in the add contact form
+ * Clears name, email, and phone values and removes all validation states
  *
  * @returns {void} Nothing is returned; resets the form fields directly.
  */
 function resetAddContactForm() {
+  const form = document.getElementById("addContactForm");
+  
+  // Use centralized form reset to clear validation states
+  if (form) {
+    resetFormCompletely(form);
+  }
+  
+  // Clear field values manually as fallback
   ["addContactName", "addContactEmail", "addContactPhone"].forEach((id) => {
     const field = document.getElementById(id);
     if (field) field.value = "";
@@ -723,17 +732,25 @@ async function saveContactToFirebase(data) {
 function buildContactMarkup({ name, email }) {
   const initials = getInitials(name);
   const color = colorFromString(name);
-  return `<div class="initals" style="background-color: ${color};">${initials}</div>
+  return `<div class="initials" style="background-color: ${color};">${initials}</div>
     <div class="small-info"><h3>${name}</h3><span>${email}</span></div>`;
 }
 
 /**
- * Resets all input fields in the edit contact form.
- * Clears the values for name, email, and phone.
+ * Resets all input fields in the edit contact form
+ * Clears the values for name, email, and phone and removes all validation states
  *
  * @returns {void} Nothing is returned; resets the form fields directly.
  */
 function resetContactForm() {
+  const form = document.getElementById("contactForm");
+  
+  // Use centralized form reset to clear validation states
+  if (form) {
+    resetFormCompletely(form);
+  }
+  
+  // Clear field values manually as fallback
   ["contactName", "contactEmail", "contactPhone"].forEach((id) => {
     const field = document.getElementById(id);
     if (field) field.value = "";

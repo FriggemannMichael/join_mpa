@@ -1,5 +1,5 @@
 /**
- * Layout-Service für gemeinsame Seitenelemente und Navigation
+ * Layout service for common page elements and navigation
  * @module layout
  */
 
@@ -14,11 +14,11 @@ import { provisionActiveUser } from "./userProvisioning.js";
 import { icons } from "./svg-template.js";
 
 /**
- * Lädt Layout-Templates und initialisiert die Seitenstruktur
+ * Loads layout templates and initializes the page structure
  * @returns {Promise<void>}
  */
 export async function bootLayout() {
-  // Warte auf Firebase Auth Initialisierung
+  // Wait for Firebase Auth initialization
   await authReady;
 
   await insertTemplates([
@@ -26,14 +26,14 @@ export async function bootLayout() {
     ["[data-template=sidebar]", "./templates/sidebar.html"],
   ]);
 
-  // Warte einen Tick, damit das DOM aktualisiert wird
+  // Wait one tick for the DOM to update
   await new Promise((resolve) => setTimeout(resolve, 0));
 
   hydrateLayout();
 }
 
 /**
- * Aktiviert alle Layout-Funktionalitäten nach dem Template-Loading
+ * Activates all layout functionalities after template loading
  */
 function hydrateLayout() {
   setProfileInitials();
@@ -46,7 +46,7 @@ function hydrateLayout() {
 }
 
 /**
- * Setzt die Initialen im Profil-Icon basierend auf dem aktuellen User
+ * Sets the initials in the profile icon based on the current user
  */
 function setProfileInitials() {
   const user = getActiveUser();
@@ -58,7 +58,7 @@ function setProfileInitials() {
 }
 
 /**
- * Bindet Event-Listener für das Profil-Dropdown-Menü
+ * Binds event listeners for the profile dropdown menu
  */
 function bindProfileMenu() {
   const icon = document.getElementById("profileIcon");
@@ -85,10 +85,10 @@ function bindProfileMenu() {
 }
 
 /**
- * Schaltet das Profil-Menü zwischen offen und geschlossen um
- * @param {HTMLElement} menu Das Menü-Element
- * @param {HTMLElement} overlay Das Overlay-Element
- * @param {HTMLElement} icon Das Icon-Element
+ * Toggles the profile menu between open and closed
+ * @param {HTMLElement} menu The menu element
+ * @param {HTMLElement} overlay The overlay element
+ * @param {HTMLElement} icon The icon element
  */
 function toggleMenu(menu, overlay, icon) {
   if (menu.classList.contains("sub-menu-open")) closeMenu(menu, overlay, icon);
@@ -96,10 +96,10 @@ function toggleMenu(menu, overlay, icon) {
 }
 
 /**
- * Öffnet das Profil-Menü und setzt Accessibility-Attribute
- * @param {HTMLElement} menu Das Menü-Element
- * @param {HTMLElement} overlay Das Overlay-Element
- * @param {HTMLElement} icon Das Icon-Element
+ * Opens the profile menu and sets accessibility attributes
+ * @param {HTMLElement} menu The menu element
+ * @param {HTMLElement} overlay The overlay element
+ * @param {HTMLElement} icon The icon element
  */
 function openMenu(menu, overlay, icon) {
   menu.classList.add("sub-menu-open");
@@ -111,10 +111,10 @@ function openMenu(menu, overlay, icon) {
 }
 
 /**
- * Schließt das Profil-Menü und setzt Accessibility-Attribute
- * @param {HTMLElement} menu Das Menü-Element
- * @param {HTMLElement} overlay Das Overlay-Element
- * @param {HTMLElement} icon Das Icon-Element
+ * Closes the profile menu and sets accessibility attributes
+ * @param {HTMLElement} menu The menu element
+ * @param {HTMLElement} overlay The overlay element
+ * @param {HTMLElement} icon The icon element
  */
 function closeMenu(menu, overlay, icon) {
   menu.classList.add("sub-menu-close");
@@ -126,11 +126,11 @@ function closeMenu(menu, overlay, icon) {
 }
 
 /**
- * Behandelt Tastatur-Events für das Profil-Menü
- * @param {KeyboardEvent} event Das Keyboard-Event
- * @param {HTMLElement} menu Das Menü-Element
- * @param {HTMLElement} overlay Das Overlay-Element
- * @param {HTMLElement} icon Das Icon-Element
+ * Handles keyboard events for the profile menu
+ * @param {KeyboardEvent} event The keyboard event
+ * @param {HTMLElement} menu The menu element
+ * @param {HTMLElement} overlay The overlay element
+ * @param {HTMLElement} icon The icon element
  */
 function handleProfileKey(event, menu, overlay, icon) {
   if (event.key === "Enter" || event.key === " ") {
@@ -141,7 +141,7 @@ function handleProfileKey(event, menu, overlay, icon) {
 }
 
 /**
- * Bindet den Logout-Button und behandelt Logout-Events
+ * Binds the logout button and handles logout events
  */
 function bindLogout() {
   const trigger = document.getElementById("logoutLink");
@@ -153,7 +153,7 @@ function bindLogout() {
 }
 
 /**
- * Markiert den aktiven Navigationslink basierend auf der aktuellen Seite
+ * Marks the active navigation link based on the current page
  */
 function highlightActiveNav() {
   const current = getPageName(window.location.pathname);
@@ -164,18 +164,18 @@ function highlightActiveNav() {
 }
 
 /**
- * Extrahiert den Dateinamen aus einem Pfad
- * @param {string} path Vollständiger oder relativer Pfad
- * @returns {string} Dateiname (z.B. "summary.html")
+ * Extracts the filename from a path
+ * @param {string} path Full or relative path
+ * @returns {string} Filename (e.g. "summary.html")
  */
 function getPageName(path) {
   return path.split("/").pop();
 }
 
 /**
- * Richtet die Navigation basierend auf dem Auth-Status ein
- * Zeigt normale Menü-Links wenn eingeloggt (inkl. Guest)
- * Zeigt Login-Link auf Legal/Privacy/Help nur wenn nicht eingeloggt
+ * Sets up navigation based on authentication status
+ * Shows normal menu links when logged in (including Guest)
+ * Shows login link on Legal/Privacy/Help only when not logged in
  */
 function setupAuthBasedNavigation() {
   const user = getActiveUser();
@@ -215,7 +215,7 @@ function setupAuthBasedNavigation() {
 }
 
 /**
- * Rendert das Log In Icon mit SVG aus svg-template.js
+ * Renders the log in icon with SVG from svg-template.js
  */
 function renderLoginIcon() {
   const iconContainer = document.getElementById("loginIcon");
@@ -224,7 +224,7 @@ function renderLoginIcon() {
 }
 
 /**
- * Blendet das Profil-Icon auf Legal/Privacy/Help-Seiten aus, wenn kein User eingeloggt ist
+ * Hides the profile icon on Legal/Privacy/Help pages when no user is logged in
  */
 function hideProfileIconOnLegalPagesIfNotLoggedIn() {
   const user = getActiveUser();

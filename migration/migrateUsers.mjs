@@ -4,13 +4,13 @@
  * Usage: `npm run migrate:users`
  *
  * Modes / Flags (simple parsing):
- *  --reset-mode=keep     (Default) Verwendet das vorhandene Klartext-Passwort (nur DEV!).
- *  --reset-mode=random   Generiert random Passwort + speichert Mapping.
- *  --dry-run             Führt keinen Schreibvorgang aus, zeigt nur Aktionen.
+ *  --reset-mode=keep     (Default) Uses the existing plaintext password (DEV only!).
+ *  --reset-mode=random   Generates random password + stores mapping.
+ *  --dry-run             Executes no write operation, only shows actions.
  *
  * Output:
- *  - Console Log von erstellten oder übersprungenen Nutzern.
- *  - Bei random: erstellt `migration/passwords_created.json` (gitignore!)
+ *  - Console log of created or skipped users.
+ *  - For random: creates `migration/passwords_created.json` (gitignore!)
  */
 
 import fs from 'fs';
@@ -40,12 +40,12 @@ const resetMode = getArg('reset-mode', 'keep'); // keep | random
 const dryRun = args.includes('--dry-run');
 
 if (!fs.existsSync(LEGACY_JSON_PATH)) {
-  console.error('Legacy JSON nicht gefunden:', LEGACY_JSON_PATH);
+  console.error('Legacy JSON not found:', LEGACY_JSON_PATH);
   process.exit(1);
 }
 if (!fs.existsSync(SERVICE_ACCOUNT_PATH)) {
-  console.error('Service Account Datei fehlt:', SERVICE_ACCOUNT_PATH);
-  console.error('Bitte serviceAccountKey.json gemäß MIGRATION.md ablegen.');
+  console.error('Service Account file missing:', SERVICE_ACCOUNT_PATH);
+  console.error('Please place serviceAccountKey.json according to MIGRATION.md.');
   process.exit(1);
 }
 
@@ -54,10 +54,10 @@ const legacyRaw = JSON.parse(fs.readFileSync(LEGACY_JSON_PATH, 'utf8'));
 const legacyUsers = legacyRaw.users || {};
 const legacyEntries = Object.entries(legacyUsers);
 if (!legacyEntries.length) {
-  console.log('Keine Legacy-User gefunden. Abbruch.');
+  console.log('No legacy users found. Aborting.');
   process.exit(0);
 }
-console.log(`Gefundene Legacy-User: ${legacyEntries.length}`);
+console.log(`Found legacy users: ${legacyEntries.length}`);
 
 // Init Firebase Admin
 const serviceAccount = JSON.parse(fs.readFileSync(SERVICE_ACCOUNT_PATH, 'utf8'));
@@ -70,7 +70,7 @@ const adminAuth = getAuth();
 const db = getDatabase();
 
 /**
- * Erzeugt ein zufälliges Passwort.
+ * Generates a random password.
  * @returns {string}
  */
 function randomPassword() {
@@ -78,7 +78,7 @@ function randomPassword() {
 }
 
 /**
- * Normalisiert ein Legacy User Objekt für Contact Struktur.
+ * Normalizes a legacy user object for contact structure.
  */
 function toContactProfile(legacy, uid) {
   return {
@@ -100,10 +100,10 @@ let skipped = 0;
 for (const [legacyKey, legacy] of legacyEntries) {
   const email = legacy.email;
   if (!email) {
-    console.warn(`Übersprungen (kein Email) legacyKey=${legacyKey}`);
+    console.warn(`Skipped (no email) legacyKey=${legacyKey}`);
     skipped++; continue;
   }
-  // Prüfen ob User existiert
+  // Check if user exists
   let existingUser = null;
   try {
     existingUser = await adminAuth.getUserByEmail(email);
@@ -115,19 +115,19 @@ for (const [legacyKey, legacy] of legacyEntries) {
 
   if (existingUser) {
     uid = existingUser.uid;
-    console.log(`Vorhanden: ${email} -> UID=${uid}`);
+    console.log(`Existing: ${email} -> UID=${uid}`);
   } else {
-    // Passwort bestimmen
+    // Determine password
     if (resetMode === 'random') {
       pwdToUse = randomPassword();
       passwordMap[email] = pwdToUse;
     } else {
-      // keep (nur DEV!)
+      // keep (DEV only!)
       pwdToUse = legacy.password && legacy.password.length >= 6 ? legacy.password : 'Temp123!';
     }
 
     if (dryRun) {
-      console.log(`[DRY-RUN] Würde User anlegen: ${email}`);
+      console.log(`[DRY-RUN] Would create user: ${email}`);
     } else {
       try {
         const cred = await adminAuth.createUser({
@@ -138,26 +138,26 @@ for (const [legacyKey, legacy] of legacyEntries) {
             disabled: false
         });
         uid = cred.uid;
-        console.log(`Angelegt: ${email} -> UID=${uid}`);
+        console.log(`Created: ${email} -> UID=${uid}`);
         created++;
       } catch (e) {
-        console.error(`Fehler beim Anlegen für ${email}:`, e.message);
+        console.error(`Error creating user for ${email}:`, e.message);
         skipped++; continue;
       }
     }
   }
 
-  // Kontaktprofil schreiben
+  // Write contact profile
   if (uid) {
     const contactRefPath = `contacts/${uid}`;
     const profile = toContactProfile(legacy, uid);
     if (dryRun) {
-      console.log(`[DRY-RUN] Würde Kontaktprofil schreiben: ${contactRefPath}`);
+      console.log(`[DRY-RUN] Would write contact profile: ${contactRefPath}`);
     } else {
       try {
         await db.ref(contactRefPath).set(profile);
       } catch (e) {
-        console.error(`Kontaktprofil Fehler für ${email}:`, e.message);
+        console.error(`Contact profile error for ${email}:`, e.message);
       }
     }
   }
@@ -165,12 +165,12 @@ for (const [legacyKey, legacy] of legacyEntries) {
 
 if (!dryRun && resetMode === 'random' && Object.keys(passwordMap).length) {
   fs.writeFileSync(PASSWORD_OUTPUT_PATH, JSON.stringify(passwordMap, null, 2), 'utf8');
-  console.log('Random Passwörter gespeichert in', PASSWORD_OUTPUT_PATH);
+  console.log('Random passwords stored in', PASSWORD_OUTPUT_PATH);
 }
 
 console.log('--- Migration Summary ---');
-console.log('Neu angelegt:', created);
-console.log('Übersprungen/Vorhanden/Fehler:', skipped);
+console.log('Newly created:', created);
+console.log('Skipped/Existing/Error:', skipped);
 console.log('Reset Mode:', resetMode, 'DryRun:', dryRun);
 
-console.log('Fertig.');
+console.log('Done.');

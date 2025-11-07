@@ -1,9 +1,9 @@
 const templateCache = new Map();
 
 /**
- * Lädt ein HTML-Template von der angegebenen URL mit Caching
- * @param {string} path Pfad zum HTML-Template
- * @returns {Promise<string>} HTML-Inhalt des Templates
+ * Loads an HTML template from the specified URL with caching
+ * @param {string} path Path to the HTML template
+ * @returns {Promise<string>} HTML content of the template
  */
 async function fetchTemplate(path) {
   if (templateCache.has(path)) return templateCache.get(path);
@@ -15,9 +15,9 @@ async function fetchTemplate(path) {
 }
 
 /**
- * Lädt ein Template und fügt es in das angegebene DOM-Element ein
- * @param {string} selector CSS-Selektor für das Ziel-Element
- * @param {string} path Pfad zum HTML-Template
+ * Loads a template and inserts it into the specified DOM element
+ * @param {string} selector CSS selector for the target element
+ * @param {string} path Path to the HTML template
  * @returns {Promise<void>}
  */
 export async function injectTemplate(selector, path) {
@@ -28,8 +28,8 @@ export async function injectTemplate(selector, path) {
 }
 
 /**
- * Lädt mehrere Templates parallel und fügt sie in ihre Ziel-Elemente ein
- * @param {Array<Array<string>>} pairs Array von [selector, path] Tupeln
+ * Loads multiple templates in parallel and inserts them into their target elements
+ * @param {Array<Array<string>>} pairs Array of [selector, path] tuples
  * @returns {Promise<void>}
  */
 export async function insertTemplates(pairs) {
