@@ -224,7 +224,7 @@ select {
 .btn-create.disabled {
   background-color: var(--primary-color);
   color: var(--white);
-  cursor: not-allowed;
+  cursor: pointer;
 }
 
 .btn-create:disabled:hover,
