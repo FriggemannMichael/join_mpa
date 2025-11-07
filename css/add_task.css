@@ -462,7 +462,7 @@ label {
   .create-btn,
   .form-bottom,
   .btn-text {
-    font-size: 16px;
+    font-size: 14px;
   }
 
   .form-bottom {
@@ -724,6 +724,13 @@ label {
   justify-content: space-between;
   padding: 12px 16px;
   transition: border-color 0.3s ease;
+}
+
+@media( width<=600px ) {
+.category-select-header{
+  font-size: 14px;
+}
+
 }
 
 .category-select-header:active {
