@@ -27,9 +27,7 @@ export function mountAddTaskValidation(root = document) {
   const signal = prepareValidationAbort();
   const handlers = createAddTaskVisibleHandlers(context);
   bindPriorityGroup(context.prioGroup, handlers.showPriority, signal);
-  controller = bindForm(
-    buildAddTaskFormConfig(context, handlers, signal)
-  );
+  controller = bindForm(buildAddTaskFormConfig(context, handlers, signal));
   return controller;
 }
 
@@ -76,9 +74,7 @@ export function mountEditTaskValidation(root = document) {
   const signal = prepareValidationAbort();
   const handlers = createEditVisibleHandlers(context);
   bindPriorityGroup(context.prioGroup, handlers.showPriority, signal);
-  controller = bindForm(
-    buildEditTaskFormConfig(context, handlers, signal)
-  );
+  controller = bindForm(buildEditTaskFormConfig(context, handlers, signal));
   return controller;
 }
 
@@ -201,9 +197,21 @@ function buildAddTaskFormConfig(context, handlers, signal) {
     submitBtn: context.submitBtn,
     validateAllSilent: createAddTaskSilentValidator(context),
     fields: [
-      { el: context.titleEl, events: ["blur"], validateVisible: handlers.showTitle },
-      { el: context.dateEl, events: ["blur", "change"], validateVisible: handlers.showDate },
-      { el: context.category, events: ["change"], validateVisible: handlers.showCategory },
+      {
+        el: context.titleEl,
+        events: ["blur"],
+        validateVisible: handlers.showTitle,
+      },
+      {
+        el: context.dateEl,
+        events: ["blur", "change"],
+        validateVisible: handlers.showDate,
+      },
+      {
+        el: context.category,
+        events: ["change"],
+        validateVisible: handlers.showCategory,
+      },
     ],
     signal,
   };
@@ -221,8 +229,16 @@ function buildEditTaskFormConfig(context, handlers, signal) {
     submitBtn: context.submitBtn,
     validateAllSilent: createEditSilentValidator(context),
     fields: [
-      { el: context.titleEl, events: ["blur"], validateVisible: handlers.showTitle },
-      { el: context.dateEl, events: ["blur"], validateVisible: handlers.showDate },
+      {
+        el: context.titleEl,
+        events: ["blur"],
+        validateVisible: handlers.showTitle,
+      },
+      {
+        el: context.dateEl,
+        events: ["blur"],
+        validateVisible: handlers.showDate,
+      },
     ],
     signal,
   };
@@ -235,10 +251,18 @@ function buildEditTaskFormConfig(context, handlers, signal) {
  */
 function createAddTaskSilentValidator(context) {
   return () => {
-    const validTitle = validateMinLengthEl(context.titleEl, 3, "Title", { show: false });
-    const validDate = validateDateNotPastEl(context.dateEl, "Due date", { show: false });
-    const validCategory = validateRequiredEl(context.category, "Category", { show: false });
-    const validPriority = validatePriorityGroup(context.prioGroup, "Priority", { show: false });
+    const validTitle = validateMinLengthEl(context.titleEl, 3, "Title", {
+      show: false,
+    });
+    const validDate = validateDateNotPastEl(context.dateEl, "Due date", {
+      show: false,
+    });
+    const validCategory = validateRequiredEl(context.category, "Category", {
+      show: false,
+    });
+    const validPriority = validatePriorityGroup(context.prioGroup, "Priority", {
+      show: false,
+    });
     return validTitle && validDate && validCategory && validPriority;
   };
 }
@@ -250,9 +274,15 @@ function createAddTaskSilentValidator(context) {
  */
 function createEditSilentValidator(context) {
   return () => {
-    const validTitle = validateMinLengthEl(context.titleEl, 3, "Title", { show: false });
-    const validDate = validateDateNotPastEl(context.dateEl, "Due date", { show: false });
-    const validPriority = validatePriorityGroup(context.prioGroup, "Priority", { show: false });
+    const validTitle = validateMinLengthEl(context.titleEl, 3, "Title", {
+      show: false,
+    });
+    const validDate = validateDateNotPastEl(context.dateEl, "Due date", {
+      show: false,
+    });
+    const validPriority = validatePriorityGroup(context.prioGroup, "Priority", {
+      show: false,
+    });
     return validTitle && validDate && validPriority;
   };
 }

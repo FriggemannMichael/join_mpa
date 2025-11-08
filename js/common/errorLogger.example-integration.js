@@ -27,7 +27,7 @@ async function deleteSelectedContact() {
 // AFTER: Using errorLogger.js
 // ============================================================================
 
-import errorLogger from '../common/errorLogger.js';
+import errorLogger from "../common/errorLogger.js";
 
 /**
  * Example 1: Enhanced error logging in try-catch
@@ -39,7 +39,7 @@ async function deleteSelectedContact(contactId) {
     finalizeContactDeletion();
   } catch (error) {
     logContactDeletionError(error, contactId);
-    showAlert('deleteContactError');
+    showAlert("deleteContactError");
   }
 }
 
@@ -58,7 +58,7 @@ async function executeContactDeletion(contactId) {
 function finalizeContactDeletion() {
   clearContactDetail();
   hideContactOverlay();
-  showAlert('deleteContact');
+  showAlert("deleteContact");
   closeContactDetailOverlay();
 }
 
@@ -78,10 +78,10 @@ function logContactDeletionError(error, contactId) {
  */
 function buildDeletionErrorPayload(contactId) {
   return {
-    module: 'ContactCache',
+    module: "ContactCache",
     tags: {
-      feature: 'contacts',
-      action: 'delete',
+      feature: "contacts",
+      action: "delete",
       critical: true,
     },
     extra: {
@@ -109,7 +109,7 @@ async function loadContactsFromApi() {
  * @returns {Promise<Response>}
  */
 async function fetchContactsResponse() {
-  const response = await fetch('/api/contacts');
+  const response = await fetch("/api/contacts");
   if (response.ok) return response;
   throw new Error(`HTTP ${response.status}: ${response.statusText}`);
 }
@@ -128,12 +128,12 @@ function logContactLoadError(error) {
  */
 function buildLoadErrorPayload() {
   return {
-    module: 'ContactCache',
+    module: "ContactCache",
     severity: errorLogger.ErrorSeverity.ERROR,
-    tags: { feature: 'contacts', action: 'load', endpoint: '/api/contacts' },
+    tags: { feature: "contacts", action: "load", endpoint: "/api/contacts" },
     extra: {
-      endpoint: '/api/contacts',
-      method: 'GET',
+      endpoint: "/api/contacts",
+      method: "GET",
       timestamp: new Date().toISOString(),
     },
   };
@@ -143,10 +143,18 @@ function buildLoadErrorPayload() {
  * Example 3: Validation errors (less severe)
  */
 function validateContactData(data) {
-  if (!ensureContactField(data, 'email', 'Contact email is required', buildEmailValidationExtra)) {
+  if (
+    !ensureContactField(
+      data,
+      "email",
+      "Contact email is required",
+      buildEmailValidationExtra
+    )
+  ) {
     return false;
   }
-  if (!ensureContactField(data, 'name', 'Contact name is required')) return false;
+  if (!ensureContactField(data, "name", "Contact name is required"))
+    return false;
   return true;
 }
 
@@ -173,11 +181,11 @@ function ensureContactField(data, field, message, extraFactory) {
  */
 function buildValidationPayload(field, extra) {
   return {
-    module: 'ContactCache',
+    module: "ContactCache",
     severity: errorLogger.ErrorSeverity.WARNING,
     tags: {
-      feature: 'contacts',
-      action: 'validate',
+      feature: "contacts",
+      action: "validate",
       field,
     },
     extra: extra ?? undefined,
@@ -215,9 +223,9 @@ async function updateContact(contactId, newData) {
  */
 function addUpdateStartBreadcrumb(contactId) {
   errorLogger.addBreadcrumb({
-    message: 'User started contact update',
-    category: 'user-action',
-    level: 'info',
+    message: "User started contact update",
+    category: "user-action",
+    level: "info",
     data: { contactId },
   });
 }
@@ -228,12 +236,12 @@ function addUpdateStartBreadcrumb(contactId) {
  */
 function validateContactForUpdate(newData) {
   errorLogger.addBreadcrumb({
-    message: 'Validating contact data',
-    category: 'validation',
-    level: 'info',
+    message: "Validating contact data",
+    category: "validation",
+    level: "info",
   });
   if (validateContactData(newData)) return;
-  throw new Error('Invalid contact data');
+  throw new Error("Invalid contact data");
 }
 
 /**
@@ -244,9 +252,9 @@ function validateContactForUpdate(newData) {
  */
 async function persistContactUpdate(contactId, newData) {
   errorLogger.addBreadcrumb({
-    message: 'Updating contact in Firebase',
-    category: 'database',
-    level: 'info',
+    message: "Updating contact in Firebase",
+    category: "database",
+    level: "info",
     data: { contactId },
   });
   await updateContactInFirebase(contactId, newData);
@@ -258,9 +266,9 @@ async function persistContactUpdate(contactId, newData) {
  */
 function addUpdateSuccessBreadcrumb(contactId) {
   errorLogger.addBreadcrumb({
-    message: 'Contact updated successfully',
-    category: 'database',
-    level: 'info',
+    message: "Contact updated successfully",
+    category: "database",
+    level: "info",
     data: { contactId },
   });
 }
@@ -283,10 +291,10 @@ function captureContactUpdateError(error, contactId, newData) {
  */
 function buildUpdateErrorPayload(contactId, newData) {
   return {
-    module: 'ContactCache',
+    module: "ContactCache",
     tags: {
-      feature: 'contacts',
-      action: 'update',
+      feature: "contacts",
+      action: "update",
     },
     extra: {
       contactId,
@@ -305,12 +313,12 @@ function onUserLogin(user) {
     username: user.displayName,
   });
 
-  errorLogger.captureMessage('User logged in successfully', {
-    module: 'AuthService',
+  errorLogger.captureMessage("User logged in successfully", {
+    module: "AuthService",
     severity: errorLogger.ErrorSeverity.INFO,
     tags: {
-      feature: 'auth',
-      action: 'login',
+      feature: "auth",
+      action: "login",
     },
   });
 }
@@ -336,7 +344,7 @@ async function saveContact(contactData) {
  */
 function ensureContactIsValid(contactData) {
   if (validateContactData(contactData)) return;
-  throw new Error('Validation failed');
+  throw new Error("Validation failed");
 }
 
 /**
@@ -348,7 +356,7 @@ async function ensureContactNotDuplicate(contactData) {
   const exists = await checkContactExists(contactData.email);
   if (!exists) return;
   logDuplicateContactWarning(contactData.email);
-  throw new Error('Contact with this email already exists');
+  throw new Error("Contact with this email already exists");
 }
 
 /**
@@ -356,13 +364,13 @@ async function ensureContactNotDuplicate(contactData) {
  * @param {string} email
  */
 function logDuplicateContactWarning(email) {
-  errorLogger.captureMessage('Duplicate contact email detected', {
-    module: 'ContactCache',
+  errorLogger.captureMessage("Duplicate contact email detected", {
+    module: "ContactCache",
     severity: errorLogger.ErrorSeverity.WARNING,
     tags: {
-      feature: 'contacts',
-      action: 'save',
-      validation: 'duplicate',
+      feature: "contacts",
+      action: "save",
+      validation: "duplicate",
     },
     extra: {
       email,
@@ -386,7 +394,7 @@ function logContactSaveError(error, contactData) {
  * @returns {string}
  */
 function determineContactSaveSeverity(error) {
-  return error.message.includes('Validation')
+  return error.message.includes("Validation")
     ? errorLogger.ErrorSeverity.WARNING
     : errorLogger.ErrorSeverity.ERROR;
 }
@@ -399,9 +407,9 @@ function determineContactSaveSeverity(error) {
  */
 function buildSaveErrorPayload(contactData, severity) {
   return {
-    module: 'ContactCache',
+    module: "ContactCache",
     severity,
-    tags: { feature: 'contacts', action: 'save' },
+    tags: { feature: "contacts", action: "save" },
     extra: buildSaveExtraFlags(contactData),
   };
 }
@@ -430,7 +438,7 @@ async function syncContacts() {
     return { success: true };
   } catch (error) {
     logSyncError(error);
-    return { success: false, reason: 'error' };
+    return { success: false, reason: "error" };
   }
 }
 
@@ -439,16 +447,16 @@ async function syncContacts() {
  * @returns {{success:boolean,reason:string}}
  */
 function reportOfflineSync() {
-  errorLogger.captureMessage('Cannot sync contacts - device is offline', {
-    module: 'ContactCache',
+  errorLogger.captureMessage("Cannot sync contacts - device is offline", {
+    module: "ContactCache",
     severity: errorLogger.ErrorSeverity.INFO,
     tags: {
-      feature: 'contacts',
-      action: 'sync',
+      feature: "contacts",
+      action: "sync",
       offline: true,
     },
   });
-  return { success: false, reason: 'offline' };
+  return { success: false, reason: "offline" };
 }
 
 /**
@@ -465,10 +473,10 @@ function logSyncError(error) {
  */
 function buildSyncErrorPayload() {
   return {
-    module: 'ContactCache',
+    module: "ContactCache",
     tags: {
-      feature: 'contacts',
-      action: 'sync',
+      feature: "contacts",
+      action: "sync",
       online: true,
     },
   };
@@ -501,9 +509,9 @@ function logFatalStartupError(error) {
  */
 function buildFatalErrorPayload() {
   return {
-    module: 'App',
+    module: "App",
     severity: errorLogger.ErrorSeverity.FATAL,
-    tags: { feature: 'initialization', action: 'startup', critical: true },
+    tags: { feature: "initialization", action: "startup", critical: true },
     extra: {
       timestamp: new Date().toISOString(),
       userAgent: navigator.userAgent,
@@ -581,5 +589,5 @@ export {
   onUserLogin,
   saveContact,
   syncContacts,
-  initializeApp
+  initializeApp,
 };
