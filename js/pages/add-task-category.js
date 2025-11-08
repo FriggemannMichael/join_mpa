@@ -16,6 +16,7 @@ export function toggleCategoryDropdown() {
   manageCategoryOutsideClick(isOpen);
 }
 
+
 /**
  * Registers or removes the outside click handler based on dropdown state.
  * @param {boolean} shouldListen - Whether to listen for outside clicks.
@@ -28,6 +29,7 @@ function manageCategoryOutsideClick(shouldListen) {
     document.removeEventListener("click", handler);
   }
 }
+
 
 /**
  * Hides the dropdown when clicking outside of it.
@@ -45,6 +47,7 @@ function handleOutsideCategoryClick(event) {
   document.removeEventListener("click", handleOutsideCategoryClick);
 }
 
+
 /**
  * Applies the selected category value and closes the dropdown.
  * @param {string} value - Selected category identifier.
@@ -60,6 +63,7 @@ export function selectCategory(value) {
   document.getElementById("category-dropdown")?.classList.add("d-none");
   document.querySelector(".category-select-header")?.classList.remove("open");
 }
+
 
 /**
  * Maps category identifiers to human-readable labels.

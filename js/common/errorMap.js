@@ -8,6 +8,14 @@ const errorMessages = {
   "auth/weak-password": "Password is too weak (min. 6 characters)",
 };
 
+
+/**
+ * Maps a Firebase authentication error to a human-readable message.
+ * Falls back to a default text if the error code is unknown or missing.
+ *
+ * @param {{ code?: string }} err - Firebase error object containing an error code.
+ * @returns {string} A user-friendly error message.
+ */
 export function mapFirebaseError(err) {
   if (!err || !err.code) return "Unknown error";
   return errorMessages[err.code] || "Login failed";

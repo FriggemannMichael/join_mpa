@@ -1,6 +1,7 @@
 import { close, icons, } from "../common/svg-template.js";
 import {bindEditDeleteButtons} from "../pages/contacts.js" 
 
+
 /**
  * Initializes the responsive edit/delete menu for contact details.
  * Sets up all necessary event listeners for button clicks, outside clicks, and Escape key handling.

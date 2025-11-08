@@ -241,6 +241,7 @@ export function renderContactDetail({ name, email, phone, initials, color }) {
     triggerFadeInAnimation(info);
 }
 
+
 /**
  * Hides the contact detail placeholder.
  * @returns {void}
@@ -249,6 +250,7 @@ function hidePlaceholder() {
     const placeholder = document.querySelector(".contact-detail-placeholder");
     if (placeholder) placeholder.style.display = "none";
 }
+
 
 /**
  * Injects the contact detail template into the info container.
@@ -259,6 +261,7 @@ function hidePlaceholder() {
 function injectContactTemplate(info, data) {
     info.innerHTML = contactDetailTemplate(data);
 }
+
 
 /**
  * Triggers a fade-in animation for the contact info.
@@ -289,7 +292,6 @@ export function renderEditContactModalIcons() {
         });
     }
 }
-
 
 
 /**
@@ -327,6 +329,7 @@ export async function handleContactCreate(event) {
     resetContactForm();
     toggleOverlay(false);
 }
+
 
 /**
  * Toggles the visibility of the contact overlay.

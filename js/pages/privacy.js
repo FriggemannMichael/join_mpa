@@ -5,7 +5,9 @@
 
 import { bootLayout } from "../common/layout.js";
 
+
 initPrivacyPage();
+
 
 /**
  * Initializes the privacy page with layout setup

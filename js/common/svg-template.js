@@ -171,6 +171,14 @@ export const icons = {
 </svg>`,
 };
 
+
+/**
+ * Returns the SVG markup for a check icon.
+ * If attributes are provided, they are injected into the root <svg> tag.
+ *
+ * @param {Record<string, string>} [props={}] - Optional SVG attributes (e.g., width, height, fill).
+ * @returns {string} The final SVG string with or without injected attributes.
+ */
 export function call(props = {}) {
   // Alias for phone icon
   const svg = icons.phone;
@@ -187,6 +195,14 @@ export function call(props = {}) {
   return svgTag;
 }
 
+
+/**
+ * Returns the SVG markup for a check icon.
+ * If attributes are provided, they are injected into the root <svg> tag.
+ *
+ * @param {Record<string, string>} [props={}] - Optional SVG attributes (e.g., width, height, fill).
+ * @returns {string} The final SVG string with or without injected attributes.
+ */
 export function person(props = {}) {
   const svg = icons.person;
   let svgTag = svg;
@@ -200,6 +216,14 @@ export function person(props = {}) {
   }
   return svgTag;
 }
+
+/**
+ * Returns the SVG markup for a check icon.
+ * If attributes are provided, they are injected into the root <svg> tag.
+ *
+ * @param {Record<string, string>} [props={}] - Optional SVG attributes (e.g., width, height, fill).
+ * @returns {string} The final SVG string with or without injected attributes.
+ */
 export function mail(props = {}) {
   const svg = icons.mail;
   let svgTag = svg;
@@ -213,6 +237,14 @@ export function mail(props = {}) {
   }
   return svgTag;
 }
+
+/**
+ * Returns the SVG markup for a check icon.
+ * If attributes are provided, they are injected into the root <svg> tag.
+ *
+ * @param {Record<string, string>} [props={}] - Optional SVG attributes (e.g., width, height, fill).
+ * @returns {string} The final SVG string with or without injected attributes.
+ */
 export function check(props = {}) {
   const svg = icons.check;
   let svgTag = svg;
@@ -226,6 +258,14 @@ export function check(props = {}) {
   }
   return svgTag;
 }
+
+/**
+ * Returns the SVG markup for a close icon.
+ * If attributes are provided, they are injected into the root <svg> tag.
+ *
+ * @param {Record<string, string>} [props={}] - Optional SVG attributes (e.g., width, height, fill).
+ * @returns {string} The final SVG string with or without injected attributes.
+ */
 export function close(props = {}) {
   const svg = icons.close;
   let svgTag = svg;

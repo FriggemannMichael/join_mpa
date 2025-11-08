@@ -9,6 +9,7 @@ import { clearPriorityButtons } from "./add-task-priority.js";
 import { validateFormAndUpdateButton } from "./add-task-form-validation.js";
 import { showAlert } from "../common/alertService.js";
 
+
 /**
  * Clears the form, removes validation errors, and notifies the user.
  */
@@ -20,6 +21,7 @@ export function clearTaskForm() {
   validateFormAndUpdateButton();
   showAlert("clearForm");
 }
+
 
 /**
  * Resets all input fields and selections in the form.
@@ -33,6 +35,7 @@ function resetFormFields() {
   renderSubtasks();
 }
 
+
 /**
  * Restores the default category placeholder label.
  */
@@ -40,6 +43,7 @@ function resetCategoryPlaceholder() {
   const placeholder = document.getElementById("selected-category-placeholder");
   if (placeholder) placeholder.textContent = "Select category";
 }
+
 
 /**
  * Removes validation styling and messages from the form.
@@ -52,6 +56,7 @@ function clearAllValidationErrors(container) {
   clearFormGroupFaults(container);
 }
 
+
 /**
  * Clears all input-fault classes from input elements.
  * @param {HTMLElement} container - Root container of the form.
@@ -61,6 +66,7 @@ function clearInputFaults(container) {
     .querySelectorAll(".input-fault")
     .forEach((element) => element.classList.remove("input-fault"));
 }
+
 
 /**
  * Removes validation messages from the form.
@@ -73,6 +79,7 @@ function clearFaultMessages(container) {
   });
 }
 
+
 /**
  * Clears fault classes from form groups.
  * @param {HTMLElement} container - Root container of the form.
@@ -83,12 +90,14 @@ function clearFormGroupFaults(container) {
     .forEach((group) => group.classList.remove("input-fault"));
 }
 
+
 /**
  * Clears all text-like inputs within the form.
  */
 function clearTextFields() {
   getFormInputFields().forEach(clearFieldValue);
 }
+
 
 /**
  * Retrieves all text, date, textarea, and select elements in the form.
@@ -99,6 +108,7 @@ function getFormInputFields() {
     "#pageContent input[type='text'], #pageContent input[type='date'], #pageContent textarea, #pageContent select"
   );
 }
+
 
 /**
  * Clears the value of a single form field.
@@ -111,6 +121,7 @@ function clearFieldValue(field) {
     field.value = "";
   }
 }
+
 
 /**
  * Unchecks all assignee checkboxes.

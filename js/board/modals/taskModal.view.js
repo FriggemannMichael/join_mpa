@@ -5,32 +5,75 @@ import { icons } from "../../common/svg-template.js";
 import { closeTaskOverlay, ScrollLock, formatDate } from "../utils.js";
 
 /**
- * Renders the task modal view for a given task.
- * Sets up scroll lock, header, content, and action buttons.
+ * Renders the task modal: locks scroll, builds content, and binds events.
  * @async
- * @param {string} id - ID of the task to display.
- * @param {Object} [task={}] - Task data used to populate the modal.
+ * @param {string} id - Task id to display.
+ * @param {Object} [task={}] - Task data.
  * @returns {Promise<void>}
  */
 export async function renderTaskModal(id, task = {}) {
   ScrollLock.set();
-  const overlay = document.getElementById("taskOverlay");
-  const section = document.getElementById("taskModal");
+  const { overlay, section } = getTaskModalElements();
+  prepareTaskSection(section, id);
+  const h2 = buildTaskTitle(task.title);
+  const scrollable = await createScrollableSection(task, h2, id);
+  mountTaskModal(section, task, id, scrollable);
+  taskModalEventlistener(overlay, section);
+}
+
+
+/**
+ * Gets modal DOM elements.
+ * @returns {{overlay: HTMLElement, section: HTMLElement}}
+ */
+function getTaskModalElements() {
+  return {
+    overlay: document.getElementById("taskOverlay"),
+    section: document.getElementById("taskModal"),
+  };
+}
+
+
+/**
+ * Applies base attributes/classes to the modal section.
+ * @param {HTMLElement} section - Modal container element.
+ * @param {string} id - Task id.
+ * @returns {void}
+ */
+function prepareTaskSection(section, id) {
   section.classList.add("task-overlay");
   section.dataset.taskId = id;
+}
+
+
+/**
+ * Creates the title element for the task.
+ * @param {string} title - Task title text.
+ * @returns {HTMLHeadingElement}
+ */
+function buildTaskTitle(title) {
   const h2 = document.createElement("h2");
-  h2.textContent = task.title;
+  h2.textContent = title ?? "";
+  return h2;
+}
 
-  const scrollableSection = await createScrollableSection(task, h2, id);
 
+/**
+ * Mounts header, body, and footer into the modal section.
+ * @param {HTMLElement} section
+ * @param {{categoryLabel?:string, category?:string}} task
+ * @param {string} id
+ * @param {HTMLElement} scrollableSection
+ * @returns {void}
+ */
+function mountTaskModal(section, task, id, scrollableSection) {
   section.replaceChildren(
     taskModalHeader(task.categoryLabel, task.category),
     scrollableSection,
     taskModalEditDelete(task, id)
   );
-
-  taskModalEventlistener(overlay, section);
 }
+
 
 /**
  * Creates the scrollable content section inside the task modal.

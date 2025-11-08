@@ -5,6 +5,7 @@
 
 import { subtasks } from "./add-task-subtasks.js";
 
+
 /**
  * Collects all task data from the form.
  * @returns {Object} Task payload.
@@ -25,6 +26,7 @@ export function readTaskData() {
   };
 }
 
+
 /**
  * Reads selected assignees from the dropdown.
  * @returns {Array<Object>} Selected assignees.
@@ -40,6 +42,7 @@ export function readAssignees() {
   }));
 }
 
+
 /**
  * Sanitizes assignee names by stripping duplicates markers.
  * @param {string} name - Raw name attribute.
@@ -48,6 +51,7 @@ export function readAssignees() {
 function sanitizeAssigneeName(name = "") {
   return name.replace(/\s*\(Du\)$/i, "").trim();
 }
+
 
 /**
  * Reads the current category selection.
@@ -62,6 +66,7 @@ export function readCategory() {
   };
 }
 
+
 /**
  * Reads the trimmed value from an input field.
  * @param {string} id - Element identifier.
@@ -71,6 +76,7 @@ export function readValue(id) {
   const field = document.getElementById(id);
   return field ? field.value.trim() : "";
 }
+
 
 /**
  * Reads the currently active priority selection.

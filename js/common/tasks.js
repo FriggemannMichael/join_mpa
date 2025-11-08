@@ -15,7 +15,9 @@ import {
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { showAlert } from "./alertService.js";
 
+
 const TASKS_PATH = "tasks";
+
 
 /**
  * Validates the provided task data.
@@ -32,6 +34,7 @@ function validateTask(task) {
     throw new Error("Task title is required");
   }
 }
+
 
 /**
  * Creates a new task entry in Firebase.
@@ -52,6 +55,7 @@ export async function createTask(task) {
     throw error;
   }
 }
+
 
 /**
  * Subscribes to tasks in Firebase and updates the listener on changes.
@@ -74,36 +78,71 @@ export function subscribeToTasks(listener) {
   return () => off(tasksRef, "value", handler);
 }
 
+
 /**
- * Builds a normalized and complete task payload ready to be stored in Firebase.
- * Fills in default values for missing fields and adds metadata like timestamps and user info.
+ * Builds a normalized task payload object with safe defaults.
  *
- * @param {Partial<Task>} task - The raw task input (can contain only a subset of fields).
- * @returns {Task} The fully normalized task object ready for database storage.
+ * @param {Object} task - Raw task input data.
+ * @returns {Object} Cleaned task payload ready for saving.
  */
 function buildTaskPayload(task) {
   const now = Date.now();
-  const currentUser = getActiveUser();
+  const user = getActiveUser();
 
   return {
-    title: task.title || "",
-    description: task.description || "",
-    dueDate: task.dueDate || "",
-    category: task.category || "",
-    categoryLabel: task.categoryLabel || task.category || "",
-    priority: task.priority || "medium",
-    status:
-      !task.status || typeof task.status !== "string" || !task.status.trim()
-        ? "toDo"
-        : task.status,
-    assignees: Array.isArray(task.assignees) ? task.assignees : [],
-    subtasks: Array.isArray(task.subtasks) ? task.subtasks : [],
-    createdBy: currentUser?.uid || "",
-    createdByEmail: currentUser?.email || "",
-    createdAt: now,
-    updatedAt: now,
+    ...getBaseTaskFields(task),
+    ...getTaskMeta(user, now),
   };
 }
+
+
+/**
+ * Extracts and normalizes main task fields with defaults.
+ * @param {Object} t - Task input data.
+ * @returns {Object} Normalized field set.
+ */
+function getBaseTaskFields(t) {
+  return {
+    title: t.title || "",
+    description: t.description || "",
+    dueDate: t.dueDate || "",
+    category: t.category || "",
+    categoryLabel: t.categoryLabel || t.category || "",
+    priority: t.priority || "medium",
+    status: getSafeStatus(t.status),
+    assignees: Array.isArray(t.assignees) ? t.assignees : [],
+    subtasks: Array.isArray(t.subtasks) ? t.subtasks : [],
+  };
+}
+
+
+/**
+ * Ensures a valid task status value.
+ * @param {string} [status]
+ * @returns {string} Safe status string.
+ */
+function getSafeStatus(status) {
+  return !status || typeof status !== "string" || !status.trim()
+    ? "toDo"
+    : status;
+}
+
+
+/**
+ * Generates metadata for task creation and updates.
+ * @param {{ uid?: string, email?: string }} user
+ * @param {number} timestamp
+ * @returns {Object} Metadata fields.
+ */
+function getTaskMeta(user, timestamp) {
+  return {
+    createdBy: user?.uid || "",
+    createdByEmail: user?.email || "",
+    createdAt: timestamp,
+    updatedAt: timestamp,
+  };
+}
+
 
 /**
  * Converts a raw Firebase task object into a normalized and sorted task array.

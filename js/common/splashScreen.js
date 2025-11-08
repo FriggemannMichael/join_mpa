@@ -16,6 +16,7 @@ function initSplashScreen() {
   hideSplashForDesktop(elements);
 }
 
+
 /**
  * Provides splash screen elements if available
  * @returns {{splashScreen: HTMLElement, splashLogo: HTMLElement}|null}
@@ -27,6 +28,7 @@ function getSplashElements() {
   return { splashScreen, splashLogo };
 }
 
+
 /**
  * Detects if viewport should use mobile animation
  * @returns {boolean}
@@ -34,6 +36,7 @@ function getSplashElements() {
 function isMobileViewport() {
   return window.innerWidth <= 600;
 }
+
 
 /**
  * Runs mobile splash animation sequence
@@ -51,6 +54,7 @@ function runMobileSplashAnimation({ splashScreen, splashLogo }) {
   );
 }
 
+
 /**
  * Builds start and end frames for mobile animation
  * @returns {{start: object, end: object}}
@@ -63,6 +67,7 @@ function buildMobileFrames() {
     end: buildMobileEndFrame(base, viewport),
   };
 }
+
 
 /**
  * Builds the starting frame for the logo
@@ -79,6 +84,7 @@ function buildMobileStartFrame(base, viewport) {
   };
 }
 
+
 /**
  * Builds the ending frame for the logo
  * @param {{width:number,height:number}} base
@@ -94,6 +100,7 @@ function buildMobileEndFrame(base, viewport) {
   };
 }
 
+
 /**
  * Applies absolute positioning and transition to logo
  * @param {HTMLElement} splashLogo
@@ -104,6 +111,7 @@ function prepareLogoForAnimation(splashLogo, frame) {
   splashLogo.style.transition = "all 500ms ease-in-out";
   applyLogoFrame(splashLogo, frame);
 }
+
 
 /**
  * Applies frame values to logo element
@@ -116,6 +124,7 @@ function applyLogoFrame(splashLogo, frame) {
   splashLogo.style.width = `${frame.width}px`;
   splashLogo.style.height = `${frame.height}px`;
 }
+
 
 /**
  * Configures splash screen container for animation
@@ -131,6 +140,7 @@ function configureMobileScreen(splashScreen) {
   splashScreen.style.alignItems = "center";
 }
 
+
 /**
  * Animates logo towards end frame
  * @param {HTMLElement} splashLogo
@@ -139,6 +149,7 @@ function configureMobileScreen(splashScreen) {
 function animateMobileLogo(splashLogo, endFrame) {
   setTimeout(() => applyLogoFrame(splashLogo, endFrame), 100);
 }
+
 
 /**
  * Handles mobile animation completion
@@ -151,6 +162,7 @@ function handleTransitionFinish(splashScreen, splashLogo) {
   scheduleSplashFadeOut(splashScreen, splashLogo);
 }
 
+
 /**
  * Reveals login card after splash
  */
@@ -159,6 +171,7 @@ function revealLoginCard() {
   if (!loginCard) return;
   loginCard.classList.remove("login-card-hidden");
 }
+
 
 /**
  * Fades splash elements after transition
@@ -174,6 +187,7 @@ function scheduleSplashFadeOut(splashScreen, splashLogo) {
   }, 100);
 }
 
+
 /**
  * Hides splash when large viewport is detected
  * @param {{splashScreen: HTMLElement, splashLogo: HTMLElement}} elements
@@ -183,5 +197,6 @@ function hideSplashForDesktop({ splashScreen, splashLogo }) {
   splashLogo.style.display = "none";
   revealLoginCard();
 }
+
 
 window.addEventListener("DOMContentLoaded", initSplashScreen);

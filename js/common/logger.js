@@ -15,6 +15,7 @@ const LogLevel = {
   DEBUG: 'DEBUG'
 };
 
+
 /**
  * Configuration for the logger
  */
@@ -24,6 +25,7 @@ const config = {
   includeTimestamp: true,
   includeModuleName: true
 };
+
 
 /**
  * Formats a log message with optional metadata
@@ -51,6 +53,7 @@ function formatMessage(level, module, message, data) {
   return parts.join(' ');
 }
 
+
 /**
  * Internal logging function
  * @param {string} level - The log level
@@ -71,6 +74,7 @@ function log(level, module, message, data, consoleFn) {
   }
 }
 
+
 /**
  * Logs an error message
  * @param {string} module - The module name
@@ -82,6 +86,7 @@ function log(level, module, message, data, consoleFn) {
 export function logError(module, message, error) {
   log(LogLevel.ERROR, module, message, error, console.error);
 }
+
 
 /**
  * Logs a warning message
@@ -95,6 +100,7 @@ export function logWarning(module, message, data) {
   log(LogLevel.WARN, module, message, data, console.warn);
 }
 
+
 /**
  * Logs an informational message
  * @param {string} module - The module name
@@ -107,6 +113,7 @@ export function logInfo(module, message, data) {
   log(LogLevel.INFO, module, message, data, console.log);
 }
 
+
 /**
  * Logs a debug message
  * @param {string} module - The module name
@@ -118,6 +125,7 @@ export function logInfo(module, message, data) {
 export function logDebug(module, message, data) {
   log(LogLevel.DEBUG, module, message, data, console.log);
 }
+
 
 /**
  * Configures the logger

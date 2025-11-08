@@ -1,5 +1,6 @@
 const templateCache = new Map();
 
+
 /**
  * Loads an HTML template from the specified URL with caching
  * @param {string} path Path to the HTML template
@@ -14,6 +15,7 @@ async function fetchTemplate(path) {
   return html;
 }
 
+
 /**
  * Loads a template and inserts it into the specified DOM element
  * @param {string} selector CSS selector for the target element
@@ -26,6 +28,7 @@ export async function injectTemplate(selector, path) {
   const html = await fetchTemplate(path);
   host.innerHTML = html;
 }
+
 
 /**
  * Loads multiple templates in parallel and inserts them into their target elements

@@ -12,6 +12,7 @@ import {
   filterAssignees,
 } from "./add-task-assignees-ui.js";
 
+
 /**
  * Loads and populates the assignee selection list with contacts.
  * @async
@@ -32,6 +33,7 @@ export async function populateAssignees() {
   await loadAndBindAssignees(elements.dropdown, currentUser.uid);
 }
 
+
 /**
  * Gets the assignee dropdown elements.
  * @returns {{header: HTMLElement, dropdown: HTMLElement}|null}
@@ -41,6 +43,7 @@ function getAssigneeElements() {
   const dropdown = document.getElementById("assignee-dropdown");
   return header && dropdown ? { header, dropdown } : null;
 }
+
 
 /**
  * Loads assignees from database and binds events.
@@ -53,6 +56,7 @@ async function loadAndBindAssignees(dropdown, uid) {
   await loadAssigneesFromDatabase(dropdown, uid);
   bindAssigneeEvents();
 }
+
 
 /**
  * Loads contacts from the Firebase database
@@ -68,6 +72,7 @@ async function loadAssigneesFromDatabase(dropdown, currentUserUid) {
   }
 }
 
+
 /**
  * Fetches contacts from Firebase
  * @returns {Promise<Object|null>} Contacts object or null
@@ -77,6 +82,7 @@ async function fetchContactsFromFirebase() {
   const snapshot = await db.get(db.ref(db.getDatabase(), "contacts"));
   return snapshot.exists() ? snapshot.val() : null;
 }
+
 
 /**
  * Handles successfully loaded contacts
@@ -100,6 +106,7 @@ function handleContactsLoaded(dropdown, contacts, currentUserUid) {
   setAssigneeLoading(false);
 }
 
+
 /**
  * Handles errors when loading contacts
  * @param {Error} error Error object
@@ -116,6 +123,7 @@ function handleContactsLoadError(error) {
   showErrorStatus(message);
 }
 
+
 /**
  * Displays an error message
  * @param {string} message Error message
@@ -126,6 +134,7 @@ function showErrorStatus(message) {
   status.textContent = message;
   status.classList.add("error");
 }
+
 
 /**
  * Builds assignee options from raw contact data
@@ -139,6 +148,7 @@ function buildAssigneeOptions(rawUsers, currentUid) {
   return sortUsersByLabel(mappedUsers);
 }
 
+
 /**
  * Maps user objects to assignee options
  * @param {Object} users User object
@@ -151,6 +161,7 @@ function mapUsersToOptions(users, currentUid) {
     .map((entry) => createAssigneeOption(entry, currentUid))
     .filter((entry) => entry.value);
 }
+
 
 /**
  * Creates an assignee option from a user entry
@@ -172,6 +183,7 @@ function createAssigneeOption(entry, currentUid) {
   };
 }
 
+
 /**
  * Sorts user options alphabetically by label
  * @param {Array} users User options
@@ -180,6 +192,7 @@ function createAssigneeOption(entry, currentUid) {
 function sortUsersByLabel(users) {
   return users.sort((a, b) => a.label.localeCompare(b.label, "de"));
 }
+
 
 /**
  * Binds event listeners for assignee dropdown
@@ -195,6 +208,7 @@ function bindAssigneeEvents() {
   bindSearchInputEvent(searchInput);
 }
 
+
 /**
  * Binds click event for header
  * @param {HTMLElement} header Header element
@@ -208,6 +222,7 @@ function bindHeaderClickEvent(header) {
     toggleAssigneeDropdown();
   });
 }
+
 
 /**
  * Binds change event for dropdown
@@ -226,6 +241,7 @@ function bindDropdownChangeEvent(dropdown) {
   });
 }
 
+
 /**
  * Binds outside click event to close the dropdown
  * @param {HTMLElement} dropdown Dropdown element
@@ -242,6 +258,7 @@ function bindOutsideClickEvent(dropdown) {
   });
 }
 
+
 /**
  * Toggles the visibility of the assignee dropdown.
  * @returns {void}
@@ -257,6 +274,7 @@ function toggleAssigneeDropdown() {
   handleDropdownStateChange(isOpening, searchInput);
 }
 
+
 /**
  * Toggles the dropdown visibility classes.
  * @param {HTMLElement|null} header - Header element.
@@ -267,6 +285,7 @@ function toggleDropdownVisibility(header, dropdown) {
   dropdown?.classList.toggle("d-none");
   header?.classList.toggle("open");
 }
+
 
 /**
  * Handles state changes when dropdown opens or closes.
@@ -282,6 +301,7 @@ function handleDropdownStateChange(isOpening, searchInput) {
     filterAssignees("");
   }
 }
+
 
 /**
  * Binds event listener for the search field
@@ -303,6 +323,7 @@ function bindSearchInputEvent(searchInput) {
   });
 }
 
+
 /**
  * Sets the loading status for assignees
  * @param {boolean} isLoading Loading status
@@ -316,6 +337,7 @@ function setAssigneeLoading(isLoading) {
   }
 }
 
+
 /**
  * Extracts initials from a name
  * @param {string} name Name
@@ -328,6 +350,7 @@ export function getInitials(name) {
   if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
+
 
 /**
  * Handles clicks outside the dropdown

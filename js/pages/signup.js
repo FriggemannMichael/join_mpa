@@ -19,12 +19,12 @@ import {
   getFieldValidator,
 } from "../signUp/signUp.validation.js";
 
-// const fieldValidator = getFieldValidator(val);
 
 initSignupPage();
 
 const el = (id) => document.getElementById(id);
 const val = (id) => (el(id)?.value ?? "").trim();
+
 
 /**
  * Initializes the signup page and binds all interactive elements.

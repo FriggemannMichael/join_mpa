@@ -150,6 +150,7 @@ function updateSummaryDisplay(metrics) {
   updateDeadlineElement(metrics.upcomingDeadline);
 }
 
+
 /**
  * Updates all metric display elements with values.
  * @param {Object} metrics - The metrics object.
@@ -163,6 +164,7 @@ function updateMetricElements(metrics) {
   updateElementById("amount_inProgress", metrics.inProgress);
   updateElementById("amount_awaitingFeedback", metrics.awaitingFeedback);
 }
+
 
 /**
  * Updates the deadline display element.

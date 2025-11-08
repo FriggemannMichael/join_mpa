@@ -5,7 +5,9 @@
 
 import { bootLayout } from "../common/layout.js";
 
+
 initLegalPage();
+
 
 /**
  * Initializes the legal page with layout setup

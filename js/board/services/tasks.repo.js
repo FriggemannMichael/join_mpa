@@ -95,30 +95,46 @@ export async function loadTask(id) {
 }
 
 /**
- * Updates a task in the database and shows a success alert.
+ * Updates an existing task in Firebase Realtime Database.
+ * Validates inputs, performs the update, and handles user feedback.
+ *
  * @async
- * @param {string} taskId - ID of the task to update.
- * @param {Object} task - Updated task data.
- * @returns {Promise<boolean>} Resolves to true when the update is complete.
+ * @param {string} taskId - Unique ID of the task to update.
+ * @param {Object} task - Task data to update.
+ * @returns {Promise<boolean>} Resolves true on success, false otherwise.
  */
 export async function updateTask(taskId, task) {
   try {
-    if (!taskId) {
-      showAlert("error", 2500, "Task ID is missing");
-      return false;
-    }
-
-    if (!task || typeof task !== "object") {
-      showAlert("error", 2500, "Invalid task data");
-      return false;
-    }
-
-    const taskRef = ref(db, `tasks/${taskId}`);
-    await update(taskRef, task);
+    if (!isValidUpdateData(taskId, task)) return false;
+    await performTaskUpdate(taskId, task);
     showBoardAlert("updated");
     return true;
-  } catch (error) {
+  } catch {
     showAlert("error", 2500, "Failed to update task");
     return false;
   }
+}
+
+/**
+ * Checks whether provided taskId and task object are valid.
+ * @param {string} id - Task ID.
+ * @param {Object} data - Task payload.
+ * @returns {boolean} True if valid, false otherwise.
+ */
+function isValidUpdateData(id, data) {
+  if (!id) return showAlert("error", 2500, "Task ID is missing"), false;
+  if (!data || typeof data !== "object")
+    return showAlert("error", 2500, "Invalid task data"), false;
+  return true;
+}
+
+/**
+ * Performs the actual Firebase update.
+ * @param {string} id - Task ID.
+ * @param {Object} data - Task payload.
+ * @returns {Promise<void>}
+ */
+async function performTaskUpdate(id, data) {
+  const taskRef = ref(db, `tasks/${id}`);
+  await update(taskRef, data);
 }

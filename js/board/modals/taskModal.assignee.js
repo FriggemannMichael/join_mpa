@@ -12,16 +12,13 @@ import { getCurrentUser, colorFromString, getInitials } from "../utils.js";
 export async function taskModalAssignees(task) {
   const assigned = document.createElement("div");
   assigned.classList.add("assigned_to_task_overlay");
-
   const assignedTo = document.createElement("p");
   assignedTo.classList.add("taskModal-label");
   assignedTo.textContent = "Assigned To:";
-
   const assigneesDiv = document.createElement("div");
   const contacts = await getContactsMap();
   const assigneesArr = Array.isArray(task?.assignees) ? task.assignees : [];
   const user = getCurrentUser();
-
   renderAssignees(assigneesDiv, assigneesArr, contacts, user);
   assigned.append(assignedTo, assigneesDiv);
   return assigned;
@@ -53,31 +50,54 @@ export function renderAssignees(
 
 
 /**
- * Renders all assignee rows inside the given container.
- * Creates badges and labels for each assigned user.
- * @param {HTMLElement} container - The container element to render into.
- * @param {Array<Object>} assigneesArr - Array of assignee objects.
- * @param {Object} contactsMap - Map of contacts, keyed by user ID.
- * @param {Object} currentUser - The currently logged-in user.
+ * Renders all assignees into the given container.
+ *
+ * @param {HTMLElement} container - Parent element where assignees are rendered.
+ * @param {Array<Object>} assigneesArr - List of assignee objects.
+ * @param {Object<string, Object>} contactsMap - Map of contact data by uid.
+ * @param {{ uid: string, email: string }} currentUser - Logged-in user.
  * @returns {void}
  */
 function renderAssigneeList(container, assigneesArr, contactsMap, currentUser) {
   assigneesArr.forEach((a) => {
-    const uid = a?.uid;
-    const contact = contactsMap[uid];
-    const name = contact?.name || a?.name;
-    const isYou = (currentUser && uid === currentUser.uid) || (a?.email && a.email === currentUser.email);
-    const color = colorFromString(name);
-    const initials = getInitials(name);
-    const badge = createBadge(initials, name, color)
-    const label = createLabel(isYou, name)
-
-    const row = document.createElement("div");
-    row.className = "assignee_row";
-    row.append(badge, label);
-
+    const contact = contactsMap[a?.uid];
+    const name = contact?.name || a?.name || "Unknown";
+    const isYou = isCurrentUser(a, currentUser);
+    const row = buildAssigneeRow(name, isYou);
     container.append(row);
   });
+}
+
+
+/**
+ * Checks if the given assignee represents the current user.
+ * @param {Object} a - Assignee object.
+ * @param {{ uid: string, email: string }} user - Current user.
+ * @returns {boolean}
+ */
+function isCurrentUser(a, user) {
+  return (
+    (user && a?.uid === user.uid) ||
+    (a?.email && a.email === user.email)
+  );
+}
+
+
+/**
+ * Builds a complete assignee row element.
+ * @param {string} name - Assignee name.
+ * @param {boolean} isYou - Whether this assignee is the current user.
+ * @returns {HTMLDivElement}
+ */
+function buildAssigneeRow(name, isYou) {
+  const color = colorFromString(name);
+  const initials = getInitials(name);
+  const badge = createBadge(initials, name, color);
+  const label = createLabel(isYou, name);
+  const row = document.createElement("div");
+  row.className = "assignee_row";
+  row.append(badge, label);
+  return row;
 }
 
 

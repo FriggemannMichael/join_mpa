@@ -19,7 +19,6 @@ import { logWarning } from "./logger.js";
  * @returns {Promise<void>}
  */
 export async function bootLayout() {
-  // Wait for Firebase Auth initialization
   await authReady;
 
   await insertTemplates([
@@ -27,7 +26,6 @@ export async function bootLayout() {
     ["[data-template=sidebar]", "./templates/sidebar.html"],
   ]);
 
-  // Wait one tick for the DOM to update
   await new Promise((resolve) => setTimeout(resolve, 0));
 
   hydrateLayout();
@@ -121,6 +119,7 @@ function bindProfileMenu() {
   attachProfileListeners(els.icon, els.menu, els.overlay);
 }
 
+
 /**
  * Toggles the profile menu between open and closed
  * @param {HTMLElement} menu The menu element
@@ -131,6 +130,7 @@ function toggleMenu(menu, overlay, icon) {
   if (menu.classList.contains("sub-menu-open")) closeMenu(menu, overlay, icon);
   else openMenu(menu, overlay, icon);
 }
+
 
 /**
  * Opens the profile menu and sets accessibility attributes
@@ -147,6 +147,7 @@ function openMenu(menu, overlay, icon) {
   document.body.classList.add("sub-menu-bg-open");
 }
 
+
 /**
  * Closes the profile menu and sets accessibility attributes
  * @param {HTMLElement} menu The menu element
@@ -161,6 +162,7 @@ function closeMenu(menu, overlay, icon) {
   menu.setAttribute("aria-hidden", "true");
   document.body.classList.remove("sub-menu-bg-open");
 }
+
 
 /**
  * Handles keyboard events for the profile menu
@@ -177,6 +179,7 @@ function handleProfileKey(event, menu, overlay, icon) {
   if (event.key === "Escape") closeMenu(menu, overlay, icon);
 }
 
+
 /**
  * Binds the logout button and handles logout events
  */
@@ -189,6 +192,7 @@ function bindLogout() {
   });
 }
 
+
 /**
  * Marks the active navigation link based on the current page
  */
@@ -199,6 +203,7 @@ function highlightActiveNav() {
     link.classList.toggle("link-active", match === current);
   });
 }
+
 
 /**
  * Extracts the filename from a path
@@ -219,6 +224,7 @@ function getAuthState() {
   return { isLoggedIn: !!user, user };
 }
 
+
 /**
  * Checks whether the current path is a legal/info page.
  * @param {string} path - Current window pathname.
@@ -229,6 +235,7 @@ function isLegalPath(path) {
   return page === "legal.html" || page === "privacy.html" || page === "help.html";
 }
 
+
 /**
  * Toggles visibility for navigation links.
  * @param {NodeListOf<Element>} links - Elements to show or hide.
@@ -238,6 +245,7 @@ function isLegalPath(path) {
 function toggleNavLinks(links, show) {
   links.forEach(el => el.classList.toggle("nav-link-hidden", !show));
 }
+
 
 /**
  * Sets up navigation visibility based on authentication and current page.
@@ -256,6 +264,7 @@ function setupAuthBasedNavigation() {
   }
 }
 
+
 /**
  * Shows navigation for authenticated users.
  * @param {NodeListOf<Element>} authRequired - Auth-required links.
@@ -266,6 +275,7 @@ function showAuthenticatedNav(authRequired, guestOnly) {
   toggleNavLinks(authRequired, true);
   toggleNavLinks(guestOnly, false);
 }
+
 
 /**
  * Shows navigation for guest users.
@@ -280,6 +290,7 @@ function showGuestNav(authRequired, guestOnly, legal) {
   if (legal) renderLoginIcon();
 }
 
+
 /**
  * Renders the log in icon with SVG from svg-template.js
  */
@@ -288,6 +299,7 @@ function renderLoginIcon() {
   if (!iconContainer) return;
   iconContainer.innerHTML = icons.log;
 }
+
 
 /**
  * Hides the profile icon on Legal/Privacy/Help pages when no user is logged in.
@@ -302,6 +314,7 @@ function hideProfileIconOnLegalPagesIfNotLoggedIn() {
   updateProfileIconVisibility(profileIcon, isLoggedIn, isLegalPage);
 }
 
+
 /**
  * Checks if the current page is a legal page.
  * @returns {boolean} True if current page is legal/privacy/help.
@@ -314,6 +327,7 @@ function checkIfLegalPage() {
     currentPage === "help.html"
   );
 }
+
 
 /**
  * Updates the profile icon visibility based on auth and page.

@@ -1,5 +1,3 @@
-// common/validation-helpers.js
-
 /**
  * Enables or disables the submit button based on form validity
  * @param {HTMLButtonElement} btn - The submit button element

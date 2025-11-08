@@ -12,6 +12,7 @@ import {
   validateFormAndUpdateButton,
 } from "./add-task-form-validation.js";
 
+
 /**
  * Wires up clear and create actions for the form buttons.
  */
@@ -23,6 +24,7 @@ export function bindActionButtons() {
   validateFormAndUpdateButton();
 }
 
+
 /**
  * Handles task creation click with guarded error handling.
  */
@@ -33,6 +35,7 @@ async function handleTaskCreate() {
     // Intentionally swallow errors to preserve prior behavior.
   }
 }
+
 
 /**
  * Attempts to create a task and navigates on success.
@@ -47,6 +50,7 @@ async function attemptTaskCreation() {
   await saveTaskAndRedirect(data);
 }
 
+
 /**
  * Handles validation errors when task creation fails.
  * @param {Object} data - Task payload.
@@ -56,6 +60,7 @@ function handleValidationFailure(data) {
   setTaskStatus("Please fill all required fields (incl. Priority)", true);
 }
 
+
 /**
  * Disables the create button to prevent duplicates.
  */
@@ -63,6 +68,7 @@ function disableCreateButton() {
   const button = document.getElementById("taskCreateBtn");
   if (button) button.disabled = true;
 }
+
 
 /**
  * Persists the task and redirects to the board view.
@@ -76,6 +82,7 @@ async function saveTaskAndRedirect(data) {
     window.location.href = "board.html";
   }, 1800);
 }
+
 
 /**
  * Updates the task status message element.

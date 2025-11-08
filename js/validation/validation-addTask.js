@@ -11,8 +11,10 @@ import {
   validatePriorityGroup,
 } from "./validation-fields.js";
 
+
 let controller = null;
 let abortCtrl = null;
+
 
 /**
  * Attaches the validation (only active once). Root = document or Modal-Container.
@@ -30,6 +32,7 @@ export function mountAddTaskValidation(root = document) {
   controller = bindForm(buildAddTaskFormConfig(context, handlers, signal));
   return controller;
 }
+
 
 /**
  * Removes the validation and cleans up event listeners
@@ -51,6 +54,7 @@ export function updateAddTaskValidationButton() {
   return controller?.updateSubmit?.();
 }
 
+
 /**
  * Creates a No-Op controller as fallback
  * @returns {Object} Dummy controller
@@ -61,6 +65,7 @@ function makeNoopController() {
     detach() {},
   };
 }
+
 
 /**
  * Attaches the validation for Edit-Task (without category validation)
@@ -78,6 +83,7 @@ export function mountEditTaskValidation(root = document) {
   return controller;
 }
 
+
 /**
  * Provides add-task DOM references
  * @param {Document|HTMLElement} root
@@ -93,6 +99,7 @@ function getAddTaskContext(root) {
   return { titleEl, dateEl, category, prioGroup, submitBtn };
 }
 
+
 /**
  * Provides edit-task DOM references
  * @param {Document|HTMLElement} root
@@ -107,6 +114,7 @@ function getEditTaskContext(root) {
   return { titleEl, dateEl, prioGroup, submitBtn };
 }
 
+
 /**
  * Initializes no-op controller fallback
  * @returns {Object}
@@ -115,6 +123,7 @@ function setFallbackController() {
   controller = makeNoopController();
   return controller;
 }
+
 
 /**
  * Prepares abort controller for validation listeners
@@ -125,6 +134,7 @@ function prepareValidationAbort() {
   abortCtrl = new AbortController();
   return abortCtrl.signal;
 }
+
 
 /**
  * Builds visible validation handlers for add-task form
@@ -144,6 +154,7 @@ function createAddTaskVisibleHandlers(context) {
   };
 }
 
+
 /**
  * Builds visible validation handlers for edit-task form
  * @param {{titleEl:HTMLElement,dateEl:HTMLElement,prioGroup:HTMLElement}} context
@@ -160,6 +171,7 @@ function createEditVisibleHandlers(context) {
   };
 }
 
+
 /**
  * Registers priority button validation
  * @param {HTMLElement} group
@@ -174,6 +186,7 @@ function bindPriorityGroup(group, showPriority, signal) {
   );
 }
 
+
 /**
  * Handles priority clicks to trigger validation
  * @param {MouseEvent} event
@@ -185,87 +198,96 @@ function handlePriorityClick(event, showPriority) {
   controller?.updateSubmit?.();
 }
 
+
 /**
- * Builds form config for add-task validation
- * @param {Object} context
- * @param {Object} handlers
- * @param {AbortSignal} signal
- * @returns {Object}
+ * Builds form config for the "Add Task" form, defining
+ * validation logic, field events, and silent validator.
+ *
+ * @param {Object} context - Contains form elements and submit button.
+ * @param {Object} handlers - Visible validation handlers.
+ * @param {AbortSignal} [signal] - Optional abort signal.
+ * @returns {Object} Config object for bindForm.
  */
 function buildAddTaskFormConfig(context, handlers, signal) {
+  const fields = buildAddTaskFields(context, handlers);
   return {
     submitBtn: context.submitBtn,
     validateAllSilent: createAddTaskSilentValidator(context),
-    fields: [
-      {
-        el: context.titleEl,
-        events: ["blur"],
-        validateVisible: handlers.showTitle,
-      },
-      {
-        el: context.dateEl,
-        events: ["blur", "change"],
-        validateVisible: handlers.showDate,
-      },
-      {
-        el: context.category,
-        events: ["change"],
-        validateVisible: handlers.showCategory,
-      },
-    ],
+    fields,
     signal,
   };
 }
 
 /**
- * Builds form config for edit-task validation
- * @param {Object} context
- * @param {Object} handlers
- * @param {AbortSignal} signal
- * @returns {Object}
+ * Builds field configuration for Add Task form.
+ * @param {Object} c - Context with form elements.
+ * @param {Object} h - Validation handler functions.
+ * @returns {Array<Object>} Field configuration list.
+ */
+function buildAddTaskFields(c, h) {
+  return [
+    { el: c.titleEl, events: ["blur"], validateVisible: h.showTitle },
+    { el: c.dateEl, events: ["blur", "change"], validateVisible: h.showDate },
+    { el: c.category, events: ["change"], validateVisible: h.showCategory },
+  ];
+}
+
+
+/**
+ * Builds form config for the Edit Task form.
+ * @param {EditTaskContext} context - Form elements and submit button.
+ * @param {EditTaskHandlers} handlers - Visible validation handlers.
+ * @param {AbortSignal} [signal] - Optional abort signal.
+ * @returns {{submitBtn:HTMLElement, validateAllSilent:() => boolean, fields:Array, signal?:AbortSignal}}
  */
 function buildEditTaskFormConfig(context, handlers, signal) {
+  const fields = buildEditTaskFields(context, handlers);
   return {
     submitBtn: context.submitBtn,
     validateAllSilent: createEditSilentValidator(context),
-    fields: [
-      {
-        el: context.titleEl,
-        events: ["blur"],
-        validateVisible: handlers.showTitle,
-      },
-      {
-        el: context.dateEl,
-        events: ["blur"],
-        validateVisible: handlers.showDate,
-      },
-    ],
+    fields,
     signal,
   };
 }
 
+
 /**
- * Creates silent validator for add-task form
- * @param {{titleEl:HTMLElement,dateEl:HTMLElement,category:HTMLElement,prioGroup:HTMLElement}} context
- * @returns {Function}
+ * Builds field configuration for Edit Task.
+ * @param {EditTaskContext} c - Context with form elements.
+ * @param {EditTaskHandlers} h - Visible validators for fields.
+ * @returns {{el:HTMLElement, events:string[], validateVisible:() => boolean}[]}
+ */
+function buildEditTaskFields(c, h) {
+  return [
+    { el: c.titleEl, events: ["blur"], validateVisible: h.showTitle },
+    { el: c.dateEl, events: ["blur"], validateVisible: h.showDate },
+  ];
+}
+
+
+/**
+ * Creates a silent validator for the Add Task form.
+ * Runs all field validations without showing visible messages.
+ *
+ * @param {Object} context - References to all task form elements.
+ * @param {HTMLElement} context.titleEl
+ * @param {HTMLElement} context.dateEl
+ * @param {HTMLElement} context.category
+ * @param {HTMLElement} context.prioGroup
+ * @returns {() => boolean} Function that validates all fields silently.
  */
 function createAddTaskSilentValidator(context) {
   return () => {
-    const validTitle = validateMinLengthEl(context.titleEl, 3, "Title", {
-      show: false,
-    });
-    const validDate = validateDateNotPastEl(context.dateEl, "Due date", {
-      show: false,
-    });
-    const validCategory = validateRequiredEl(context.category, "Category", {
-      show: false,
-    });
-    const validPriority = validatePriorityGroup(context.prioGroup, "Priority", {
-      show: false,
-    });
-    return validTitle && validDate && validCategory && validPriority;
+    const v = (fn) => fn(); // shorthand runner
+    return (
+      v(() => validateMinLengthEl(context.titleEl, 3, "Title", { show: false })) &&
+      v(() => validateDateNotPastEl(context.dateEl, "Due date", { show: false })) &&
+      v(() => validateRequiredEl(context.category, "Category", { show: false })) &&
+      v(() => validatePriorityGroup(context.prioGroup, "Priority", { show: false }))
+    );
   };
 }
+
 
 /**
  * Creates silent validator for edit-task form

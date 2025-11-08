@@ -6,30 +6,44 @@ import { confirmModal } from "../modals/confirmModal.js"
 
 
 /**
- * Initializes event listeners for the task modal overlay.
- * Handles backdrop clicks, Escape key presses, and section interactions.
- * @param {HTMLElement} overlay - The overlay element containing the modal.
+ * Attaches event listeners for the task modal overlay and content section.
+ * Handles backdrop clicks, Escape key, and section clicks.
+ *
+ * @param {HTMLElement} overlay - The modal overlay element.
  * @param {HTMLElement} section - The modal content section.
  * @returns {void}
  */
 export function taskModalEventlistener(overlay, section) {
   if (!overlay) return;
-  const backdrop = overlay.querySelector(".backdrop_overlay");
-
-  if (!overlay.dataset.bound) {
-    const onBackdropClick = (e) => {
-      if (e.target === overlay || e.target === backdrop) closeTaskOverlay();
-    };
-    const onKeydown = (e) => { if (e.key === "Escape") closeTaskOverlay(); };
-    bindOverlayEvents(overlay, section, onBackdropClick, onKeydown);
-  }
-
-  if (!section._handler) {
-    section._handler = handleSectionClick;
-    section.addEventListener("click", section._handler);
-  }
-
+  setupOverlayEvents(overlay, section);
+  setupSectionClick(section);
   overlay.classList.add("active");
+}
+
+
+/**
+ * Binds backdrop and keyboard events if not already bound.
+ * @param {HTMLElement} overlay
+ * @param {HTMLElement} section
+ */
+function setupOverlayEvents(overlay, section) {
+  if (overlay.dataset.bound) return;
+  const backdrop = overlay.querySelector(".backdrop_overlay");
+  const onBackdropClick = (e) =>
+    (e.target === overlay || e.target === backdrop) && closeTaskOverlay();
+  const onKeydown = (e) => e.key === "Escape" && closeTaskOverlay();
+  bindOverlayEvents(overlay, section, onBackdropClick, onKeydown);
+}
+
+
+/**
+ * Ensures the section has its click handler attached once.
+ * @param {HTMLElement} section
+ */
+function setupSectionClick(section) {
+  if (section._handler) return;
+  section._handler = handleSectionClick;
+  section.addEventListener("click", section._handler);
 }
 
 

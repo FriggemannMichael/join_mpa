@@ -15,7 +15,9 @@ import {
 } from "./add-task-form.js";
 import { mountAddTaskValidation } from "../validation/validation-addTask.js";
 
+
 initAddTaskPage();
+
 
 /**
  * Initializes the Add-Task page with authentication check and UI setup

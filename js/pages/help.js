@@ -5,7 +5,9 @@
 
 import { bootLayout } from "../common/layout.js";
 
+
 initHelpPage();
+
 
 /**
  * Initializes the help page with layout setup

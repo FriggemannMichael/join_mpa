@@ -11,6 +11,7 @@ import {
 } from "../validation/validation-fields.js";
 import { readTaskData } from "./add-task-form-data.js";
 
+
 /**
  * Validates the add-task form data object.
  * @param {Object} data - Task payload.
@@ -19,6 +20,7 @@ import { readTaskData } from "./add-task-form-data.js";
 export function validateTaskData(data) {
   return Boolean(data.title && data.dueDate && data.category && data.priority);
 }
+
 
 /**
  * Validates the form silently and updates the submit button state.
@@ -32,6 +34,7 @@ export function validateFormAndUpdateButton() {
   button.classList.toggle("disabled", !isValid);
 }
 
+
 /**
  * Displays validation errors for all required fields.
  * @param {Object} data - Task payload.
@@ -43,6 +46,7 @@ export function showAllValidationErrors(data) {
   validatePriorityField(data);
 }
 
+
 /**
  * Validates the title field and shows feedback when missing.
  * @param {Object} data - Task payload.
@@ -52,6 +56,7 @@ export function validateTitleField(data) {
   if (title && !data.title)
     validateMinLengthEl(title, 3, "Title", { show: true });
 }
+
 
 /**
  * Validates the due-date field and shows feedback when missing.
@@ -63,6 +68,7 @@ export function validateDueDateField(data) {
     validateDateNotPastEl(dueDate, "Due date", { show: true });
 }
 
+
 /**
  * Validates the category field and shows feedback when missing.
  * @param {Object} data - Task payload.
@@ -72,6 +78,7 @@ export function validateCategoryField(data) {
   if (category && !data.category)
     validateRequiredEl(category, "Category", { show: true });
 }
+
 
 /**
  * Validates the priority group and shows feedback when missing.

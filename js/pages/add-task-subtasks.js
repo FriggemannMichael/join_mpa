@@ -54,25 +54,46 @@ function insertSubtaskIcons(elements) {
 
 
 /**
- * Binds event listeners for the subtask input field
- * @param {Object} elements DOM elements
+ * Attaches all subtask input listeners.
+ * @param {{ subtaskInput: HTMLInputElement, subtaskIcons: HTMLElement }} elements
+ * @returns {void}
  */
 function bindSubtaskInputEvents(elements) {
   const { subtaskInput, subtaskIcons } = elements;
+  bindFocusState(subtaskInput, subtaskIcons);
+  bindInputState(subtaskInput, subtaskIcons);
+  bindEnterKey(subtaskInput);
+}
 
-  subtaskInput.addEventListener("focus", () => {
-    subtaskIcons.classList.add("active");
-  });
 
-  subtaskInput.addEventListener("input", () => {
-    if (subtaskInput.value.trim()) {
-      subtaskIcons.classList.add("active");
-    } else {
-      subtaskIcons.classList.remove("active");
-    }
-  });
+/**
+ * Activates icon state when input gains focus.
+ * @param {HTMLInputElement} input
+ * @param {HTMLElement} icons
+ */
+function bindFocusState(input, icons) {
+  input.addEventListener("focus", () => icons.classList.add("active"));
+}
 
-  subtaskInput.addEventListener("keypress", (e) => {
+
+/**
+ * Toggles icon visibility based on input value.
+ * @param {HTMLInputElement} input
+ * @param {HTMLElement} icons
+ */
+function bindInputState(input, icons) {
+  input.addEventListener("input", () =>
+    icons.classList.toggle("active", !!input.value.trim())
+  );
+}
+
+
+/**
+ * Handles Enter key press to add a subtask.
+ * @param {HTMLInputElement} input
+ */
+function bindEnterKey(input) {
+  input.addEventListener("keypress", (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
       addSubtask();

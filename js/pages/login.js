@@ -7,7 +7,9 @@ import { login, startGuest, readAuthError } from "../common/authService.js";
 import { redirectIfAuthenticated } from "../common/pageGuard.js";
 import { validateEmail } from "../common/emailValidator.js";
 
+
 initLoginPage();
+
 
 /**
  * Initializes the login page with redirect check and UI setup
@@ -21,6 +23,7 @@ async function initLoginPage() {
   runIntroAnimation();
 }
 
+
 /**
  * Binds event listeners for the login form
  */
@@ -29,6 +32,7 @@ function bindLoginForm() {
   if (!form) return;
   form.addEventListener("submit", handleLoginSubmit);
 }
+
 
 /**
  * Binds event listener for the login button
@@ -45,28 +49,60 @@ function bindLoginButton() {
   });
 }
 
+
 /**
- * Handles the login form submission with email validation
- * Validates email format before attempting authentication
+ * Handles login form submission.
+ * Validates credentials, disables the button, and performs login.
  *
- * @param {Event} event The submit event
+ * @async
+ * @param {SubmitEvent} event - The form submit event.
+ * @returns {Promise<void>} Resolves when login flow is completed.
  */
 async function handleLoginSubmit(event) {
   event.preventDefault();
-  const email = readInputValue("email");
-  const password = readInputValue("password");
-
-  // Basic presence check
-  if (!email || !password) {
-    return showLoginStatus("Please enter email & password", true);
-  }
-
-  // Validate email format to catch obvious typos early
-  if (!validateEmail(email)) {
-    return showLoginStatus("Please enter a valid email address", true);
-  }
-
+  const [email, password] = getLoginCredentials();
+  if (!isLoginInputValid(email, password)) return;
   disableButton("loginBtn", true);
+  await tryLogin(email, password);
+  disableButton("loginBtn", false);
+}
+
+
+/**
+ * Reads email and password input values.
+ * @returns {[string, string]} Array containing [email, password].
+ */
+function getLoginCredentials() {
+  return ["email", "password"].map(readInputValue);
+}
+
+
+/**
+ * Validates email and password presence and format.
+ * Shows visible feedback if invalid.
+ *
+ * @param {string} email - Entered email address.
+ * @param {string} password - Entered password.
+ * @returns {boolean} Returns true if both inputs are valid.
+ */
+function isLoginInputValid(email, password) {
+  if (!email || !password)
+    return showLoginStatus("Please enter email & password", true), false;
+  if (!validateEmail(email))
+    return showLoginStatus("Please enter a valid email address", true), false;
+  return true;
+}
+
+
+/**
+ * Attempts login and handles success or error feedback.
+ *
+ * @async
+ * @param {string} email - User email.
+ * @param {string} password - User password.
+ * @returns {Promise<void>} Resolves when login attempt finishes.
+ */
+async function tryLogin(email, password) {
   try {
     await login(email, password);
     sessionStorage.setItem("justLoggedIn", "true");
@@ -74,8 +110,8 @@ async function handleLoginSubmit(event) {
   } catch (err) {
     showLoginStatus(readAuthError(err), true);
   }
-  disableButton("loginBtn", false);
 }
+
 
 /**
  * Binds event listener for the guest button
@@ -91,6 +127,7 @@ function bindGuestButton() {
   });
 }
 
+
 /**
  * Binds event listener for the signup button
  */
@@ -101,6 +138,7 @@ function bindSignupButton() {
     window.location.href = "./signup.html";
   });
 }
+
 
 /**
  * Runs the intro animation for the login page
@@ -117,6 +155,7 @@ function runIntroAnimation() {
   });
 }
 
+
 /**
  * Reads the value of an input field and returns it trimmed
  * @param {string} id The ID of the input element
@@ -127,6 +166,7 @@ function readInputValue(id) {
   return field ? field.value.trim() : "";
 }
 
+
 /**
  * Enables or disables a button
  * @param {string} id The ID of the button element
@@ -136,6 +176,7 @@ function disableButton(id, disabled) {
   const button = document.getElementById(id);
   if (button) button.disabled = disabled;
 }
+
 
 /**
  * Displays a login status message

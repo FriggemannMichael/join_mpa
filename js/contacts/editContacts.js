@@ -96,32 +96,49 @@ export function closeEditOverlay() {
 
 
 /**
- * Opens the edit overlay and fills the form with the selected contact's data.
- * Updates initials and avatar color dynamically based on the contact name.
+ * Opens the edit contact modal and populates all contact fields.
  *
- * @param {Object} contact - The contact object to edit.
- * @param {string} contact.name - The contact's full name.
- * @param {string} contact.email - The contact's email address.
- * @param {string} [contact.phone] - The contact's phone number (optional).
- * @returns {void} Nothing is returned; updates the UI and form fields.
+ * @param {{ name: string, email: string, phone?: string }} contact - Contact data to display.
+ * @returns {void}
  */
 export function openEditModal(contact) {
   openEditOverlay();
+  fillEditForm(contact);
+  updateContactAvatar(contact);
+  showEditMenu();
+}
 
-  document.getElementById("contactName").value = contact.name;
-  document.getElementById("contactEmail").value = contact.email;
-  document.getElementById("contactPhone").value = contact.phone || "";
 
-  const initials = getInitials(contact.name);
-  const color = colorFromString(contact.name);
-  const initialsElem = document.getElementById("contactInitials");
-  if (initialsElem) {
-    initialsElem.textContent = initials;
-    initialsElem.parentElement.style.backgroundColor = color;
-  }
+/**
+ * Fills input fields with contact information.
+ * @param {Object} c - Contact object.
+ */
+function fillEditForm(c) {
+  byId("contactName").value = c.name;
+  byId("contactEmail").value = c.email;
+  byId("contactPhone").value = c.phone || "";
+}
 
+
+/**
+ * Updates contact initials and background color in avatar.
+ * @param {Object} c - Contact object.
+ */
+function updateContactAvatar(c) {
+  const initialsElem = byId("contactInitials");
+  if (!initialsElem) return;
+  initialsElem.textContent = getInitials(c.name);
+  initialsElem.parentElement.style.backgroundColor = colorFromString(c.name);
+}
+
+
+/**
+ * Displays the edit/delete menu if available.
+ * @returns {void}
+ */
+function showEditMenu() {
   try {
-    document.getElementById("editDeleteModal").classList.remove("menu-hidden");
+    byId("editDeleteModal").classList.remove("menu-hidden");
   } catch {}
 }
 

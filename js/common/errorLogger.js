@@ -6,6 +6,7 @@
 
 import { logError, logWarning, logInfo } from './logger.js';
 
+
 /**
  * Error severity levels
  * @readonly
@@ -17,6 +18,7 @@ const ErrorSeverity = {
   WARNING: 'warning',
   INFO: 'info'
 };
+
 
 /**
  * Configuration for the error logger
@@ -31,11 +33,13 @@ const config = {
   environment: 'production'
 };
 
+
 /**
  * Queue for offline error logs
  * @type {Array<Object>}
  */
 let errorQueue = [];
+
 
 /**
  * Initialize the error logger
@@ -46,10 +50,10 @@ function initialize() {
     loadFromLocalStorage();
   }
 
-  // Listen for online/offline events
   window.addEventListener('online', handleOnline);
   window.addEventListener('offline', handleOffline);
 }
+
 
 /**
  * Load error logs from localStorage
@@ -66,29 +70,56 @@ function loadFromLocalStorage() {
   }
 }
 
+
 /**
- * Save error logs to localStorage
+ * Saves recent error logs to localStorage.
+ * Applies size limits and handles quota errors gracefully.
+ *
+ * @returns {void}
  */
 function saveToLocalStorage() {
   if (!config.useLocalStorage) return;
-
   try {
-    // Keep only the most recent entries
-    const logsToStore = errorQueue.slice(-config.maxLocalStorageEntries);
-    localStorage.setItem(config.localStorageKey, JSON.stringify(logsToStore));
+    persistLogs(getRecentLogs());
   } catch (error) {
-    console.error('Failed to save error logs to localStorage:', error);
-    // If quota exceeded, clear old logs and try again
-    if (error.name === 'QuotaExceededError') {
-      errorQueue = errorQueue.slice(-50); // Keep only last 50
-      try {
-        localStorage.setItem(config.localStorageKey, JSON.stringify(errorQueue));
-      } catch (retryError) {
-        console.error('Failed to save even after clearing logs:', retryError);
-      }
-    }
+    handleStorageError(error);
   }
 }
+
+
+/**
+ * Returns the most recent logs limited by config.
+ * @returns {Array} Recent error logs.
+ */
+function getRecentLogs() {
+  return errorQueue.slice(-config.maxLocalStorageEntries);
+}
+
+
+/**
+ * Writes provided logs to localStorage.
+ * @param {Array} logs - Logs to persist.
+ */
+function persistLogs(logs) {
+  localStorage.setItem(config.localStorageKey, JSON.stringify(logs));
+}
+
+
+/**
+ * Handles quota or unexpected storage errors.
+ * @param {Error} error - Thrown storage error.
+ */
+function handleStorageError(error) {
+  console.error("Failed to save error logs to localStorage:", error);
+  if (error.name !== "QuotaExceededError") return;
+  errorQueue = errorQueue.slice(-50);
+  try {
+    persistLogs(errorQueue);
+  } catch (retryError) {
+    console.error("Failed to save even after clearing logs:", retryError);
+  }
+}
+
 
 /**
  * Handle online event - attempt to send queued errors
@@ -100,12 +131,14 @@ function handleOnline() {
   }
 }
 
+
 /**
  * Handle offline event
  */
 function handleOffline() {
   logWarning('ErrorLogger', 'Connection lost, errors will be queued locally');
 }
+
 
 /**
  * Send queued errors to remote service (Sentry)
@@ -129,6 +162,7 @@ async function sendQueuedErrors() {
   saveToLocalStorage();
 }
 
+
 /**
  * Send error to Sentry
  * @param {Object} errorData - Error data to send
@@ -143,6 +177,7 @@ async function sendToSentry(errorData) {
   // For now, this is a placeholder that would use Sentry SDK
   logInfo('ErrorLogger', 'Sentry integration not yet implemented', errorData);
 }
+
 
 /**
  * Create error data object with context
@@ -165,56 +200,65 @@ function createErrorData(error, context = {}) {
     extra: context.extra || {},
     breadcrumbs: context.breadcrumbs || []
   };
-
   return errorData;
 }
 
+
 /**
- * Capture and log an error with context
- * @param {Error|string} error - The error to capture
- * @param {Object} [context={}] - Additional context information
- * @param {string} [context.module] - Module name where error occurred
- * @param {string} [context.severity] - Error severity level
- * @param {Object} [context.user] - User information
- * @param {Object} [context.tags] - Tags for categorizing the error
- * @param {Object} [context.extra] - Additional data
- * @param {Array} [context.breadcrumbs] - Breadcrumb trail
- * @returns {string} Error ID for tracking
+ * Captures an error, logs it, persists locally, and optionally sends to Sentry.
  *
- * @example
- * errorLogger.capture(new Error('Failed to save'), {
- *   module: 'TaskService',
- *   severity: 'error',
- *   tags: { feature: 'tasks', action: 'save' },
- *   extra: { taskId: 123 }
- * });
+ * @param {unknown} error - Any thrown value or Error instance.
+ * @param {{ module?: string } } [context={}] - Optional metadata (e.g., source module).
+ * @returns {string|null} Returns the generated error id, or null if disabled.
  */
 export function capture(error, context = {}) {
   if (!config.enabled) return null;
+  const { errorData, errorId } = buildAndLogError(error, context);
+  queueAndPersist(errorData);
+  maybeSendToSentry(errorData);
+  return errorId;
+}
 
+
+/**
+ * Creates error payload, assigns id, and writes an error log entry.
+ * @param {unknown} error
+ * @param {{ module?: string }} context
+ * @returns {{ errorData: any, errorId: string }}
+ */
+function buildAndLogError(error, context) {
   const errorData = createErrorData(error, context);
   const errorId = generateErrorId();
   errorData.id = errorId;
-
-  // Log to console
-  const module = context.module || 'ErrorLogger';
+  const module = context.module || "ErrorLogger";
   logError(module, errorData.message, error instanceof Error ? error : errorData);
-
-  // Add to queue
-  errorQueue.push(errorData);
-
-  // Save to localStorage
-  saveToLocalStorage();
-
-  // Try to send to Sentry if online and enabled
-  if (config.useSentry && window.navigator.onLine) {
-    sendToSentry(errorData).catch(err => {
-      logWarning('ErrorLogger', 'Failed to send to Sentry', err);
-    });
-  }
-
-  return errorId;
+  return { errorData, errorId };
 }
+
+
+/**
+ * Enqueues error and saves recent entries to localStorage.
+ * @param {any} errorData
+ * @returns {void}
+ */
+function queueAndPersist(errorData) {
+  errorQueue.push(errorData);
+  saveToLocalStorage();
+}
+
+
+/**
+ * Sends error to Sentry when enabled and online.
+ * @param {any} errorData
+ * @returns {void}
+ */
+function maybeSendToSentry(errorData) {
+  if (!(config.useSentry && window.navigator.onLine)) return;
+  sendToSentry(errorData).catch((err) =>
+    logWarning("ErrorLogger", "Failed to send to Sentry", err)
+  );
+}
+
 
 /**
  * Capture an exception (alias for capture with ERROR severity)
@@ -226,6 +270,7 @@ export function captureException(error, context = {}) {
   return capture(error, { ...context, severity: ErrorSeverity.ERROR });
 }
 
+
 /**
  * Capture a message (for non-exception errors)
  * @param {string} message - The message to capture
@@ -235,6 +280,7 @@ export function captureException(error, context = {}) {
 export function captureMessage(message, context = {}) {
   return capture(message, { ...context, severity: context.severity || ErrorSeverity.INFO });
 }
+
 
 /**
  * Add a breadcrumb for error context tracking
@@ -250,6 +296,7 @@ export function addBreadcrumb(breadcrumb) {
   logInfo('ErrorLogger', 'Breadcrumb added', breadcrumb);
 }
 
+
 /**
  * Set user context for error reporting
  * @param {Object} user - User information
@@ -261,6 +308,7 @@ export function setUser(user) {
   config.currentUser = user;
   logInfo('ErrorLogger', 'User context set', { userId: user.id });
 }
+
 
 /**
  * Configure the error logger
@@ -288,6 +336,7 @@ export function configure(options) {
   }
 }
 
+
 /**
  * Get all logged errors from localStorage
  * @returns {Array<Object>} Array of error logs
@@ -295,6 +344,7 @@ export function configure(options) {
 export function getErrorLogs() {
   return [...errorQueue];
 }
+
 
 /**
  * Clear all error logs from localStorage
@@ -307,6 +357,7 @@ export function clearErrorLogs() {
   logInfo('ErrorLogger', 'Error logs cleared');
 }
 
+
 /**
  * Generate a unique error ID
  * @returns {string} Unique error ID
@@ -314,6 +365,7 @@ export function clearErrorLogs() {
 function generateErrorId() {
   return `err_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 }
+
 
 /**
  * Export error logs as JSON for debugging
@@ -323,13 +375,10 @@ export function exportLogs() {
   return JSON.stringify(errorQueue, null, 2);
 }
 
-// Initialize on module load
 initialize();
 
-// Export severity levels for use in other modules
 export { ErrorSeverity };
 
-// Default export with all methods
 export default {
   capture,
   captureException,

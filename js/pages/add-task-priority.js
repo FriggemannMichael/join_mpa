@@ -7,6 +7,7 @@ import { icons } from "../common/svg-template.js";
 import { validatePriorityGroup } from "../validation/validation-fields.js";
 import { updateAddTaskValidationButton } from "../validation/validation-addTask.js";
 
+
 /**
  * Binds event listeners for all priority buttons.
  */
@@ -18,6 +19,7 @@ export function bindPriorityButtons() {
   activateMediumPriority();
 }
 
+
 /**
  * Activates the medium priority button if available.
  */
@@ -27,6 +29,7 @@ function activateMediumPriority() {
   );
   if (medium) setActivePriority(medium);
 }
+
 
 /**
  * Sets a priority button as active and updates validation.
@@ -43,6 +46,7 @@ function setActivePriority(activeButton) {
   updateAddTaskValidationButton?.();
 }
 
+
 /**
  * Updates the visual state of a priority button.
  * @param {HTMLElement} button - Button element to update.
@@ -55,6 +59,7 @@ function updateButtonActiveState(button, isActive) {
   if (icon && priority) updatePriorityIcon(icon, priority, isActive);
 }
 
+
 /**
  * Replaces the icon based on priority state.
  * @param {Element} iconContainer - Current icon container.
@@ -66,6 +71,7 @@ function updatePriorityIcon(iconContainer, priority, isActive) {
     ? getActivePriorityIcon(priority)
     : getInactivePriorityIcon(priority);
 }
+
 
 /**
  * Returns markup for the active priority icon.
@@ -81,6 +87,7 @@ function getActivePriorityIcon(priority) {
   const icon = iconMap[priority] || "";
   return `<div class="prio-icon">${icon}</div>`;
 }
+
 
 /**
  * Returns markup for the inactive priority icon.
@@ -99,6 +106,7 @@ function getInactivePriorityIcon(priority) {
     : "";
   return `<img class="prio-icon" src="${src}" alt="${label} priority" />`;
 }
+
 
 /**
  * Clears all active priority buttons and restores the default selection.

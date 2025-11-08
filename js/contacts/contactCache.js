@@ -87,6 +87,7 @@ document.addEventListener("keydown", (e) => {
     }
 });
 
+
 /**
  * Opens the edit modal for the currently selected contact.
  * Finds the contact from cache and initializes the edit form handler.

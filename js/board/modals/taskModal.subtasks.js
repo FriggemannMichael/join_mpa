@@ -11,16 +11,12 @@ import { updateSubtaskDone } from "../services/tasks.repo.js";
 export function taskModalSubtask(task, taskId) {
   const subtasks = Array.isArray(task?.subtasks) ? task.subtasks : [];
   if (!subtasks.length) return document.createDocumentFragment();
-
   const wrap = document.createElement("div");
   wrap.className = "subtask_task_overlay";
-
   const head = document.createElement("div");
   head.className = "subtask_header_task_overlay";
   head.innerHTML = `<span class="taskModal-label">Subtasks</span>`;
-
   const list = createSubtaskList(taskId, subtasks);
-
   wrap.append(head, list);
   return wrap;
 }
