@@ -6,6 +6,7 @@ import {
   validateEmailEl,
   validatePhoneEl,
 } from "./validation-fields.js";
+import { logWarning } from "../common/logger.js";
 
 /**
  * Initializes validation for the Add Contact form.
@@ -19,7 +20,7 @@ export function initAddContactValidation() {
   const submitBtn = byId("addContactSubmit");
 
   if (!nameEl || !emailEl || !phoneEl || !submitBtn) {
-    console.warn("initAddContactValidation: Required elements not found");
+    logWarning("AddContactValidation", "Required elements not found");
     return null;
   }
 
@@ -63,7 +64,7 @@ export function initEditContactValidation() {
   const submitBtn = byId("contactSaveBtn");
 
   if (!nameEl || !emailEl || !phoneEl || !submitBtn) {
-    console.warn("initEditContactValidation: Required elements not found");
+    logWarning("EditContactValidation", "Required elements not found");
     return null;
   }
 

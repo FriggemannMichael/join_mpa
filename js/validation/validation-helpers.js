@@ -1,15 +1,13 @@
 // common/validation-helpers.js
-const activeListeners = [];
 
+/**
+ * Enables or disables the submit button based on form validity
+ * @param {HTMLButtonElement} btn - The submit button element
+ * @param {boolean} isValid - Whether the form is valid
+ * @returns {void}
+ */
 export function releaseSubmit(btn, isValid) {
   if (!btn) return;
   btn.disabled = !isValid;
   btn.ariaDisabled = String(!isValid);
-}
-
-export function detachValidation() {
-  activeListeners.forEach(({ el, evt, handler }) => {
-    if (el) el.removeEventListener(evt, handler);
-  });
-  activeListeners.length = 0;
 }

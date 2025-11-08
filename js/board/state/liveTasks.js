@@ -1,5 +1,6 @@
 import { subscribeToTasks } from "../../common/tasks.js";
 import { renderBoard } from "../index.js";
+import { logError } from "../../common/logger.js";
 
 let unsubscribeTasks = null;
 
@@ -18,7 +19,7 @@ export function observeTasks() {
       if (unsubscribeTasks) unsubscribeTasks();
     });
   } catch (error) {
-    console.error("Error subscribing to tasks:", error);
+    logError("LiveTasks", "Error subscribing to tasks", error);
     renderBoard([]);
   }
 }

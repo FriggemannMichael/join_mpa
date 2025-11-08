@@ -26,34 +26,69 @@ import { showAlert } from "../../common/alertService.js";
  */
 export async function openEditForm(taskId) {
   try {
-    const section = document.getElementById("taskModal");
-    if (!section) {
-      showAlert("error", 2500, "Edit form could not be opened");
-      return;
-    }
+    const section = getTaskModalSection();
+    if (!section) return;
 
-    const overlay = document.getElementById("taskOverlay");
-    if (overlay?.cleanup) {
-      overlay.cleanup();
-    }
-
-    section.classList.add("task-overlay");
-
-    section.replaceChildren(
-      createHeader(closeTaskOverlay),
-      createBody(),
-      createFooter(() => handleUpdate(taskId, section))
-    );
-
-    await populateAssignees();
-    bindPriorityButtons();
-    await fillEdit(taskId);
-    unmountAddTaskValidation();
-    mountEditTaskValidation(section);
+    cleanupExistingOverlay();
+    renderEditFormUI(taskId, section);
+    await initializeEditFormData(taskId, section);
   } catch (error) {
     showAlert("error", 2500, "Error loading task for editing");
     closeTaskOverlay();
   }
+}
+
+/**
+ * Gets the task modal section element and shows an error if not found.
+ * @returns {HTMLElement|null} The task modal section or null if not found.
+ */
+function getTaskModalSection() {
+  const section = document.getElementById("taskModal");
+  if (!section) {
+    showAlert("error", 2500, "Edit form could not be opened");
+  }
+  return section;
+}
+
+/**
+ * Cleans up any existing overlay cleanup handlers.
+ * @returns {void}
+ */
+function cleanupExistingOverlay() {
+  const overlay = document.getElementById("taskOverlay");
+  if (overlay?.cleanup) {
+    overlay.cleanup();
+  }
+}
+
+/**
+ * Renders the edit form UI structure with header, body, and footer.
+ * @param {string} taskId - ID of the task being edited.
+ * @param {HTMLElement} section - The modal section element.
+ * @returns {void}
+ */
+function renderEditFormUI(taskId, section) {
+  section.classList.add("task-overlay");
+  section.replaceChildren(
+    createHeader(closeTaskOverlay),
+    createBody(),
+    createFooter(() => handleUpdate(taskId, section))
+  );
+}
+
+/**
+ * Initializes form data by populating assignees, priority, task fields, and validation.
+ * @async
+ * @param {string} taskId - ID of the task to load.
+ * @param {HTMLElement} section - The modal section element.
+ * @returns {Promise<void>}
+ */
+async function initializeEditFormData(taskId, section) {
+  await populateAssignees();
+  bindPriorityButtons();
+  await fillEdit(taskId);
+  unmountAddTaskValidation();
+  mountEditTaskValidation(section);
 }
 
 /**
@@ -134,33 +169,71 @@ function setField(scope, selector, value) {
  */
 export async function fillEdit(taskId) {
   try {
-    const task = await loadTask(taskId);
-    if (!task) {
-      showAlert("error", 2500, "Task not found");
-      closeTaskOverlay();
-      return;
-    }
+    const task = await loadTaskOrAbort(taskId);
+    if (!task) return;
 
     const scope = document.getElementById("taskModal");
     if (!scope) return;
 
-    setField(scope, "#taskTitle", task.title);
-    setField(scope, "#taskDescription", task.description);
-    setField(scope, "#taskDueDate", task.dueDate);
-
-    const prio = (task.priority || "").toLowerCase();
-    scope.querySelectorAll(".priority-btn").forEach((btn) => {
-      btn.classList.toggle("active", btn.dataset.priority === prio);
-    });
-
-    preselectAssignees(task.assignees || []);
-    setSubtasksFrom(task.subtasks || []);
-    initSubtaskInput();
-    renderSubtasks();
+    populateFormFields(scope, task);
+    setPriorityButtons(scope, task.priority);
+    initializeAssigneesAndSubtasks(task);
   } catch (error) {
     showAlert("error", 2500, "Error loading task data");
     closeTaskOverlay();
   }
+}
+
+/**
+ * Loads the task by ID and closes the overlay if the task is not found.
+ * @async
+ * @param {string} taskId - The ID of the task to load.
+ * @returns {Promise<Object|null>} The loaded task object or null if not found.
+ */
+async function loadTaskOrAbort(taskId) {
+  const task = await loadTask(taskId);
+  if (!task) {
+    showAlert("error", 2500, "Task not found");
+    closeTaskOverlay();
+  }
+  return task;
+}
+
+/**
+ * Populates the form fields with task data.
+ * @param {HTMLElement} scope - The form container element.
+ * @param {Object} task - The task object containing field values.
+ * @returns {void}
+ */
+function populateFormFields(scope, task) {
+  setField(scope, "#taskTitle", task.title);
+  setField(scope, "#taskDescription", task.description);
+  setField(scope, "#taskDueDate", task.dueDate);
+}
+
+/**
+ * Activates the priority button matching the task priority.
+ * @param {HTMLElement} scope - The form container element.
+ * @param {string} [priority=""] - The priority value to set.
+ * @returns {void}
+ */
+function setPriorityButtons(scope, priority = "") {
+  const prio = priority.toLowerCase();
+  scope.querySelectorAll(".priority-btn").forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.priority === prio);
+  });
+}
+
+/**
+ * Initializes assignees and subtasks for the edit form.
+ * @param {Object} task - The task object with assignees and subtasks.
+ * @returns {void}
+ */
+function initializeAssigneesAndSubtasks(task) {
+  preselectAssignees(task.assignees || []);
+  setSubtasksFrom(task.subtasks || []);
+  initSubtaskInput();
+  renderSubtasks();
 }
 
 /**
@@ -187,33 +260,72 @@ function preselectAssignees(selected) {
  */
 export async function handleUpdate(taskId, root = document) {
   try {
-    if (!taskId) {
-      showAlert("error", 2500, "Invalid task ID");
-      return;
-    }
+    if (!validateTaskId(taskId)) return;
 
     const base = collectTaskData(root);
+    if (!validateTaskTitle(base.title)) return;
 
-    if (!base.title?.trim()) {
-      showAlert("error", 2500, "Task title is required");
-      return;
-    }
-
-    const assignees = readAssignees(root);
-    const subtasks = normalizeSubtasks();
-
-    const task = {
-      ...base,
-      assignees,
-      subtasks,
-      updatedAt: Date.now(),
-    };
-
-    await updateTask(taskId, task);
-    closeTaskOverlay();
+    const updatedTask = buildUpdatedTask(base, root);
+    await saveAndCloseTask(taskId, updatedTask);
   } catch (error) {
     showAlert("error", 2500, "Failed to update task");
   }
+}
+
+/**
+ * Validates that a task ID is present.
+ * @param {string} taskId - The task ID to validate.
+ * @returns {boolean} True if valid, false otherwise.
+ */
+function validateTaskId(taskId) {
+  if (!taskId) {
+    showAlert("error", 2500, "Invalid task ID");
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Validates that the task title is not empty.
+ * @param {string} title - The task title to validate.
+ * @returns {boolean} True if valid, false otherwise.
+ */
+function validateTaskTitle(title) {
+  if (!title?.trim()) {
+    showAlert("error", 2500, "Task title is required");
+    return false;
+  }
+  return true;
+}
+
+/**
+ * Builds the complete updated task object with all fields.
+ * @param {Object} base - Base task data (title, description, dueDate, priority).
+ * @param {Document|HTMLElement} root - The root element containing the form.
+ * @returns {Object} The complete task object ready for saving.
+ */
+function buildUpdatedTask(base, root) {
+  const assignees = readAssignees(root);
+  const subtasks = normalizeSubtasks();
+
+  return {
+    ...base,
+    assignees,
+    subtasks,
+    updatedAt: Date.now(),
+  };
+}
+
+/**
+ * Saves the updated task and closes the overlay.
+ * @async
+ * @param {string} taskId - The task ID to update.
+ * @param {Object} task - The task object to save.
+ * @returns {Promise<void>}
+ */
+async function saveAndCloseTask(taskId, task) {
+  await updateTask(taskId, task);
+  closeTaskOverlay();
 }
 
 /**

@@ -159,67 +159,115 @@ export function bindEditDeleteButtons() {
 
 /**
  * Renders all grouped contacts into the contact list element.
- * Creates section headers for each starting letter and adds all related contacts below.
- *
  * @param {HTMLElement} list - The DOM element where the contacts will be rendered.
  * @param {Object<string, Array<Object>>} grouped - Contacts grouped by their starting letter.
- * @returns {void} Nothing is returned; modifies the DOM directly.
+ * @returns {void}
  */
 export function renderGroupedContacts(list, grouped) {
     Object.keys(grouped)
         .sort()
         .forEach((letter) => {
-            const p = document.createElement("p");
-            p.className = "beginning-letter";
-            p.textContent = letter;
-            list.appendChild(p);
-            const sep = document.createElement("div");
-            sep.className = "contact-seperator";
-            list.appendChild(sep);
-            grouped[letter].forEach((c) => {
-                const item = document.createElement("article");
-                item.className = "contact-person";
-                item.dataset.phone = `tel:${c.phone || ""}`;
-                item.dataset.key = c.key;
-                item.dataset.contactId = c.key;
-                item.tabIndex = 0;
-                item.innerHTML = buildContactMarkup(c);
-                item.addEventListener("click", () => showContactDetail(item, c.key));
-                list.appendChild(item);
-            });
+            renderContactGroup(list, letter, grouped[letter]);
         });
+}
+
+/**
+ * Renders a single contact group with header and contacts.
+ * @param {HTMLElement} list - The list container.
+ * @param {string} letter - The starting letter.
+ * @param {Array<Object>} contacts - Contacts in this group.
+ * @returns {void}
+ */
+function renderContactGroup(list, letter, contacts) {
+    appendGroupHeader(list, letter);
+    appendGroupSeparator(list);
+    contacts.forEach((c) => appendContactItem(list, c));
+}
+
+/**
+ * Appends a group header for a letter.
+ * @param {HTMLElement} list - The list container.
+ * @param {string} letter - The starting letter.
+ * @returns {void}
+ */
+function appendGroupHeader(list, letter) {
+    const p = document.createElement("p");
+    p.className = "beginning-letter";
+    p.textContent = letter;
+    list.appendChild(p);
+}
+
+/**
+ * Appends a separator between header and contacts.
+ * @param {HTMLElement} list - The list container.
+ * @returns {void}
+ */
+function appendGroupSeparator(list) {
+    const sep = document.createElement("div");
+    sep.className = "contact-seperator";
+    list.appendChild(sep);
+}
+
+/**
+ * Appends a single contact item to the list.
+ * @param {HTMLElement} list - The list container.
+ * @param {Object} c - The contact object.
+ * @returns {void}
+ */
+function appendContactItem(list, c) {
+    const item = document.createElement("article");
+    item.className = "contact-person";
+    item.dataset.phone = `tel:${c.phone || ""}`;
+    item.dataset.key = c.key;
+    item.dataset.contactId = c.key;
+    item.tabIndex = 0;
+    item.innerHTML = buildContactMarkup(c);
+    item.addEventListener("click", () => showContactDetail(item, c.key));
+    list.appendChild(item);
 }
 
 
 /**
  * Renders the detailed contact view with full contact information.
- * Replaces the placeholder, injects the contact detail template,
- * and triggers a fade-in animation for smooth display.
- *
- * @param {Object} data - The contact data used to render the detail view.
- * @param {string} data.name - The contact's full name.
- * @param {string} data.email - The contact's email address.
- * @param {string} [data.phone] - The contact's phone number (optional).
- * @param {string} data.initials - The generated initials for the avatar.
- * @param {string} data.color - The avatar background color (HSL or HEX).
- * @returns {void} Nothing is returned; updates the DOM directly.
+ * @param {Object} data - The contact data.
+ * @returns {void}
  */
 export function renderContactDetail({ name, email, phone, initials, color }) {
-    const placeholder = document.querySelector(".contact-detail-placeholder");
     const info = document.querySelector(".contact-info");
     if (!info) return;
+
+    hidePlaceholder();
+    injectContactTemplate(info, { name, email, phone, initials, color });
+    triggerFadeInAnimation(info);
+}
+
+/**
+ * Hides the contact detail placeholder.
+ * @returns {void}
+ */
+function hidePlaceholder() {
+    const placeholder = document.querySelector(".contact-detail-placeholder");
     if (placeholder) placeholder.style.display = "none";
+}
 
-    info.innerHTML = contactDetailTemplate({
-        name,
-        email,
-        phone,
-        initials,
-        color,
-    });
+/**
+ * Injects the contact detail template into the info container.
+ * @param {HTMLElement} info - The contact info container.
+ * @param {Object} data - The contact data.
+ * @returns {void}
+ */
+function injectContactTemplate(info, data) {
+    info.innerHTML = contactDetailTemplate(data);
+}
 
-    info.classList.remove("fade-in"); 
-    void info.offsetWidth; 
+/**
+ * Triggers a fade-in animation for the contact info.
+ * @param {HTMLElement} info - The contact info element.
+ * @returns {void}
+ */
+function triggerFadeInAnimation(info) {
+    info.classList.remove("fade-in");
+    void info.offsetWidth;
     info.classList.add("fade-in");
     info.style.display = "block";
 }

@@ -293,18 +293,44 @@ function getFieldValidator(id) {
 }
 
 /**
- * Validate single field with comprehensive email validation
- * @param {string} id Field ID
- * @param {{showErrors?: boolean, markTouch?: boolean}} opts Validation options
- * @returns {boolean} True if field is valid
+ * Validates a single signup field with comprehensive validation logic.
+ * @param {string} id - Field ID to validate.
+ * @param {{showErrors?: boolean, markTouch?: boolean}} opts - Validation options.
+ * @returns {boolean} True if field is valid.
  */
 function validateSingleField(id, opts = {}) {
   const { showErrors = false, markTouch = false } = opts;
   const validator = getFieldValidator(id);
   const { ok, msg } = validator();
+
   if (markTouch) markTouched(id);
+
+  const shouldShow = shouldShowValidationError(id, showErrors);
+  applyValidationFeedback(id, ok, msg, shouldShow);
+
+  return ok;
+}
+
+/**
+ * Determines if validation errors should be displayed for a field.
+ * @param {string} id - The field ID.
+ * @param {boolean} showErrors - Force display of errors.
+ * @returns {boolean} True if errors should be shown.
+ */
+function shouldShowValidationError(id, showErrors) {
   const touched = getContainer(id)?.dataset.touched === "true";
-  const shouldShow = showErrors || touched;
+  return showErrors || touched;
+}
+
+/**
+ * Applies validation feedback to a field (state and message).
+ * @param {string} id - Field ID.
+ * @param {boolean} ok - Validation result.
+ * @param {string} msg - Error message.
+ * @param {boolean} shouldShow - Whether to show errors.
+ * @returns {void}
+ */
+function applyValidationFeedback(id, ok, msg, shouldShow) {
   if (shouldShow) {
     setFieldState(id, ok);
     setFieldFaultMsg(id, ok ? "" : msg);
@@ -312,7 +338,6 @@ function validateSingleField(id, opts = {}) {
     setFieldState(id, true);
     setFieldFaultMsg(id, "");
   }
-  return ok;
 }
 
 
@@ -350,28 +375,58 @@ function bindPasswordToggles() {
 
 /**
  * Validates all signup input fields individually with visual feedback.
- * Runs validation for name, email, password, and password confirmation fields.
- *
  * @returns {boolean} `true` if all fields are valid, otherwise `false`.
  */
 function validateAllFields() {
-  const nameOk = validateSingleField("signupName", {
-    showErrors: true,
-    markTouch: true,
-  });
-  const emailOk = validateSingleField("signupEmail", {
-    showErrors: true,
-    markTouch: true,
-  });
-  const passwordOk = validateSingleField("signupPassword", {
-    showErrors: true,
-    markTouch: true,
-  });
-  const confirmOk = validateSingleField("signupPasswordConfirm", {
-    showErrors: true,
-    markTouch: true,
-  });
+  const nameOk = validateNameField();
+  const emailOk = validateEmailFieldWithFeedback();
+  const passwordOk = validatePasswordFieldWithFeedback();
+  const confirmOk = validatePasswordConfirmFieldWithFeedback();
   return nameOk && emailOk && passwordOk && confirmOk;
+}
+
+/**
+ * Validates the name field with visual feedback.
+ * @returns {boolean} True if name is valid.
+ */
+function validateNameField() {
+  return validateSingleField("signupName", {
+    showErrors: true,
+    markTouch: true,
+  });
+}
+
+/**
+ * Validates the email field with visual feedback.
+ * @returns {boolean} True if email is valid.
+ */
+function validateEmailFieldWithFeedback() {
+  return validateSingleField("signupEmail", {
+    showErrors: true,
+    markTouch: true,
+  });
+}
+
+/**
+ * Validates the password field with visual feedback.
+ * @returns {boolean} True if password is valid.
+ */
+function validatePasswordFieldWithFeedback() {
+  return validateSingleField("signupPassword", {
+    showErrors: true,
+    markTouch: true,
+  });
+}
+
+/**
+ * Validates the password confirmation field with visual feedback.
+ * @returns {boolean} True if password confirmation matches.
+ */
+function validatePasswordConfirmFieldWithFeedback() {
+  return validateSingleField("signupPasswordConfirm", {
+    showErrors: true,
+    markTouch: true,
+  });
 }
 
 
@@ -392,28 +447,50 @@ function checkPrivacyAccepted() {
 
 /**
  * Handles the full signup registration process.
- * Disables the submit button, registers the user, clears validation messages,
- * and redirects to the summary page upon success.  
- * Displays an error message if registration fails.
- *
  * @async
  * @returns {Promise<void>} Resolves when the registration process is completed.
  */
 async function submitRegistration() {
   disableSubmit(true);
   try {
-    await registerUser(
-      val("signupName"),
-      val("signupEmail"),
-      val("signupPassword")
-    );
-    clearFaultMsgs();
-    window.location.href = "./summary.html";
+    await performUserRegistration();
+    handleRegistrationSuccess();
   } catch (err) {
-    setSignupStatus(readAuthError(err), true);
+    handleRegistrationError(err);
   } finally {
     disableSubmit(false);
   }
+}
+
+/**
+ * Performs the actual user registration with Firebase.
+ * @async
+ * @returns {Promise<void>}
+ */
+async function performUserRegistration() {
+  await registerUser(
+    val("signupName"),
+    val("signupEmail"),
+    val("signupPassword")
+  );
+}
+
+/**
+ * Handles successful user registration.
+ * @returns {void}
+ */
+function handleRegistrationSuccess() {
+  clearFaultMsgs();
+  window.location.href = "./summary.html";
+}
+
+/**
+ * Handles registration errors by displaying appropriate messages.
+ * @param {Error} err - The error object.
+ * @returns {void}
+ */
+function handleRegistrationError(err) {
+  setSignupStatus(readAuthError(err), true);
 }
 
 
@@ -436,20 +513,51 @@ async function handleSignupSubmit(event) {
 
 /**
  * Validates all signup form fields for correctness and completeness.
- * Checks name format, email validity, password length, and password confirmation.
- *
  * @returns {boolean} `true` if all form fields are valid, otherwise `false`.
  */
 function checkAllFieldsValid() {
+  const okName = isNameValid();
+  const okEmail = isEmailValid();
+  const okPwLen = isPasswordLengthValid();
+  const okConfirm = isPasswordConfirmValid();
+  return okName && okEmail && okPwLen && okConfirm;
+}
+
+/**
+ * Checks if the name field is valid.
+ * @returns {boolean} True if name matches the pattern.
+ */
+function isNameValid() {
   const name = val("signupName");
+  return !!name && RX_NAME.test(name);
+}
+
+/**
+ * Checks if the email field is valid.
+ * @returns {boolean} True if email is valid.
+ */
+function isEmailValid() {
   const email = val("signupEmail");
+  return !!email && validateEmail(email);
+}
+
+/**
+ * Checks if the password meets minimum length.
+ * @returns {boolean} True if password is at least 6 characters.
+ */
+function isPasswordLengthValid() {
+  const password = val("signupPassword");
+  return password.length >= 6;
+}
+
+/**
+ * Checks if the password confirmation matches and is valid.
+ * @returns {boolean} True if passwords match and are valid.
+ */
+function isPasswordConfirmValid() {
   const password = val("signupPassword");
   const confirm = val("signupPasswordConfirm");
-  const okName = !!name && RX_NAME.test(name);
-  const okEmail = !!email && validateEmail(email);
-  const okPwLen = password.length >= 6;
-  const okConfirm = confirm.length >= 6 && password === confirm;
-  return okName && okEmail && okPwLen && okConfirm;
+  return confirm.length >= 6 && password === confirm;
 }
 
 

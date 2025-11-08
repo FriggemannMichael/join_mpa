@@ -9,7 +9,7 @@ import {
   validateRequiredEl,
 } from "../validation/validation-fields.js";
 import { updateAddTaskValidationButton } from "../validation/validation-addTask.js";
-import {showAlert} from "../common/alertService.js";
+import { showAlert } from "../common/alertService.js";
 
 /**
  * Binds event listeners for priority buttons
@@ -189,66 +189,120 @@ function readActivePriority() {
 }
 
 /**
- * Clears the form and resets all validation states
- * Removes all error messages, resets field borders, and clears all values
+ * Clears the form and resets all validation states.
+ * @returns {void}
  */
 function clearTaskForm() {
   const pageContent = document.getElementById("pageContent");
-
   clearAllValidationErrors(pageContent);
+  resetFormFields();
+  resetCategoryPlaceholder();
+  validateFormAndUpdateButton();
+  showAlert("clearForm");
+}
 
+/**
+ * Resets all form fields and selections.
+ * @returns {void}
+ */
+function resetFormFields() {
   clearTextFields();
   clearCheckboxes();
   clearPriorityButtons();
   updateAssigneeSelection();
   subtasks.length = 0;
   renderSubtasks();
-
-  const categoryPlaceholder = document.getElementById("selected-category-placeholder");
-  if (categoryPlaceholder) {
-    categoryPlaceholder.textContent = "Select category";
-  }
-
-  validateFormAndUpdateButton();
-  showAlert("clearForm")
 }
 
 /**
- * Clears all validation error states from the form
- * @param {HTMLElement} container Container element
+ * Resets the category placeholder to default text.
+ * @returns {void}
+ */
+function resetCategoryPlaceholder() {
+  const categoryPlaceholder = document.getElementById(
+    "selected-category-placeholder"
+  );
+  if (categoryPlaceholder) {
+    categoryPlaceholder.textContent = "Select category";
+  }
+}
+
+/**
+ * Clears all validation error states from the form.
+ * @param {HTMLElement} container - Container element.
+ * @returns {void}
  */
 function clearAllValidationErrors(container) {
   if (!container) return;
+  clearInputFaults(container);
+  clearFaultMessages(container);
+  clearFormGroupFaults(container);
+}
 
+/**
+ * Removes the input-fault class from all elements.
+ * @param {HTMLElement} container - Container element.
+ * @returns {void}
+ */
+function clearInputFaults(container) {
   container.querySelectorAll(".input-fault").forEach((el) => {
     el.classList.remove("input-fault");
   });
+}
 
+/**
+ * Clears all fault messages and their visibility.
+ * @param {HTMLElement} container - Container element.
+ * @returns {void}
+ */
+function clearFaultMessages(container) {
   container.querySelectorAll(".field-fault-msg").forEach((msg) => {
     msg.textContent = "";
     msg.classList.remove("visible");
   });
+}
 
+/**
+ * Removes the input-fault class from all form groups.
+ * @param {HTMLElement} container - Container element.
+ * @returns {void}
+ */
+function clearFormGroupFaults(container) {
   container.querySelectorAll(".form-group").forEach((group) => {
     group.classList.remove("input-fault");
   });
 }
 
 /**
- * Clears all text fields in the form
+ * Clears all text fields in the form.
+ * @returns {void}
  */
 function clearTextFields() {
-  document
-    .querySelectorAll(
-      "#pageContent input[type='text'], #pageContent input[type='date'], #pageContent textarea, #pageContent select"
-    )
-    .forEach((field) => {
-      if (field instanceof HTMLSelectElement) {
-        field.selectedIndex = 0;
-      } else {
-        field.value = "";
-      }
-    });
+  const fields = getFormInputFields();
+  fields.forEach(clearFieldValue);
+}
+
+/**
+ * Gets all form input fields (text, date, textarea, select).
+ * @returns {NodeListOf<Element>} List of form fields.
+ */
+function getFormInputFields() {
+  return document.querySelectorAll(
+    "#pageContent input[type='text'], #pageContent input[type='date'], #pageContent textarea, #pageContent select"
+  );
+}
+
+/**
+ * Clears the value of a single field.
+ * @param {HTMLElement} field - The field to clear.
+ * @returns {void}
+ */
+function clearFieldValue(field) {
+  if (field instanceof HTMLSelectElement) {
+    field.selectedIndex = 0;
+  } else {
+    field.value = "";
+  }
 }
 
 /**
@@ -279,48 +333,113 @@ function clearPriorityButtons() {
 }
 
 /**
- * Handles the creation of a task
+ * Handles the creation of a task.
+ * @async
+ * @returns {Promise<void>}
  */
 async function handleTaskCreate() {
   try {
     const data = readTaskData();
 
     if (!validateTaskData(data)) {
-      showAllValidationErrors(data);
-      setTaskStatus("Please fill all required fields (incl. Priority)", true);
+      handleValidationFailure(data);
       return;
     }
 
-    const createBtn = document.getElementById("taskCreateBtn");
-    if (createBtn) createBtn.disabled = true;
-
-    await createTask(data);
-    setTaskStatus("Task successfully created!", false);
-    clearTaskForm();
-    setTimeout(() => {
-      window.location.href = "board.html";}, 100);
-  } catch (error) {  }
+    disableCreateButton();
+    await saveTaskAndRedirect(data);
+  } catch (error) {}
 }
 
 /**
- * Shows visual validation errors for all required fields
- * @param {Object} data Task data to validate
+ * Handles validation failure by showing errors.
+ * @param {Object} data - Task data.
+ * @returns {void}
+ */
+function handleValidationFailure(data) {
+  showAllValidationErrors(data);
+  setTaskStatus("Please fill all required fields (incl. Priority)", true);
+}
+
+/**
+ * Disables the create button to prevent double submission.
+ * @returns {void}
+ */
+function disableCreateButton() {
+  const createBtn = document.getElementById("taskCreateBtn");
+  if (createBtn) createBtn.disabled = true;
+}
+
+/**
+ * Saves the task and redirects to the board page.
+ * @async
+ * @param {Object} data - Task data to save.
+ * @returns {Promise<void>}
+ */
+async function saveTaskAndRedirect(data) {
+  await createTask(data);
+  setTaskStatus("Task successfully created!", false);
+  clearTaskForm();
+  setTimeout(() => {
+    window.location.href = "board.html";
+  }, 1800);
+}
+
+/**
+ * Shows visual validation errors for all required fields.
+ * @param {Object} data - Task data to validate.
+ * @returns {void}
  */
 function showAllValidationErrors(data) {
-  const titleEl = document.getElementById("taskTitle");
-  const dateEl = document.getElementById("taskDueDate");
-  const catEl = document.getElementById("category");
-  const prioGrp = document.querySelector(".priority-buttons");
+  validateTitleField(data);
+  validateDueDateField(data);
+  validateCategoryField(data);
+  validatePriorityField(data);
+}
 
+/**
+ * Validates and shows error for the title field.
+ * @param {Object} data - Task data.
+ * @returns {void}
+ */
+function validateTitleField(data) {
+  const titleEl = document.getElementById("taskTitle");
   if (titleEl && !data.title) {
     validateMinLengthEl(titleEl, 3, "Title", { show: true });
   }
+}
+
+/**
+ * Validates and shows error for the due date field.
+ * @param {Object} data - Task data.
+ * @returns {void}
+ */
+function validateDueDateField(data) {
+  const dateEl = document.getElementById("taskDueDate");
   if (dateEl && !data.dueDate) {
     validateDateNotPastEl(dateEl, "Due date", { show: true });
   }
+}
+
+/**
+ * Validates and shows error for the category field.
+ * @param {Object} data - Task data.
+ * @returns {void}
+ */
+function validateCategoryField(data) {
+  const catEl = document.getElementById("category");
   if (catEl && !data.category) {
     validateRequiredEl(catEl, "Category", { show: true });
   }
+}
+
+/**
+ * Validates and shows error for the priority field.
+ * @param {Object} data - Task data.
+ * @returns {void}
+ */
+function validatePriorityField(data) {
+  const prioGrp = document.querySelector(".priority-buttons");
   if (prioGrp && !data.priority) {
     validatePriorityGroup(prioGrp, "Priority", { show: true });
   }

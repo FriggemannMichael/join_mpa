@@ -137,11 +137,7 @@ function updateSummaryMetrics(tasks) {
 
 /**
  * Calculates key task metrics for the summary dashboard.
- * Groups tasks by status and priority, and determines the next upcoming deadline.
- *
  * @param {Array<Object>} tasks - The list of task objects to analyze.
- * @param {string} tasks[].status - The current status of the task (e.g., "toDo", "done").
- * @param {string} tasks[].priority - The priority level of the task (e.g., "urgent", "medium").
  * @returns {{
  *   todo: number,
  *   done: number,
@@ -150,25 +146,38 @@ function updateSummaryMetrics(tasks) {
  *   urgent: number,
  *   total: number,
  *   upcomingDeadline: string|null
- * }} An object containing the computed metrics and the nearest deadline, if available.
+ * }} The computed metrics.
  */
 function calculateTaskMetrics(tasks) {
-  const todoTasks = tasks.filter((t) => t.status === "toDo");
-  const doneTasks = tasks.filter((t) => t.status === "done");
-  const inProgressTasks = tasks.filter((t) => t.status === "inProgress");
-  const awaitingFeedbackTasks = tasks.filter(
-    (t) => t.status === "awaitFeedback"
-  );
-  const urgentTasks = tasks.filter((t) => t.priority === "urgent");
   return {
-    todo: todoTasks.length,
-    done: doneTasks.length,
-    inProgress: inProgressTasks.length,
-    awaitingFeedback: awaitingFeedbackTasks.length,
-    urgent: urgentTasks.length,
+    todo: countTasksByStatus(tasks, "toDo"),
+    done: countTasksByStatus(tasks, "done"),
+    inProgress: countTasksByStatus(tasks, "inProgress"),
+    awaitingFeedback: countTasksByStatus(tasks, "awaitFeedback"),
+    urgent: countTasksByPriority(tasks, "urgent"),
     total: tasks.length,
     upcomingDeadline: findUpcomingDeadline(tasks),
   };
+}
+
+/**
+ * Counts tasks by status.
+ * @param {Array<Object>} tasks - Task list.
+ * @param {string} status - Status to filter by.
+ * @returns {number} Count of matching tasks.
+ */
+function countTasksByStatus(tasks, status) {
+  return tasks.filter((t) => t.status === status).length;
+}
+
+/**
+ * Counts tasks by priority.
+ * @param {Array<Object>} tasks - Task list.
+ * @param {string} priority - Priority to filter by.
+ * @returns {number} Count of matching tasks.
+ */
+function countTasksByPriority(tasks, priority) {
+  return tasks.filter((t) => t.priority === priority).length;
 }
 
 
@@ -208,8 +217,6 @@ function formatDeadlineDate(dateString) {
 
 /**
  * Updates all summary dashboard elements with the latest task metrics.
- * Inserts numeric values and displays the nearest upcoming deadline if available.
- *
  * @param {{
  *   todo: number,
  *   done: number,
@@ -218,20 +225,37 @@ function formatDeadlineDate(dateString) {
  *   urgent: number,
  *   total: number,
  *   upcomingDeadline: string|null
- * }} metrics - The calculated task metrics used to update the UI.
- * @returns {void} Nothing is returned; updates the DOM directly.
+ * }} metrics - The calculated task metrics.
+ * @returns {void}
  */
 function updateSummaryDisplay(metrics) {
+  updateMetricElements(metrics);
+  updateDeadlineElement(metrics.upcomingDeadline);
+}
+
+/**
+ * Updates all metric display elements with values.
+ * @param {Object} metrics - The metrics object.
+ * @returns {void}
+ */
+function updateMetricElements(metrics) {
   updateElementById("amount_toDo", metrics.todo);
   updateElementById("amount_done", metrics.done);
   updateElementById("amount_urgent", metrics.urgent);
   updateElementById("amount_tasks", metrics.total);
   updateElementById("amount_inProgress", metrics.inProgress);
   updateElementById("amount_awaitingFeedback", metrics.awaitingFeedback);
+}
+
+/**
+ * Updates the deadline display element.
+ * @param {string|null} deadline - The upcoming deadline or null.
+ * @returns {void}
+ */
+function updateDeadlineElement(deadline) {
   const deadlineElement = document.getElementById("amount_deadline");
   if (deadlineElement) {
-    deadlineElement.textContent =
-      metrics.upcomingDeadline || "No upcoming deadlines";
+    deadlineElement.textContent = deadline || "No upcoming deadlines";
   }
 }
 

@@ -12,6 +12,7 @@ import {
 import { insertTemplates } from "./templateLoader.js";
 import { provisionActiveUser } from "./userProvisioning.js";
 import { icons } from "./svg-template.js";
+import { logWarning } from "./logger.js";
 
 /**
  * Loads layout templates and initializes the page structure
@@ -83,9 +84,9 @@ function getProfileElements() {
  * @returns {boolean} `true` if all elements exist, otherwise `false`.
  */
 function validateProfileElements({ icon, menu, overlay }) {
-  if (!icon) console.warn("Layout: profileIcon not found");
-  if (!menu) console.warn("Layout: profileMenu not found");
-  if (!overlay) console.warn("Layout: profileMenuBackdrop not found");
+  if (!icon) logWarning("Layout", "profileIcon not found");
+  if (!menu) logWarning("Layout", "profileMenu not found");
+  if (!overlay) logWarning("Layout", "profileMenuBackdrop not found");
   return icon && menu && overlay;
 }
 
@@ -247,11 +248,33 @@ function setupAuthBasedNavigation() {
   const legal = isLegalPath(window.location.pathname);
   const authRequired = document.querySelectorAll("[data-auth-required]");
   const guestOnly = document.querySelectorAll("[data-guest-only]");
+
   if (isLoggedIn) {
-    toggleNavLinks(authRequired, true);
-    toggleNavLinks(guestOnly, false);
-    return;
+    showAuthenticatedNav(authRequired, guestOnly);
+  } else {
+    showGuestNav(authRequired, guestOnly, legal);
   }
+}
+
+/**
+ * Shows navigation for authenticated users.
+ * @param {NodeListOf<Element>} authRequired - Auth-required links.
+ * @param {NodeListOf<Element>} guestOnly - Guest-only links.
+ * @returns {void}
+ */
+function showAuthenticatedNav(authRequired, guestOnly) {
+  toggleNavLinks(authRequired, true);
+  toggleNavLinks(guestOnly, false);
+}
+
+/**
+ * Shows navigation for guest users.
+ * @param {NodeListOf<Element>} authRequired - Auth-required links.
+ * @param {NodeListOf<Element>} guestOnly - Guest-only links.
+ * @param {boolean} legal - Whether current page is legal.
+ * @returns {void}
+ */
+function showGuestNav(authRequired, guestOnly, legal) {
   toggleNavLinks(authRequired, false);
   toggleNavLinks(guestOnly, legal);
   if (legal) renderLoginIcon();
@@ -267,23 +290,42 @@ function renderLoginIcon() {
 }
 
 /**
- * Hides the profile icon on Legal/Privacy/Help pages when no user is logged in
+ * Hides the profile icon on Legal/Privacy/Help pages when no user is logged in.
+ * @returns {void}
  */
 function hideProfileIconOnLegalPagesIfNotLoggedIn() {
-  const user = getActiveUser();
-  const isLoggedIn = !!user;
-
-  const currentPage = getPageName(window.location.pathname);
-  const isLegalPage =
-    currentPage === "legal.html" ||
-    currentPage === "privacy.html" ||
-    currentPage === "help.html";
-
+  const isLoggedIn = !!getActiveUser();
+  const isLegalPage = checkIfLegalPage();
   const profileIcon = document.getElementById("profileIcon");
 
-  if (!isLoggedIn && isLegalPage && profileIcon) {
+  if (!profileIcon) return;
+  updateProfileIconVisibility(profileIcon, isLoggedIn, isLegalPage);
+}
+
+/**
+ * Checks if the current page is a legal page.
+ * @returns {boolean} True if current page is legal/privacy/help.
+ */
+function checkIfLegalPage() {
+  const currentPage = getPageName(window.location.pathname);
+  return (
+    currentPage === "legal.html" ||
+    currentPage === "privacy.html" ||
+    currentPage === "help.html"
+  );
+}
+
+/**
+ * Updates the profile icon visibility based on auth and page.
+ * @param {HTMLElement} profileIcon - The profile icon element.
+ * @param {boolean} isLoggedIn - Whether user is logged in.
+ * @param {boolean} isLegalPage - Whether current page is legal.
+ * @returns {void}
+ */
+function updateProfileIconVisibility(profileIcon, isLoggedIn, isLegalPage) {
+  if (!isLoggedIn && isLegalPage) {
     profileIcon.style.display = "none";
-  } else if (profileIcon) {
+  } else {
     profileIcon.style.display = "";
   }
 }

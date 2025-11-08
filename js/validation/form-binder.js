@@ -1,4 +1,5 @@
 import { releaseSubmit } from "./validation-helpers.js";
+import { logWarning } from "../common/logger.js";
 
 /**
  * Encapsulates all field listeners and centrally controls the submit button.
@@ -14,7 +15,7 @@ export function bindForm({ fields, submitBtn, validateAllSilent, signal }) {
   fields.forEach((f) => {
     const { el, events, validateVisible } = f;
     if (!el) {
-      console.warn("bindForm: Element is null, skip field binding");
+      logWarning("FormBinder", "Element is null, skip field binding");
       return;
     }
     events.forEach((evt) => {

@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Error Logger Demo</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background: white;
+      border-radius: 8px;
+      padding: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      border-bottom: 3px solid #4CAF50;
+      padding-bottom: 10px;
+    }
+    .section {
+      margin: 30px 0;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #fafafa;
+    }
+    .section h2 {
+      color: #555;
+      margin-top: 0;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 5px;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    button.warning {
+      background-color: #ff9800;
+    }
+    button.warning:hover {
+      background-color: #e68900;
+    }
+    button.error {
+      background-color: #f44336;
+    }
+    button.error:hover {
+      background-color: #da190b;
+    }
+    button.info {
+      background-color: #2196F3;
+    }
+    button.info:hover {
+      background-color: #0b7dda;
+    }
+    .log-output {
+      background-color: #1e1e1e;
+      color: #d4d4d4;
+      padding: 15px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+      margin-top: 15px;
+    }
+    .log-entry {
+      margin: 5px 0;
+      padding: 5px;
+      border-left: 3px solid #4CAF50;
+      padding-left: 10px;
+    }
+    .log-entry.error {
+      border-left-color: #f44336;
+      color: #ff6b6b;
+    }
+    .log-entry.warning {
+      border-left-color: #ff9800;
+      color: #ffd700;
+    }
+    .log-entry.info {
+      border-left-color: #2196F3;
+      color: #87ceeb;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .stat-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 36px;
+      font-weight: bold;
+    }
+    .stat-label {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    input[type="text"] {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      width: 200px;
+      margin: 5px;
+    }
+    .online-status {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 4px;
+      font-weight: bold;
+      margin-left: 10px;
+    }
+    .online-status.online {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .online-status.offline {
+      background-color: #f44336;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Error Logger Demo</h1>
+    <p>
+      Status: <span class="online-status online" id="onlineStatus">Online</span>
+    </p>
+
+    <!-- Test Errors Section -->
+    <div class="section">
+      <h2>Test Error Logging</h2>
+      <p>Klicken Sie auf die Buttons, um verschiedene Error-Typen zu testen:</p>
+
+      <button class="error" onclick="testFatalError()">Fatal Error</button>
+      <button class="error" onclick="testStandardError()">Standard Error</button>
+      <button class="warning" onclick="testWarning()">Warning</button>
+      <button class="info" onclick="testInfo()">Info Message</button>
+      <button onclick="testWithContext()">Error mit Kontext</button>
+      <button onclick="testException()">Exception werfen</button>
+    </div>
+
+    <!-- User Context Section -->
+    <div class="section">
+      <h2>User Context</h2>
+      <input type="text" id="userId" placeholder="User ID" value="12345">
+      <input type="text" id="userEmail" placeholder="Email" value="demo@example.com">
+      <input type="text" id="userName" placeholder="Username" value="demo_user">
+      <button onclick="setUserContext()">Set User Context</button>
+    </div>
+
+    <!-- Breadcrumbs Section -->
+    <div class="section">
+      <h2>Breadcrumbs</h2>
+      <button onclick="addNavigationBreadcrumb()">Navigation Breadcrumb</button>
+      <button onclick="addActionBreadcrumb()">User Action Breadcrumb</button>
+      <button onclick="addApiBreadcrumb()">API Call Breadcrumb</button>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="section">
+      <h2>Statistics</h2>
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-number" id="totalErrors">0</div>
+          <div class="stat-label">Total Errors Logged</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="queuedErrors">0</div>
+          <div class="stat-label">Queued in LocalStorage</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error Logs Section -->
+    <div class="section">
+      <h2>Error Logs</h2>
+      <button onclick="refreshLogs()">Refresh Logs</button>
+      <button class="warning" onclick="exportLogsToFile()">Export Logs</button>
+      <button class="error" onclick="clearLogs()">Clear All Logs</button>
+      <div class="log-output" id="logOutput">
+        <div class="log-entry info">Warten auf Logs...</div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import errorLogger from './js/common/errorLogger.js';
+
+    // Make errorLogger globally available for demo
+    window.errorLogger = errorLogger;
+
+    // Configure error logger for demo
+    errorLogger.configure({
+      enabled: true,
+      useLocalStorage: true,
+      maxLocalStorageEntries: 100,
+      environment: 'development',
+      useSentry: false
+    });
+
+    // Test Functions
+    window.testFatalError = function() {
+      errorLogger.capture(new Error('Critical system failure'), {
+        module: 'DemoApp',
+        severity: errorLogger.ErrorSeverity.FATAL,
+        tags: { test: true, type: 'fatal' },
+        extra: { timestamp: Date.now() }
+      });
+      updateStats();
+    };
+
+    window.testStandardError = function() {
+      errorLogger.captureException(new Error('Something went wrong'), {
+        module: 'DemoService',
+        tags: { test: true, type: 'error' }
+      });
+      updateStats();
+    };
+
+    window.testWarning = function() {
+      errorLogger.capture('This is a warning message', {
+        module: 'DemoWarning',
+        severity: errorLogger.ErrorSeverity.WARNING,
+        tags: { test: true, type: 'warning' }
+      });
+      updateStats();
+    };
+
+    window.testInfo = function() {
+      errorLogger.captureMessage('This is an informational message', {
+        module: 'DemoInfo',
+        severity: errorLogger.ErrorSeverity.INFO,
+        tags: { test: true, type: 'info' }
+      });
+      updateStats();
+    };
+
+    window.testWithContext = function() {
+      errorLogger.capture(new Error('Error with rich context'), {
+        module: 'ContextDemo',
+        severity: errorLogger.ErrorSeverity.ERROR,
+        tags: {
+          feature: 'demo',
+          action: 'test',
+          priority: 'high'
+        },
+        extra: {
+          taskId: 999,
+          userId: 123,
+          timestamp: new Date().toISOString(),
+          browser: navigator.userAgent
+        }
+      });
+      updateStats();
+    };
+
+    window.testException = function() {
+      try {
+        // Simuliere einen Fehler
+        const obj = null;
+        obj.someMethod(); // Dies wird einen TypeError werfen
+      } catch (error) {
+        errorLogger.captureException(error, {
+          module: 'ExceptionDemo',
+          tags: { caught: true, type: 'null-reference' }
+        });
+        updateStats();
+      }
+    };
+
+    window.setUserContext = function() {
+      const userId = document.getElementById('userId').value;
+      const userEmail = document.getElementById('userEmail').value;
+      const userName = document.getElementById('userName').value;
+
+      errorLogger.setUser({
+        id: userId,
+        email: userEmail,
+        username: userName
+      });
+
+      alert('User Context gesetzt!');
+    };
+
+    window.addNavigationBreadcrumb = function() {
+      errorLogger.addBreadcrumb({
+        message: 'User navigated to demo page',
+        category: 'navigation',
+        level: 'info',
+        data: { page: 'error-logger-demo' }
+      });
+      alert('Navigation Breadcrumb hinzugefügt');
+    };
+
+    window.addActionBreadcrumb = function() {
+      errorLogger.addBreadcrumb({
+        message: 'User clicked test button',
+        category: 'user-action',
+        level: 'info',
+        data: { action: 'click', element: 'button' }
+      });
+      alert('User Action Breadcrumb hinzugefügt');
+    };
+
+    window.addApiBreadcrumb = function() {
+      errorLogger.addBreadcrumb({
+        message: 'API call to /api/test',
+        category: 'api',
+        level: 'info',
+        data: { endpoint: '/api/test', method: 'GET' }
+      });
+      alert('API Breadcrumb hinzugefügt');
+    };
+
+    window.refreshLogs = function() {
+      const logs = errorLogger.getErrorLogs();
+      const logOutput = document.getElementById('logOutput');
+
+      if (logs.length === 0) {
+        logOutput.innerHTML = '<div class="log-entry info">Keine Logs vorhanden</div>';
+        return;
+      }
+
+      logOutput.innerHTML = logs.map(log => {
+        const severity = log.severity || 'info';
+        return `
+          <div class="log-entry ${severity}">
+            <strong>[${log.timestamp}]</strong>
+            [${log.severity.toUpperCase()}]
+            [${log.module}]
+            ${log.message}
+            ${log.extra && Object.keys(log.extra).length > 0 ?
+              `<br><small>Extra: ${JSON.stringify(log.extra)}</small>` : ''}
+          </div>
+        `;
+      }).join('');
+    };
+
+    window.exportLogsToFile = function() {
+      const jsonLogs = errorLogger.exportLogs();
+      const blob = new Blob([jsonLogs], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `error-logs-${new Date().toISOString()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    };
+
+    window.clearLogs = function() {
+      if (confirm('Wirklich alle Logs löschen?')) {
+        errorLogger.clearErrorLogs();
+        updateStats();
+        refreshLogs();
+      }
+    };
+
+    window.updateStats = function() {
+      const logs = errorLogger.getErrorLogs();
+      document.getElementById('totalErrors').textContent = logs.length;
+      document.getElementById('queuedErrors').textContent = logs.length;
+      refreshLogs();
+    };
+
+    // Online/Offline Status
+    window.addEventListener('online', () => {
+      const status = document.getElementById('onlineStatus');
+      status.textContent = 'Online';
+      status.className = 'online-status online';
+    });
+
+    window.addEventListener('offline', () => {
+      const status = document.getElementById('onlineStatus');
+      status.textContent = 'Offline';
+      status.className = 'online-status offline';
+    });
+
+    // Initial load
+    updateStats();
+
+    // Log demo start
+    errorLogger.captureMessage('Error Logger Demo gestartet', {
+      module: 'DemoApp',
+      severity: errorLogger.ErrorSeverity.INFO
+    });
+    updateStats();
+  </script>
+</body>
+</html>

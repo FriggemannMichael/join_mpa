@@ -8,6 +8,7 @@ import { confirmModal } from "../board/modals/confirmModal.js";
 import { closeContactDetailOverlay, openContactDetailOverlay } from "./detailOverlay.js"
 import { readValue } from "./helper.js"
 import { showAlert } from "../common/alertService.js";
+import { logError } from "../common/logger.js";
 
 let contactsCache = [];
 let selectedContactKey = null;
@@ -151,7 +152,7 @@ async function deleteSelectedContact() {
     showAlert("deleteContact")
     closeContactDetailOverlay()
   } catch (error) {
-    console.error("Error deleting contact:", error);
+    logError("ContactCache", "Error deleting contact", error);
   }
 }
 

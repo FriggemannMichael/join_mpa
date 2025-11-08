@@ -13,22 +13,44 @@ import {
 } from "./add-task-assignees-ui.js";
 
 /**
- * Loads and populates the assignee selection list with contacts
+ * Loads and populates the assignee selection list with contacts.
+ * @async
+ * @returns {Promise<void>}
  */
 export async function populateAssignees() {
-  const header = document.getElementById("assigneeHeader");
-  const dropdown = document.getElementById("assignee-dropdown");
-  if (!header || !dropdown) return;
+  const elements = getAssigneeElements();
+  if (!elements) return;
 
   setAssigneeLoading(true);
-
   const currentUser = getActiveUser();
+
   if (!currentUser) {
     setAssigneeLoading(false);
     return;
   }
 
-  await loadAssigneesFromDatabase(dropdown, currentUser.uid);
+  await loadAndBindAssignees(elements.dropdown, currentUser.uid);
+}
+
+/**
+ * Gets the assignee dropdown elements.
+ * @returns {{header: HTMLElement, dropdown: HTMLElement}|null}
+ */
+function getAssigneeElements() {
+  const header = document.getElementById("assigneeHeader");
+  const dropdown = document.getElementById("assignee-dropdown");
+  return header && dropdown ? { header, dropdown } : null;
+}
+
+/**
+ * Loads assignees from database and binds events.
+ * @async
+ * @param {HTMLElement} dropdown - Dropdown element.
+ * @param {string} uid - User ID.
+ * @returns {Promise<void>}
+ */
+async function loadAndBindAssignees(dropdown, uid) {
+  await loadAssigneesFromDatabase(dropdown, uid);
   bindAssigneeEvents();
 }
 
@@ -221,7 +243,8 @@ function bindOutsideClickEvent(dropdown) {
 }
 
 /**
- * Toggles the visibility of the assignee dropdown
+ * Toggles the visibility of the assignee dropdown.
+ * @returns {void}
  */
 function toggleAssigneeDropdown() {
   const header = document.getElementById("assigneeHeader");
@@ -230,16 +253,31 @@ function toggleAssigneeDropdown() {
 
   const isOpening = dropdown?.classList.contains("d-none");
 
+  toggleDropdownVisibility(header, dropdown);
+  handleDropdownStateChange(isOpening, searchInput);
+}
+
+/**
+ * Toggles the dropdown visibility classes.
+ * @param {HTMLElement|null} header - Header element.
+ * @param {HTMLElement|null} dropdown - Dropdown element.
+ * @returns {void}
+ */
+function toggleDropdownVisibility(header, dropdown) {
   dropdown?.classList.toggle("d-none");
   header?.classList.toggle("open");
+}
 
-  // Focus on search field when opening
+/**
+ * Handles state changes when dropdown opens or closes.
+ * @param {boolean} isOpening - Whether dropdown is opening.
+ * @param {HTMLElement|null} searchInput - Search input element.
+ * @returns {void}
+ */
+function handleDropdownStateChange(isOpening, searchInput) {
   if (isOpening && searchInput) {
     setTimeout(() => searchInput.focus(), 100);
-  }
-
-  // Clear search field when closing
-  if (!isOpening && searchInput) {
+  } else if (!isOpening && searchInput) {
     searchInput.value = "";
     filterAssignees("");
   }

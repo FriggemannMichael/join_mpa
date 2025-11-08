@@ -1,0 +1,354 @@
+{
+  "analysisDate": "2025-11-08",
+  "summary": {
+    "totalJavaScriptFiles": 71,
+    "filesWithExports": 42,
+    "entryPointScripts": 10,
+    "totalNamedExports": 138,
+    "unusedExportsRemoved": 10,
+    "filesRemoved": 2
+  },
+  "removedFiles": [
+    {
+      "file": "js/common/formvalidation.js",
+      "reason": "UNUSED - All 4 exports (byName, showFaultMsg, clearFaultMsg, toggleFaultMsg) were not imported anywhere. Legacy validation code replaced by newer validation modules.",
+      "status": "removed"
+    },
+    {
+      "file": "js/common/formReset.js",
+      "reason": "UNUSED - All 6 exports (resetFormCompletely, clearAllValidationStates, resetAriaAttributes, clearCustomErrorMessages, clearFieldValidation, resetFormAndButton) were not imported. Each page implements its own reset logic.",
+      "status": "removed"
+    }
+  ],
+  "modifiedFiles": [
+    {
+      "file": "js/validation/validation-helpers.js",
+      "removedExports": ["detachValidation"],
+      "reason": "Function was never imported or used. The activeListeners array it depended on was also removed.",
+      "status": "cleaned"
+    },
+    {
+      "file": "js/common/emailValidator.js",
+      "removedExports": ["getEmailErrorMessage"],
+      "reason": "Function was never imported. Only validateEmail is used throughout the codebase.",
+      "status": "cleaned"
+    },
+    {
+      "file": "js/validation/validation-core.js",
+      "removedExports": ["rules"],
+      "reason": "Exported constant object was never imported. Only the report function is used.",
+      "status": "cleaned"
+    }
+  ],
+  "falsePositives": [
+    {
+      "file": "js/pages/add-task-form.js",
+      "exports": ["toggleCategoryDropdown", "selectCategory"],
+      "reason": "Exposed via window object for HTML onclick handlers in add-task.html",
+      "status": "valid - HTML integration"
+    },
+    {
+      "file": "js/board/index.js",
+      "exports": ["renderBoard"],
+      "reason": "Entry point function called by board initialization",
+      "status": "valid - entry point"
+    },
+    {
+      "file": "js/common/authService.js",
+      "exports": ["getActiveUser", "startGuest", "authReady"],
+      "reason": "Re-exports from session.js - used as central auth facade",
+      "status": "valid - re-export pattern"
+    },
+    {
+      "file": "js/common/logger.js",
+      "exports": ["logError", "logWarning", "logInfo", "logDebug", "configureLogger"],
+      "reason": "Imported by 5 files - recently added logging infrastructure",
+      "status": "valid - utility module"
+    },
+    {
+      "file": "js/contacts/addContacts.js",
+      "exports": ["renderAddContactModalIcons"],
+      "reason": "Called by contacts.js page initialization",
+      "status": "valid - template rendering"
+    },
+    {
+      "file": "js/pages/contacts.js",
+      "exports": ["resetAddContactForm", "saveContactToFirebase"],
+      "reason": "Used by addContacts.js and editContacts.js modules",
+      "status": "valid - cross-module dependencies"
+    }
+  ],
+  "activeExportsByCategory": {
+    "authenticationAndSession": {
+      "count": 12,
+      "files": [
+        "js/common/firebase.js",
+        "js/common/session.js",
+        "js/common/authService.js",
+        "js/common/pageGuard.js"
+      ],
+      "exports": [
+        "auth",
+        "db",
+        "isUserLoggedIn",
+        "getActiveUser",
+        "startGuestSession",
+        "authReady",
+        "onAuthChange",
+        "ensureAuthenticated",
+        "readAuthError",
+        "getInitials",
+        "guardPage",
+        "redirectIfAuthenticated"
+      ]
+    },
+    "validation": {
+      "count": 18,
+      "files": [
+        "js/validation/validation-core.js",
+        "js/validation/validation-config.js",
+        "js/validation/validation-helpers.js",
+        "js/validation/validation-fields.js",
+        "js/validation/valdiation-ui.js",
+        "js/validation/form-binder.js",
+        "js/validation/validation-addTask.js",
+        "js/validation/validation-addContacts.js",
+        "js/common/emailValidator.js"
+      ],
+      "exports": [
+        "report",
+        "DEFAULT_MIN_LENGTH",
+        "releaseSubmit",
+        "validateRequiredEl",
+        "validateMinLengthEl",
+        "validateDateNotPastEl",
+        "validatePriorityGroup",
+        "validateEmailEl",
+        "validatePhoneEl",
+        "byId",
+        "showError",
+        "clearError",
+        "toggleError",
+        "bindForm",
+        "mountAddTaskValidation",
+        "unmountAddTaskValidation",
+        "updateAddTaskValidationButton",
+        "mountEditTaskValidation",
+        "initAddContactValidation",
+        "initEditContactValidation",
+        "validateEmail"
+      ]
+    },
+    "uiAndLayout": {
+      "count": 8,
+      "files": [
+        "js/common/layout.js",
+        "js/common/alertService.js",
+        "js/common/templateLoader.js",
+        "js/common/svg-template.js"
+      ],
+      "exports": [
+        "bootLayout",
+        "showAlert",
+        "insertTemplates",
+        "icons",
+        "call",
+        "person",
+        "mail",
+        "check",
+        "close"
+      ]
+    },
+    "boardComponents": {
+      "count": 45,
+      "files": [
+        "js/board/components/card.js",
+        "js/board/components/assignees.js",
+        "js/board/components/priority.js",
+        "js/board/components/subtasks.js",
+        "js/board/components/columns.js",
+        "js/board/components/placeholders.js",
+        "js/board/templates/board-templates.js",
+        "js/board/state/columns.js",
+        "js/board/state/liveTasks.js",
+        "js/board/features/search.js",
+        "js/board/handlers/interactions.js",
+        "js/board/dnd/dragdrop.js",
+        "js/board/modals/confirmModal.js",
+        "js/board/modals/taskModal.view.js",
+        "js/board/modals/taskModal.events.js",
+        "js/board/modals/taskModal.subtasks.js",
+        "js/board/modals/taskModal.assignee.js",
+        "js/board/modals/addTaskModal.js",
+        "js/board/modals/editTask.js",
+        "js/board/services/tasks.repo.js",
+        "js/board/utils.js",
+        "js/board/index.js"
+      ],
+      "exports": [
+        "buildTaskCard",
+        "buildAssigneeGroup",
+        "buildPriority",
+        "buildSubtaskProgress",
+        "renderColumn",
+        "buildEmptyState",
+        "boardTemplates",
+        "buildColumnsConfig",
+        "groupTasksByStatus",
+        "observeTasks",
+        "initBoardSearch",
+        "bindColumnShortcuts",
+        "enableCardInteractions",
+        "confirmModal",
+        "renderTaskModal",
+        "taskModalEventlistener",
+        "taskModalSubtask",
+        "renderAssignees",
+        "initAddTask",
+        "openEditForm",
+        "loadTask",
+        "updateTask",
+        "deleteTask",
+        "updateSubtaskDone",
+        "getContactsMap",
+        "getCurrentUser",
+        "colorFromString",
+        "ScrollLock",
+        "getColorForInitials",
+        "getInitials",
+        "setTaskStatus",
+        "closeTaskOverlay",
+        "clearModal",
+        "showBoardAlert",
+        "formatDate",
+        "setGlobalButtonsDisabled",
+        "renderBoard"
+      ]
+    },
+    "contactsManagement": {
+      "count": 22,
+      "files": [
+        "js/contacts/templates.js",
+        "js/contacts/contactCache.js",
+        "js/contacts/addContacts.js",
+        "js/contacts/editContacts.js",
+        "js/contacts/detailOverlay.js",
+        "js/contacts/responsiveHandler.js",
+        "js/contacts/helper.js",
+        "js/pages/contacts.js"
+      ],
+      "exports": [
+        "contactDetailTemplate",
+        "showContactDetail",
+        "handleEditContact",
+        "renderContactList",
+        "openAddContactModal",
+        "addModalCloseListeners",
+        "bindAddContactControls",
+        "updateAddContactAvatar",
+        "renderAddContactModalIcons",
+        "closeEditOverlay",
+        "openEditModal",
+        "bindEditContactControls",
+        "openContactDetailOverlay",
+        "closeContactDetailOverlay",
+        "initEditDeleteRespMenu",
+        "clearActiveContacts",
+        "readValue",
+        "renderAddButton",
+        "groupContactsByLetter",
+        "bindEditDeleteButtons",
+        "renderGroupedContacts",
+        "renderContactDetail",
+        "resetContactForm",
+        "insertCloseBtn",
+        "saveContactToFirebase",
+        "resetAddContactForm"
+      ]
+    },
+    "addTaskPages": {
+      "count": 20,
+      "files": [
+        "js/pages/add-task-form.js",
+        "js/pages/add-task-subtasks.js",
+        "js/pages/add-task-assignees.js",
+        "js/pages/add-task-assignees-ui.js"
+      ],
+      "exports": [
+        "bindPriorityButtons",
+        "bindActionButtons",
+        "readValue",
+        "toggleCategoryDropdown",
+        "selectCategory",
+        "subtasks",
+        "initSubtaskInput",
+        "clearSubtaskInput",
+        "addSubtask",
+        "renderSubtasks",
+        "deleteSubtask",
+        "editSubtask",
+        "setSubtasksFrom",
+        "populateAssignees",
+        "getInitials",
+        "handleOutsideDropdownClick",
+        "renderAssigneeDropdown",
+        "filterAssignees",
+        "updateAssigneeSelection"
+      ]
+    },
+    "utilities": {
+      "count": 8,
+      "files": [
+        "js/common/tasks.js",
+        "js/common/database.js",
+        "js/common/errorMap.js",
+        "js/common/userProvisioning.js",
+        "js/common/logger.js"
+      ],
+      "exports": [
+        "subscribeToTasks",
+        "loadFirebaseDatabase",
+        "mapFirebaseError",
+        "logError",
+        "logWarning",
+        "logInfo",
+        "logDebug",
+        "configureLogger"
+      ]
+    }
+  },
+  "architectureObservations": [
+    "Clean module separation: common/, validation/, board/, contacts/, pages/",
+    "Entry point scripts (10 files) act as page orchestrators without exports",
+    "Only 2 functions exposed globally via window object for HTML onclick handlers",
+    "Re-export pattern used in authService.js as central facade for session management",
+    "Legacy validation code successfully removed (formvalidation.js, formReset.js)",
+    "Logger module recently added - good infrastructure for debugging",
+    "Template rendering pattern used extensively for HTML generation",
+    "Board module is most complex with 21 files and 45 exports"
+  ],
+  "recommendations": {
+    "completed": [
+      "✅ Removed unused formvalidation.js (4 exports)",
+      "✅ Removed unused formReset.js (6 exports)",
+      "✅ Cleaned validation-helpers.js (removed detachValidation)",
+      "✅ Cleaned emailValidator.js (removed getEmailErrorMessage)",
+      "✅ Cleaned validation-core.js (removed rules constant)"
+    ],
+    "futureConsiderations": [
+      "Consider consolidating duplicate getInitials() implementations (found in authService.js, board/utils.js, add-task-assignees.js)",
+      "Consider consolidating duplicate readValue() implementations (found in contacts/helper.js, pages/add-task-form.js)",
+      "Convert splashScreen.js from non-module to ES6 module for consistency",
+      "Replace inline onclick handlers with addEventListener to eliminate window object exposure",
+      "Consider using barrel exports (index.js) for commonly used utility groups"
+    ]
+  },
+  "testingRecommendations": [
+    "Test all form validation flows (signup, add task, add contact, edit contact)",
+    "Test board drag-and-drop functionality",
+    "Test contact management (add, edit, delete, display)",
+    "Test authentication flows (login, logout, guest mode)",
+    "Test add task modal and edit task functionality",
+    "Verify no console errors appear after unused code removal"
+  ]
+}
