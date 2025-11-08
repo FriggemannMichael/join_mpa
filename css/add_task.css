@@ -543,6 +543,7 @@ label {
   transform: rotate(180deg);
 }
 
+.category-dropdown,
 .multiselect-dropdown {
   background-color: var(--white);
   border: 1px solid var(--accent-color);
@@ -747,17 +748,6 @@ label {
 .category-select-header.input-fault:focus,
 .category-select-header.input-fault:active {
   border-color: #e60026 !important;
-}
-
-.category-dropdown {
-  background-color: var(--white);
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  box-shadow: 0 2px 6px var(--shadow-color);
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  z-index: 10;
 }
 
 .category-option {
