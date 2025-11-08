@@ -86,7 +86,9 @@ function closeActiveOverlay() {
  * @param {KeyboardEvent} event
  */
 function handleKeyboardActivation(event) {
-  const trigger = event.target.closest("[data-overlay-open],[data-overlay-close]");
+  const trigger = event.target.closest(
+    "[data-overlay-open],[data-overlay-close]"
+  );
   if (!trigger) return;
   event.preventDefault();
   trigger.click();
