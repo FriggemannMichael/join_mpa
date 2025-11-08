@@ -5,6 +5,8 @@ import { handleDeleteContact } from "./contactCache.js";
 import {resetContactForm, } from "../pages/contacts.js"
 
 
+const byId = (id) => document.getElementById(id);
+
 let editContactValidator = null;
 
 
