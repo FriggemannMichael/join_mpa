@@ -14,41 +14,12 @@ import { logWarning } from "../common/logger.js";
  * @returns {Object|null} Controller with updateSubmit and detach methods, or null if elements not found.
  */
 export function initAddContactValidation() {
-  const nameEl = byId("addContactName");
-  const emailEl = byId("addContactEmail");
-  const phoneEl = byId("addContactPhone");
-  const submitBtn = byId("addContactSubmit");
-
-  if (!nameEl || !emailEl || !phoneEl || !submitBtn) {
-    logWarning("AddContactValidation", "Required elements not found");
-    return null;
-  }
-
-  const showName = () => {
-    const okReq = validateRequiredEl(nameEl, "Name", { show: true });
-    const okLen = validateMinLengthEl(nameEl, 2, "Name", { show: true });
-    return okReq && okLen;
-  };
-
-  const showEmail = () => validateEmailEl(emailEl, "E-Mail", { show: true });
-  const showPhone = () => validatePhoneEl(phoneEl, "Telefon", { show: true });
-
-  const validateAllSilent = () => {
-    const okNameReq = validateRequiredEl(nameEl, "Name", { show: false });
-    const okNameLen = validateMinLengthEl(nameEl, 2, "Name", { show: false });
-    const okEmail = validateEmailEl(emailEl, "E-Mail", { show: false });
-    const okPhone = validatePhoneEl(phoneEl, "Telefon", { show: false });
-    return okNameReq && okNameLen && okEmail && okPhone;
-  };
-
-  return bindForm({
-    submitBtn,
-    validateAllSilent,
-    fields: [
-      { el: nameEl, events: ["blur", "input"], validateVisible: showName },
-      { el: emailEl, events: ["blur"], validateVisible: showEmail },
-      { el: phoneEl, events: ["blur"], validateVisible: showPhone },
-    ],
+  return initContactValidation({
+    nameId: "addContactName",
+    emailId: "addContactEmail",
+    phoneId: "addContactPhone",
+    submitId: "addContactSubmit",
+    logKey: "AddContactValidation",
   });
 }
 
@@ -58,40 +29,64 @@ export function initAddContactValidation() {
  * @returns {Object|null} Controller with updateSubmit and detach methods, or null if elements not found.
  */
 export function initEditContactValidation() {
-  const nameEl = byId("contactName");
-  const emailEl = byId("contactEmail");
-  const phoneEl = byId("contactPhone");
-  const submitBtn = byId("contactSaveBtn");
+  return initContactValidation({
+    nameId: "contactName",
+    emailId: "contactEmail",
+    phoneId: "contactPhone",
+    submitId: "contactSaveBtn",
+    logKey: "EditContactValidation",
+  });
+}
 
-  if (!nameEl || !emailEl || !phoneEl || !submitBtn) {
-    logWarning("EditContactValidation", "Required elements not found");
+function initContactValidation(ids) {
+  const nodes = getContactNodes(ids);
+  if (!nodes) {
+    logWarning(ids.logKey, "Required elements not found");
     return null;
   }
+  const visible = createVisibleHandlers(nodes);
+  return bindForm(buildContactConfig(nodes, visible));
+}
 
-  const showName = () => {
-    const okReq = validateRequiredEl(nameEl, "Name", { show: true });
-    const okLen = validateMinLengthEl(nameEl, 2, "Name", { show: true });
-    return okReq && okLen;
+function getContactNodes({ nameId, emailId, phoneId, submitId }) {
+  const nodes = {
+    name: byId(nameId),
+    email: byId(emailId),
+    phone: byId(phoneId),
+    submit: byId(submitId),
   };
+  return Object.values(nodes).every(Boolean) ? nodes : null;
+}
 
-  const showEmail = () => validateEmailEl(emailEl, "E-Mail", { show: true });
-  const showPhone = () => validatePhoneEl(phoneEl, "Telefon", { show: true });
-
-  const validateAllSilent = () => {
-    const okNameReq = validateRequiredEl(nameEl, "Name", { show: false });
-    const okNameLen = validateMinLengthEl(nameEl, 2, "Name", { show: false });
-    const okEmail = validateEmailEl(emailEl, "E-Mail", { show: false });
-    const okPhone = validatePhoneEl(phoneEl, "Telefon", { show: false });
-    return okNameReq && okNameLen && okEmail && okPhone;
+function createVisibleHandlers({ name, email, phone }) {
+  return {
+    name: () => validateNameField(name, true),
+    email: () => validateEmailEl(email, "E-Mail", { show: true }),
+    phone: () => validatePhoneEl(phone, "Telefon", { show: true }),
   };
+}
 
-  return bindForm({
-    submitBtn,
-    validateAllSilent,
+function buildContactConfig(nodes, visible) {
+  return {
+    submitBtn: nodes.submit,
+    validateAllSilent: createSilentValidator(nodes),
     fields: [
-      { el: nameEl, events: ["blur", "input"], validateVisible: showName },
-      { el: emailEl, events: ["blur"], validateVisible: showEmail },
-      { el: phoneEl, events: ["blur"], validateVisible: showPhone },
+      { el: nodes.name, events: ["blur", "input"], validateVisible: visible.name },
+      { el: nodes.email, events: ["blur"], validateVisible: visible.email },
+      { el: nodes.phone, events: ["blur"], validateVisible: visible.phone },
     ],
-  });
+  };
+}
+
+function createSilentValidator(nodes) {
+  return () =>
+    validateNameField(nodes.name, false) &&
+    validateEmailEl(nodes.email, "E-Mail", { show: false }) &&
+    validatePhoneEl(nodes.phone, "Telefon", { show: false });
+}
+
+function validateNameField(el, show) {
+  const requiredOk = validateRequiredEl(el, "Name", { show });
+  const lengthOk = validateMinLengthEl(el, 2, "Name", { show });
+  return requiredOk && lengthOk;
 }
