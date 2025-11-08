@@ -8,20 +8,14 @@ export function buildSubtaskProgress(subtasks = []) {
   if (!Array.isArray(subtasks) || !subtasks.length) return null;
   const done = subtasks.filter(st => st.done).length;
   const total = subtasks.length;
-
   const { box, bar } = buildProgressBar(done, total);
-
   const label = document.createElement("span");
   label.className = "subtasks_label";
   label.textContent = `${done}/${total} Subtasks`;
-
   const tooltip = total
-    ? `${done} of ${total} subtasks completed (${Math.round((done / total) * 100)}%)`
-    : "No subtasks available";
-
+    ? `${done} of ${total} subtasks completed (${Math.round((done / total) * 100)}%)`: "No subtasks available";
   box.setAttribute("data-tooltip", tooltip);
   bar.setAttribute("aria-label", tooltip);
-
   box.append(bar, label);
   return box;
 }

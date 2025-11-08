@@ -1,12 +1,8 @@
-import { renderTaskModal } from "../modals/taskModal.view.js";
-import { db } from "../../common/firebase.js";
-import {
-  ref,
-  update,
-} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
-import { loadTask } from "../services/tasks.repo.js";
+import {openModal, updateTaskIfMoved} from "./dragdrop.handlers.js"
+import {setupTouchBehavior, applyDragStyles, buildGhost, buildPlaceholders,cleanupDragStyles, findDropTarget, autoScrollOnEdge, resetPointerState} from "./dragdrop.ui.js"
 
 let currentDrag = null;
+
 
 /**
  * Enables drag and pointer interactions for a task card.
@@ -18,21 +14,6 @@ export function enableCardInteractions(card) {
   bindPointerEvents(card);
 }
 
-/**
- * Sets up touch action behavior for mobile and desktop views.
- * @param {HTMLElement} card - The task card element.
- * @returns {void}
- */
-function setupTouchBehavior(card) {
-  const MOBILE_BREAKPOINT = 900;
-  const updateTouchAction = () => {
-    const isMobileView = window.innerWidth < MOBILE_BREAKPOINT;
-    card.style.touchAction = isMobileView ? "none" : "auto";
-    card.style.webkitUserSelect = isMobileView ? "none" : "auto";
-  };
-  updateTouchAction();
-  window.addEventListener("resize", updateTouchAction);
-}
 
 /**
  * Binds pointer event listeners for drag and drop.
@@ -51,6 +32,7 @@ function bindPointerEvents(card) {
   card.addEventListener("pointerup", (e) => onUp(card, e, s, HOLD_MS));
   card.addEventListener("pointercancel", (e) => onUp(card, e, s, HOLD_MS));
 }
+
 
 /**
  * Initializes and returns the default drag state object.
@@ -71,6 +53,7 @@ function initDragState() {
   };
 }
 
+
 /**
  * Handles the pointer down event on a task card.
  * @param {HTMLElement} card - The task card element being interacted with.
@@ -85,6 +68,7 @@ function onDown(card, e, s, HOLD_MS) {
   initializeDragState(e, s);
   handleTouchDown(card, e, s, HOLD_MS);
 }
+
 
 /**
  * Initializes the drag state with pointer event data.
@@ -103,6 +87,7 @@ function initializeDragState(e, s) {
   s.pointerId = e.pointerId;
 }
 
+
 /**
  * Handles touch-specific pointer down behavior.
  * @param {HTMLElement} card - The task card element.
@@ -118,6 +103,7 @@ function handleTouchDown(card, e, s, HOLD_MS) {
   }
   if (s.isTouch) startHoldTimer(card, e, s, HOLD_MS);
 }
+
 
 /**
  * Handles pointer movement during drag interactions.
@@ -141,6 +127,7 @@ function onMove(card, e, s, THRESHOLD) {
   moveDragging(card, e);
 }
 
+
 /**
  * Handles pointer movement before drag has started.
  * @param {HTMLElement} card - The task card element.
@@ -159,6 +146,7 @@ function handlePreDragMovement(card, e, s, THRESHOLD) {
     startDrag(card, e, s);
   }
 }
+
 
 /**
  * Handles the pointer up event after a drag or tap.
@@ -182,6 +170,7 @@ async function onUp(card, e, s, HOLD_MS) {
   resetPointerState(card, e, s);
 }
 
+
 /**
  * Starts a hold timer to trigger dragging after a delay.
  * Used for touch interactions before initiating a drag.
@@ -199,6 +188,7 @@ function startHoldTimer(card, e, s, HOLD_MS) {
   }, HOLD_MS);
 }
 
+
 /**
  * Clears the active hold timer in the drag state.
  * @param {Object} s - The current drag state object.
@@ -211,6 +201,7 @@ function clearHoldTimer(s) {
   }
 }
 
+
 /**
  * Checks if the event belongs to the same active pointer.
  * @param {PointerEvent} e - The current pointer event.
@@ -220,6 +211,7 @@ function clearHoldTimer(s) {
 function samePointer(e, s) {
   return s.isPointerDown && e.pointerId === s.pointerId;
 }
+
 
 /**
  * Checks if the pointer movement exceeds the defined threshold.
@@ -234,6 +226,7 @@ function exceededThreshold(e, s, t) {
   );
 }
 
+
 /**
  * Determines if the pointer interaction should be treated as a tap.
  * @param {Object} s - The current drag state object.
@@ -243,6 +236,7 @@ function exceededThreshold(e, s, t) {
 function isTap(s, HOLD_MS) {
   return Date.now() - s.startTime < HOLD_MS;
 }
+
 
 /**
  * Starts the drag operation for the given card.
@@ -263,41 +257,6 @@ function startDrag(card, e, s) {
   });
 }
 
-/**
- * Resets the pointer and drag state after interaction ends.
- * Releases pointer capture and restores default touch settings.
- * @param {HTMLElement} card - The task card element being reset.
- * @param {PointerEvent} e - The pointer event triggering the reset.
- * @param {Object} s - The current drag state object.
- * @returns {void}
- */
-function resetPointerState(card, e, s) {
-  try {
-    card.releasePointerCapture?.(e.pointerId);
-    s.dragging = false;
-    s.moved = false;
-    s.isPointerDown = false;
-    s.pointerId = null;
-
-    if (window.innerWidth >= 900) {
-      card.style.touchAction = "auto";
-      card.style.webkitUserSelect = "auto";
-    }
-  } catch {}
-}
-
-/**
- * Opens the task modal for the given card.
- * Loads the task data and renders the modal view.
- * @async
- * @param {HTMLElement} card - The task card element that was tapped or clicked.
- * @returns {Promise<void>}
- */
-async function openModal(card) {
-  const id = card.dataset.taskId;
-  const task = await loadTask(id);
-  await renderTaskModal(id, task);
-}
 
 /**
  * Starts the visual drag process for a task card.
@@ -315,19 +274,6 @@ function startDragging(card, e) {
   card.classList.add("dragging");
 }
 
-/**
- * Applies visual drag styles to the card and body.
- * @param {HTMLElement} card - The task card.
- * @param {PointerEvent} e - The pointer event.
- * @returns {void}
- */
-function applyDragStyles(card, e) {
-  card.setPointerCapture(e.pointerId);
-  card.style.touchAction = "none";
-  card.style.cursor = "grabbing";
-  document.body.classList.add("no-select");
-  document.body.style.cursor = "grabbing";
-}
 
 /**
  * Creates and displays the ghost element for dragging.
@@ -345,6 +291,7 @@ function createGhostElement(card, e, rect, originColumn) {
   currentDrag = { card, ghost, originColumn, offsetX, offsetY };
   document.body.appendChild(ghost);
 }
+
 
 /**
  * Updates the dragged card's ghost position during movement.
@@ -369,6 +316,7 @@ function moveDragging(card, e) {
   autoScrollOnEdge(e);
 }
 
+
 /**
  * Ends the drag operation and updates task placement.
  * @param {HTMLElement} card - The dragged task card element.
@@ -385,90 +333,6 @@ function endDragging(card, e) {
   deleteDragSettings(card);
 }
 
-/**
- * Cleans up all visual drag styles from the page.
- * @returns {void}
- */
-function cleanupDragStyles() {
-  document.body.classList.remove("no-select");
-  document.querySelectorAll(".task_column.active").forEach((col) => {
-    col.classList.remove("active");
-  });
-  document.querySelectorAll(".no_task_to_do").forEach((el) => {
-    el.style.display = "";
-  });
-}
-
-/**
- * Finds the drop target column for the dragged card.
- * @param {PointerEvent} e - The pointer event.
- * @returns {HTMLElement|null} The target column or null.
- */
-function findDropTarget(e) {
-  let el = document.elementFromPoint(e.clientX, e.clientY);
-  let targetCol = el?.closest(".task_column");
-
-  if (!targetCol) {
-    const nearestSpace = findNearestSpace(e.clientX, e.clientY);
-    targetCol = nearestSpace?.closest(".task_column");
-  }
-
-  return targetCol;
-}
-
-/**
- * Updates the task status if it was moved to a different column.
- * @param {HTMLElement} card - The task card.
- * @param {HTMLElement|null} targetCol - The target column.
- * @param {HTMLElement} originColumn - The origin column.
- * @returns {void}
- */
-function updateTaskIfMoved(card, targetCol, originColumn) {
-  if (targetCol && targetCol !== originColumn) {
-    const space = targetCol.querySelector(".task_space");
-    updateTaskStatus(card.dataset.taskId, space.id);
-  }
-}
-
-/**
- * Creates and styles a ghost clone of the dragged card.
- * Used for visual feedback during drag operations.
- * @param {HTMLElement} card - The original task card being dragged.
- * @param {DOMRect} rect - The bounding rectangle of the original card.
- * @returns {HTMLElement} The created ghost element.
- */
-function buildGhost(card, rect) {
-  const ghost = card.cloneNode(true);
-  ghost.classList.add("drag-ghost");
-  Object.assign(ghost.style, {
-    position: "fixed",
-    left: `${rect.left}px`,
-    top: `${rect.top}px`,
-    width: `${rect.width}px`,
-    height: `${rect.height}px`,
-    pointerEvents: "none",
-    zIndex: 1000,
-  });
-  return ghost;
-}
-
-/**
- * Builds and inserts drop placeholders in all task columns.
- * Creates visual targets for drag-and-drop except in the origin column.
- * @param {HTMLElement} originColumn - The column where the drag started.
- * @param {number} height - The height of the dragged card used for placeholders.
- * @returns {void}
- */
-function buildPlaceholders(originColumn, height) {
-  document.querySelectorAll(".task_column").forEach((col) => {
-    if (col !== originColumn) {
-      const dropPh = document.createElement("div");
-      dropPh.className = "drop_placeholder";
-      dropPh.style.height = `${height}px`;
-      col.querySelector(".task_space")?.appendChild(dropPh);
-    }
-  });
-}
 
 /**
  * Cleans up all drag-related elements and resets styles.
@@ -488,75 +352,4 @@ function deleteDragSettings(card) {
   }
   document.body.style.cursor = "";
   currentDrag = null;
-}
-
-/**
- * Finds the nearest task space element to the given pointer position.
- * @param {number} clientX - The pointer's X position in the viewport.
- * @param {number} clientY - The pointer's Y position in the viewport.
- * @returns {HTMLElement|null} The nearest task space element, or null if none found.
- */
-function findNearestSpace(clientX, clientY) {
-  const spaces = document.querySelectorAll(".task_space");
-  let nearest = null;
-  let minDist = Infinity;
-
-  spaces.forEach((space) => {
-    const dist = calculateDistanceToSpace(space, clientX, clientY);
-    if (dist < minDist) {
-      minDist = dist;
-      nearest = space;
-    }
-  });
-
-  return nearest;
-}
-
-/**
- * Calculates the distance from a point to the center of a space element.
- * @param {HTMLElement} space - The space element.
- * @param {number} clientX - X position.
- * @param {number} clientY - Y position.
- * @returns {number} The distance in pixels.
- */
-function calculateDistanceToSpace(space, clientX, clientY) {
-  const rect = space.getBoundingClientRect();
-  const cx = rect.left + rect.width / 2;
-  const cy = rect.top + rect.height / 2;
-  const movedx = clientX - cx;
-  const movedy = clientY - cy;
-  return Math.sqrt(movedx * movedx + movedy * movedy);
-}
-
-/**
- * Updates the status of a task in the database.
- * Sets the new status and updates the timestamp.
- * @async
- * @param {string} taskId - The ID of the task to update.
- * @param {string} newStatus - The new status value for the task.
- * @returns {Promise<void>}
- */
-export async function updateTaskStatus(taskId, newStatus) {
-  const taskRef = ref(db, `tasks/${taskId}`);
-  await update(taskRef, { status: newStatus, updatedAt: Date.now() });
-}
-
-/**
- * Automatically scrolls the window when dragging near screen edges.
- * Triggers smooth upward or downward scrolling based on pointer position.
- * @param {PointerEvent} e - The pointer move event.
- * @returns {void}
- */
-function autoScrollOnEdge(e) {
-  const SCROLL_ZONE = 80;
-  const SCROLL_SPEED = 15;
-
-  const { clientY } = e;
-  const vh = window.innerHeight;
-
-  if (clientY < SCROLL_ZONE) {
-    window.scrollBy({ top: -SCROLL_SPEED, behavior: "instant" });
-  } else if (clientY > vh - SCROLL_ZONE) {
-    window.scrollBy({ top: SCROLL_SPEED, behavior: "instant" });
-  }
 }

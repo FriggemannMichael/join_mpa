@@ -7,7 +7,6 @@
 export function buildPriority(priority) {
   const wrapper = document.createElement("div");
   wrapper.className = "prio";
-
   const icon = document.createElement("img");
   const map = {
     urgent: "./assets/icons/prio-urgent.svg",

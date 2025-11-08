@@ -18,17 +18,13 @@ export function buildTaskCard(task) {
   const card = document.createElement("article");
   card.className = "task_card";
   card.dataset.taskId = task.id;
-
   const type = document.createElement("div");
   type.id = "taskType";
   type.classList.add("task_category", task.category);
   type.textContent = task.categoryLabel || task.category || "Task";
   card.append(type);
-
   buildTaskCardDescription(card, task)
-
   buildTaskCardFooter(card, task)
-
   return card;
 }
 

@@ -19,8 +19,7 @@ export function buildAssigneeGroup(task = {}) {
     const li = document.createElement("li"); li.className = "task-card-avatar"; li.title = name;
     li.textContent = getInitials(name || "");
     li.style.background = colorFromString(name || "");
-    ul.append(li);
-  });
+    ul.append(li);});
   if (rest) { const more = document.createElement("li"); more.className = "task-card-avatar more"; more.textContent = `+${rest}`; ul.append(more); }
   wrap.append(ul); return wrap;
 }
