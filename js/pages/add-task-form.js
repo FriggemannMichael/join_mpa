@@ -1,8 +1,3 @@
-/**
- * Form management for Add-Task page
- * @module add-task-form
- */
-
 import { createTask } from "../common/tasks.js";
 import { icons } from "../common/svg-template.js";
 import { subtasks, renderSubtasks } from "./add-task-subtasks.js";
@@ -14,6 +9,7 @@ import {
   validateRequiredEl,
 } from "../validation/validation-fields.js";
 import { updateAddTaskValidationButton } from "../validation/validation-addTask.js";
+import {showAlert} from "../common/alertService.js";
 
 /**
  * Binds event listeners for priority buttons
@@ -37,7 +33,7 @@ export function bindPriorityButtons() {
  * Sets a priority button as active and deactivates others
  * @param {HTMLElement} activeButton The button to activate
  */
-export function setActivePriority(activeButton) {
+function setActivePriority(activeButton) {
   document.querySelectorAll(".priority-btn").forEach((btn) => {
     updateButtonActiveState(btn, btn === activeButton);
   });
@@ -45,7 +41,6 @@ export function setActivePriority(activeButton) {
   const group = activeButton.closest(".priority-buttons");
   validatePriorityGroup(group, "Priority", { show: true });
 
-  // Update overall button status
   updateAddTaskValidationButton?.();
 }
 
@@ -123,7 +118,6 @@ export function bindActionButtons() {
   if (clearBtn) clearBtn.addEventListener("click", clearTaskForm);
   if (createBtn) createBtn.addEventListener("click", handleTaskCreate);
 
-  // Initial validation - Note: mountAddTaskValidation handles field validation
   validateFormAndUpdateButton();
 }
 
@@ -131,7 +125,7 @@ export function bindActionButtons() {
  * Reads the task data from the form
  * @returns {Object} Task data
  */
-export function readTaskData() {
+function readTaskData() {
   const assignees = readAssignees();
   const category = readCategory();
 
@@ -189,7 +183,7 @@ export function readValue(id) {
  * Reads the active priority
  * @returns {string} Priority
  */
-export function readActivePriority() {
+function readActivePriority() {
   const active = document.querySelector(".priority-btn.active");
   return active ? active.dataset.priority || "" : "";
 }
@@ -198,29 +192,25 @@ export function readActivePriority() {
  * Clears the form and resets all validation states
  * Removes all error messages, resets field borders, and clears all values
  */
-export function clearTaskForm() {
+function clearTaskForm() {
   const pageContent = document.getElementById("pageContent");
 
-  // Clear all validation errors manually
   clearAllValidationErrors(pageContent);
 
-  // Clear task-specific data
   clearTextFields();
   clearCheckboxes();
   clearPriorityButtons();
   updateAssigneeSelection();
   subtasks.length = 0;
   renderSubtasks();
-  setTaskStatus("Form reset", false);
 
-  // Clear category placeholder
   const categoryPlaceholder = document.getElementById("selected-category-placeholder");
   if (categoryPlaceholder) {
     categoryPlaceholder.textContent = "Select category";
   }
 
-  // Update button status after clear
   validateFormAndUpdateButton();
+  showAlert("clearForm")
 }
 
 /**
@@ -230,18 +220,15 @@ export function clearTaskForm() {
 function clearAllValidationErrors(container) {
   if (!container) return;
 
-  // Clear all input-fault classes
   container.querySelectorAll(".input-fault").forEach((el) => {
     el.classList.remove("input-fault");
   });
 
-  // Clear all field-fault-msg elements
   container.querySelectorAll(".field-fault-msg").forEach((msg) => {
     msg.textContent = "";
     msg.classList.remove("visible");
   });
 
-  // Clear form-group input-fault
   container.querySelectorAll(".form-group").forEach((group) => {
     group.classList.remove("input-fault");
   });
@@ -294,12 +281,11 @@ function clearPriorityButtons() {
 /**
  * Handles the creation of a task
  */
-export async function handleTaskCreate() {
+async function handleTaskCreate() {
   try {
     const data = readTaskData();
 
     if (!validateTaskData(data)) {
-      // Show visual validation errors for all fields
       showAllValidationErrors(data);
       setTaskStatus("Please fill all required fields (incl. Priority)", true);
       return;
@@ -312,13 +298,8 @@ export async function handleTaskCreate() {
     setTaskStatus("Task successfully created!", false);
     clearTaskForm();
     setTimeout(() => {
-      window.location.href = "board.html";
-    }, 100);
-  } catch (error) {
-    setTaskStatus("Task could not be saved. Please try again.", true);
-    const createBtn = document.getElementById("taskCreateBtn");
-    if (createBtn) createBtn.disabled = false;
-  }
+      window.location.href = "board.html";}, 100);
+  } catch (error) {  }
 }
 
 /**
@@ -331,7 +312,6 @@ function showAllValidationErrors(data) {
   const catEl = document.getElementById("category");
   const prioGrp = document.querySelector(".priority-buttons");
 
-  // Validate each field with show: true to display errors
   if (titleEl && !data.title) {
     validateMinLengthEl(titleEl, 3, "Title", { show: true });
   }
@@ -358,7 +338,7 @@ function validateTaskData(data) {
 /**
  * Validates the form and enables/disables the Create button
  */
-export function validateFormAndUpdateButton() {
+function validateFormAndUpdateButton() {
   const data = readTaskData();
   const createBtn = document.getElementById("taskCreateBtn");
 
@@ -374,7 +354,7 @@ export function validateFormAndUpdateButton() {
  * @param {string} message Status message
  * @param {boolean} isError Error flag
  */
-export function setTaskStatus(message, isError) {
+function setTaskStatus(message, isError) {
   const status = document.getElementById("taskStatus");
   if (!status) return;
   status.textContent = message;
@@ -393,7 +373,6 @@ export function toggleCategoryDropdown() {
   header.classList.toggle("open", isOpen);
   header.setAttribute("aria-expanded", isOpen.toString());
 
-  // Listener only active when open
   if (isOpen) {
     document.addEventListener("click", handleOutsideCategoryClick);
   } else {
@@ -406,7 +385,6 @@ function handleOutsideCategoryClick(e) {
   const header = document.querySelector(".category-select-header");
   if (!dropdown || !header) return;
 
-  // Click outside -> close
   if (!dropdown.contains(e.target) && !header.contains(e.target)) {
     dropdown.classList.add("d-none");
     header.classList.remove("open");
@@ -426,7 +404,6 @@ export function selectCategory(value) {
 
   if (input) {
     input.value = value;
-    // Trigger change event for validation
     input.dispatchEvent(new Event("change"));
   }
   if (placeholder) placeholder.textContent = getCategoryLabel(value);

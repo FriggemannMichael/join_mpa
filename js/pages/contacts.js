@@ -12,6 +12,7 @@ import { bindEditContactControls } from "../contacts/editContacts.js"
 import { initEditDeleteRespMenu } from "../contacts/responsiveHandler.js"
 import { readValue } from "../contacts/helper.js"
 import { closeContactDetailOverlay } from "../contacts/detailOverlay.js"
+import { showAlert } from "../common/alertService.js";
 
 
 initContactsPage();
@@ -308,6 +309,7 @@ function toggleOverlay(show) {
 export async function saveContactToFirebase(data) {
     const contactsRef = ref(db, "/contacts");
     await set(push(contactsRef), data);
+    showAlert("createContact")
 }
 
 

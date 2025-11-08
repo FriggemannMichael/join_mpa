@@ -7,6 +7,7 @@ import { resetContactForm, renderContactDetail, renderGroupedContacts, groupCont
 import { confirmModal } from "../board/modals/confirmModal.js";
 import { closeContactDetailOverlay, openContactDetailOverlay } from "./detailOverlay.js"
 import { readValue } from "./helper.js"
+import { showAlert } from "../common/alertService.js";
 
 let contactsCache = [];
 let selectedContactKey = null;
@@ -147,6 +148,8 @@ async function deleteSelectedContact() {
     await removeContactFromFirebase();
     clearContactDetail();
     hideContactOverlay();
+    showAlert("deleteContact")
+    closeContactDetailOverlay()
   } catch (error) {
     console.error("Error deleting contact:", error);
   }
@@ -220,6 +223,7 @@ async function handleEditSubmit(event) {
   if (!data.name || !data.email) return;
   await updateContactInFirebase(data);
   finalizeEditProcess();
+  showAlert("editContact")
 }
 
 
