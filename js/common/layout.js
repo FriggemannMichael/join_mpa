@@ -57,31 +57,67 @@ function setProfileInitials() {
   target.classList.toggle("guest-font-size", initials === "GU");
 }
 
-/**
- * Binds event listeners for the profile dropdown menu
- */
-function bindProfileMenu() {
-  const icon = document.getElementById("profileIcon");
-  const menu = document.getElementById("profileMenu");
-  const overlay = document.getElementById("profileMenuBackdrop");
 
-  // Debug logging for troubleshooting
+/**
+ * Retrieves key DOM elements related to the profile menu.
+ * Returns an object containing references to the icon, menu, and backdrop overlay.
+ *
+ * @returns {{icon: HTMLElement|null, menu: HTMLElement|null, overlay: HTMLElement|null}}
+ * An object with the profile elements, or `null` values if elements are missing.
+ */
+function getProfileElements() {
+  return {
+    icon: document.getElementById("profileIcon"),
+    menu: document.getElementById("profileMenu"),
+    overlay: document.getElementById("profileMenuBackdrop"),
+  };
+}
+
+
+/**
+ * Validates that all required profile elements exist in the DOM.
+ * Logs a warning for each missing element and returns a boolean result.
+ *
+ * @param {{icon: HTMLElement|null, menu: HTMLElement|null, overlay: HTMLElement|null}} elements
+ * An object containing the profile elements to validate.
+ * @returns {boolean} `true` if all elements exist, otherwise `false`.
+ */
+function validateProfileElements({ icon, menu, overlay }) {
   if (!icon) console.warn("Layout: profileIcon not found");
   if (!menu) console.warn("Layout: profileMenu not found");
   if (!overlay) console.warn("Layout: profileMenuBackdrop not found");
+  return icon && menu && overlay;
+}
 
-  if (!icon || !menu || !overlay) return;
 
+/**
+ * Attaches event listeners to the profile menu components.
+ * Handles click, keyboard, and overlay interactions for opening and closing the menu.
+ *
+ * @param {HTMLElement} icon - The profile icon that toggles the menu.
+ * @param {HTMLElement} menu - The dropdown menu element containing links and buttons.
+ * @param {HTMLElement} overlay - The backdrop overlay that closes the menu when clicked.
+ * @returns {void} Nothing is returned; event listeners are bound directly to DOM elements.
+ */
+function attachProfileListeners(icon, menu, overlay) {
+  const close = () => closeMenu(menu, overlay, icon);
   icon.addEventListener("click", () => toggleMenu(menu, overlay, icon));
-  icon.addEventListener("keydown", (event) =>
-    handleProfileKey(event, menu, overlay, icon)
-  );
-  overlay.addEventListener("click", () => closeMenu(menu, overlay, icon));
-  menu
-    .querySelectorAll("a, button")
-    .forEach((item) =>
-      item.addEventListener("click", () => closeMenu(menu, overlay, icon))
-    );
+  icon.addEventListener("keydown", (e) => handleProfileKey(e, menu, overlay, icon));
+  overlay.addEventListener("click", close);
+  menu.querySelectorAll("a, button").forEach((i) => i.addEventListener("click", close));
+}
+
+
+/**
+ * Initializes the profile menu by binding all required event listeners.
+ * Retrieves and validates DOM elements before attaching listeners.
+ *
+ * @returns {void} Nothing is returned; sets up the profile menu interactions.
+ */
+function bindProfileMenu() {
+  const els = getProfileElements();
+  if (!validateProfileElements(els)) return;
+  attachProfileListeners(els.icon, els.menu, els.overlay);
 }
 
 /**
@@ -172,46 +208,53 @@ function getPageName(path) {
   return path.split("/").pop();
 }
 
+
 /**
- * Sets up navigation based on authentication status
- * Shows normal menu links when logged in (including Guest)
- * Shows login link on Legal/Privacy/Help only when not logged in
+ * Returns the current authentication state.
+ * @returns {{ isLoggedIn: boolean, user: unknown }} Object containing login status and user data.
+ */
+function getAuthState() {
+  const user = getActiveUser();
+  return { isLoggedIn: !!user, user };
+}
+
+/**
+ * Checks whether the current path is a legal/info page.
+ * @param {string} path - Current window pathname.
+ * @returns {boolean} True if the path is a legal page.
+ */
+function isLegalPath(path) {
+  const page = getPageName(path);
+  return page === "legal.html" || page === "privacy.html" || page === "help.html";
+}
+
+/**
+ * Toggles visibility for navigation links.
+ * @param {NodeListOf<Element>} links - Elements to show or hide.
+ * @param {boolean} show - If true, links are visible; otherwise hidden.
+ * @returns {void}
+ */
+function toggleNavLinks(links, show) {
+  links.forEach(el => el.classList.toggle("nav-link-hidden", !show));
+}
+
+/**
+ * Sets up navigation visibility based on authentication and current page.
+ * @returns {void}
  */
 function setupAuthBasedNavigation() {
-  const user = getActiveUser();
-  const isLoggedIn = !!user;
-
-  const currentPage = getPageName(window.location.pathname);
-  const isLegalPage =
-    currentPage === "legal.html" ||
-    currentPage === "privacy.html" ||
-    currentPage === "help.html";
-
-  const authRequiredLinks = document.querySelectorAll("[data-auth-required]");
-  const guestOnlyLinks = document.querySelectorAll("[data-guest-only]");
-
+  const { isLoggedIn } = getAuthState();
+  const legal = isLegalPath(window.location.pathname);
+  const authRequired = document.querySelectorAll("[data-auth-required]");
+  const guestOnly = document.querySelectorAll("[data-guest-only]");
   if (isLoggedIn) {
-    authRequiredLinks.forEach((link) => {
-      link.classList.remove("nav-link-hidden");
-    });
-    guestOnlyLinks.forEach((link) => {
-      link.classList.add("nav-link-hidden");
-    });
-  } else {
-    authRequiredLinks.forEach((link) => {
-      link.classList.add("nav-link-hidden");
-    });
-    if (isLegalPage) {
-      guestOnlyLinks.forEach((link) => {
-        link.classList.remove("nav-link-hidden");
-      });
-      renderLoginIcon();
-    } else {
-      guestOnlyLinks.forEach((link) => {
-        link.classList.add("nav-link-hidden");
-      });
-    }
+    toggleNavLinks(authRequired, true);
+    toggleNavLinks(guestOnly, false);
+    return;
   }
+  toggleNavLinks(authRequired, false);
+  toggleNavLinks(guestOnly, legal);
+  if (legal) renderLoginIcon();
 }
 
 /**

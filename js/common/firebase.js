@@ -21,6 +21,5 @@ export function isUserLoggedIn() {
   return !!auth.currentUser;
 }
 
-// Zu testzwecken bei drag and drop
 const db = getDatabase(firebaseApp);
 export { db};

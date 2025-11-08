@@ -18,31 +18,35 @@ import { showAlert } from "./alertService.js";
 const TASKS_PATH = "tasks";
 
 /**
- * Creates and stores a new task entry in the Firebase Realtime Database.
- * Builds the full task payload, pushes it under the tasks path, and returns the generated ID.
- *
+ * Validates the provided task data.
+ * @param {object} task - Task data to validate.
+ * @throws {Error} If task data or title is invalid.
+ */
+function validateTask(task) {
+  if (!task || typeof task !== "object") {
+    showAlert("error", 2500, "Invalid task data");
+    throw new Error("Invalid task data");
+  }
+  if (!task.title?.trim()) {
+    showAlert("error", 2500, "Task title is required");
+    throw new Error("Task title is required");
+  }
+}
+
+/**
+ * Creates a new task entry in Firebase.
  * @async
- * @param {Object} task - The raw task data to store (title, description, subtasks, etc.).
- * @returns {Promise<string>} The unique key of the newly created task in the database.
+ * @param {object} task - Task object containing all required fields.
+ * @returns {Promise<string>} Resolves with the new task key.
+ * @throws {Error} When Firebase or validation fails.
  */
 export async function createTask(task) {
   try {
-    if (!task || typeof task !== "object") {
-      showAlert("error", 2500, "Invalid task data");
-      throw new Error("Invalid task data");
-    }
-
-    if (!task.title?.trim()) {
-      showAlert("error", 2500, "Task title is required");
-      throw new Error("Task title is required");
-    }
-
+    validateTask(task);
     const db = getDatabase();
-    const tasksRef = ref(db, TASKS_PATH);
-    const newTaskRef = push(tasksRef);
-    const entry = buildTaskPayload(task);
-    await set(newTaskRef, entry);
-    return newTaskRef.key;
+    const newRef = push(ref(db, TASKS_PATH));
+    await set(newRef, buildTaskPayload(task));
+    return newRef.key;
   } catch (error) {
     showAlert("error", 2500, "Failed to create task");
     throw error;
@@ -50,43 +54,24 @@ export async function createTask(task) {
 }
 
 /**
- * Subscribes to all tasks in the Firebase Realtime Database and listens for changes in real time.
- * Whenever the tasks update, the provided listener is called with the normalized task list.
- * Returns a function that can be called to unsubscribe from the listener.
- *
- * @param {(tasks: Array<Object>) => void} listener - Callback function invoked with the updated list of tasks.
- * @returns {() => void} Function to stop listening for changes (unsubscribe).
+ * Subscribes to tasks in Firebase and updates the listener on changes.
+ * @param {(tasks:any[])=>void} listener - Callback for normalized tasks.
+ * @returns {() => void} Unsubscribe function.
  */
 export function subscribeToTasks(listener) {
-  try {
-    if (typeof listener !== "function") {
-      showAlert("error", 2500, "Invalid listener function");
-      return () => {};
-    }
-
-    const db = getDatabase();
-    const tasksRef = ref(db, TASKS_PATH);
-
-    const handler = (snapshot) => {
-      try {
-        const tasks = snapshot.exists() ? snapshot.val() : null;
-        listener(normalizeTasks(tasks));
-      } catch (error) {
-        showAlert("error", 2500, "Error processing tasks");
-        listener([]);
-      }
-    };
-
-    onValue(tasksRef, handler, (error) => {
-      showAlert("error", 2500, "Failed to load tasks");
-      listener([]);
-    });
-
-    return () => off(tasksRef, "value", handler);
-  } catch (error) {
-    showAlert("error", 2500, "Error subscribing to tasks");
+  if (typeof listener !== "function") {
+    showAlert("error", 2500, "Invalid listener function");
     return () => {};
   }
+
+  const tasksRef = ref(getDatabase(), TASKS_PATH);
+  const handler = (s) => {
+    try { listener(normalizeTasks(s.exists() ? s.val() : null)); }
+    catch { showAlert("error", 2500, "Error processing tasks"); listener([]); }
+  };
+
+  onValue(tasksRef, handler, () => { showAlert("error", 2500, "Failed to load tasks"); listener([]); });
+  return () => off(tasksRef, "value", handler);
 }
 
 /**

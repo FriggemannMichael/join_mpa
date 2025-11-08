@@ -10,12 +10,27 @@ import { subscribeToTasks } from "../common/tasks.js";
 
 let unsubscribeFromTasks = null;
 
+
+/**
+ * Initializes the guest display logic once the DOM is fully loaded.
+ * Ensures all elements are available before running {@link handleGuestDisplay}.
+ *
+ * @listens DOMContentLoaded
+ * @returns {void} Nothing is returned; triggers initialization on page load.
+ */
 document.addEventListener("DOMContentLoaded", () => {
   handleGuestDisplay();
 });
 
 initSummaryPage();
 
+
+/**
+ * Handles visibility of the greeting name for guest users.
+ * Hides the name field if the active user is identified as a guest.
+ *
+ * @returns {void} Nothing is returned; updates the DOM directly.
+ */
 function handleGuestDisplay() {
   const user = getActiveUser();
   const nameField = document.getElementById("greeting__name");
@@ -28,6 +43,14 @@ function handleGuestDisplay() {
   }
 }
 
+
+/**
+ * Initializes the summary page after verifying access permissions.
+ * Ensures layout, greeting, and summary data are properly loaded and rendered.
+ *
+ * @async
+ * @returns {Promise<void>} Resolves when the summary page has been fully initialized.
+ */
 async function initSummaryPage() {
   const allowed = await guardPage("./index.html");
   if (!allowed) return;
@@ -37,6 +60,14 @@ async function initSummaryPage() {
   await loadSummaryData();
 }
 
+
+/**
+ * Loads and subscribes to real-time task data for the summary view.
+ * Updates summary metrics automatically or shows fallback data on error.
+ *
+ * @async
+ * @returns {Promise<void>} Resolves when the subscription is successfully initialized or handled with a fallback.
+ */
 async function loadSummaryData() {
   try {
     unsubscribeFromTasks = await subscribeToTasks(updateSummaryMetrics);
@@ -45,6 +76,13 @@ async function loadSummaryData() {
   }
 }
 
+
+/**
+ * Renders a personalized greeting message based on the active user.
+ * Displays or hides the user's name and adjusts the greeting text for guests.
+ *
+ * @returns {void} Nothing is returned; updates the DOM directly.
+ */
 function renderGreeting() {
   const nameField = document.getElementById("greeting__name");
   const textField = document.getElementById("greeting__text");
@@ -61,6 +99,16 @@ function renderGreeting() {
   }
 }
 
+
+/**
+ * Determines whether the given user object represents a guest account.
+ * Checks common guest identifiers such as UID or display name.
+ *
+ * @param {?Object} user - The user object to check, or `null` if not logged in.
+ * @param {string} [user.uid] - The unique user ID.
+ * @param {string} [user.displayName] - The display name of the user.
+ * @returns {boolean} `true` if the user is identified as a guest, otherwise `false`.
+ */
 function isGuestUser(user) {
   if (!user) return true;
   if (user.uid === "guest-user") return true;
@@ -69,6 +117,14 @@ function isGuestUser(user) {
   return false;
 }
 
+
+/**
+ * Updates the summary dashboard metrics based on the current task list.
+ * Falls back to default metrics if the provided data is invalid.
+ *
+ * @param {Array<Object>} tasks - The list of task objects to calculate metrics from.
+ * @returns {void} Nothing is returned; updates the summary display in the DOM.
+ */
 function updateSummaryMetrics(tasks) {
   if (!Array.isArray(tasks)) {
     showFallbackMetrics();
@@ -78,6 +134,24 @@ function updateSummaryMetrics(tasks) {
   updateSummaryDisplay(metrics);
 }
 
+
+/**
+ * Calculates key task metrics for the summary dashboard.
+ * Groups tasks by status and priority, and determines the next upcoming deadline.
+ *
+ * @param {Array<Object>} tasks - The list of task objects to analyze.
+ * @param {string} tasks[].status - The current status of the task (e.g., "toDo", "done").
+ * @param {string} tasks[].priority - The priority level of the task (e.g., "urgent", "medium").
+ * @returns {{
+ *   todo: number,
+ *   done: number,
+ *   inProgress: number,
+ *   awaitingFeedback: number,
+ *   urgent: number,
+ *   total: number,
+ *   upcomingDeadline: string|null
+ * }} An object containing the computed metrics and the nearest deadline, if available.
+ */
 function calculateTaskMetrics(tasks) {
   const todoTasks = tasks.filter((t) => t.status === "toDo");
   const doneTasks = tasks.filter((t) => t.status === "done");
@@ -97,6 +171,15 @@ function calculateTaskMetrics(tasks) {
   };
 }
 
+
+/**
+ * Finds the next upcoming task deadline from a list of tasks.
+ * Filters out past due dates, sorts by the nearest upcoming one, and formats the result.
+ *
+ * @param {Array<Object>} tasks - The list of task objects to search through.
+ * @param {string} [tasks[].dueDate] - The due date of the task in ISO or date-parsable format.
+ * @returns {string|null} The formatted upcoming deadline date, or `null` if none exist.
+ */
 function findUpcomingDeadline(tasks) {
   const now = new Date();
   const upcomingTasks = tasks
@@ -106,6 +189,13 @@ function findUpcomingDeadline(tasks) {
   return formatDeadlineDate(upcomingTasks[0].dueDate);
 }
 
+
+/**
+ * Formats a date string into a readable "Month Day, Year" format (e.g., "November 8, 2025").
+ *
+ * @param {string} dateString - A date in ISO or any valid date-parsable format.
+ * @returns {string} The formatted date string in U.S. English locale.
+ */
 function formatDeadlineDate(dateString) {
   const date = new Date(dateString);
   return date.toLocaleDateString("en-US", {
@@ -115,6 +205,22 @@ function formatDeadlineDate(dateString) {
   });
 }
 
+
+/**
+ * Updates all summary dashboard elements with the latest task metrics.
+ * Inserts numeric values and displays the nearest upcoming deadline if available.
+ *
+ * @param {{
+ *   todo: number,
+ *   done: number,
+ *   inProgress: number,
+ *   awaitingFeedback: number,
+ *   urgent: number,
+ *   total: number,
+ *   upcomingDeadline: string|null
+ * }} metrics - The calculated task metrics used to update the UI.
+ * @returns {void} Nothing is returned; updates the DOM directly.
+ */
 function updateSummaryDisplay(metrics) {
   updateElementById("amount_toDo", metrics.todo);
   updateElementById("amount_done", metrics.done);
@@ -129,6 +235,15 @@ function updateSummaryDisplay(metrics) {
   }
 }
 
+
+/**
+ * Updates the text content of a DOM element by its ID.
+ * Converts the provided value to a string before assigning it.
+ *
+ * @param {string} elementId - The ID of the element to update.
+ * @param {string|number} value - The value to display inside the element.
+ * @returns {void} Nothing is returned; updates the DOM directly.
+ */
 function updateElementById(elementId, value) {
   const element = document.getElementById(elementId);
   if (element) {
@@ -136,6 +251,13 @@ function updateElementById(elementId, value) {
   }
 }
 
+
+/**
+ * Displays default summary metrics when no task data is available or loading fails.
+ * Resets all metric values to zero and shows a fallback deadline message.
+ *
+ * @returns {void} Nothing is returned; updates the summary dashboard in the DOM.
+ */
 function showFallbackMetrics() {
   const fallbackMetrics = {
     todo: 0,
@@ -149,6 +271,13 @@ function showFallbackMetrics() {
   updateSummaryDisplay(fallbackMetrics);
 }
 
+
+/**
+ * Resolves the display name of the currently active user.
+ * Falls back to the email prefix or "Guest" if no valid name is found.
+ *
+ * @returns {string} The resolved user name or "Guest" as a default value.
+ */
 function resolveUserName() {
   const user = getActiveUser();
   if (isGuestUser(user)) return "Guest";
@@ -158,6 +287,13 @@ function resolveUserName() {
   return "Guest";
 }
 
+
+/**
+ * Builds a time-based greeting prefix based on the current hour.
+ * Returns "Good morning", "Good afternoon", or "Good evening".
+ *
+ * @returns {string} The greeting text corresponding to the current time of day.
+ */
 function buildGreetingPrefix() {
   const hour = new Date().getHours();
   if (hour < 12) return "Good morning,";
@@ -165,6 +301,13 @@ function buildGreetingPrefix() {
   return "Good evening,";
 }
 
+
+/**
+ * Builds a time-based greeting prefix for guest users.
+ * Returns "Good morning", "Good afternoon", or "Good evening" without a comma.
+ *
+ * @returns {string} The guest greeting text based on the current time of day.
+ */
 function buildGreetingPrefixForGuest() {
   const hour = new Date().getHours();
   if (hour < 12) return "Good morning";
@@ -172,10 +315,23 @@ function buildGreetingPrefixForGuest() {
   return "Good evening";
 }
 
+
+/**
+ * Checks whether the current viewport width corresponds to a mobile device.
+ *
+ * @returns {boolean} `true` if the viewport width is below 768px, otherwise `false`.
+ */
 function isMobileDevice() {
   return window.innerWidth < 768;
 }
 
+
+/**
+ * Determines whether the mobile greeting should be displayed.
+ * Only shows the greeting if the user has just logged in on a mobile device.
+ *
+ * @returns {boolean} `true` if the mobile greeting should be shown, otherwise `false`.
+ */
 function shouldShowMobileGreeting() {
   if (!isMobileDevice()) return false;
   const justLoggedIn = sessionStorage.getItem("justLoggedIn");
@@ -184,6 +340,16 @@ function shouldShowMobileGreeting() {
   return true;
 }
 
+
+/**
+ * Retrieves key DOM elements used for displaying the mobile greeting.
+ *
+ * @returns {{
+ *   screen: HTMLElement|null,
+ *   text: HTMLElement|null,
+ *   name: HTMLElement|null
+ * }} An object containing references to the mobile greeting elements, or `null` if missing.
+ */
 function getMobileGreetingElements() {
   return {
     screen: document.getElementById("mobileGreeting"),
@@ -192,6 +358,19 @@ function getMobileGreetingElements() {
   };
 }
 
+
+/**
+ * Sets the text content for the mobile greeting screen.
+ * Displays a time-based greeting and the user's name unless the user is a guest.
+ *
+ * @param {{
+ *   text: HTMLElement,
+ *   name: HTMLElement
+ * }} elements - The DOM elements for the greeting text and name.
+ * @param {Object} user - The active user object.
+ * @param {boolean} isGuest - Whether the current user is identified as a guest.
+ * @returns {void} Nothing is returned; updates the DOM directly.
+ */
 function setMobileGreetingContent(elements, user, isGuest) {
   const timeGreeting = isGuest
     ? buildGreetingPrefixForGuest()
@@ -200,6 +379,14 @@ function setMobileGreetingContent(elements, user, isGuest) {
   elements.name.textContent = isGuest ? "" : resolveUserName();
 }
 
+
+/**
+ * Displays the mobile greeting screen with a timed fade-out animation.
+ * Activates the screen, waits briefly, then fades it out and resets classes.
+ *
+ * @param {HTMLElement} screen - The mobile greeting container element.
+ * @returns {void} Nothing is returned; updates the DOM with timed transitions.
+ */
 function displayMobileGreeting(screen) {
   screen.classList.add("active");
   setTimeout(() => {
