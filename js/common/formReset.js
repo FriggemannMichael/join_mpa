@@ -21,16 +21,12 @@ export function resetFormCompletely(form) {
     return;
   }
 
-  // Reset all form values using native reset()
   form.reset();
 
-  // Clear all validation error states
   clearAllValidationStates(form);
 
-  // Reset ARIA attributes
   resetAriaAttributes(form);
 
-  // Clear custom error messages
   clearCustomErrorMessages(form);
 }
 
@@ -43,19 +39,15 @@ export function resetFormCompletely(form) {
 export function clearAllValidationStates(form) {
   if (!form) return;
 
-  // Clear input-fault classes
   form.querySelectorAll('.input-fault, .field-fault').forEach(el => {
     el.classList.remove('input-fault', 'field-fault');
   });
 
-  // Clear container-level fault classes
   form.querySelectorAll('.inputField__container').forEach(container => {
     container.classList.remove('input-fault');
-    // Remove touched state
     delete container.dataset.touched;
   });
 
-  // Clear error field classes
   form.querySelectorAll('input.error, textarea.error, select.error').forEach(el => {
     el.classList.remove('error');
   });
@@ -70,12 +62,10 @@ export function clearAllValidationStates(form) {
 export function resetAriaAttributes(form) {
   if (!form) return;
 
-  // Reset aria-invalid to false on all form controls
   form.querySelectorAll('[aria-invalid]').forEach(el => {
     el.setAttribute('aria-invalid', 'false');
   });
 
-  // Clear aria-describedby if it points to error messages
   form.querySelectorAll('[aria-describedby]').forEach(el => {
     const describedBy = el.getAttribute('aria-describedby');
     if (describedBy && describedBy.includes('error')) {
@@ -94,19 +84,16 @@ export function resetAriaAttributes(form) {
 export function clearCustomErrorMessages(form) {
   if (!form) return;
 
-  // Clear field-fault-msg elements
   form.querySelectorAll('.field-fault-msg').forEach(msg => {
     msg.textContent = '';
     msg.classList.remove('visible');
   });
 
-  // Clear generic error divs
   form.querySelectorAll('.error-message, .field-error, .validation-error').forEach(msg => {
     msg.textContent = '';
     msg.classList.remove('visible', 'show');
   });
 
-  // Clear status messages inside the form
   form.querySelectorAll('[id*="Status"], [id*="Error"]').forEach(status => {
     status.textContent = '';
     status.classList.remove('error', 'visible');
@@ -127,19 +114,15 @@ export function clearCustomErrorMessages(form) {
 export function clearFieldValidation(field) {
   if (!field) return;
 
-  // Remove error classes from field
   field.classList.remove('input-fault', 'field-fault', 'error');
 
-  // Reset aria-invalid
   field.setAttribute('aria-invalid', 'false');
 
-  // Clear parent container's fault state
   const container = field.closest('.inputField__container');
   if (container) {
     container.classList.remove('input-fault');
   }
 
-  // Clear associated error message
   const parent = field.parentElement;
   if (parent) {
     const errorMsg = parent.querySelector('.field-fault-msg');
